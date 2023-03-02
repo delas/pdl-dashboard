@@ -1,0 +1,67 @@
+$Topbar-height: 7vh;
+$Sidebar-width: 25%;
+
+.Home{
+    height: 100%;
+}
+
+.Home-PageLayout{
+    height: 100%;
+    width: 100%;
+}
+
+.Home-Topbar{
+    height: $Topbar-height;
+}
+
+.Home-Page-below-topbar{
+    height: calc(100% - $Topbar-height);
+    display: flex;
+    flex-direction: row;
+}
+
+.Home-Sidebar{
+    position: relative;
+    transform: translateX(0);
+    transition: left 0.5s ease-in-out, width 0.5s ease-in-out;
+    height: 100%;
+    width: $Sidebar-width;
+    &-sidebaropen{
+        left: 0;
+        width: $Sidebar-width;
+    }
+    &-sidebarclosed{
+        left: -$Sidebar-width;
+        width: 0px;
+    }
+}
+
+.Home-Content{
+    transition: width 0.5s ease-in-out;
+    &-sidebaropen{
+        width: calc(100% - $Sidebar-width);
+        height: 100%;
+    }
+    &-sidebarclosed{
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.Home-SidebarHosts{
+    position: absolute;
+    height: calc(100% - $Topbar-height);
+    top:$Topbar-height;
+
+    transform: translateX(0);
+    transition: left 0.5s ease-in-out, width 0.5s ease-in-out;
+
+    &-sidebarHostsopen{
+        left: 0;
+        width: 50%;
+    }
+    &-sidebarHostsclosed{
+        left: -50%;
+        width: 0px;
+    }
+}

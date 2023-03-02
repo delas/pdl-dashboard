@@ -1,0 +1,21 @@
+.SidebarHosts{
+    padding: 1em;
+    border: 1px solid black;
+    height: calc(100% - 7vw);
+
+}
+
+.SidebarHosts-Top{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .SidebarHosts-title{
+
+    }
+
+    .SidebarHosts-closeButton{
+
+    }
+}

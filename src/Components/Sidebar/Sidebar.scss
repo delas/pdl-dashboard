@@ -1,0 +1,67 @@
+.Sidebar{
+    width: 100%;
+    height: 100%;
+    background-color: #f8f9fa;
+}
+
+.Sidebar.closed{
+    width: 0;
+}
+
+.Sidebar-flexContainer{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.Sidebar-flexContainer-top{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1em;
+}
+
+.Sidebar-flexContainer-buttons{
+    width: 90%;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding-top: 1em;
+    height: auto;
+}
+
+.Sidebar-flexContainer-files{
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+    max-height: 60%;
+    width: 100%;
+}
+
+.Sidebar-status{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 1em;
+    height: 2em;
+    justify-content: center;
+    justify-items: center;
+}
+
+.Sidebar-status-icon{
+    svg{
+        color: green;
+    }
+}
+
+.Sidebar-status-text{
+    font-size: 0.85em;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}

@@ -1,0 +1,61 @@
+.Topbar{
+    background-color: rgb(153, 0, 0);
+    height: 100%;
+    height: 100%;
+}
+
+.Topbar-flexContainer{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    // padding: 0.5em;
+}
+
+.Topbar-flexContainer-left{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    gap: 1em;
+    color:#FFF;
+}
+.Topbar-flexContainer-right{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    gap: 1em;
+    color: #fff;
+}
+
+.Topbar-configure-hosts{
+    padding-right: 0.5em;
+}
+
+.Topbar-logo{
+    height: 60%;
+    width: auto;
+    aspect-ratio: 1 / 1;
+    img{
+        height: 100%;
+    }
+}
+
+.Topbar-title{
+    width: auto;
+}
+
+.Images {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+    justify-content: left;
+    align-items: center;
+    gap: 0.5em;
+    padding-left: 0.5em;
+}
