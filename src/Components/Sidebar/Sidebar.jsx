@@ -7,7 +7,8 @@ import SidebarFile from '../SidebarFiles/SidebarFile';
 function Sidebar(props) {
 
     const {
-        toggleFilePopupOpen
+        toggleFilePopupOpen,
+        toggleActionPopupOpen
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -52,6 +53,7 @@ function Sidebar(props) {
                             icon = {<FaCog/>}
                             disabled = {false}
                             className = {``}
+                            onClick = {toggleActionPopupOpen}
                         />
                     </div>
                     <div className='Sidebar-flexContainer-files'>

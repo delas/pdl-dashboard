@@ -3,7 +3,6 @@ import Button from '../Button/Button';
 import {useState, useEffect} from 'react';
 import { FaRegWindowClose } from 'react-icons/fa';
 import SidebarHostItem from './SidebarHostItem/SidebarHostItem';
-// import SidebarHostsFile from '../SidebarHostsFiles/SidebarHostsFile';
 
 function SidebarHosts(props) {
 

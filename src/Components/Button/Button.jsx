@@ -1,5 +1,5 @@
 import './Button.scss';
-import {useState, useEffect} from 'react';
+// import {useState, useEffect} from 'react';
 
 function Button(props) {
 

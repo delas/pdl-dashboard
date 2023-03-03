@@ -5,6 +5,7 @@ import Topbar from '../../Components/Topbar/Topbar';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
 import AddFilePopup from '../../Components/Popup/AddfilePopup/AddfilePopup';
+import ActionPopup from '../../Components/Popup/ActionPopup/ActionPopup';
 
 function Home(props) {
 
@@ -41,6 +42,7 @@ function Home(props) {
                     <div className={`Home-Sidebar Home-Sidebar${isOpen.sidebarOpen ? "-sidebaropen" : "-sidebarclosed"}`}>
                         <Sidebar
                             toggleFilePopupOpen = {toggles.toggleFilePopupOpen}
+                            toggleActionPopupOpen = {toggles.toggleActionPopupOpen}
                         />
                     </div>
 
@@ -60,6 +62,13 @@ function Home(props) {
                 {isOpen.filePopupOpen ?
                     <AddFilePopup
                         toggleFilePopupOpen = {toggles.toggleFilePopupOpen}
+                    />
+                    : null
+                }
+
+                {isOpen.actionPopupOpen ?
+                    <ActionPopup
+                        toggleActionPopupOpen = {toggles.toggleActionPopupOpen}
                     />
                     : null
                 }

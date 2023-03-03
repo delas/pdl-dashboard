@@ -1,15 +1,16 @@
 import './App.css';
 import {useState, useEffect} from 'react';
 import Home from './Pages/Home/Home';
-import AddFilePopup from './Components/Popup/AddfilePopup/AddfilePopup';
+// import AddFilePopup from './Components/Popup/AddfilePopup/AddfilePopup';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
 
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [sidebarHostsOpen, setSidebarHostsOpen] = useState(true);
-    const [filePopupOpen, setFilePopupOpen] = useState(true);
+    const [sidebarHostsOpen, setSidebarHostsOpen] = useState(false);
+    const [filePopupOpen, setFilePopupOpen] = useState(false);
+    const [actionPopupOpen, setActionPopupOpen] = useState(false);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -21,6 +22,10 @@ function App(props) {
 
     const toggleFilePopupOpen = () => {
         setFilePopupOpen(!filePopupOpen);
+    }
+
+    const toggleActionPopupOpen = () => {
+        setActionPopupOpen(!actionPopupOpen);
     }
 
     useEffect(() => {
@@ -38,21 +43,18 @@ function App(props) {
     return (
         <div className="App">
             {props.page === "Home" ? <Home 
-                // sidebarOpen = {sidebarOpen}
-                // sidebarHostsOpen = {sidebarHostsOpen}
-                // filePopupOpen = {filePopupOpen}
                 toggles = {{
                     toggleSidebar: toggleSidebar,
                     toggleSidebarHosts: toggleSidebarHosts,
                     toggleFilePopupOpen: toggleFilePopupOpen,
+                    toggleActionPopupOpen: toggleActionPopupOpen
                 }}
                 isOpen = {{
                     sidebarOpen: sidebarOpen,
                     sidebarHostsOpen: sidebarHostsOpen,
                     filePopupOpen: filePopupOpen,
+                    actionPopupOpen: actionPopupOpen
                 }}
-                // toggleSidebarHosts = {toggleSidebarHosts}
-                // toggleFilePopupOpen = {toggleFilePopupOpen}
             /> : null}
             {props.page === "Page1" ? <Page1/> : null}
             {props.page === "Page2" ? <Page2/> : null}

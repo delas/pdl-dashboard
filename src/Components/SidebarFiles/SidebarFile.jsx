@@ -1,5 +1,4 @@
 import './SidebarFile.scss';
-// import Button from '../Button/Button';
 import {useState, useEffect} from 'react';
 import { FaTrash } from 'react-icons/fa';
 

@@ -1,5 +1,4 @@
 import './AddfilePopup.scss';
-// import Button from '../Button/Button';
 import {useState, useEffect} from 'react';
 import { FaRegWindowClose, FaCloudUploadAlt } from 'react-icons/fa';
 
@@ -24,7 +23,6 @@ function AddFilePopup(props) {
     }
 
     return (
-        // <div className='AddfilePopup'>
         <div className='Backdrop-modal' 
             onClick = {() => {toggleFilePopupOpen()}}
         >
@@ -32,7 +30,7 @@ function AddFilePopup(props) {
             <div className='AddFilePopup' 
                 onClick = {(e) => {e.stopPropagation()}}
             >
-                
+
                 <header className='AddFilePopup-header'>
                     <h4>Upload file</h4>
                     <div className='ClosePopup'>
@@ -54,12 +52,6 @@ function AddFilePopup(props) {
                             <div>Select a file or drag here</div>
                             <span id="file-upload-btn" class="AddFilePopup-fileinput-button">Select a file</span>
                         </div>
-
-                        {/* <div class={`AddFilePopup-fileinput-progressbar-parent${}`}>
-                            <progress class="AddFilePopup-fileinput-progress" id="file-progress" value="0">
-                                <span>0</span>%
-                            </progress>
-                        </div> */}
                     </label>
                 </form>
 
@@ -73,9 +65,7 @@ function AddFilePopup(props) {
                 </footer>
 
             </div>
-
         </div>
-        // </div>
     );
 }
 
