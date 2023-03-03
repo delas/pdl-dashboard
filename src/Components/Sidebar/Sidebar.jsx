@@ -7,7 +7,7 @@ import SidebarFile from '../SidebarFiles/SidebarFile';
 function Sidebar(props) {
 
     const {
-        sidebarOpen
+        toggleFilePopupOpen
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +45,7 @@ function Sidebar(props) {
                             icon = {<FaFileUpload/>}
                             disabled = {false}
                             className = {``}
+                            onClick = {toggleFilePopupOpen}
                         />
                         <Button
                             text = {`Execute action`}

@@ -8,10 +8,11 @@ function Button(props) {
         disabled,
         icon,
         text,
+        onClick = null,
     } = props;
 
     return (
-        <button className={`Button ${className}`} type="button" disabled = {disabled}>
+        <button className={`Button ${className}`} type="button" disabled = {disabled} onClick = {() => {onClick()}}>
             <div className={`Button-icon`}>
                 {icon}
             </div>
