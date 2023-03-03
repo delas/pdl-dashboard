@@ -4,9 +4,9 @@
     border-top: 1px solid #6c757d;
     border-bottom: 0.25px solid  #6c757d;
     background-color: #fff;
-    &:hover{
-        transform: scale(1.02);
-    }
+    // &:hover{
+    //     transform: scale(1.02);
+    // }
 }
 
 .SidebarFile-flexContainer{
@@ -47,6 +47,10 @@
     white-space: nowrap;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
+    &:hover{
+        transform: scale(1.1);
+        cursor: pointer;
+    }
 }
 
 .SidebarFile-delete{
@@ -54,5 +58,6 @@
     &:hover{
         transform: scale(1.1);
         cursor: pointer;
+        color: rgb(153, 0, 0);
     }
 }

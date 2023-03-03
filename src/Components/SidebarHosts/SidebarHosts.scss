@@ -1,8 +1,11 @@
 .SidebarHosts{
-    padding: 1em;
-    border: 1px solid black;
-    height: calc(100% - 7vw);
-
+    height: 100%;
+    width: 100%;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 1rem;
+    box-sizing:border-box;
 }
 
 .SidebarHosts-Top{
@@ -12,10 +15,52 @@
     align-items: center;
 
     .SidebarHosts-title{
-
+        font-size: 0.8rem;
+        display: flex;
+        flex-direction: row;
+        flex-grow: 0;
+        align-items: center;
     }
 
     .SidebarHosts-closeButton{
+        height: 30%;
+        width: auto;
+        aspect-ratio: 1 / 1;
+        svg{
+            width: 100%;
+            height: 100%;
+        }
+        &:hover{
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+    }
+}
 
+.SidebarHosts-body{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    justify-content: flex-start;
+    align-items: self-start;
+
+    .SidebarHosts-section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        h5{
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+    }
+
+    .SidebarHosts-repository{
+    }
+
+    .SidebarHosts-miner{
+    }
+
+    .SidebarHosts-serviceRegistry{
     }
 }

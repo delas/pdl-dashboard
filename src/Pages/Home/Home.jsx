@@ -52,7 +52,9 @@ function Home(props) {
                 </div>
 
                 <div className={`Home-SidebarHosts Home-SidebarHosts${sidebarHostsOpen ? "-sidebarHostsopen" : "-sidebarHostsclosed"}`}>
-                    <SidebarHosts/>
+                    <SidebarHosts
+                        toggleSidebarHosts = {toggleSidebarHosts}
+                    />
                 </div>
             
             

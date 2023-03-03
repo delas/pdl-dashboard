@@ -4,10 +4,6 @@
     background-color: #f8f9fa;
 }
 
-.Sidebar.closed{
-    width: 0;
-}
-
 .Sidebar-flexContainer{
     width: 100%;
     height: 100%;
@@ -55,7 +51,7 @@
 
 .Sidebar-status-icon{
     svg{
-        color: green;
+        color: #28a745;;
     }
 }
 

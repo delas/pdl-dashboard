@@ -3,6 +3,7 @@ $Sidebar-width: 25%;
 
 .Home{
     height: 100%;
+    // overflow-y: hidden;
 }
 
 .Home-PageLayout{
@@ -50,8 +51,9 @@ $Sidebar-width: 25%;
 
 .Home-SidebarHosts{
     position: absolute;
-    height: calc(100% - $Topbar-height);
-    top:$Topbar-height;
+    height: 100%;
+    top:0;
+    left: 0;
 
     transform: translateX(0);
     transition: left 0.5s ease-in-out, width 0.5s ease-in-out;
