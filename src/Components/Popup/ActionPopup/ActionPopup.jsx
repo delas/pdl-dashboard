@@ -18,36 +18,36 @@ function ActionPopup(props) {
     });
 
     const Miners = [
-        {name: 'miner1', value: 'sv'},
-        {name: 'miner2', value: 'en'},
-        {name: 'miner3', value: 'au'},
-        {name: 'miner4', value: 'dk'},
-        {name: 'miner5', value: 'nw'},
-        {name: 'miner6', value: 'ge'},
-        {name: 'miner7', value: 'fr'},
-        {name: 'miner8', value: 'us'},
+        {label: 'miner1', value: 'sv'},
+        {label: 'miner2', value: 'en'},
+        {label: 'miner3', value: 'au'},
+        {label: 'miner4', value: 'dk'},
+        {label: 'miner5', value: 'nw'},
+        {label: 'miner6', value: 'ge'},
+        {label: 'miner7', value: 'fr'},
+        {label: 'miner8', value: 'us'},
     ];
 
     const Repository = [
-        {name: 'repository1', value: 'sv'},
-        {name: 'repository2', value: 'en'},
-        {name: 'repository3', value: 'au'},
-        {name: 'repository4', value: 'dk'},
-        {name: 'repository5', value: 'nw'},
-        {name: 'repository6', value: 'ge'},
-        {name: 'repository7', value: 'fr'},
-        {name: 'repository8', value: 'us'},
+        {label: 'repository1', value: 'sv'},
+        {label: 'repository2', value: 'en'},
+        {label: 'repository3', value: 'au'},
+        {label: 'repository4', value: 'dk'},
+        {label: 'repository5', value: 'nw'},
+        {label: 'repository6', value: 'ge'},
+        {label: 'repository7', value: 'fr'},
+        {label: 'repository8', value: 'us'},
     ];
 
     const Files = [
-        {name: 'file1', value: 'sv'},
-        {name: 'file2', value: 'en'},
-        {name: 'file3', value: 'au'},
-        {name: 'file4', value: 'dk'},
-        {name: 'file5', value: 'nw'},
-        {name: 'file6', value: 'ge'},
-        {name: 'file7', value: 'fr'},
-        {name: 'file8', value: 'us'},
+        {label: 'file1', value: 'sv'},
+        {label: 'file2', value: 'en'},
+        {label: 'file3', value: 'au'},
+        {label: 'file4', value: 'dk'},
+        {label: 'file5', value: 'nw'},
+        {label: 'file6', value: 'ge'},
+        {label: 'file7', value: 'fr'},
+        {label: 'file8', value: 'us'},
     ];
 
     const Params = [

@@ -2,6 +2,8 @@ import './AddNewHostPopup.scss';
 import {useState, useEffect} from 'react';
 import { FaRegWindowClose, FaCloudUploadAlt } from 'react-icons/fa';
 import Dropdown from '../../Dropdown/Dropdown';
+import {saveHost} from '../../../Store/LocalDataStore';
+import {v4 as uuidv4} from 'uuid';
 
 function AddNewHostPopup(props) {
 
@@ -11,11 +13,27 @@ function AddNewHostPopup(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [selectedHosttype, setSelectedHosttype] = useState(null);
+    const [hostName, setHostname] = useState(null);
 
 
     useEffect(() => {
         setIsLoading(false);
     });
+
+    const handleSubmit = () => {
+        const newHost = {
+            id: uuidv4(),
+            name: hostName,
+            status: "online",
+            type: selectedHosttype,
+            addedFrom: 'locally',
+        };
+        saveHost(newHost.id, newHost);
+    }
+
+    const handleTextfieldChange = (event) => {
+        setHostname(event.target.value);
+    }
 
     if(isLoading){
         return (
@@ -26,17 +44,16 @@ function AddNewHostPopup(props) {
     }
 
     const hosttypes = [
-        {name:'miner', value:'miner'},
-        {name:'repository', value:'repository'},
-        {name:'service registry', value:'service registry'}
-    ]
+        {label:'miner', value:'miner'},
+        {label:'repository', value:'repository'},
+        {label:'service registry', value:'service registry'}
+    ];
 
-    const onValueChange = (value) => {
+    const onDropdownValueChange = (value) => {
         setSelectedHosttype(value);
     }
 
     return (
-        // <div className='AddNewHostPopup'>
         <div className='Backdrop-modal' 
             onClick = {() => {toggleNewHostPopupOpen()}}
         >
@@ -57,7 +74,7 @@ function AddNewHostPopup(props) {
                 <div className='AddNewHostPopup-body'>
 
                     <div className='AddNewHostPopup-input-parent'>
-                        <label className='AddNewHostPopup-input-label' for ="AddNewHostPopup-input-miner-id">
+                        <label className='AddNewHostPopup-input-label' for="AddNewHostPopup-input-miner-id">
                             {`Hostname:`}
                         </label>
                         <input 
@@ -65,6 +82,8 @@ function AddNewHostPopup(props) {
                             type={`text`} 
                             placeholder = {`http://miner.host.net`}
                             id = "AddNewHostPopup-input-miner-id"
+                            onChange = {handleTextfieldChange}
+                            value = {hostName}
                         />
                         
                     </div>
@@ -73,7 +92,7 @@ function AddNewHostPopup(props) {
                         <span className='AddNewHostPopup-wizard-dropdown-label'>Host type:</span>
                         <Dropdown
                             options = {hosttypes}
-                            onValueChange = {onValueChange}
+                            onValueCHange = {onDropdownValueChange}
                         />
                     </div>
 
@@ -84,14 +103,16 @@ function AddNewHostPopup(props) {
                         <button className='AddNewHostPopup-button AddNewHostPopup-button-cancel'
                             onClick = {() => {toggleNewHostPopupOpen()}}
                         >Cancel</button>
-                        <button className='AddNewHostPopup-button AddNewHostPopup-button-confirm'>Confirm</button>
+                        <button className='AddNewHostPopup-button AddNewHostPopup-button-confirm' onClick={() => {
+                            handleSubmit();
+                            toggleNewHostPopupOpen();
+                        }}>Confirm</button>
                     </div>
                 </footer>
 
             </div>
 
         </div>
-        // </div>
     );
 }
 

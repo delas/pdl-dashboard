@@ -6,10 +6,12 @@ import { FaTrash, FaServer, FaCogs, FaNetworkWired, FaQuestion } from 'react-ico
 function SidebarHostItem(props) {
 
     const {
+        id,
         hostName,
         hostType,
         addedFrom = 'locally', // values: ["locally", "http://...", "https://..."]
         status = "offline", //Values: ["offline", "online", "loading"]
+        onRemove
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -61,7 +63,7 @@ function SidebarHostItem(props) {
                     </div>
                 </div>
 
-                <div className='SidebarHostItem-delete'>
+                <div className='SidebarHostItem-delete' onClick = {() => {onRemove(id)}}>
                     <FaTrash/>
                 </div>
 
