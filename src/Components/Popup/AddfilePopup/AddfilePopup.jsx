@@ -40,18 +40,17 @@ function AddFilePopup(props) {
                     </div>
                 </header>
 
-                <form id="file-upload-form" classname="AddFilePopup-body">
+                <form id="file-upload-form" class="AddFilePopup-body">
                     <input id="file-upload" type="file" name="fileUpload" accept="image/*" className='AddFilePopup-fileinput'/>
 
                     <label for="file-upload" id="file-drag" className='AddFilePopup-fileinput-label'>
-                        <FaCloudUploadAlt id="file-image" src="#" alt="Preview" className='AddFilePopup-fileinput-icon'
-                            
-                        />
+                        <FaCloudUploadAlt id="file-image" src="#" alt="Preview" className='AddFilePopup-fileinput-icon'/>
 
                         <div className='AddFilePopup-fileinput-selectFile'>
                             <div>Select a file or drag here</div>
-                            <span id="file-upload-btn" classname="AddFilePopup-fileinput-button">Select a file</span>
+                            <span id="file-upload-btn" class="AddFilePopup-fileinput-button">Select a file</span>
                         </div>
+
                     </label>
                 </form>
 

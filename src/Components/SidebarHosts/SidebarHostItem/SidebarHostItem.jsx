@@ -2,6 +2,7 @@ import './SidebarHostItem.scss';
 // import Button from '../Button/Button';
 import {useState, useEffect} from 'react';
 import { FaTrash, FaServer, FaCogs, FaNetworkWired, FaQuestion } from 'react-icons/fa';
+// import {PingServiceRegistry} from '../../../Services/ServiceRegistryServices';
 
 function SidebarHostItem(props) {
 
@@ -10,16 +11,46 @@ function SidebarHostItem(props) {
         hostName,
         hostType,
         addedFrom = 'locally', // values: ["locally", "http://...", "https://..."]
-        status = "offline", //Values: ["offline", "online", "loading"]
-        onRemove
+        onRemove,
+        ping,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
     const [icon, setIcon] = useState(null);
+    const [status, setStatus] = useState('offline');
+    const [isPingActive, setIsPingActive] = useState(false);
+
+    const getStatus = (res) => {
+        return res.status === 200 && res.data.toUpperCase() === "PONG";
+    }
 
     useEffect(() => {
-        setIsLoading(false);
-    });
+        setStatus("loading");
+        ping(hostName).then((res) => {
+            setStatus(getStatus(res) ? "online" : "offline");
+        }).then(() => {
+            setIsLoading(false);
+        }).catch((e) => {
+            console.log(e);
+            setStatus('offline');
+        })
+
+        if(!isPingActive) pingOnInterval(5000);
+    }, []);
+
+    const pingOnInterval = async (timeBetweenTicks) => {
+        setIsPingActive(true);
+        setInterval(() => {
+            ping(hostName).then((res) => {
+                setStatus(getStatus(res) ? "online" : "offline");
+            }).catch((e) => {
+                console.log(e);
+                setStatus('offline');
+            })
+        }, timeBetweenTicks);
+    }
+
+    
 
     const setIconForItem = () => {
         switch(hostType){

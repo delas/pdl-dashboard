@@ -4,7 +4,6 @@ export function saveHost(key, hostObject){
 
 export function removeHost(key){
     try{
-        console.log(`remove item with key ${key}`);
         localStorage.removeItem(key);
     }
     catch(e) {

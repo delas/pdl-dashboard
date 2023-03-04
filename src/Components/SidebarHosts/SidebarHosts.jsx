@@ -1,10 +1,11 @@
 import './SidebarHosts.scss';
-import Button from '../Button/Button';
 import {useState, useEffect} from 'react';
 import { FaRegWindowClose } from 'react-icons/fa';
 import SidebarHostItem from './SidebarHostItem/SidebarHostItem';
-import fs from 'fs';
-import {saveHost, getMiners, getRepositories, getServiceRegistries, removeHost} from '../../Store/LocalDataStore';
+import {getMiners, getRepositories, getServiceRegistries, removeHost} from '../../Store/LocalDataStore';
+import {PingServiceRegistry} from '../../Services/ServiceRegistryServices';
+import {PingMiner} from '../../Services/MinerServices';
+import {PingRepository} from '../../Services/RepositoryServices';
 
 
 
@@ -16,7 +17,7 @@ function SidebarHosts(props) {
         toggleSidebarHosts
     } = props;
 
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         setIsLoading(false);
@@ -29,7 +30,7 @@ function SidebarHosts(props) {
             </div>
         )
     }
-    
+
     const forceRerender = () => {
         forceUpdate({});
     }
@@ -59,8 +60,8 @@ function SidebarHosts(props) {
                             hostName = {repository.name}
                             hostType = {repository.type}
                             addedFrom = {repository.addedFrom}
-                            status = {repository.status}
                             onRemove = {removeHostAndUpdate}
+                            ping = {PingRepository}
                         />
                     })}
                     
@@ -75,8 +76,8 @@ function SidebarHosts(props) {
                             hostName = {miner.name}
                             hostType = {miner.type}
                             addedFrom = {miner.addedFrom}
-                            status = {miner.status}
                             onRemove = {removeHostAndUpdate}
+                            ping = {PingMiner}
                         />
                     })}
                 </div>
@@ -90,8 +91,8 @@ function SidebarHosts(props) {
                             hostName = {serviceRegistry.name}
                             hostType = {serviceRegistry.type}
                             addedFrom = {serviceRegistry.addedFrom}
-                            status = {serviceRegistry.status}
                             onRemove = {removeHostAndUpdate}
+                            ping = {PingServiceRegistry}
                         />
                     })}
                 </div>
