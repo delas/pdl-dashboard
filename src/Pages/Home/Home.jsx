@@ -6,6 +6,7 @@ import Sidebar from '../../Components/Sidebar/Sidebar';
 import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
 import AddFilePopup from '../../Components/Popup/AddfilePopup/AddfilePopup';
 import ActionPopup from '../../Components/Popup/ActionPopup/ActionPopup';
+import AddNewHostPopup from '../../Components/Popup/AddNewHostPopup/AddNewHostPopup';
 
 function Home(props) {
 
@@ -43,6 +44,7 @@ function Home(props) {
                         <Sidebar
                             toggleFilePopupOpen = {toggles.toggleFilePopupOpen}
                             toggleActionPopupOpen = {toggles.toggleActionPopupOpen}
+                            toggleNewHostPopupOpen = {toggles.toggleNewHostPopupOpen}
                         />
                     </div>
 
@@ -69,6 +71,13 @@ function Home(props) {
                 {isOpen.actionPopupOpen ?
                     <ActionPopup
                         toggleActionPopupOpen = {toggles.toggleActionPopupOpen}
+                    />
+                    : null
+                }
+
+                {isOpen.newHostPopupOpen ? 
+                    <AddNewHostPopup
+                        toggleNewHostPopupOpen = {toggles.toggleNewHostPopupOpen}
                     />
                     : null
                 }

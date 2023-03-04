@@ -11,6 +11,7 @@ function App(props) {
     const [sidebarHostsOpen, setSidebarHostsOpen] = useState(false);
     const [filePopupOpen, setFilePopupOpen] = useState(false);
     const [actionPopupOpen, setActionPopupOpen] = useState(false);
+    const [newHostPopupOpen, setNewHostPopupOpen] = useState(true);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -26,6 +27,10 @@ function App(props) {
 
     const toggleActionPopupOpen = () => {
         setActionPopupOpen(!actionPopupOpen);
+    }
+
+    const toggleNewHostPopupOpen = () => {
+        setNewHostPopupOpen(!newHostPopupOpen)
     }
 
     useEffect(() => {
@@ -47,13 +52,15 @@ function App(props) {
                     toggleSidebar: toggleSidebar,
                     toggleSidebarHosts: toggleSidebarHosts,
                     toggleFilePopupOpen: toggleFilePopupOpen,
-                    toggleActionPopupOpen: toggleActionPopupOpen
+                    toggleActionPopupOpen: toggleActionPopupOpen,
+                    toggleNewHostPopupOpen: toggleNewHostPopupOpen
                 }}
                 isOpen = {{
                     sidebarOpen: sidebarOpen,
                     sidebarHostsOpen: sidebarHostsOpen,
                     filePopupOpen: filePopupOpen,
-                    actionPopupOpen: actionPopupOpen
+                    actionPopupOpen: actionPopupOpen,
+                    newHostPopupOpen: newHostPopupOpen
                 }}
             /> : null}
             {props.page === "Page1" ? <Page1/> : null}

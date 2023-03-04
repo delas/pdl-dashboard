@@ -1,14 +1,15 @@
 import './Sidebar.scss';
 import Button from '../Button/Button';
 import {useState, useEffect} from 'react';
-import { FaCircle, FaCog, FaFileUpload } from 'react-icons/fa';
+import { FaCircle, FaCog, FaFileUpload, FaBuffer } from 'react-icons/fa';
 import SidebarFile from '../SidebarFiles/SidebarFile';
 
 function Sidebar(props) {
 
     const {
         toggleFilePopupOpen,
-        toggleActionPopupOpen
+        toggleActionPopupOpen,
+        toggleNewHostPopupOpen
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -54,6 +55,13 @@ function Sidebar(props) {
                             disabled = {false}
                             className = {``}
                             onClick = {toggleActionPopupOpen}
+                        />
+                        <Button
+                            text = {`Add new host`}
+                            icon = {<FaBuffer/>}
+                            disabled = {false}
+                            className={``}
+                            onClick = {toggleNewHostPopupOpen}
                         />
                     </div>
                     <div className='Sidebar-flexContainer-files'>
