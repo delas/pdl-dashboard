@@ -11,6 +11,8 @@ function SidebarHostItem(props) {
         addedFrom = 'locally', // values: ["locally", "http://...", "https://..."]
         onRemove,
         ping,
+        openPopup,
+        popups,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -57,6 +59,16 @@ function SidebarHostItem(props) {
         }
     }
 
+    const openPopupHandler = () => {
+        console.log(popups)
+        switch(hostType){
+            case 'miner': openPopup(popups.ActionPopup, {miner: {label: hostName, value: id}}); break;
+            case 'repository': openPopup(popups.AddFilePopup, {repository: {label: hostName, value: id}}); break;
+            case 'service registry': break;
+            default: break;
+        }
+    }
+
     useEffect(() => {
         setIconForItem();
     }, []);
@@ -78,7 +90,7 @@ function SidebarHostItem(props) {
                         <div className={`SidebarHostItem-filetype SidebarHostItem-filetype-${status}`}>
                             {icon}
                         </div>
-                        <div className='SidebarHostItem-filename'>
+                        <div className='SidebarHostItem-filename' onClick = {() => {openPopupHandler()}}>
                             {hostName}
                         </div>
                     </div>

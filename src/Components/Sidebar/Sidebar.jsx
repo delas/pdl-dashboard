@@ -7,9 +7,8 @@ import SidebarFile from '../SidebarFiles/SidebarFile';
 function Sidebar(props) {
 
     const {
-        toggleFilePopupOpen,
-        toggleActionPopupOpen,
-        toggleNewHostPopupOpen
+        openPopup,
+        popups,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -47,21 +46,21 @@ function Sidebar(props) {
                             icon = {<FaFileUpload/>}
                             disabled = {false}
                             className = {``}
-                            onClick = {toggleFilePopupOpen}
+                            onClick = {() => {openPopup(popups.AddFilePopup)}}
                         />
                         <Button
                             text = {`Execute action`}
                             icon = {<FaCog/>}
                             disabled = {false}
                             className = {``}
-                            onClick = {toggleActionPopupOpen}
+                            onClick = {() => {openPopup(popups.ActionPopup)}}
                         />
                         <Button
                             text = {`Add new host`}
                             icon = {<FaBuffer/>}
                             disabled = {false}
                             className={``}
-                            onClick = {toggleNewHostPopupOpen}
+                            onClick = {() => {openPopup(popups.AddNewHostPopup)}}
                         />
                     </div>
                     <div className='Sidebar-flexContainer-files'>
@@ -71,6 +70,8 @@ function Sidebar(props) {
                                     <SidebarFile key={index}
                                         filename = {file.filename}
                                         filetype = {file.filetype}
+                                        openPopup = {openPopup}
+                                        popups = {popups}
                                     />
                                 )
                             })

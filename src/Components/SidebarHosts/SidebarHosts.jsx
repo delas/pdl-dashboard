@@ -15,7 +15,10 @@ function SidebarHosts(props) {
     const [, forceUpdate] = useState();
 
     const {
-        toggleSidebarHosts
+        toggleSidebarHosts,
+        toggleFilePopupOpen,
+        openPopup,
+        popups,
     } = props;
 
     const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +43,11 @@ function SidebarHosts(props) {
         removeHost(id);
         forceRerender();
     }
+
+    // const onSidebarHostClick = () => {
+    //     openPopup(popups.AddFilePopup);
+    //     // toggleFilePopupOpen();
+    // }
 
     return (
         <div className="SidebarHosts">
@@ -66,6 +74,8 @@ function SidebarHosts(props) {
                                     addedFrom = {repository.addedFrom}
                                     onRemove = {removeHostAndUpdate}
                                     ping = {PingRepository}
+                                    openPopup = {openPopup}
+                                    popups = {popups}
                                 />
                                 {/* {index < getRepositories().length - 1 ? <HorizontalLine/> : null} */}
                             </>)
@@ -87,6 +97,8 @@ function SidebarHosts(props) {
                                 addedFrom = {miner.addedFrom}
                                 onRemove = {removeHostAndUpdate}
                                 ping = {PingMiner}
+                                openPopup = {openPopup}
+                                popups = {popups}
                             />
                             {/* {index < getMiners().length - 1 ? <HorizontalLine/> : null} */}
                         </>

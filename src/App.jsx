@@ -55,6 +55,13 @@ function App(props) {
                     toggleActionPopupOpen: toggleActionPopupOpen,
                     toggleNewHostPopupOpen: toggleNewHostPopupOpen
                 }}
+                set = {{
+                    setSidebarOpen: setSidebarOpen,
+                    setSidebarHostsOpen: setSidebarHostsOpen,
+                    setFilePopupOpen: setFilePopupOpen,
+                    setActionPopupOpen: setActionPopupOpen,
+                    setNewHostPopupOpen: setNewHostPopupOpen,
+                }}
                 isOpen = {{
                     sidebarOpen: sidebarOpen,
                     sidebarHostsOpen: sidebarHostsOpen,

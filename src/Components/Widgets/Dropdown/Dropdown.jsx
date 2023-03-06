@@ -1,5 +1,5 @@
 import './Dropdown.scss';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Select from 'react-select'
 
 function Dropdown(props) {
@@ -11,7 +11,14 @@ function Dropdown(props) {
         label,
         placeholder = "select from list",
         onValueCHange = () => {},
+        value = null,
     } = props;
+
+    useEffect(() => {
+        if(value !== selected){
+            setSelected(value);
+        }
+    }, [])
     
     const handleValueChange = (value) => {
         setSelected(value);

@@ -6,7 +6,9 @@ function SidebarFile(props) {
 
     const {
         filename,
-        filetype
+        filetype,
+        openPopup,
+        popups,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +32,9 @@ function SidebarFile(props) {
                     <div className='SidebarFile-filetype'>
                         {filetype}
                     </div>
-                    <div className='SidebarFile-filename'>
+                    <div className='SidebarFile-filename' 
+                        // onClick = {() => { openPopup(popups.AddNewHostPopup, {repository: {}}) }}
+                    >
                         {filename}
                     </div>
                 </div>

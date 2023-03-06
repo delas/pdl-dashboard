@@ -7,42 +7,38 @@ import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import InputField from '../../Widgets/InputField/InputField';
 import HorizontalLine from '../../Widgets/HorizontalLine/HorizontalLine';
+import { getMiners, getRepositories } from '../../../Store/LocalDataStore';
 
 function ActionPopup(props) {
 
     const {
-        toggleActionPopupOpen
+        toggleActionPopupOpen,
+        miner = {},
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
     const [selected, setSelected] = useState(1);
     const [dropdownValue, setDropdownValue] = useState(null);
+    const [minerDestination, setMinerDestination] = useState(null);
 
     useEffect(() => {
         setIsLoading(false);
+        setMinerDestination(miner);
     });
 
-    const Miners = [
-        {label: 'miner1', value: 'sv'},
-        {label: 'miner2', value: 'en'},
-        {label: 'miner3', value: 'au'},
-        {label: 'miner4', value: 'dk'},
-        {label: 'miner5', value: 'nw'},
-        {label: 'miner6', value: 'ge'},
-        {label: 'miner7', value: 'fr'},
-        {label: 'miner8', value: 'us'},
-    ];
+    const onMinerChange = (value) => {
+        setMinerDestination(value)
+    }
 
-    const Repository = [
-        {label: 'repository1', value: 'sv'},
-        {label: 'repository2', value: 'en'},
-        {label: 'repository3', value: 'au'},
-        {label: 'repository4', value: 'dk'},
-        {label: 'repository5', value: 'nw'},
-        {label: 'repository6', value: 'ge'},
-        {label: 'repository7', value: 'fr'},
-        {label: 'repository8', value: 'us'},
-    ];
+    const miners = getMiners().map((miner, index) => {
+        return {label: miner.name, value: miner.id}
+    });
+    
+    const repositories = getRepositories().map((repository, index) => {
+        return {label: repository.name, value: repository.id}
+    });
+
+
 
     const Files = [
         {label: 'file1', value: 'sv'},
@@ -138,9 +134,10 @@ function ActionPopup(props) {
                 {selected === 1 ? 
                     <div className='ActionPopup-wizard-step1'>
                         <Dropdown
-                            options = {Files}
-                            onValueChange = {onValueChange}
+                            options = {miners}
+                            onValueChange = {onMinerChange}
                             label = {`Select miner`}
+                            value = {minerDestination}
                         />
                     </div>
                 : null}
@@ -191,7 +188,7 @@ function ActionPopup(props) {
                 {selected === 4 ? 
                     <div className='ActionPopup-wizard-step4'>
                         <Dropdown
-                            options = {Files}
+                            options = {repositories}
                             onValueChange = {onValueChange}
                             label = {`Select the destination repository`}
                         />

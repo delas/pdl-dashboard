@@ -13,10 +13,51 @@ function Home(props) {
     const {
         toggles,
         isOpen,
+        set,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
+    const [popupProps, setPopupProps] = useState({});
+
+    const popups = {
+        AddNewHostPopup: 'AddNewHostPopup',
+        AddFilePopup: 'AddFilePopup',
+        ActionPopup: 'ActionPopup'
+    }
     
+    const openPopup = (popup, props = {}) => {
+        console.log(popup)
+        switch(popup){
+            case 'AddNewHostPopup': 
+                set.setNewHostPopupOpen(true); 
+                setPopupProps(props);
+                break;
+            case 'AddFilePopup': 
+                set.setFilePopupOpen(true); 
+                setPopupProps(props);
+                break;
+            case 'ActionPopup': 
+                set.setActionPopupOpen(true); 
+                setPopupProps(props);
+                break;
+            default: (() => {})(); break; // Do nothing. Produces empty lambda expression call
+        }
+    }
+
+    const closePopup = (popup) => {
+        switch(popup){
+            case 'AddNewHostPopup': 
+                set.setNewHostPopupOpen(false);
+                break;
+            case 'AddFilePopup': 
+                set.setFilePopupOpen(false);
+                break;
+            case 'ActionPopup': 
+                set.setActionPopupOpen(false);
+                break;
+            default: (() => {})(); break; // Do nothing. Produces empty lambda expression call
+        }
+    }
 
     useEffect(() => {
         setIsLoading(false);
@@ -42,9 +83,8 @@ function Home(props) {
                 <div className={`Home-Page-below-topbar`}>
                     <div className={`Home-Sidebar Home-Sidebar${isOpen.sidebarOpen ? "-sidebaropen" : "-sidebarclosed"}`}>
                         <Sidebar
-                            toggleFilePopupOpen = {toggles.toggleFilePopupOpen}
-                            toggleActionPopupOpen = {toggles.toggleActionPopupOpen}
-                            toggleNewHostPopupOpen = {toggles.toggleNewHostPopupOpen}
+                            openPopup = {openPopup}
+                            popups = {popups}
                         />
                     </div>
 
@@ -58,12 +98,17 @@ function Home(props) {
                 <div className={`Home-SidebarHosts Home-SidebarHosts${isOpen.sidebarHostsOpen ? "-sidebarHostsopen" : "-sidebarHostsclosed"}`}>
                     <SidebarHosts
                         toggleSidebarHosts = {toggles.toggleSidebarHosts}
+                        openPopup = {openPopup}
+                        popups = {popups}
                     />
                 </div>
 
                 {isOpen.filePopupOpen ?
                     <AddFilePopup
                         toggleFilePopupOpen = {toggles.toggleFilePopupOpen}
+                        {...popupProps}
+                        closePopup = {closePopup}
+                        popups = {popups}
                     />
                     : null
                 }
@@ -71,6 +116,9 @@ function Home(props) {
                 {isOpen.actionPopupOpen ?
                     <ActionPopup
                         toggleActionPopupOpen = {toggles.toggleActionPopupOpen}
+                        {...popupProps}
+                        closePopup = {closePopup}
+                        popups = {popups}
                     />
                     : null
                 }
@@ -78,6 +126,9 @@ function Home(props) {
                 {isOpen.newHostPopupOpen ? 
                     <AddNewHostPopup
                         toggleNewHostPopupOpen = {toggles.toggleNewHostPopupOpen}
+                        {...popupProps}
+                        closePopup = {closePopup}
+                        popups = {popups}
                     />
                     : null
                 }
