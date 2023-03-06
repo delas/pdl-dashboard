@@ -1,6 +1,10 @@
 .SidebarHostItem{
     width: 100%;
-
+    background-color: #FFF;
+    padding: 0.5rem 1rem;
+    box-sizing:border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
 }
 
 .SidebarHostItem-flexContainer{
@@ -11,7 +15,7 @@
 }
 
 .SidebarHostItem-flexContainer-left{
-
+    width: 100%;
 }
 
 .SidebarHostItem-flexContainer-topleft{
@@ -20,6 +24,7 @@
     justify-content: flex-start;
     align-items: center;
     gap: 1em;
+    width: 100%;
 
     .SidebarHostItem-filetype{
         height: 1em;
@@ -41,7 +46,12 @@
     }
 
     .SidebarHostItem-filename{
-
+        text-align: left;
+        width: 100%;
+        &:hover{
+            text-decoration: underline;
+            cursor: pointer;
+        }
     }
 }
 

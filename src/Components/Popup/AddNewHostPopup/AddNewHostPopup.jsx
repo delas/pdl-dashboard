@@ -1,9 +1,11 @@
 import './AddNewHostPopup.scss';
 import {useState, useEffect} from 'react';
-import { FaRegWindowClose, FaCloudUploadAlt } from 'react-icons/fa';
-import Dropdown from '../../Dropdown/Dropdown';
+import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {saveHost} from '../../../Store/LocalDataStore';
 import {v4 as uuidv4} from 'uuid';
+import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
+import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
+import InputField from '../../Widgets/InputField/InputField';
 
 function AddNewHostPopup(props) {
 
@@ -35,6 +37,11 @@ function AddNewHostPopup(props) {
         setHostname(event.target.value);
     }
 
+    const onConfirmClick = () => {
+        handleSubmit();
+        toggleNewHostPopupOpen();
+    }
+
     if(isLoading){
         return (
             <div className="AddNewHostPopup">
@@ -61,54 +68,38 @@ function AddNewHostPopup(props) {
             <div className='AddNewHostPopup' 
                 onClick = {(e) => {e.stopPropagation()}}
             >
-                
-                <header className='AddNewHostPopup-header'>
-                    <h4>Add new host</h4>
-                    <div className='ClosePopup'>
-                        <FaRegWindowClose
-                            onClick = {() => {toggleNewHostPopupOpen()}}
-                        />
-                    </div>
-                </header>
+
+                <PopupHeader
+                    title = {`Add new host`}
+                    closePopup = {toggleNewHostPopupOpen}
+                />
 
                 <div className='AddNewHostPopup-body'>
 
-                    <div className='AddNewHostPopup-input-parent'>
-                        <label className='AddNewHostPopup-input-label' for="AddNewHostPopup-input-miner-id">
-                            {`Hostname:`}
-                        </label>
-                        <input 
-                            className={`AddNewHostPopup-input`}
-                            type={`text`} 
-                            placeholder = {`http://miner.host.net`}
-                            id = "AddNewHostPopup-input-miner-id"
-                            onChange = {handleTextfieldChange}
-                            value = {hostName}
-                        />
-                        
-                    </div>
+                    <InputField
+                        className={`AddNewHostPopup-input`}
+                        type={`text`} 
+                        placeholder = {`http://miner.host.net`}
+                        id = "AddNewHostPopup-input-miner-id"
+                        onChange = {handleTextfieldChange}
+                        value = {hostName}
+                        label = {`Hostname:`}
+                    />
 
-                    <div className='AddNewHostPopup-hosttype-dropdown'>
-                        <span className='AddNewHostPopup-wizard-dropdown-label'>Host type:</span>
-                        <Dropdown
-                            options = {hosttypes}
-                            onValueCHange = {onDropdownValueChange}
-                        />
-                    </div>
+                    <Dropdown
+                        options = {hosttypes}
+                        onValueCHange = {onDropdownValueChange}
+                        label = {`Host type:`}
+                    />
 
                 </div>
 
-                <footer className='AddNewHostPopup-footer'>
-                    <div className='AddNewHostPopup-buttonContainer'>
-                        <button className='AddNewHostPopup-button AddNewHostPopup-button-cancel'
-                            onClick = {() => {toggleNewHostPopupOpen()}}
-                        >Cancel</button>
-                        <button className='AddNewHostPopup-button AddNewHostPopup-button-confirm' onClick={() => {
-                            handleSubmit();
-                            toggleNewHostPopupOpen();
-                        }}>Confirm</button>
-                    </div>
-                </footer>
+                <PopupFooter
+                    onCancelClick = {toggleNewHostPopupOpen}
+                    onNextClick = {onConfirmClick}
+                    cancelText = {`Cancel`}
+                    nextText = {`Confirm`}
+                />
 
             </div>
 

@@ -18,11 +18,12 @@
 }
 
 .SidebarFile-flexContainer-left{
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    gap: 5px;
+    gap: 0.5em;
 }
 
 .SidebarFile-filetype{
@@ -47,8 +48,9 @@
     white-space: nowrap;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
+    text-align: left;
     &:hover{
-        transform: scale(1.1);
+        transform: scale(1.02);
         cursor: pointer;
     }
 }

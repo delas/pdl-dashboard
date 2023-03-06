@@ -1,8 +1,6 @@
 import './SidebarHostItem.scss';
-// import Button from '../Button/Button';
 import {useState, useEffect} from 'react';
 import { FaTrash, FaServer, FaCogs, FaNetworkWired, FaQuestion } from 'react-icons/fa';
-// import {PingServiceRegistry} from '../../../Services/ServiceRegistryServices';
 
 function SidebarHostItem(props) {
 
@@ -31,8 +29,8 @@ function SidebarHostItem(props) {
         }).then(() => {
             setIsLoading(false);
         }).catch((e) => {
-            console.log(e);
             setStatus('offline');
+            setIsLoading(false);
         })
 
         if(!isPingActive) pingOnInterval(5000);
@@ -49,8 +47,6 @@ function SidebarHostItem(props) {
             })
         }, timeBetweenTicks);
     }
-
-    
 
     const setIconForItem = () => {
         switch(hostType){

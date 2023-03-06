@@ -1,7 +1,12 @@
 import './ActionPopup.scss';
 import {useState, useEffect} from 'react';
 import { FaRegWindowClose, FaCloudUploadAlt } from 'react-icons/fa';
-import Dropdown from '../../Dropdown/Dropdown';
+import Dropdown from '../../Widgets/Dropdown/Dropdown';
+import FileInput  from '../../Widgets/FileInput/FileInput';
+import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
+import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
+import InputField from '../../Widgets/InputField/InputField';
+import HorizontalLine from '../../Widgets/HorizontalLine/HorizontalLine';
 
 function ActionPopup(props) {
 
@@ -107,15 +112,11 @@ function ActionPopup(props) {
             <div className='ActionPopup' 
                 onClick = {(e) => {e.stopPropagation()}}
             >
-                
-                <header className='ActionPopup-header'>
-                    <h4>New action</h4>
-                    <div className='ClosePopup'>
-                        <FaRegWindowClose
-                            onClick = {() => {toggleActionPopupOpen()}}
-                        />
-                    </div>
-                </header>
+
+                <PopupHeader
+                    title = {`New action`}
+                    closePopup = {toggleActionPopupOpen}
+                />
 
                 <table className='ActionPopup-wizard-steps'>
                         <td className={`ActionPopup-wizard-step ActionPopup-wizard-step-${selected === 1 ? "selected": ""}`}>
@@ -136,13 +137,11 @@ function ActionPopup(props) {
 
                 {selected === 1 ? 
                     <div className='ActionPopup-wizard-step1'>
-                        <div className='ActionPopup-wizard-dropdown'>
-                            <span className='ActionPopup-wizard-dropdown-label'>Select miner</span>
-                            <Dropdown
-                                options = {Miners}
-                                onValueChange = {onValueChange}
-                            />
-                        </div>
+                        <Dropdown
+                            options = {Files}
+                            onValueChange = {onValueChange}
+                            label = {`Select miner`}
+                        />
                     </div>
                 : null}
 
@@ -150,28 +149,16 @@ function ActionPopup(props) {
 
                 {selected === 2 ? 
                     <div className='ActionPopup-wizard-step2'>
-                        <form id="file-upload-form" class="ActionPopup-body">
-                            <input id="file-upload" type="file" name="fileUpload" accept="image/*" className='ActionPopup-fileinput'/>
 
-                            <label for="file-upload" id="file-drag" className='ActionPopup-fileinput-label'>
-                                <FaCloudUploadAlt id="file-image" src="#" alt="Preview" className='ActionPopup-fileinput-icon'/>
+                        <FileInput onChance = {() => {}}/>
 
-                                <div className='ActionPopup-fileinput-selectFile'>
-                                    <div>Select a file or drag here</div>
-                                    <span id="file-upload-btn" class="ActionPopup-fileinput-button">Select a file</span>
-                                </div>
-
-                            </label>
-                        </form>
-
-                        <div className='ActionPopup-wizard-dropdown'>
-                            <span className='ActionPopup-wizard-dropdown-label'>Select file</span>
-                            <Dropdown
-                                options = {Files}
-                                onValueChange = {onValueChange}
-                            />
-                        </div>
+                        <Dropdown
+                            options = {Files}
+                            onValueChange = {onValueChange}
+                            label = {`Select file`}
+                        />
                     </div> 
+
                 : null}
 
                 {/* ------------------ STEP 3 ------------------ */}
@@ -183,17 +170,15 @@ function ActionPopup(props) {
                                 Params.map((param, index) => {
                                     const type = getInputType(param);
                                     return (
-                                        <div className='ActionPopup-Wizard-parameter-input-parent'>
-                                            <label className='ActionPopup-Wizard-paramter-input-label'>
-                                                {param.name}
-                                            </label>
-                                            <input 
-                                                className={`ActionPopup-Wizard-parameter-input ActionPopup-Wizard-parameter-input-${type}`}
-                                                type={type} key={index} 
-                                                placeholder = {type}
-                                            />
-                                            
-                                        </div>
+                                        <>
+                                        <InputField
+                                            key = {index}
+                                            label = {param.name}
+                                            fieldType = {type}
+                                            placeholder = {type}
+                                        />
+                                        {index < Params.length - 1 ? <HorizontalLine/> : null}
+                                        </>
                                     )
                                 })
                             }
@@ -205,26 +190,20 @@ function ActionPopup(props) {
 
                 {selected === 4 ? 
                     <div className='ActionPopup-wizard-step4'>
-                        <div className='ActionPopup-wizard-dropdown'>
-                            <span className='ActionPopup-wizard-dropdown-label'>Select the destination repository</span>
-                            <Dropdown
-                                options = {Repository}
-                                onValueChange = {onValueChange}
-                            />
-                        </div>
+                        <Dropdown
+                            options = {Files}
+                            onValueChange = {onValueChange}
+                            label = {`Select the destination repository`}
+                        />
                     </div> 
                 : null}
 
-                
-
-                <footer className='ActionPopup-footer'>
-                    <div className='ActionPopup-buttonContainer'>
-                        <button className='ActionPopup-button ActionPopup-button-cancel'
-                            onClick = {() => {handleCancelButtonClick()}}
-                        >{getCancelButtonName()}</button>
-                        <button className='ActionPopup-button ActionPopup-button-confirm' onClick={() => {handleNextButtonClick()}}>{getNextButtonName()}</button>
-                    </div>
-                </footer>
+                <PopupFooter
+                    onCancelClick = {handleCancelButtonClick}
+                    onNextClick = {handleNextButtonClick}
+                    cancelText = {getCancelButtonName()}
+                    nextText = {getNextButtonName()}
+                />
 
             </div>
 

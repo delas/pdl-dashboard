@@ -1,0 +1,27 @@
+.Popup-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    border-top-left-radius: calc(0.3rem - 1px);
+    border-top-right-radius: calc(0.3rem - 1px);
+
+    h4{
+        line-height: 0.7;
+    }
+
+    .ClosePopup{
+        height: 1.3em;
+        width: auto;
+        aspect-ratio: 1 / 1;
+        svg{
+            width: 100%;
+            height: 100%;
+        }
+        &:hover{
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+    }
+}

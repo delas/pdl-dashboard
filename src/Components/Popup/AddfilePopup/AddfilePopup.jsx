@@ -1,6 +1,9 @@
 import './AddfilePopup.scss';
 import {useState, useEffect} from 'react';
 import { FaRegWindowClose, FaCloudUploadAlt } from 'react-icons/fa';
+import FileInput from '../../Widgets/FileInput/FileInput';
+import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
+import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 
 function AddFilePopup(props) {
 
@@ -31,37 +34,19 @@ function AddFilePopup(props) {
                 onClick = {(e) => {e.stopPropagation()}}
             >
 
-                <header className='AddFilePopup-header'>
-                    <h4>Upload file</h4>
-                    <div className='ClosePopup'>
-                        <FaRegWindowClose
-                            onClick = {() => {toggleFilePopupOpen()}}
-                        />
-                    </div>
-                </header>
+                <PopupHeader
+                    title = {`Upload file`}
+                    closePopup = {toggleFilePopupOpen}
+                />
 
-                <form id="file-upload-form" class="AddFilePopup-body">
-                    <input id="file-upload" type="file" name="fileUpload" accept="image/*" className='AddFilePopup-fileinput'/>
+                <FileInput onChange = {() => {}}/>
 
-                    <label for="file-upload" id="file-drag" className='AddFilePopup-fileinput-label'>
-                        <FaCloudUploadAlt id="file-image" src="#" alt="Preview" className='AddFilePopup-fileinput-icon'/>
-
-                        <div className='AddFilePopup-fileinput-selectFile'>
-                            <div>Select a file or drag here</div>
-                            <span id="file-upload-btn" class="AddFilePopup-fileinput-button">Select a file</span>
-                        </div>
-
-                    </label>
-                </form>
-
-                <footer className='AddFilePopup-footer'>
-                    <div className='AddFilePopup-buttonContainer'>
-                        <button className='AddFilePopup-button AddFilePopup-button-cancel'
-                            onClick = {() => {toggleFilePopupOpen()}}
-                        >Cancel</button>
-                        <button className='AddFilePopup-button AddFilePopup-button-confirm'>Confirm</button>
-                    </div>
-                </footer>
+                <PopupFooter
+                    onCancelClick = {toggleFilePopupOpen}
+                    onNextClick = {() => {}}
+                    cancelText = {`Cancel`}
+                    nextText = {`Confirm`}
+                />
 
             </div>
         </div>

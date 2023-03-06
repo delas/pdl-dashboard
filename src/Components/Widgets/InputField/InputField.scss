@@ -1,0 +1,28 @@
+.InputField-parent{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-self: flex-start;
+    align-items: flex-start;
+    // padding: 0.5rem 1rem;
+    // box-sizing: border-box;
+}
+
+.InputField-label{
+}
+
+.InputField{
+    width: 100%;
+    font-size: 1.5;
+    height: 2em;
+    &-text{
+        height: 2em;
+    }
+    &-number{
+
+    }
+    &-checkbox{
+        width: auto;
+        height: auto;
+    }
+}
