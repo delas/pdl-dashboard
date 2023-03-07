@@ -62,9 +62,6 @@ function AddNewHostPopup(props) {
     }
 
     return (
-        // <div className='Backdrop-modal' 
-        //     onClick = {() => {toggleNewHostPopupOpen()}}
-        // >
         <BackdropModal closeModal = {toggleNewHostPopupOpen}>
 
             <div className='AddNewHostPopup' 
@@ -106,7 +103,6 @@ function AddNewHostPopup(props) {
             </div>
             
             </BackdropModal>
-        // </div>
     );
 }
 
