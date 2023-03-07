@@ -101,7 +101,7 @@ function SidebarHostItem(props) {
 
                     <div className='SidebarHostItem-flexContainer-bottomleft'>
                         <div className='SidebarHostItem-addedFrom'>
-                            {addedFrom}
+                            <b>Added from:</b> {addedFrom}
                         </div>
                     </div>
                 </div>
