@@ -6,6 +6,7 @@ import {v4 as uuidv4} from 'uuid';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import InputField from '../../Widgets/InputField/InputField';
+import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 
 function AddNewHostPopup(props) {
 
@@ -61,9 +62,10 @@ function AddNewHostPopup(props) {
     }
 
     return (
-        <div className='Backdrop-modal' 
-            onClick = {() => {toggleNewHostPopupOpen()}}
-        >
+        // <div className='Backdrop-modal' 
+        //     onClick = {() => {toggleNewHostPopupOpen()}}
+        // >
+        <BackdropModal closeModal = {toggleNewHostPopupOpen}>
 
             <div className='AddNewHostPopup' 
                 onClick = {(e) => {e.stopPropagation()}}
@@ -88,7 +90,7 @@ function AddNewHostPopup(props) {
 
                     <Dropdown
                         options = {hosttypes}
-                        onValueCHange = {onDropdownValueChange}
+                        onValueChange = {onDropdownValueChange}
                         label = {`Host type:`}
                     />
 
@@ -102,8 +104,9 @@ function AddNewHostPopup(props) {
                 />
 
             </div>
-
-        </div>
+            
+            </BackdropModal>
+        // </div>
     );
 }
 

@@ -8,6 +8,7 @@ import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import InputField from '../../Widgets/InputField/InputField';
 import HorizontalLine from '../../Widgets/HorizontalLine/HorizontalLine';
 import { getMiners, getRepositories } from '../../../Store/LocalDataStore';
+import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 
 function ActionPopup(props) {
 
@@ -100,11 +101,8 @@ function ActionPopup(props) {
     }
 
     return (
-        // <div className='ActionPopup'>
-        <div className='Backdrop-modal' 
-            onClick = {() => {toggleActionPopupOpen()}}
-        >
-
+        <BackdropModal closeModal = {toggleActionPopupOpen}>
+            
             <div className='ActionPopup' 
                 onClick = {(e) => {e.stopPropagation()}}
             >
@@ -203,9 +201,7 @@ function ActionPopup(props) {
                 />
 
             </div>
-
-        </div>
-        // </div>
+        </BackdropModal>
     );
 }
 

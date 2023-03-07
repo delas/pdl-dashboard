@@ -10,7 +10,7 @@ function Dropdown(props) {
         options,
         label,
         placeholder = "select from list",
-        onValueCHange = () => {},
+        onValueChange = () => {},
         value = null,
     } = props;
 
@@ -22,7 +22,7 @@ function Dropdown(props) {
     
     const handleValueChange = (value) => {
         setSelected(value);
-        onValueCHange(value.value);
+        onValueChange(value.value);
     }
 
     return (

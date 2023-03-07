@@ -10,7 +10,7 @@ function SidebarHostItem(props) {
         hostType,
         addedFrom = 'locally', // values: ["locally", "http://...", "https://..."]
         onRemove,
-        ping,
+        ping = null,
         openPopup,
         popups,
     } = props;
@@ -25,17 +25,21 @@ function SidebarHostItem(props) {
     }
 
     useEffect(() => {
-        setStatus("loading");
-        ping(hostName).then((res) => {
-            setStatus(getStatus(res) ? "online" : "offline");
-        }).then(() => {
-            setIsLoading(false);
-        }).catch((e) => {
-            setStatus('offline');
-            setIsLoading(false);
-        })
+        if(ping !== null){
+            setStatus("loading");
+            ping(hostName).then((res) => {
+                setStatus(getStatus(res) ? "online" : "offline");
+            }).then(() => {
+                setIsLoading(false);
+            }).catch((e) => {
+                setStatus('offline');
+                setIsLoading(false);
+            })
 
-        if(!isPingActive) pingOnInterval(5000);
+            if(!isPingActive) pingOnInterval(5000);
+        } else {
+            setIsLoading(false);
+        }
     }, []);
 
     const pingOnInterval = async (timeBetweenTicks) => {
@@ -44,7 +48,7 @@ function SidebarHostItem(props) {
             ping(hostName).then((res) => {
                 setStatus(getStatus(res) ? "online" : "offline");
             }).catch((e) => {
-                console.log(e);
+                // console.log(e);
                 setStatus('offline');
             })
         }, timeBetweenTicks);
@@ -64,7 +68,7 @@ function SidebarHostItem(props) {
         switch(hostType){
             case 'miner': openPopup(popups.ActionPopup, {miner: {label: hostName, value: id}}); break;
             case 'repository': openPopup(popups.AddFilePopup, {repository: {label: hostName, value: id}}); break;
-            case 'service registry': break;
+            case 'service registry': openPopup(popups.NewSRHostPopup, {serviceRegistry: {label: hostName, value: id}});break;
             default: break;
         }
     }

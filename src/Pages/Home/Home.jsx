@@ -7,6 +7,7 @@ import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
 import AddFilePopup from '../../Components/Popup/AddfilePopup/AddfilePopup';
 import ActionPopup from '../../Components/Popup/ActionPopup/ActionPopup';
 import AddNewHostPopup from '../../Components/Popup/AddNewHostPopup/AddNewHostPopup';
+import AddNewHostFromServiceRegistryPopup from '../../Components/Popup/AddNewHostFromServiceRegistryPopup/AddNewHostFromServiceRegistryPopup';
 
 function Home(props) {
 
@@ -22,7 +23,8 @@ function Home(props) {
     const popups = {
         AddNewHostPopup: 'AddNewHostPopup',
         AddFilePopup: 'AddFilePopup',
-        ActionPopup: 'ActionPopup'
+        ActionPopup: 'ActionPopup',
+        NewSRHostPopup: 'NewSRHostPopup',
     }
     
     const openPopup = (popup, props = {}) => {
@@ -40,6 +42,10 @@ function Home(props) {
                 set.setActionPopupOpen(true); 
                 setPopupProps(props);
                 break;
+            case 'NewSRHostPopup': 
+                set.setNewHostFromSRPopupOpen(true); 
+                setPopupProps(props);
+                break;
             default: (() => {})(); break; // Do nothing. Produces empty lambda expression call
         }
     }
@@ -54,6 +60,9 @@ function Home(props) {
                 break;
             case 'ActionPopup': 
                 set.setActionPopupOpen(false);
+                break;
+            case 'NewSRHostPopup': 
+                set.setNewHostFromSRPopupOpen(false);
                 break;
             default: (() => {})(); break; // Do nothing. Produces empty lambda expression call
         }
@@ -126,6 +135,16 @@ function Home(props) {
                 {isOpen.newHostPopupOpen ? 
                     <AddNewHostPopup
                         toggleNewHostPopupOpen = {toggles.toggleNewHostPopupOpen}
+                        {...popupProps}
+                        closePopup = {closePopup}
+                        popups = {popups}
+                    />
+                    : null
+                }
+
+                {isOpen.newHostFromSROpen ? 
+                    <AddNewHostFromServiceRegistryPopup
+                        togglenewHostFromSRPopupOpen = {toggles.togglenewHostFromSRPopupOpen}
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}

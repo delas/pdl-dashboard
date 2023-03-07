@@ -6,6 +6,7 @@ import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {getRepositories} from '../../../Store/LocalDataStore';
+import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 
 function AddFilePopup(props) {
 
@@ -39,9 +40,7 @@ function AddFilePopup(props) {
     })
 
     return (
-        <div className='Backdrop-modal' 
-            onClick = {() => {toggleFilePopupOpen()}}
-        >
+            <BackdropModal closeModal = {toggleFilePopupOpen}>
 
             <div className='AddFilePopup' 
                 onClick = {(e) => {e.stopPropagation()}}
@@ -71,7 +70,7 @@ function AddFilePopup(props) {
                 />
 
             </div>
-        </div>
+        </BackdropModal>
     );
 }
 

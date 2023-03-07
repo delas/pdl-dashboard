@@ -118,6 +118,8 @@ function SidebarHosts(props) {
                                 addedFrom = {serviceRegistry.addedFrom}
                                 onRemove = {removeHostAndUpdate}
                                 ping = {PingServiceRegistry}
+                                openPopup = {openPopup}
+                                popups = {popups}
                             />
                             {/* {index < getServiceRegistries().length - 1 ? <HorizontalLine/> : null} */}
                         </>)

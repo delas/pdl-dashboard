@@ -12,6 +12,7 @@ function App(props) {
     const [filePopupOpen, setFilePopupOpen] = useState(false);
     const [actionPopupOpen, setActionPopupOpen] = useState(false);
     const [newHostPopupOpen, setNewHostPopupOpen] = useState(false);
+    const [newHostFromSROpen, setNewHostFromSRPopupOpen] = useState(true);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -31,6 +32,10 @@ function App(props) {
 
     const toggleNewHostPopupOpen = () => {
         setNewHostPopupOpen(!newHostPopupOpen)
+    }
+
+    const togglenewHostFromSRPopupOpen = () => {
+        setNewHostFromSRPopupOpen(!newHostFromSROpen)
     }
 
     useEffect(() => {
@@ -53,7 +58,8 @@ function App(props) {
                     toggleSidebarHosts: toggleSidebarHosts,
                     toggleFilePopupOpen: toggleFilePopupOpen,
                     toggleActionPopupOpen: toggleActionPopupOpen,
-                    toggleNewHostPopupOpen: toggleNewHostPopupOpen
+                    toggleNewHostPopupOpen: toggleNewHostPopupOpen,
+                    togglenewHostFromSRPopupOpen: togglenewHostFromSRPopupOpen
                 }}
                 set = {{
                     setSidebarOpen: setSidebarOpen,
@@ -61,13 +67,15 @@ function App(props) {
                     setFilePopupOpen: setFilePopupOpen,
                     setActionPopupOpen: setActionPopupOpen,
                     setNewHostPopupOpen: setNewHostPopupOpen,
+                    setNewHostFromSRPopupOpen: setNewHostFromSRPopupOpen,
                 }}
                 isOpen = {{
                     sidebarOpen: sidebarOpen,
                     sidebarHostsOpen: sidebarHostsOpen,
                     filePopupOpen: filePopupOpen,
                     actionPopupOpen: actionPopupOpen,
-                    newHostPopupOpen: newHostPopupOpen
+                    newHostPopupOpen: newHostPopupOpen,
+                    newHostFromSROpen: newHostFromSROpen
                 }}
             /> : null}
             {props.page === "Page1" ? <Page1/> : null}
