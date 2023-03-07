@@ -11,7 +11,7 @@ function App(props) {
     const [sidebarHostsOpen, setSidebarHostsOpen] = useState(false);
     const [filePopupOpen, setFilePopupOpen] = useState(false);
     const [actionPopupOpen, setActionPopupOpen] = useState(false);
-    const [newHostPopupOpen, setNewHostPopupOpen] = useState(true);
+    const [newHostPopupOpen, setNewHostPopupOpen] = useState(false);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
