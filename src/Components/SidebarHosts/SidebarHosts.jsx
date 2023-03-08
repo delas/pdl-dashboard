@@ -2,7 +2,7 @@ import './SidebarHosts.scss';
 import {useState, useEffect} from 'react';
 import { FaRegWindowClose } from 'react-icons/fa';
 import SidebarHostItem from './SidebarHostItem/SidebarHostItem';
-import {getMiners, getRepositories, getServiceRegistries, removeHost} from '../../Store/LocalDataStore';
+import {getMiners, getRepositories, getServiceRegistries} from '../../Store/LocalDataStore';
 import {PingServiceRegistry} from '../../Services/ServiceRegistryServices';
 import {PingMiner} from '../../Services/MinerServices';
 import {PingRepository} from '../../Services/RepositoryServices';
@@ -19,6 +19,8 @@ function SidebarHosts(props) {
         toggleFilePopupOpen,
         openPopup,
         popups,
+        removeHost,
+        addHost,
     } = props;
 
     const [isLoading, setIsLoading] = useState(false);
@@ -43,11 +45,6 @@ function SidebarHosts(props) {
         removeHost(id);
         forceRerender();
     }
-
-    // const onSidebarHostClick = () => {
-    //     openPopup(popups.AddFilePopup);
-    //     // toggleFilePopupOpen();
-    // }
 
     return (
         <div className="SidebarHosts">
@@ -76,8 +73,8 @@ function SidebarHosts(props) {
                                     ping = {PingRepository}
                                     openPopup = {openPopup}
                                     popups = {popups}
+                                    status = {repository.status}
                                 />
-                                {/* {index < getRepositories().length - 1 ? <HorizontalLine/> : null} */}
                             </>)
                         })}
                         
@@ -99,8 +96,8 @@ function SidebarHosts(props) {
                                 ping = {PingMiner}
                                 openPopup = {openPopup}
                                 popups = {popups}
+                                status = {miner.status}
                             />
-                            {/* {index < getMiners().length - 1 ? <HorizontalLine/> : null} */}
                         </>
                     )})}
                 </div>
@@ -120,8 +117,8 @@ function SidebarHosts(props) {
                                 ping = {PingServiceRegistry}
                                 openPopup = {openPopup}
                                 popups = {popups}
+                                status = {serviceRegistry.status}
                             />
-                            {/* {index < getServiceRegistries().length - 1 ? <HorizontalLine/> : null} */}
                         </>)
                     })}
                 </div>

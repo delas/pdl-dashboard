@@ -10,49 +10,12 @@ function SidebarHostItem(props) {
         hostType,
         addedFrom = 'locally', // values: ["locally", "http://...", "https://..."]
         onRemove,
-        ping = null,
         openPopup,
         popups,
+        status
     } = props;
 
-    const [isLoading, setIsLoading] = useState(true);
     const [icon, setIcon] = useState(null);
-    const [status, setStatus] = useState('offline');
-    const [isPingActive, setIsPingActive] = useState(false);
-
-    const getStatus = (res) => {
-        return res.status === 200 && res.data.toUpperCase() === "PONG";
-    }
-
-    useEffect(() => {
-        if(ping !== null){
-            setStatus("loading");
-            ping(hostName).then((res) => {
-                setStatus(getStatus(res) ? "online" : "offline");
-            }).then(() => {
-                setIsLoading(false);
-            }).catch((e) => {
-                setStatus('offline');
-                setIsLoading(false);
-            })
-
-            if(!isPingActive) pingOnInterval(5000);
-        } else {
-            setIsLoading(false);
-        }
-    }, []);
-
-    const pingOnInterval = async (timeBetweenTicks) => {
-        setIsPingActive(true);
-        setInterval(() => {
-            ping(hostName).then((res) => {
-                setStatus(getStatus(res) ? "online" : "offline");
-            }).catch((e) => {
-                // console.log(e);
-                setStatus('offline');
-            })
-        }, timeBetweenTicks);
-    }
 
     const setIconForItem = () => {
         switch(hostType){
@@ -64,7 +27,6 @@ function SidebarHostItem(props) {
     }
 
     const openPopupHandler = () => {
-        console.log(popups)
         switch(hostType){
             case 'miner': openPopup(popups.ActionPopup, {miner: {label: hostName, value: id}}); break;
             case 'repository': openPopup(popups.AddFilePopup, {repository: {label: hostName, value: id}}); break;
@@ -76,14 +38,6 @@ function SidebarHostItem(props) {
     useEffect(() => {
         setIconForItem();
     }, []);
-
-    if(isLoading){
-        return (
-            <div className="SidebarHostItem">
-                <div>Loading ...</div>
-            </div>
-        )
-    }
 
     return (
         <div className="SidebarHostItem">

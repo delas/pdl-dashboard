@@ -23,6 +23,15 @@ export function getServiceRegistries(){
     return getAllType("service registry");
 }
 
+export function setStatus(id, status) {
+    const host = Object.keys(localStorage).filter((key) => key === id);
+    if(host.length > 0){
+        const storageItem = JSON.parse(localStorage.getItem(host[0]));
+        storageItem.status = status;
+        removeHost(id);
+        saveHost(id, storageItem);
+    }
+}
 
 function getAllType(type) { //Types ["miner", "repository", "service registry"]
     return getAllKeysWithType(type).map((key) => {

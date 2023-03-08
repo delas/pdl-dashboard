@@ -30,9 +30,25 @@ function AddNewHostPopup(props) {
             status: "online",
             type: selectedHosttype,
             addedFrom: 'locally',
+            config: {},
         };
         saveHost(newHost.id, newHost);
     }
+
+
+    // const necessaryInformation = {
+    //     id : "123"
+    //     name: "http://localhost:3000",
+    //     status: "online",
+    //     type: "miner",
+    //     addedFrom: "locally",
+    //     config: {
+    //         HostName: "repoUrl",
+    //         Label: "Public Repository",
+    //         Type: "Repository",
+    //         Access: "Public"
+    //     }
+    // }
 
     const handleTextfieldChange = (event) => {
         setHostname(event.target.value);
