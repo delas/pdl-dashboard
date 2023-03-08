@@ -72,6 +72,7 @@ function SidebarHosts(props) {
                                     openPopup = {openPopup}
                                     popups = {popups}
                                     status = {repository.status}
+                                    allowClick = {repository.status === "online"}
                                 />
                             </>)
                         })}
@@ -95,6 +96,7 @@ function SidebarHosts(props) {
                                 openPopup = {openPopup}
                                 popups = {popups}
                                 status = {miner.status}
+                                allowClick = {miner.status === "online"}
                             />
                         </>
                     )})}
@@ -116,6 +118,7 @@ function SidebarHosts(props) {
                                 openPopup = {openPopup}
                                 popups = {popups}
                                 status = {serviceRegistry.status}
+                                allowClick = {serviceRegistry.status === "online"}
                             />
                         </>)
                     })}

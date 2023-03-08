@@ -89,7 +89,12 @@ function ActionPopup(props) {
     }
 
     const handleCancelButtonClick = () => {
-        selected !== 1 ? setSelected(selected - 1) : setSelected(selected);
+        if(selected !== 1) 
+        setSelected(selected - 1) 
+        else {
+            setSelected(selected)
+            toggleActionPopupOpen()
+        };
     }
 
     if(isLoading){

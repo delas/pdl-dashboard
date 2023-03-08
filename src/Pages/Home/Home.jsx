@@ -8,6 +8,7 @@ import AddFilePopup from '../../Components/Popup/AddfilePopup/AddfilePopup';
 import ActionPopup from '../../Components/Popup/ActionPopup/ActionPopup';
 import AddNewHostPopup from '../../Components/Popup/AddNewHostPopup/AddNewHostPopup';
 import AddNewHostFromServiceRegistryPopup from '../../Components/Popup/AddNewHostFromServiceRegistryPopup/AddNewHostFromServiceRegistryPopup';
+import GetFilePopup from '../../Components/Popup/GetFilePopup/GetFilePopup';
 
 function Home(props) {
 
@@ -27,6 +28,7 @@ function Home(props) {
         AddFilePopup: 'AddFilePopup',
         ActionPopup: 'ActionPopup',
         NewSRHostPopup: 'NewSRHostPopup',
+        GetFilePopupOpen: 'GetFilePopupOpen',
     }
     
     const openPopup = (popup, props = {}) => {
@@ -48,6 +50,10 @@ function Home(props) {
                 set.setNewHostFromSRPopupOpen(true); 
                 setPopupProps(props);
                 break;
+            case 'GetFilePopupOpen':
+                set.setGetFilePopupOpen(true);
+                setPopupProps(props);
+                break;
             default: (() => {})(); break; // Do nothing. Produces empty lambda expression call
         }
     }
@@ -65,6 +71,9 @@ function Home(props) {
                 break;
             case 'NewSRHostPopup': 
                 set.setNewHostFromSRPopupOpen(false);
+                break;
+            case 'GetFilePopupOpen':
+                set.setGetFilePopupOpen(false);
                 break;
             default: (() => {})(); break; // Do nothing. Produces empty lambda expression call
         }
@@ -149,6 +158,17 @@ function Home(props) {
                 {isOpen.newHostFromSROpen ? 
                     <AddNewHostFromServiceRegistryPopup
                         togglenewHostFromSRPopupOpen = {toggles.togglenewHostFromSRPopupOpen}
+                        {...popupProps}
+                        closePopup = {closePopup}
+                        popups = {popups}
+                        addHost = {addHost}
+                    />
+                    : null
+                }
+
+                {isOpen.GetFilePopupOpen ? 
+                    <GetFilePopup
+                        toggleGetFilePopupOpen = {toggles.toggleGetFilePopupOpen}
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}

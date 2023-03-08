@@ -1,11 +1,9 @@
 import './App.css';
 import {useState, useEffect, useRef} from 'react';
 import Home from './Pages/Home/Home';
-// import AddFilePopup from './Components/Popup/AddfilePopup/AddfilePopup';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
 import { saveHost, removeHost } from './Store/LocalDataStore';
-
 import { pingAllAddedServices } from './Utils/ServiceHelper';
 
 function App(props) {
@@ -16,6 +14,7 @@ function App(props) {
     const [actionPopupOpen, setActionPopupOpen] = useState(false);
     const [newHostPopupOpen, setNewHostPopupOpen] = useState(false);
     const [newHostFromSROpen, setNewHostFromSRPopupOpen] = useState(false);
+    const [GetFilePopupOpen, setGetFilePopupOpen] = useState(true);
 
     let pingInterval = useRef(null);
 
@@ -43,6 +42,10 @@ function App(props) {
 
     const togglenewHostFromSRPopupOpen = () => {
         setNewHostFromSRPopupOpen(!newHostFromSROpen)
+    }
+
+    const toggleGetFilePopupOpen = () => {
+        setGetFilePopupOpen(!GetFilePopupOpen)
     }
 
     useEffect(() => {
@@ -84,7 +87,8 @@ function App(props) {
                     toggleFilePopupOpen: toggleFilePopupOpen,
                     toggleActionPopupOpen: toggleActionPopupOpen,
                     toggleNewHostPopupOpen: toggleNewHostPopupOpen,
-                    togglenewHostFromSRPopupOpen: togglenewHostFromSRPopupOpen
+                    togglenewHostFromSRPopupOpen: togglenewHostFromSRPopupOpen,
+                    toggleGetFilePopupOpen: toggleGetFilePopupOpen
                 }}
                 set = {{
                     setSidebarOpen: setSidebarOpen,
@@ -93,6 +97,7 @@ function App(props) {
                     setActionPopupOpen: setActionPopupOpen,
                     setNewHostPopupOpen: setNewHostPopupOpen,
                     setNewHostFromSRPopupOpen: setNewHostFromSRPopupOpen,
+                    setGetFilePopupOpen: setGetFilePopupOpen
                 }}
                 isOpen = {{
                     sidebarOpen: sidebarOpen,
@@ -100,7 +105,8 @@ function App(props) {
                     filePopupOpen: filePopupOpen,
                     actionPopupOpen: actionPopupOpen,
                     newHostPopupOpen: newHostPopupOpen,
-                    newHostFromSROpen: newHostFromSROpen
+                    newHostFromSROpen: newHostFromSROpen,
+                    GetFilePopupOpen: GetFilePopupOpen,
                 }}
             /> : null}
             {props.page === "Page1" ? <Page1/> : null}
