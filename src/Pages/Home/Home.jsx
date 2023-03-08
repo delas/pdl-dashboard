@@ -15,8 +15,6 @@ function Home(props) {
         toggles,
         isOpen,
         set,
-        getHostStatus,
-        removeHostHandler,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -111,8 +109,6 @@ function Home(props) {
                         toggleSidebarHosts = {toggles.toggleSidebarHosts}
                         openPopup = {openPopup}
                         popups = {popups}
-                        getHostStatus = {getHostStatus}
-                        removeHostHandler = {removeHostHandler}
                     />
                 </div>
 

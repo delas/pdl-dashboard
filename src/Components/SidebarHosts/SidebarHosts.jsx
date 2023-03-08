@@ -3,10 +3,10 @@ import {useState, useEffect} from 'react';
 import { FaRegWindowClose } from 'react-icons/fa';
 import SidebarHostItem from './SidebarHostItem/SidebarHostItem';
 import {getMiners, getRepositories, getServiceRegistries, removeHost} from '../../Store/LocalDataStore';
-// import {PingServiceRegistry} from '../../Services/ServiceRegistryServices';
-// import {PingMiner} from '../../Services/MinerServices';
-// import {PingRepository} from '../../Services/RepositoryServices';
-// import HorizontalLine from '../Widgets/HorizontalLine/HorizontalLine';
+import {PingServiceRegistry} from '../../Services/ServiceRegistryServices';
+import {PingMiner} from '../../Services/MinerServices';
+import {PingRepository} from '../../Services/RepositoryServices';
+import HorizontalLine from '../Widgets/HorizontalLine/HorizontalLine';
 
 
 
@@ -16,11 +16,9 @@ function SidebarHosts(props) {
 
     const {
         toggleSidebarHosts,
-        // toggleFilePopupOpen,
+        toggleFilePopupOpen,
         openPopup,
         popups,
-        getHostStatus,
-        removeHostHandler
     } = props;
 
     const [isLoading, setIsLoading] = useState(false);
@@ -37,14 +35,14 @@ function SidebarHosts(props) {
         )
     }
 
-    // const forceRerender = () => {
-    //     forceUpdate({});
-    // }
+    const forceRerender = () => {
+        forceUpdate({});
+    }
 
-    // const removeHostAndUpdate = (id) => {
-    //     removeHost(id);
-    //     forceRerender();
-    // }
+    const removeHostAndUpdate = (id) => {
+        removeHost(id);
+        forceRerender();
+    }
 
     // const onSidebarHostClick = () => {
     //     openPopup(popups.AddFilePopup);
@@ -74,11 +72,10 @@ function SidebarHosts(props) {
                                     hostName = {repository.name}
                                     hostType = {repository.type}
                                     addedFrom = {repository.addedFrom}
-                                    onRemove = {removeHostHandler}
-                                    // ping = {PingRepository}
+                                    onRemove = {removeHostAndUpdate}
+                                    ping = {PingRepository}
                                     openPopup = {openPopup}
                                     popups = {popups}
-                                    getHostStatus = {getHostStatus}
                                 />
                                 {/* {index < getRepositories().length - 1 ? <HorizontalLine/> : null} */}
                             </>)
@@ -98,11 +95,10 @@ function SidebarHosts(props) {
                                 hostName = {miner.name}
                                 hostType = {miner.type}
                                 addedFrom = {miner.addedFrom}
-                                onRemove = {removeHostHandler}
-                                // ping = {PingMiner}
+                                onRemove = {removeHostAndUpdate}
+                                ping = {PingMiner}
                                 openPopup = {openPopup}
                                 popups = {popups}
-                                getHostStatus = {getHostStatus}
                             />
                             {/* {index < getMiners().length - 1 ? <HorizontalLine/> : null} */}
                         </>
@@ -120,11 +116,10 @@ function SidebarHosts(props) {
                                 hostName = {serviceRegistry.name}
                                 hostType = {serviceRegistry.type}
                                 addedFrom = {serviceRegistry.addedFrom}
-                                onRemove = {removeHostHandler}
-                                // ping = {PingServiceRegistry}
+                                onRemove = {removeHostAndUpdate}
+                                ping = {PingServiceRegistry}
                                 openPopup = {openPopup}
                                 popups = {popups}
-                                getHostStatus = {getHostStatus}
                             />
                             {/* {index < getServiceRegistries().length - 1 ? <HorizontalLine/> : null} */}
                         </>)
