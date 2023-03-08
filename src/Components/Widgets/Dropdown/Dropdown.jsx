@@ -12,6 +12,7 @@ function Dropdown(props) {
         placeholder = "select from list",
         onValueChange = () => {},
         value = null,
+        loading = false,
     } = props;
 
     useEffect(() => {
@@ -23,6 +24,10 @@ function Dropdown(props) {
     const handleValueChange = (value) => {
         setSelected(value);
         onValueChange(value.value);
+    }
+
+    if(loading){
+        return <div>... loading</div>
     }
 
     return (

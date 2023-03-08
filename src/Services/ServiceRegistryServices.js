@@ -7,10 +7,10 @@ export async function PingServiceRegistry(hostname) {
 
 export async function GetMinersFromServiceRegistry(hostname) {
     const urlExtension = "/miners";
-    return axios.get(`${hostname}$${urlExtension}`);
+    return axios.get(`${hostname}${urlExtension}`);
 }
 
 export async function GetRepositoriesFromServiceRegistry(hostname) {
     const urlExtension = "/repositories";
-    return axios.get(`${hostname}$${urlExtension}`);
+    return axios.get(`${hostname}${urlExtension}`);
 }

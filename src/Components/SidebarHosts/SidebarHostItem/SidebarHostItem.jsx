@@ -12,7 +12,8 @@ function SidebarHostItem(props) {
         onRemove,
         openPopup,
         popups,
-        status
+        status,
+        allowClick = true,
     } = props;
 
     const [icon, setIcon] = useState(null);
@@ -30,7 +31,7 @@ function SidebarHostItem(props) {
         switch(hostType){
             case 'miner': openPopup(popups.ActionPopup, {miner: {label: hostName, value: id}}); break;
             case 'repository': openPopup(popups.AddFilePopup, {repository: {label: hostName, value: id}}); break;
-            case 'service registry': openPopup(popups.NewSRHostPopup, {serviceRegistry: {label: hostName, value: id}});break;
+            case 'service registry': console.log("service registry"); openPopup(popups.NewSRHostPopup, {serviceRegistry: {label: hostName, value: id}});break;
             default: break;
         }
     }
@@ -48,7 +49,7 @@ function SidebarHostItem(props) {
                         <div className={`SidebarHostItem-filetype SidebarHostItem-filetype-${status}`}>
                             {icon}
                         </div>
-                        <div className='SidebarHostItem-filename' onClick = {() => {openPopupHandler()}}>
+                        <div className='SidebarHostItem-filename' onClick={allowClick ? openPopupHandler : undefined}>
                             {hostName}
                         </div>
                     </div>

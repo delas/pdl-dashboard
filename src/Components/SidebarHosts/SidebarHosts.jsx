@@ -16,11 +16,9 @@ function SidebarHosts(props) {
 
     const {
         toggleSidebarHosts,
-        toggleFilePopupOpen,
         openPopup,
         popups,
         removeHost,
-        addHost,
     } = props;
 
     const [isLoading, setIsLoading] = useState(false);

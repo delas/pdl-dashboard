@@ -15,7 +15,7 @@ function App(props) {
     const [filePopupOpen, setFilePopupOpen] = useState(false);
     const [actionPopupOpen, setActionPopupOpen] = useState(false);
     const [newHostPopupOpen, setNewHostPopupOpen] = useState(false);
-    const [newHostFromSROpen, setNewHostFromSRPopupOpen] = useState(true);
+    const [newHostFromSROpen, setNewHostFromSRPopupOpen] = useState(false);
 
     let pingInterval = useRef(null);
 
@@ -61,7 +61,7 @@ function App(props) {
         saveHost(id, host);
     }
 
-    const removeHost = (id) => {
+    const deleteHost = (id) => {
         removeHost(id);
     }
 
@@ -77,7 +77,7 @@ function App(props) {
         <div className="App">
             {props.page === "Home" ? <Home 
                 addHost = {addHost}
-                removeHost = {removeHost}
+                removeHost = {deleteHost}
                 toggles = {{
                     toggleSidebar: toggleSidebar,
                     toggleSidebarHosts: toggleSidebarHosts,
