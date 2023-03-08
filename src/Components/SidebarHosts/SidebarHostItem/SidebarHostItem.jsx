@@ -48,6 +48,7 @@ function SidebarHostItem(props) {
             ping(hostName).then((res) => {
                 setStatus(getStatus(res) ? "online" : "offline");
             }).catch((e) => {
+                // console.log(e);
                 setStatus('offline');
             })
         }, timeBetweenTicks);
@@ -63,6 +64,7 @@ function SidebarHostItem(props) {
     }
 
     const openPopupHandler = () => {
+        console.log(popups)
         switch(hostType){
             case 'miner': openPopup(popups.ActionPopup, {miner: {label: hostName, value: id}}); break;
             case 'repository': openPopup(popups.AddFilePopup, {repository: {label: hostName, value: id}}); break;

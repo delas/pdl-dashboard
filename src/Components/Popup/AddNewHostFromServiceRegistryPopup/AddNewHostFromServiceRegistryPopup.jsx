@@ -5,7 +5,7 @@ import {saveHost} from '../../../Store/LocalDataStore';
 import {v4 as uuidv4} from 'uuid';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
-// import InputField from '../../Widgets/InputField/InputField';
+import InputField from '../../Widgets/InputField/InputField';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import SidebarHostItem from '../../SidebarHosts/SidebarHostItem/SidebarHostItem';
 
