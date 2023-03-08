@@ -6,6 +6,7 @@ import Page2 from './Pages/Page2/Page2';
 import {PingServiceRegistry} from './Services/ServiceRegistryServices';
 import {PingMiner} from './Services/MinerServices';
 import {PingRepository} from './Services/RepositoryServices';
+import {getMiners, getRepositories, getServiceRegistries, removeHost} from './Store/LocalDataStore';
 
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -19,66 +20,60 @@ function App(props) {
     const [allHostStatus, setAllHostStatus] = useState([{}]); // list of objects {id, status}
     const [isPingActiveForHosts, setIsPingActiveForHosts] = useState([{}]); // List of hosts being actively pinged {id, active}
 
-    const toggleSidebar = () => {
-        setSidebarOpen(!sidebarOpen);
+    // const [hosts, setHosts] = useState
+
+    const toggleSidebar = () => { setSidebarOpen(!sidebarOpen); }
+
+    const toggleSidebarHosts = () => { setSidebarHostsOpen(!sidebarHostsOpen); }
+
+    const toggleFilePopupOpen = () => { setFilePopupOpen(!filePopupOpen); }
+
+    const toggleActionPopupOpen = () => { setActionPopupOpen(!actionPopupOpen); }
+
+    const toggleNewHostPopupOpen = () => { setNewHostPopupOpen(!newHostPopupOpen) }
+
+    const togglenewHostFromSRPopupOpen = () => { setNewHostFromSRPopupOpen(!newHostFromSROpen) }
+
+    const isBeingActivelyPinged = (id) => { return isPingActiveForHosts.filter((pingHost) => pingHost.id === id) !== []; }
+    
+    const removeHostStatus = (id) => { setAllHostStatus(allHostStatus.filter((host) => host.id !== id)); }
+
+    const getHostStatus = (id) => { return allHostStatus.filter((host) => host.id === id); }
+
+    const getResponseStatus = (res) => { return res.status === 200 && res.data.toUpperCase() === "PONG"; }
+
+    const addOrUpdateHostStatus = (id, status) => {
+        const hostStatus = {id: id, status: status};
+        const existsInList = allHostStatus.filter((host) => host.id === id).length > 0;
+        console.log(existsInList);
+        console.log(allHostStatus.filter((host) => host.id === id))
+        if(existsInList === false) setAllHostStatus(allHostStatus.concat(hostStatus));
+        else {
+            const listWithoutHostStatus = allHostStatus.filter((host) => host.id !== id);
+            setAllHostStatus(listWithoutHostStatus.concat(hostStatus));
+        }
     }
 
-    const toggleSidebarHosts = () => {
-        setSidebarHostsOpen(!sidebarHostsOpen);
+    const addActivelyPing = (id, active) => {
+        const newPing = {id: id, active: active}; // new object to be added
+        const existsInList = isPingActiveForHosts.filter((pingHost) => pingHost.id === id).length > 0;
+        if(existsInList) setIsPingActiveForHosts(isPingActiveForHosts.concat(newPing));
+        else { //override if present
+            const listWithoutPingHost = isPingActiveForHosts.filter((pingHost) => pingHost.id !== id);
+            setIsPingActiveForHosts(listWithoutPingHost.concat(newPing));
+        }
     }
 
-    const toggleFilePopupOpen = () => {
-        setFilePopupOpen(!filePopupOpen);
-    }
-
-    const toggleActionPopupOpen = () => {
-        setActionPopupOpen(!actionPopupOpen);
-    }
-
-    const toggleNewHostPopupOpen = () => {
-        setNewHostPopupOpen(!newHostPopupOpen)
-    }
-
-    const togglenewHostFromSRPopupOpen = () => {
-        setNewHostFromSRPopupOpen(!newHostFromSROpen)
-    }
-
-    const addHostStatus = (id, status) => {
-        setAllHostStatus(allHostStatus.concat({id: id, status: status}));
-    }
-
-    const removeHostStatus = (id) => {
-        setAllHostStatus(allHostStatus.filter((host) => host.id !== id));
-    }
-
-    const getHostStatus = (id) => {
-        return allHostStatus.filter((host) => host.id === id);
-    }
-
-    useEffect(() => {
-        setIsLoading(false);
-    });
-
-    const getResponseStatus = (res) => {
-        return res.status === 200 && res.data.toUpperCase() === "PONG";
-    }
-
-    const setStatus = (status, id) => {
-        removeHostStatus(id);
-        addHostStatus(id, status);
+    const removeActivelyPing = (id) => {
+        setIsPingActiveForHosts(isPingActiveForHosts.filter((pingHost) => pingHost.id !== id));
     }
 
     const pingIndividualHost = (host, ping) => {
         ping(host.hostName).then((res) => {
-            setStatus(getResponseStatus(res) ? "online" : "offline");
+            addOrUpdateHostStatus(host.id, getResponseStatus(res) ? "online" : "offline");
         }).catch((e) => {
-            setStatus('offline');
-            setIsLoading(false);
+            addOrUpdateHostStatus(host.id, "offline");
         })
-    }
-
-    const isBeingActivelyPinged = (id) => {
-        return isPingActiveForHosts.filter((pingHost) => pingHost.id === id) !== [];
     }
 
     const pingOnInterval = async (host, ping, timeBetweenTicks) => {
@@ -86,6 +81,12 @@ function App(props) {
         setInterval(() => {
             pingIndividualHost(host, ping)
         }, timeBetweenTicks);
+    }
+
+    const removeHostHandler = (id) => {
+        removeHost(id);
+        removeHostStatus(id);
+        removeActivelyPing(id);
     }
 
     const getPingFunction = (serviceType) => {
@@ -98,6 +99,19 @@ function App(props) {
     }
 
     useEffect(() => {
+        setIsLoading(false);
+    });
+
+
+    console.log(getMiners());
+
+    useEffect(() => {
+        getMiners().forEach((host) => { addOrUpdateHostStatus(host.id, "offline"); })
+        getRepositories().forEach((host) => {  addOrUpdateHostStatus(host.id, "offline"); })
+        getServiceRegistries().forEach((host) => { addOrUpdateHostStatus(host.id, "offline"); })
+    }, []);
+
+    useEffect(() => {
         allHostStatus.forEach((host, index) => {
             if(!isBeingActivelyPinged(host.id)){
                 pingOnInterval(host, getPingFunction(host.type), 5000);
@@ -107,16 +121,7 @@ function App(props) {
 
     
 
-    const addActivelyPing = (id, active) => {
-        const newPing = {id: id, active: active}; // new object to be added
-        const pingHostObject = isPingActiveForHosts.filter((pingHost) => pingHost.id === id);
-        if(pingHostObject === undefined || pingHostObject === null){ // add new if not already present
-            setIsPingActiveForHosts(isPingActiveForHosts.concat(newPing));
-        } else { //override if present
-            const listWithoutPingHost = isPingActiveForHosts.filter((pingHost) => pingHost.id !== id);
-            setIsPingActiveForHosts(listWithoutPingHost.concat(newPing));
-        }
-    }
+    
 
     
 
@@ -139,6 +144,8 @@ function App(props) {
                     toggleNewHostPopupOpen: toggleNewHostPopupOpen,
                     togglenewHostFromSRPopupOpen: togglenewHostFromSRPopupOpen
                 }}
+                getHostStatus = {getHostStatus}
+                removeHostHandler = {removeHostHandler}
                 set = {{
                     setSidebarOpen: setSidebarOpen,
                     setSidebarHostsOpen: setSidebarHostsOpen,
@@ -155,6 +162,7 @@ function App(props) {
                     newHostPopupOpen: newHostPopupOpen,
                     newHostFromSROpen: newHostFromSROpen
                 }}
+
             /> : null}
             {props.page === "Page1" ? <Page1/> : null}
             {props.page === "Page2" ? <Page2/> : null}

@@ -10,48 +10,54 @@ function SidebarHostItem(props) {
         hostType,
         addedFrom = 'locally', // values: ["locally", "http://...", "https://..."]
         onRemove,
-        ping = null,
+        // ping = null,
         openPopup,
         popups,
+        getHostStatus
     } = props;
 
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [icon, setIcon] = useState(null);
-    const [status, setStatus] = useState('offline');
-    const [isPingActive, setIsPingActive] = useState(false);
 
-    const getStatus = (res) => {
-        return res.status === 200 && res.data.toUpperCase() === "PONG";
-    }
+    const status = getHostStatus(id)[0]?.status;
 
-    useEffect(() => {
-        if(ping !== null){
-            setStatus("loading");
-            ping(hostName).then((res) => {
-                setStatus(getStatus(res) ? "online" : "offline");
-            }).then(() => {
-                setIsLoading(false);
-            }).catch((e) => {
-                setStatus('offline');
-                setIsLoading(false);
-            })
+    console.log(getHostStatus(id));
+    console.log(getHostStatus(id)[0]?.status);
+    // const [status, setStatus] = useState('offline');
+    // const [isPingActive, setIsPingActive] = useState(false);
 
-            if(!isPingActive) pingOnInterval(5000);
-        } else {
-            setIsLoading(false);
-        }
-    }, []);
+    // const getStatus = (res) => {
+    //     return res.status === 200 && res.data.toUpperCase() === "PONG";
+    // }
 
-    const pingOnInterval = async (timeBetweenTicks) => {
-        setIsPingActive(true);
-        setInterval(() => {
-            ping(hostName).then((res) => {
-                setStatus(getStatus(res) ? "online" : "offline");
-            }).catch((e) => {
-                setStatus('offline');
-            })
-        }, timeBetweenTicks);
-    }
+    // useEffect(() => {
+    //     if(ping !== null){
+    //         setStatus("loading");
+    //         ping(hostName).then((res) => {
+    //             setStatus(getStatus(res) ? "online" : "offline");
+    //         }).then(() => {
+    //             setIsLoading(false);
+    //         }).catch((e) => {
+    //             setStatus('offline');
+    //             setIsLoading(false);
+    //         })
+
+    //         if(!isPingActive) pingOnInterval(5000);
+    //     } else {
+    //         setIsLoading(false);
+    //     }
+    // }, []);
+
+    // const pingOnInterval = async (timeBetweenTicks) => {
+    //     setIsPingActive(true);
+    //     setInterval(() => {
+    //         ping(hostName).then((res) => {
+    //             setStatus(getStatus(res) ? "online" : "offline");
+    //         }).catch((e) => {
+    //             setStatus('offline');
+    //         })
+    //     }, timeBetweenTicks);
+    // }
 
     const setIconForItem = () => {
         switch(hostType){
@@ -89,7 +95,7 @@ function SidebarHostItem(props) {
 
                 <div className='SidebarHostItem-flexContainer-left'>
                     <div className='SidebarHostItem-flexContainer-topleft'>
-                        <div className={`SidebarHostItem-filetype SidebarHostItem-filetype-${status}`}>
+                        <div className={`SidebarHostItem-filetype SidebarHostItem-filetype-${getHostStatus(id)}`}>
                             {icon}
                         </div>
                         <div className='SidebarHostItem-filename' onClick = {() => {openPopupHandler()}}>
