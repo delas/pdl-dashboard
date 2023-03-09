@@ -14,7 +14,7 @@ function App(props) {
     const [actionPopupOpen, setActionPopupOpen] = useState(false);
     const [newHostPopupOpen, setNewHostPopupOpen] = useState(false);
     const [newHostFromSROpen, setNewHostFromSRPopupOpen] = useState(false);
-    const [GetFilePopupOpen, setGetFilePopupOpen] = useState(true);
+    const [GetFilePopupOpen, setGetFilePopupOpen] = useState(false);
 
     let pingInterval = useRef(null);
 

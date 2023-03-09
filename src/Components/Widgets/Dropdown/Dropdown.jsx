@@ -23,7 +23,7 @@ function Dropdown(props) {
     
     const handleValueChange = (value) => {
         setSelected(value);
-        onValueChange(value.value);
+        onValueChange(value);
     }
 
     if(loading){

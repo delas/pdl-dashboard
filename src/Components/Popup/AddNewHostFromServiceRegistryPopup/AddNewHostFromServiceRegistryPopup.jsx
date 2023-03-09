@@ -19,8 +19,6 @@ function AddNewHostFromServiceRegistryPopup(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [minerHostsSelected, setMinerHostsSelected] = useState([]);
     const [repositoryHostsSelected, setRepositoryHostsSelected] = useState([]);
-    // const [isMinersLoading, setIsMinersLoading] = useState(true);
-    // const [isRepositoriesLoading, setIsRepositoriesLoading] = useState(false);
     const [miners, setMiners] = useState(null);
     const [repositories, setRepositories] = useState(null);
     const [minersDropdownFormat, setMinersDropdownFormat] = useState(null);
@@ -56,12 +54,12 @@ function AddNewHostFromServiceRegistryPopup(props) {
     }
 
     const addMinerHost = (miner) => {
-        setMinerHostsSelected(minerHostsSelected.concat(miner));
+        setMinerHostsSelected(minerHostsSelected.concat(miner.value));
     }
 
     const addRepositoryHost = (repository) => {
         console.log(repository);
-        setRepositoryHostsSelected(repositoryHostsSelected.concat(repository));
+        setRepositoryHostsSelected(repositoryHostsSelected.concat(repository.value));
     }
 
     const removeMinerHost = (id) => {
@@ -188,7 +186,7 @@ function AddNewHostFromServiceRegistryPopup(props) {
                     onCancelClick = {togglenewHostFromSRPopupOpen}
                     onNextClick = {onConfirmClick}
                     cancelText = {`Cancel`}
-                    nextText = {`Confirm`}
+                    nextText = {`Add selected`}
                 />
 
             </div>

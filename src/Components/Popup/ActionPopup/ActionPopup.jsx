@@ -25,7 +25,7 @@ function ActionPopup(props) {
     useEffect(() => {
         setIsLoading(false);
         setMinerDestination(miner);
-    });
+    }, []);
 
     const onMinerChange = (value) => {
         setMinerDestination(value)

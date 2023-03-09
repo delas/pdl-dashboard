@@ -15,9 +15,9 @@ function GetFilePopup(props) {
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedRepository, setSelectedRepository] = useState({});
     const [filesMetadata, setFilesMetadata] = useState(null);
     const [filesForDropdown, setFilesForDropdown] = useState([]);
+    const [selectedRepository, setSelectedRepository] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
 
     useEffect(() => {
@@ -26,9 +26,11 @@ function GetFilePopup(props) {
     }, []);
 
     useEffect(() => {
-        const repositoryUrl = getRepositories().filter((repository) => repository.id === selectedRepository)[0]?.name;
-        GetFiles(repositoryUrl).then(res => setFilesMetadata(res.data));
-    });
+        if(selectedRepository){
+            const repositoryUrl = selectedRepository.label;//getRepositories().filter((repository) => repository.id === selectedRepository.value)[0]?.name;
+            GetFiles(repositoryUrl).then(res => setFilesMetadata(res.data));
+        }
+    }, [selectedRepository]);
 
     useEffect(() => {
         if(filesMetadata !== null)
@@ -40,6 +42,7 @@ function GetFilePopup(props) {
     }, [filesMetadata]);
 
     const onRepositoryChange = (value) => {
+        console.log(value);
         setSelectedRepository(value)
     }
 
@@ -76,7 +79,6 @@ function GetFilePopup(props) {
                     onValueChange = {onRepositoryChange}
                     label = {`Select repository`}
                     value = {selectedRepository}
-                    loading = {repositories === null}
                 />
 
                 <Dropdown
