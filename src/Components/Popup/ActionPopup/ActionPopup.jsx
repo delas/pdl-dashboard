@@ -7,7 +7,7 @@ import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import InputField from '../../Widgets/InputField/InputField';
 import HorizontalLine from '../../Widgets/HorizontalLine/HorizontalLine';
-import { getMiners, getRepositories } from '../../../Store/LocalDataStore';
+import { getMiners, getRepositories, getMiner, getAllFiles } from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 
 function ActionPopup(props) {
@@ -21,14 +21,20 @@ function ActionPopup(props) {
     const [selected, setSelected] = useState(1);
     const [dropdownValue, setDropdownValue] = useState(null);
     const [minerDestination, setMinerDestination] = useState(null);
+    const [minerParams, setMinerParams] = useState([]);
+    const [availableFilesForDropdown, setAvailableFilesForDropdown] = useState([]);
 
     useEffect(() => {
         setIsLoading(false);
-        setMinerDestination(miner);
+        onMinerChange(miner);
+        setAvailableFilesForDropdown(convertFilesToDropdown(getAllFiles()));
     }, []);
 
     const onMinerChange = (value) => {
-        setMinerDestination(value)
+        setMinerDestination(value);
+        const miner = getMiner(value.value);
+        const params = miner?.config?.Parameters;
+        setMinerParams(params);
     }
 
     const miners = getMiners().map((miner, index) => {
@@ -39,27 +45,9 @@ function ActionPopup(props) {
         return {label: repository.name, value: repository.id}
     });
 
-
-
-    const Files = [
-        {label: 'file1', value: 'sv'},
-        {label: 'file2', value: 'en'},
-        {label: 'file3', value: 'au'},
-        {label: 'file4', value: 'dk'},
-        {label: 'file5', value: 'nw'},
-        {label: 'file6', value: 'ge'},
-        {label: 'file7', value: 'fr'},
-        {label: 'file8', value: 'us'},
-    ];
-
-    const Params = [
-        {name: 'param1', type: 'string'},
-        {name: 'param2', type: 'double'},
-        {name: 'param3', type: 'int'},
-        {name: 'param4', type: 'string'},
-        {name: 'param5', type: 'bool'},
-        {name: 'param6', type: 'float'},
-    ]
+    const convertFilesToDropdown = (files) => {
+        return files.map((file) => ({label: file.FileLabel, value: file.FileId}) );
+    }
 
     const getInputType = (param) => {
         switch(param.type){
@@ -117,20 +105,20 @@ function ActionPopup(props) {
                     closePopup = {toggleActionPopupOpen}
                 />
 
-                <table className='ActionPopup-wizard-steps'>
-                        <td className={`ActionPopup-wizard-step ActionPopup-wizard-step-${selected === 1 ? "selected": ""}`}>
-                            <span className='ActionPopup-wizard-step-text'>1. Miner</span>
-                        </td>
-                        <td className={`ActionPopup-wizard-step ActionPopup-wizard-step-${selected === 2 ? "selected": ""}`}>
-                            <span className='ActionPopup-wizard-step-text'>2. Inputs</span>
-                        </td>
-                        <td className={`ActionPopup-wizard-step ActionPopup-wizard-step-${selected === 3 ? "selected": ""}`}>
-                            <span className='ActionPopup-wizard-step-text'>3. Parameters</span>
-                        </td>
-                        <td className={`ActionPopup-wizard-step ActionPopup-wizard-step-${selected === 4 ? "selected": ""}`}>
-                            <span className='ActionPopup-wizard-step-text'>4. Repository</span>
-                        </td>
-                </table>
+                <div className='ActionPopup-wizard-steps'>
+                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${selected === 1 ? "selected": ""}`}>
+                        <span className='ActionPopup-wizard-step-text'>1. Miner</span>
+                    </div>
+                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${selected === 2 ? "selected": ""}`}>
+                        <span className='ActionPopup-wizard-step-text'>2. Inputs</span>
+                    </div>
+                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${selected === 3 ? "selected": ""}`}>
+                        <span className='ActionPopup-wizard-step-text'>3. Parameters</span>
+                    </div>
+                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${selected === 4 ? "selected": ""}`}>
+                        <span className='ActionPopup-wizard-step-text'>4. Repository</span>
+                    </div>
+                </div>
 
                 {/* ------------------ STEP 1 ------------------ */}
 
@@ -153,7 +141,7 @@ function ActionPopup(props) {
                         <FileInput onChance = {() => {}}/>
 
                         <Dropdown
-                            options = {Files}
+                            options = {availableFilesForDropdown}
                             onValueChange = {onValueChange}
                             label = {`Select file`}
                         />
@@ -167,7 +155,9 @@ function ActionPopup(props) {
                     <div className='ActionPopup-wizard-step3'>
                         <div className='ActionPopup-wizard-parameter-inputs'>
                             {
-                                Params.map((param, index) => {
+                                minerParams === null || minerParams === undefined || minerParams?.length === 0 ? 
+                                <span>Miner requires no parameters</span> :
+                                minerParams.map((param, index) => {
                                     const type = getInputType(param);
                                     return (
                                         <>
@@ -177,7 +167,7 @@ function ActionPopup(props) {
                                             fieldType = {type}
                                             placeholder = {type}
                                         />
-                                        {index < Params.length - 1 ? <HorizontalLine/> : null}
+                                        {index < minerParams?.length - 1 ? <HorizontalLine/> : null}
                                         </>
                                     )
                                 })

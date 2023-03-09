@@ -7,6 +7,7 @@ function SidebarHostItem(props) {
     const {
         id,
         hostName,
+        hostProvidedValue,
         hostType,
         addedFrom = 'locally', // values: ["locally", "http://...", "https://..."]
         onRemove,
@@ -28,7 +29,8 @@ function SidebarHostItem(props) {
     }
 
     const openPopupHandler = () => {
-        switch(hostType){
+        console.log('popup open');
+        switch(hostType.value){
             case 'miner': openPopup(popups.ActionPopup, {miner: {label: hostName, value: id}}); break;
             case 'repository': openPopup(popups.GetFilePopupOpen, {repository: {label: hostName, value: id}}); break;
             case 'service registry': openPopup(popups.NewSRHostPopup, {serviceRegistry: {label: hostName, value: id}});break;
@@ -50,7 +52,7 @@ function SidebarHostItem(props) {
                             {icon}
                         </div>
                         <div className='SidebarHostItem-filename' onClick={allowClick ? openPopupHandler : undefined}>
-                            {hostName}
+                            {hostProvidedValue} {hostName}
                         </div>
                     </div>
 

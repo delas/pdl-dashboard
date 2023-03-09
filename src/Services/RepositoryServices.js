@@ -20,6 +20,11 @@ export async function GetFileText(hostname, fileId){
     return axios.get(`${hostname}${urlExtension}`);
 }
 
+export async function GetRepositoryConfig(hostname) {
+    const urlExtension = "/configurations";
+    return axios.get(`${hostname}${urlExtension}`);
+}
+
 // axios.get('https://picsum.photos/300/300', )
 // .then(response => {
 //   let imageNode = document.getElementById('image');

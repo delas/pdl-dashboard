@@ -6,6 +6,8 @@ import Page2 from './Pages/Page2/Page2';
 import { saveHost, removeHost, saveFile, removeFile, hostExits } from './Store/LocalDataStore';
 import { pingAllAddedServices } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
+import { GetMinerConfig } from './Services/MinerServices';
+import { GetRepositoryConfig } from './Services/RepositoryServices';
 
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -62,10 +64,24 @@ function App(props) {
         }, 15000);
     }, []);
 
+    const handleAddHostOfType = async (type, hostname) => {
+        switch(type){
+            case 'miner': return GetMinerConfig(hostname)
+            case 'repository': return GetRepositoryConfig(hostname)
+            case 'service registry': return null;
+            default: return null;
+        }
+    }
+
     const addHost = (id, host) => {
         if(!hostExits(host.name)){
-            saveHost(id, host);
-            forceUpdate();
+            console.log(host.type.value);
+            handleAddHostOfType(host.type.value, host.name).then((res) => {
+                console.log(res.data);
+                host.config = res.data;
+                saveHost(id, host);
+                forceUpdate();
+            })
         }
     }
 

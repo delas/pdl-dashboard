@@ -44,8 +44,6 @@ function SidebarHosts(props) {
         forceRerender();
     }
 
-    console.log(getServiceRegistries());
-
     return (
         <div className="SidebarHosts">
 
@@ -75,6 +73,7 @@ function SidebarHosts(props) {
                                     popups = {popups}
                                     status = {repository.status}
                                     allowClick = {repository.status === "online"}
+                                    hostProvidedValue = {repository.config.Label}
                                 />)
                             // </>)
                         })}
@@ -99,6 +98,7 @@ function SidebarHosts(props) {
                                 popups = {popups}
                                 status = {miner.status}
                                 allowClick = {miner.status === "online"}
+                                hostProvidedValue = {miner.config.Label}
                             />)
                         // </>
                     })}

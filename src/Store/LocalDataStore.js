@@ -22,6 +22,10 @@ export function removeHost(key){
     removeItem(key);
 }
 
+export function getMiner(key) {
+    return JSON.parse(localStorage.getItem(key));
+}
+
 export function getMiners(){
     return getAllType("miner");
 }
