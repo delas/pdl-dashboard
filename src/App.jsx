@@ -73,18 +73,17 @@ function App(props) {
     }
 
     const addFile = (id, file) => {
-
         if(file.FileExtension === "png" || file.FileExtension === "jpg")
         GetFileImage(file.RepositoryHost, id)
-            .then((res) => { saveFile(id, {...file, fileContent: URL.createObjectURL(res.data) }) });
+            .then((res) => { saveFile(id, {...file, fileContent: URL.createObjectURL(res.data) }) })
+            .then(() => setTimeout(() => { forceUpdate(); }, 500));
 
         else 
         GetFileText(file.RepositoryHost, id)
-            .then((res) => { console.log(file, res.data); saveFile(id, {...file, fileContent: res.data }) });
+            .then((res) => { console.log(file, res.data); saveFile(id, {...file, fileContent: res.data }) })
+            .then(() => setTimeout(() => { forceUpdate(); }, 500));
 
-        setTimeout(() => {
-            forceUpdate();
-        }, 500);
+        
         
     }
 
