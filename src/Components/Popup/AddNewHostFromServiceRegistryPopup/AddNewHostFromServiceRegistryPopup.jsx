@@ -29,7 +29,6 @@ function AddNewHostFromServiceRegistryPopup(props) {
     });
 
     const handleSubmit = () => {
-        console.log(minerHostsSelected);
         minerHostsSelected.forEach((miner, index) => {
             const newHost = {
                 id: uuidv4(),
@@ -58,7 +57,6 @@ function AddNewHostFromServiceRegistryPopup(props) {
     }
 
     const addRepositoryHost = (repository) => {
-        console.log(repository);
         setRepositoryHostsSelected(repositoryHostsSelected.concat(repository.value));
     }
 
@@ -164,7 +162,6 @@ function AddNewHostFromServiceRegistryPopup(props) {
                             </span>
                             <div className='AddNewHostFromServiceRegistryPopup-body-right-repositories-list'>
                                 {repositoryHostsSelected.map((repository, index) => {
-                                    console.log(repository)
                                         return(
                                             <SidebarHostItem key = {index}
                                                 id = {repository.id}

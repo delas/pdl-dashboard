@@ -19,7 +19,7 @@ function SidebarHostItem(props) {
     const [icon, setIcon] = useState(null);
 
     const setIconForItem = () => {
-        switch(hostType){
+        switch(hostType.value){
             case 'miner': setIcon(<FaCogs/>); break;
             case 'repository': setIcon(<FaServer/>); break;
             case 'service registry': setIcon(<FaNetworkWired/>); break;

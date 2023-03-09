@@ -1,17 +1,19 @@
 import './AddNewHostPopup.scss';
 import {useState, useEffect} from 'react';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
-import {saveHost} from '../../../Store/LocalDataStore';
+// import {saveHost} from '../../../Store/LocalDataStore';
 import {v4 as uuidv4} from 'uuid';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import InputField from '../../Widgets/InputField/InputField';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
+import {hostExits} from '../../../Store/LocalDataStore';
 
 function AddNewHostPopup(props) {
 
     const {
-        toggleNewHostPopupOpen
+        toggleNewHostPopupOpen,
+        addHost
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +34,9 @@ function AddNewHostPopup(props) {
             addedFrom: 'locally',
             config: {},
         };
-        saveHost(newHost.id, newHost);
+        // saveHost(newHost.id, newHost);
+
+        addHost(newHost.id, newHost);
     }
 
 

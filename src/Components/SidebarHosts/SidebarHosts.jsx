@@ -44,6 +44,8 @@ function SidebarHosts(props) {
         forceRerender();
     }
 
+    console.log(getServiceRegistries());
+
     return (
         <div className="SidebarHosts">
 

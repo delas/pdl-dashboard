@@ -1,7 +1,21 @@
 // ---------------------- HOST STORAGE ----------------------
 
 export function saveHost(key, hostObject){
+    
     localStorage.setItem(key, JSON.stringify(hostObject));
+}
+
+export function hostExits(url){
+    const hostsWithSameUrl = Object.keys(localStorage).filter((key) => {
+        if(key !== "debug"){ // because there is default a value not in json format
+            const storageItem = JSON.parse(localStorage.getItem(key));
+            if(storageItem !== null 
+                && storageItem !== undefined
+                && storageItem.name === url)
+            return storageItem;
+        }
+    });
+    return hostsWithSameUrl.length !== 0;
 }
 
 export function removeHost(key){
@@ -42,7 +56,7 @@ function getAllKeysWithType(type) {
             const storageItem = JSON.parse(localStorage.getItem(key));
             if(storageItem !== null 
                 && storageItem !== undefined
-                && storageItem.type === type)
+                && storageItem.type?.value === type)
             return storageItem;
         }
     })

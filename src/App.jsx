@@ -3,7 +3,7 @@ import {useCallback, useState, useEffect, useRef} from 'react';
 import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
-import { saveHost, removeHost, saveFile, removeFile } from './Store/LocalDataStore';
+import { saveHost, removeHost, saveFile, removeFile, hostExits } from './Store/LocalDataStore';
 import { pingAllAddedServices } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 
@@ -63,8 +63,10 @@ function App(props) {
     }, []);
 
     const addHost = (id, host) => {
-        saveHost(id, host);
-        forceUpdate();
+        if(!hostExits(host.name)){
+            saveHost(id, host);
+            forceUpdate();
+        }
     }
 
     const deleteHost = (id) => {
