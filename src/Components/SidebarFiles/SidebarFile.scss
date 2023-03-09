@@ -1,4 +1,5 @@
 .SidebarFile{
+    width: 100%;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
     border-top: 1px solid #6c757d;
@@ -10,15 +11,16 @@
 }
 
 .SidebarFile-flexContainer{
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: 5px;
+    // gap: 5px;
 }
 
 .SidebarFile-flexContainer-left{
-    width: 100%;
+    width: calc(100% - 1em);
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -56,6 +58,8 @@
 }
 
 .SidebarFile-delete{
+    width: 1em;
+    aspect-ratio: 1 / 1;
     margin-right: 0.25em;
     &:hover{
         transform: scale(1.1);

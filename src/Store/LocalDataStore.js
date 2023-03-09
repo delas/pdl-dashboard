@@ -1,14 +1,11 @@
+// ---------------------- HOST STORAGE ----------------------
+
 export function saveHost(key, hostObject){
     localStorage.setItem(key, JSON.stringify(hostObject));
 }
 
 export function removeHost(key){
-    try{
-        localStorage.removeItem(key);
-    }
-    catch(e) {
-        console.log(e);
-    }
+    removeItem(key);
 }
 
 export function getMiners(){
@@ -46,6 +43,63 @@ function getAllKeysWithType(type) {
             if(storageItem !== null 
                 && storageItem !== undefined
                 && storageItem.type === type)
+            return storageItem;
+        }
+    })
+}
+
+export function removeItem(key){
+    try{
+        localStorage.removeItem(key);
+    }
+    catch(e) {
+        console.log(e);
+    }
+}
+
+// ---------------------- FILE STORAGE ----------------------
+
+export function saveFile(key, file) {
+    localStorage.setItem(key, JSON.stringify(file));
+}
+
+export function removeFile(key){
+    removeItem(key);
+}
+
+export function getAllFiles(){
+    const fileKeys = Object.keys(localStorage).filter((key) => {
+        if(key !== "debug"){ // because there is default a FileExtension not in json format
+            const storageItem = JSON.parse(localStorage.getItem(key));
+            if(storageItem !== null 
+                && storageItem !== undefined
+                && storageItem.FileExtension !== null 
+                && storageItem.FileExtension !== undefined )
+            return storageItem;
+        }
+    })
+    return fileKeys.map((key) => {
+        return JSON.parse(localStorage.getItem(key));
+    })
+}
+
+export function getFilesOfType(type) {
+    return GetAllFileOfType(type);
+}
+
+function GetAllFileOfType(type) { //Types ["PNML", "PNG", "BPMN"...]
+    return getAllFileKeysWithType(type).map((key) => {
+        return JSON.parse(localStorage.getItem(key));
+    })
+}
+
+function getAllFileKeysWithType(type) {
+    return Object.keys(localStorage).filter((key) => {
+        if(key !== "debug"){ // because there is default a FileExtension not in json format
+            const storageItem = JSON.parse(localStorage.getItem(key));
+            if(storageItem !== null 
+                && storageItem !== undefined
+                && storageItem.FileExtension === type)
             return storageItem;
         }
     })

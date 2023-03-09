@@ -18,6 +18,8 @@ function Home(props) {
         set,
         addHost,
         removeHost,
+        addFile,
+        deleteFile
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -105,6 +107,7 @@ function Home(props) {
                         <Sidebar
                             openPopup = {openPopup}
                             popups = {popups}
+                            deleteFile = {deleteFile}
                         />
                     </div>
 
@@ -131,6 +134,7 @@ function Home(props) {
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
+                        addFile = {addFile}
                     />
                     : null
                 }
@@ -172,7 +176,8 @@ function Home(props) {
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
-                        addHost = {addHost}
+                        // addHost = {addHost}
+                        addFile = {addFile}
                     />
                     : null
                 }

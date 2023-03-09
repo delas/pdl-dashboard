@@ -4,7 +4,6 @@ import { PingServiceRegistry } from '../Services/ServiceRegistryServices';
 import { getMiners, getRepositories, getServiceRegistries, setStatus } from '../Store/LocalDataStore';
 
 export async function pingAllAddedServices() {
-    console.log("running all ping");
     getMiners().forEach(miner => {
         PingMiner(miner.name).then((res) =>{
             const status = res.status === 200 && res.data.toUpperCase() === "PONG";

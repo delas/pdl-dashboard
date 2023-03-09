@@ -1,9 +1,9 @@
 import './App.css';
-import {useState, useEffect, useRef} from 'react';
+import {useCallback, useState, useEffect, useRef} from 'react';
 import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
-import { saveHost, removeHost } from './Store/LocalDataStore';
+import { saveHost, removeHost, saveFile, removeFile } from './Store/LocalDataStore';
 import { pingAllAddedServices } from './Utils/ServiceHelper';
 
 function App(props) {
@@ -18,7 +18,8 @@ function App(props) {
 
     let pingInterval = useRef(null);
 
-    const [, forceUpdate] = useState();
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() => updateState({}), []);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -62,10 +63,25 @@ function App(props) {
 
     const addHost = (id, host) => {
         saveHost(id, host);
+        forceUpdate();
     }
 
     const deleteHost = (id) => {
         removeHost(id);
+        forceUpdate();
+    }
+
+    const addFile = (id, file) => {
+        saveFile(id, file);
+        setTimeout(() => {
+            forceUpdate();
+        }, 500);
+        
+    }
+
+    const deleteFile = (id) => {
+        removeFile(id);
+        forceUpdate();
     }
 
     if(isLoading){
@@ -81,6 +97,8 @@ function App(props) {
             {props.page === "Home" ? <Home 
                 addHost = {addHost}
                 removeHost = {deleteHost}
+                addFile = {addFile}
+                deleteFile = {deleteFile}
                 toggles = {{
                     toggleSidebar: toggleSidebar,
                     toggleSidebarHosts: toggleSidebarHosts,

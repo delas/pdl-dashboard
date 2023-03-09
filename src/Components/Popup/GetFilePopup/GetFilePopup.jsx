@@ -11,6 +11,7 @@ function GetFilePopup(props) {
 
     const {
         toggleGetFilePopupOpen,
+        addFile,
         repository = {},
     } = props;
 
@@ -47,12 +48,21 @@ function GetFilePopup(props) {
     }
 
     const onFileValueChange = (value) => {
+        console.log(value);
         setSelectedFile(value);
     }
 
     const repositories = getRepositories().map((repository, index) => {
         return {label: repository.name, value: repository.id}
     })
+
+    const onConfirmClick = () => {
+        const fileToSave = filesMetadata.filter((file) => file.FileId === selectedFile.value);
+        if(fileToSave && fileToSave.length === 1){
+            addFile(fileToSave[0].FileId, fileToSave[0]);
+            toggleGetFilePopupOpen();
+        }
+    }
 
     if(isLoading){
         return (
@@ -70,7 +80,7 @@ function GetFilePopup(props) {
             >
 
                 <PopupHeader
-                    title = {`Upload file`}
+                    title = {`Download file from repository`}
                     closePopup = {toggleGetFilePopupOpen}
                 />
 
@@ -91,9 +101,9 @@ function GetFilePopup(props) {
 
                 <PopupFooter
                     onCancelClick = {toggleGetFilePopupOpen}
-                    onNextClick = {() => {}}
+                    onNextClick = {onConfirmClick}
                     cancelText = {`Cancel`}
-                    nextText = {`Confirm`}
+                    nextText = {`Download`}
                 />
 
             </div>

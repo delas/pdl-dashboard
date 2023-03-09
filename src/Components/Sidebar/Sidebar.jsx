@@ -3,29 +3,27 @@ import Button from '../Button/Button';
 import {useState, useEffect} from 'react';
 import { FaCircle, FaCog, FaFileUpload, FaBuffer } from 'react-icons/fa';
 import SidebarFile from '../SidebarFiles/SidebarFile';
+import { getAllFiles } from '../../Store/LocalDataStore';
 
 function Sidebar(props) {
 
     const {
         openPopup,
         popups,
+        deleteFile
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-
-    const files = [
-        {
-            filename: "file 1",
-            filetype: "xes",
-        },
-        {
-            filename: "file 2",
-            filetype: "png",
-        }
-    ]
+    const [isFilesLoading, setIsFilesLoading] = useState(true);
+    const [files, setFiles] = useState([]);
 
     useEffect(() => {
         setIsLoading(false);
+    }, []);
+
+    useEffect(() => {
+        setFiles(getAllFiles());
+        setIsFilesLoading(false);
     });
 
     if(isLoading){
@@ -68,10 +66,12 @@ function Sidebar(props) {
                             files.map((file, index) => {
                                 return(
                                     <SidebarFile key={index}
-                                        filename = {file.filename}
-                                        filetype = {file.filetype}
+                                        filename = {file.FileLabel}
+                                        filetype = {file.FileExtension}
                                         openPopup = {openPopup}
                                         popups = {popups}
+                                        deleteFile = {deleteFile}
+                                        fileId = {file.FileId}
                                     />
                                 )
                             })

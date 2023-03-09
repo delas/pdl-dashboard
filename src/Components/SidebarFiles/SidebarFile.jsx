@@ -7,8 +7,10 @@ function SidebarFile(props) {
     const {
         filename,
         filetype,
-        openPopup,
-        popups,
+        fileId,
+        // openPopup,
+        // popups,
+        deleteFile,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +40,7 @@ function SidebarFile(props) {
                         {filename}
                     </div>
                 </div>
-                <div className='SidebarFile-delete'>
+                <div className='SidebarFile-delete' onClick = {() => {deleteFile(fileId)}}>
                     <FaTrash/>
                 </div>
             </div>

@@ -6,7 +6,6 @@ export async function PingRepository(hostname) {
 }
 
 export async function GetFiles(hostname){
-    console.log(hostname)
     const urlExtension = "/resources/visualizations";
     return axios.get(`${hostname}${urlExtension}`);
 }
