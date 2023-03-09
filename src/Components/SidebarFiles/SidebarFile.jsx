@@ -8,8 +8,6 @@ function SidebarFile(props) {
         filename,
         filetype,
         fileId,
-        // openPopup,
-        // popups,
         deleteFile,
     } = props;
 
@@ -17,7 +15,7 @@ function SidebarFile(props) {
 
     useEffect(() => {
         setIsLoading(false);
-    });
+    }, []);
 
     if(isLoading){
         return (

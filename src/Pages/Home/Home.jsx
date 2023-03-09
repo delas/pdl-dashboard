@@ -34,7 +34,6 @@ function Home(props) {
     }
     
     const openPopup = (popup, props = {}) => {
-        console.log(popup)
         switch(popup){
             case 'AddNewHostPopup': 
                 set.setNewHostPopupOpen(true); 

@@ -31,7 +31,7 @@ function SidebarHostItem(props) {
         switch(hostType){
             case 'miner': openPopup(popups.ActionPopup, {miner: {label: hostName, value: id}}); break;
             case 'repository': openPopup(popups.GetFilePopupOpen, {repository: {label: hostName, value: id}}); break;
-            case 'service registry': console.log("service registry"); openPopup(popups.NewSRHostPopup, {serviceRegistry: {label: hostName, value: id}});break;
+            case 'service registry': openPopup(popups.NewSRHostPopup, {serviceRegistry: {label: hostName, value: id}});break;
             default: break;
         }
     }

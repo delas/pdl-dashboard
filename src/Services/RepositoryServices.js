@@ -5,7 +5,24 @@ export async function PingRepository(hostname) {
     return axios.get(`${hostname}${urlExtension}`);
 }
 
-export async function GetFiles(hostname){
+export async function GetFilesMetadata(hostname){
     const urlExtension = "/resources/visualizations";
     return axios.get(`${hostname}${urlExtension}`);
 }
+
+export async function GetFileImage(hostname, fileId){
+    const urlExtension = `/resources/${fileId}`;
+    return axios.get(`${hostname}${urlExtension}`, {responseType: 'blob'});
+}
+
+export async function GetFileText(hostname, fileId){
+    const urlExtension = `/resources/${fileId}`;
+    return axios.get(`${hostname}${urlExtension}`);
+}
+
+// axios.get('https://picsum.photos/300/300', )
+// .then(response => {
+//   let imageNode = document.getElementById('image');
+//   let imgUrl = URL.createObjectURL(response.data)
+//   imageNode.src = imgUrl
+// })

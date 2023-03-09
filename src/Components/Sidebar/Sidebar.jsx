@@ -4,6 +4,8 @@ import {useState, useEffect} from 'react';
 import { FaCircle, FaCog, FaFileUpload, FaBuffer } from 'react-icons/fa';
 import SidebarFile from '../SidebarFiles/SidebarFile';
 import { getAllFiles } from '../../Store/LocalDataStore';
+// import { GetFile } from '../../Services/RepositoryServices';
+import { getFilesOfType } from '../../Store/LocalDataStore'
 
 function Sidebar(props) {
 
@@ -24,7 +26,7 @@ function Sidebar(props) {
     useEffect(() => {
         setFiles(getAllFiles());
         setIsFilesLoading(false);
-    });
+    }, []);
 
     if(isLoading){
         return (
@@ -79,7 +81,13 @@ function Sidebar(props) {
                     </div>
                 </div>
                 <div className='Sidebar-flexContainer-actions'>
-
+                    {/* <div>
+                        {
+                            getFilesOfType("png").map((file) => {
+                                return <img src={file.fileContent}></img>
+                            })
+                        }
+                    </div> */}
                 </div>
                 <div className='Sidebar-flexContainer-status'>
                     <div className='Sidebar-status'>

@@ -5,7 +5,7 @@ import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {getRepositories} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
-import { GetFiles } from '../../../Services/RepositoryServices';
+import { GetFilesMetadata } from '../../../Services/RepositoryServices';
 
 function GetFilePopup(props) {
 
@@ -29,7 +29,7 @@ function GetFilePopup(props) {
     useEffect(() => {
         if(selectedRepository){
             const repositoryUrl = selectedRepository.label;//getRepositories().filter((repository) => repository.id === selectedRepository.value)[0]?.name;
-            GetFiles(repositoryUrl).then(res => setFilesMetadata(res.data));
+            GetFilesMetadata(repositoryUrl).then(res => setFilesMetadata(res.data));
         }
     }, [selectedRepository]);
 
@@ -43,12 +43,10 @@ function GetFilePopup(props) {
     }, [filesMetadata]);
 
     const onRepositoryChange = (value) => {
-        console.log(value);
         setSelectedRepository(value)
     }
 
     const onFileValueChange = (value) => {
-        console.log(value);
         setSelectedFile(value);
     }
 

@@ -61,7 +61,7 @@ function SidebarHosts(props) {
                     <div className='SidebarHosts-hostsContainer'>
                         {getRepositories().map((repository, index) => {
                             return(
-                            <>
+                            // <>
                                 <SidebarHostItem key = {index}
                                     id = {repository.id}
                                     hostName = {repository.name}
@@ -73,8 +73,8 @@ function SidebarHosts(props) {
                                     popups = {popups}
                                     status = {repository.status}
                                     allowClick = {repository.status === "online"}
-                                />
-                            </>)
+                                />)
+                            // </>)
                         })}
                         
                     </div>
@@ -85,7 +85,7 @@ function SidebarHosts(props) {
 
                     {getMiners().map((miner, index) => {
                         return (
-                        <>
+                        // <>
                             <SidebarHostItem key = {index}
                                 id = {miner.id}
                                 hostName = {miner.name}
@@ -97,9 +97,9 @@ function SidebarHosts(props) {
                                 popups = {popups}
                                 status = {miner.status}
                                 allowClick = {miner.status === "online"}
-                            />
-                        </>
-                    )})}
+                            />)
+                        // </>
+                    })}
                 </div>
 
                 <div className='SidebarHosts-section SidebarHosts-serviceRegistry'>
@@ -107,7 +107,7 @@ function SidebarHosts(props) {
 
                     {getServiceRegistries().map((serviceRegistry, index) => {
                         return (
-                        <>
+                        // <>
                             <SidebarHostItem key = {index}
                                 id = {serviceRegistry.id}
                                 hostName = {serviceRegistry.name}
@@ -120,7 +120,8 @@ function SidebarHosts(props) {
                                 status = {serviceRegistry.status}
                                 allowClick = {serviceRegistry.status === "online"}
                             />
-                        </>)
+                            // </>
+                        )
                     })}
                 </div>
             </div>

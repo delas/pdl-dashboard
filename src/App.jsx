@@ -5,6 +5,7 @@ import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
 import { saveHost, removeHost, saveFile, removeFile } from './Store/LocalDataStore';
 import { pingAllAddedServices } from './Utils/ServiceHelper';
+import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +73,15 @@ function App(props) {
     }
 
     const addFile = (id, file) => {
-        saveFile(id, file);
+
+        if(file.FileExtension === "png" || file.FileExtension === "jpg")
+        GetFileImage(file.RepositoryHost, id)
+            .then((res) => { saveFile(id, {...file, fileContent: URL.createObjectURL(res.data) }) });
+
+        else 
+        GetFileText(file.RepositoryHost, id)
+            .then((res) => { console.log(file, res.data); saveFile(id, {...file, fileContent: res.data }) });
+
         setTimeout(() => {
             forceUpdate();
         }, 500);
