@@ -7,7 +7,6 @@ function BackdropModal(props) {
         closeModal
     } = props;
 
-
     return (
         <div className='Backdrop-modal' 
             onClick = {(e) => {

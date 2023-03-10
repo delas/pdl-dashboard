@@ -29,7 +29,6 @@ function SidebarHostItem(props) {
     }
 
     const openPopupHandler = () => {
-        console.log('popup open');
         switch(hostType.value){
             case 'miner': openPopup(popups.ActionPopup, {miner: {label: hostName, value: id}}); break;
             case 'repository': openPopup(popups.GetFilePopupOpen, {repository: {label: hostName, value: id}}); break;

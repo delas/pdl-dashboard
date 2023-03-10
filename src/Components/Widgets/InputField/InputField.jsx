@@ -9,12 +9,12 @@ function InputField(props) {
         className = "",
         id = "",
         onChange = () => {},
-        value = null,
+        value = '',
     } = props;
 
     return (
         <div className={`InputField-parent ${className}`}>
-            <label className='InputField-label' for = {id ? id : `InputField-${fieldType}-${label}-${placeholder}-${className}`}>
+            <label className='InputField-label' htmlFor = {id ? id : `InputField-${fieldType}-${label}-${placeholder}-${className}`}>
                 {label}
             </label>
             <input 
@@ -25,9 +25,7 @@ function InputField(props) {
                 onChange = {onChange}
                 value = {value}
             />
-            
         </div>
-
     );
 }
 

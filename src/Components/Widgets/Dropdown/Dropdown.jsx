@@ -4,8 +4,6 @@ import Select from 'react-select'
 
 function Dropdown(props) {
 
-    const [selected, setSelected] = useState(null);
-
     const {
         options,
         label,
@@ -14,15 +12,8 @@ function Dropdown(props) {
         value = null,
         loading = false,
     } = props;
-
-    useEffect(() => {
-        if(value !== selected){
-            setSelected(value);
-        }
-    }, [])
     
     const handleValueChange = (value) => {
-        setSelected(value);
         onValueChange(value);
     }
 
@@ -36,7 +27,7 @@ function Dropdown(props) {
             <div className='Dropdown' onClick={(e) => {e.stopPropagation()}}>
                 <Select 
                     options={options} 
-                    value={selected} 
+                    value={value} 
                     onChange={handleValueChange} 
                     name="Dropdown" 
                     search={true} 

@@ -109,6 +109,7 @@ function AddNewHostPopup(props) {
                         options = {hosttypes}
                         onValueChange = {onDropdownValueChange}
                         label = {`Host type:`}
+                        value = {selectedHosttype}
                     />
 
                 </div>

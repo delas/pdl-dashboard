@@ -1,3 +1,4 @@
+// import { type } from '@testing-library/user-event/dist/type';
 import axios from 'axios';
 
 export async function PingMiner(hostname) {
@@ -8,4 +9,9 @@ export async function PingMiner(hostname) {
 export async function GetMinerConfig(hostname) {
     const urlExtension = "/configurations";
     return axios.get(`${hostname}${urlExtension}`);
+}
+
+export async function PostMineAction(hostname, data){
+    const urlExtension = "/miner";
+    return axios.post(`${hostname}${urlExtension}`, data);
 }

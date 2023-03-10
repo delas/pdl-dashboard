@@ -5,7 +5,12 @@ export async function PingRepository(hostname) {
     return axios.get(`${hostname}${urlExtension}`);
 }
 
-export async function GetFilesMetadata(hostname){
+export async function GetLogFilesMetadata(hostname){
+    const urlExtension = "/resources/eventlogs";
+    return axios.get(`${hostname}${urlExtension}`);
+}
+
+export async function GetVisFilesMetadata(hostname){
     const urlExtension = "/resources/visualizations";
     return axios.get(`${hostname}${urlExtension}`);
 }

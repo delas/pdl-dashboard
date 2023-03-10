@@ -85,6 +85,10 @@ export function removeFile(key){
     removeItem(key);
 }
 
+export function getFile(key) {
+    return JSON.parse(localStorage.getItem(key));
+}
+
 export function getAllFiles(){
     const fileKeys = Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a FileExtension not in json format
