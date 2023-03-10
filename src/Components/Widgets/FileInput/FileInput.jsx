@@ -5,23 +5,39 @@ function FileInput(props) {
 
     const {
         onChange,
+        filename = null,
+        filesize = null,
     } = props;
+
+    const fileSizeConverted = () => {
+        if(filesize !== null){
+            if (filesize < 1000000){
+                const size = Math.floor(filesize/1000) + 'KB';
+                return size
+            }else{
+                const size = Math.floor(filesize/1000000) + 'MB';  
+                return size;
+            }
+        }
+        return null;
+    }
+    const uploadText = filename ? `${filename} ${fileSizeConverted()}` : 'Select a file or drag here';
+    const uploadButtonText = filename ? 'Choose a different file' : 'Select a file';
 
     return (
         <form id="file-upload-form" className="fileInput-body">
-            <input id="file-upload" type="file" name="fileUpload" accept="image/*" className='fileInput-fileinput' onChange={onChange}/>
+            <input id="file-upload" type="file" name="fileUpload" className='fileInput-fileinput' onChange={onChange}/>
 
             <label htmlFor="file-upload" id="file-drag" className='fileInput-fileinput-label'>
                 <FaCloudUploadAlt id="file-image" src="#" alt="Preview" className='fileInput-fileinput-icon'/>
 
                 <div className='fileInput-fileinput-selectFile'>
-                    <div>Select a file or drag here</div>
-                    <span id="file-upload-btn" className="fileInput-fileinput-button">Select a file</span>
+                    <div>{uploadText}</div>
+                    <span id="file-upload-btn" className="fileInput-fileinput-button">{uploadButtonText}</span>
                 </div>
 
             </label>
         </form>
-
     );
 }
 

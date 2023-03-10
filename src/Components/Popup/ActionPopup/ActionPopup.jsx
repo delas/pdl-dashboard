@@ -1,8 +1,6 @@
 import './ActionPopup.scss';
 import {useState, useEffect} from 'react';
-import { FaRegWindowClose, FaCloudUploadAlt } from 'react-icons/fa';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
-import FileInput  from '../../Widgets/FileInput/FileInput';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import InputField from '../../Widgets/InputField/InputField';

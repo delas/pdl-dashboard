@@ -1,0 +1,20 @@
+.Radiobuttons-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.Radiobutton-title{
+    font-size: 1.2em;
+}
+
+.Radiobutton-label{
+    font-size: 1.0em;
+}
+
+.Radiobutton-button{
+    width: 1.2em;
+    height: 1.2em;
+}

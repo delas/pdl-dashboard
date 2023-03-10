@@ -30,9 +30,15 @@ export async function GetRepositoryConfig(hostname) {
     return axios.get(`${hostname}${urlExtension}`);
 }
 
-// axios.get('https://picsum.photos/300/300', )
-// .then(response => {
-//   let imageNode = document.getElementById('image');
-//   let imgUrl = URL.createObjectURL(response.data)
-//   imageNode.src = imgUrl
-// })
+
+export const sendFileToRepository = async (hostname, file, fileType) => {
+    const urlExtension = "/resources";
+    const fileExtension = file.name.split('.')[file.name.split('.').length - 1];
+    const formdata = new FormData();
+    formdata.append('field', file);
+    formdata.append('fileLabel', file.name);
+    formdata.append('fileType', fileType);
+    formdata.append('fileExtension', fileExtension);
+
+    axios.post(`${hostname}${urlExtension}`, formdata);
+};
