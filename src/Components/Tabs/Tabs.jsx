@@ -22,8 +22,6 @@ function Tabs(props) {
         )
     }
 
-    console.log(tablist)
-
     return (
         <div className="Tabs">
             <div className='Tabs-flexContainer'>

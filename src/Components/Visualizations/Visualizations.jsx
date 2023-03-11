@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react';
 import Tabs from '../Tabs/Tabs';
 import BPMNVisualizer from './BPMNVisualizer/BPMNVisualizer';
 import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
+import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
 
 function Visualizations(props) {
     const {
@@ -34,12 +35,13 @@ function Visualizations(props) {
                 <Tabs
                     onTabChange = {onTabChange}
                     selectedTab = {selectedTab}
-                    tablist = {[{title: 'tab1'}, {title: 'tab2'}]}
+                    tablist = {[{title: 'BPMN'}, {title: 'Histogram'}, {title: 'PNML'}]}
                 />
             </div>
             <div className='Visualizations-VisualizerContainer'>
-                {(selectedTab === 0) && <BPMNVisualizer file = {file}/>}
-                {(selectedTab === 1) && <HistogramVisualizer file = {file}/>}
+                {(selectedTab === 0 && file.FileExtension.toUpperCase() === "BPMN") && <BPMNVisualizer file = {file}/>}
+                {(selectedTab === 1 && file.FileExtension.toUpperCase() === "XES") && <HistogramVisualizer file = {file}/>}
+                {(selectedTab === 2 && file.FileExtension.toUpperCase() === "PNML") && <PNMLVisualizer file = {file}/>}
             </div>
         </div>
     );
