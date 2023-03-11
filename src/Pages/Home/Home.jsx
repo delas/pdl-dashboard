@@ -1,6 +1,6 @@
 import './Home.scss';
 import {useState, useEffect} from 'react';
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import Topbar from '../../Components/Topbar/Topbar';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
@@ -9,6 +9,9 @@ import ActionPopup from '../../Components/Popup/ActionPopup/ActionPopup';
 import AddNewHostPopup from '../../Components/Popup/AddNewHostPopup/AddNewHostPopup';
 import AddNewHostFromServiceRegistryPopup from '../../Components/Popup/AddNewHostFromServiceRegistryPopup/AddNewHostFromServiceRegistryPopup';
 import GetFilePopup from '../../Components/Popup/GetFilePopup/GetFilePopup';
+// import Tabs from '../../Components/Tabs/Tabs';
+import Visualizations from '../../Components/Visualizations/Visualizations';
+import { getFile } from '../../Store/LocalDataStore';
 
 function Home(props) {
 
@@ -24,6 +27,7 @@ function Home(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [popupProps, setPopupProps] = useState({});
+    const [visualizationsFile, setVisualizationsFile] = useState(null);
 
     const popups = {
         AddNewHostPopup: 'AddNewHostPopup',
@@ -80,6 +84,11 @@ function Home(props) {
         }
     }
 
+    const selectFileForVisualization = (fileId) => {
+        const file = getFile(fileId)
+        setVisualizationsFile(file);
+    }
+
     useEffect(() => {
         setIsLoading(false);
     });
@@ -107,14 +116,23 @@ function Home(props) {
                             openPopup = {openPopup}
                             popups = {popups}
                             deleteFile = {deleteFile}
+                            selectFileForVisualization = {selectFileForVisualization}
                         />
                     </div>
 
-                    <div className={`Home-Content Home-Content${isOpen.sidebarOpen ? "-sidebaropen" : "-sidebarclosed"}`}>
+                    {/* <div className={`Home-Content Home-Content${isOpen.sidebarOpen ? "-sidebaropen" : "-sidebarclosed"}`}>
                         <Link to="/Page1">
                             <div>Hello world from home page</div>
                         </Link>    
-                    </div>
+                    </div> */}
+
+                    {visualizationsFile && 
+                        <div className='Home-Content-visualizations-container'>
+                            <Visualizations
+                                file = {visualizationsFile}
+                            />
+                        </div>
+                    }
                 </div>
 
                 <div className={`Home-SidebarHosts Home-SidebarHosts${isOpen.sidebarHostsOpen ? "-sidebarHostsopen" : "-sidebarHostsclosed"}`}>

@@ -12,7 +12,8 @@ function Sidebar(props) {
     const {
         openPopup,
         popups,
-        deleteFile
+        deleteFile,
+        selectFileForVisualization
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -74,6 +75,7 @@ function Sidebar(props) {
                                         popups = {popups}
                                         deleteFile = {deleteFile}
                                         fileId = {file.FileId}
+                                        selectFileForVisualization = {selectFileForVisualization}
                                     />
                                 )
                             })

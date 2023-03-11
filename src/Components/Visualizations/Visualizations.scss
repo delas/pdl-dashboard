@@ -1,0 +1,22 @@
+$active: rgb(153, 0, 0);
+$inactive: #f8f9fa;
+$tab-height: 3em;
+
+.Visualizations{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.Visualizations-tabsContainer{
+    width: 100%;
+    height: $tab-height;
+}
+
+.Visualizations-VisualizerContainer{
+    width: 90%;
+    height: calc(100% - $tab-height);
+}

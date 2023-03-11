@@ -1,0 +1,14 @@
+.BPMNComponent-parent, #bpmn-component-canvas{
+    width: 100%;
+    height: 100%;
+}
+
+#bpmn-component-canvas{
+    div{
+        a{
+            svg{
+                display: none !important;
+            }
+        }
+    }
+}

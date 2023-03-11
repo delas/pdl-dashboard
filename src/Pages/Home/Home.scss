@@ -17,6 +17,7 @@ $Sidebar-width: 25%;
 
 .Home-Page-below-topbar{
     height: calc(100% - $Topbar-height);
+    width: 100%;
     display: flex;
     flex-direction: row;
 }
@@ -66,4 +67,9 @@ $Sidebar-width: 25%;
         left: -50%;
         width: 0px;
     }
+}
+
+.Home-Content-visualizations-container{
+    width: 100%;
+    height: 100%;
 }
