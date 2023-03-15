@@ -12,7 +12,7 @@ function Petrinet(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [figures, setFigures] = useState(null);
-    const [selected, setSelected] = useState("{}");
+    // const [selected, setSelected] = useState("{}");
     const GraphViewRef = useRef(null);
 
     useEffect(() => {
@@ -53,7 +53,8 @@ function Petrinet(props) {
     }
 
     const onSelect = (select) => {
-        setSelected(select);
+        // setSelected(select);
+        console.log("select");
     }
 
     const onCreateNode = () => {
@@ -103,7 +104,7 @@ function Petrinet(props) {
                 nodeKey={NODE_KEY}
                 nodes={ getNodes(figures.figures.places, figures.figures.transitions) }
                 edges={ getEdges(figures.figures.arcs) }
-                selected={selected}
+                // selected={selected}
                 nodeTypes={config.NodeTypes}
                 nodeSubtypes={{}}
                 edgeTypes={config.EdgeTypes}

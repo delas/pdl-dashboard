@@ -5,7 +5,7 @@ import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {getRepositories} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
-import { GetVisFilesMetadata } from '../../../Services/RepositoryServices';
+import { GetVisFilesMetadata, GetLogFilesMetadata } from '../../../Services/RepositoryServices';
 
 function GetFilePopup(props) {
 
@@ -17,9 +17,12 @@ function GetFilePopup(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [filesMetadata, setFilesMetadata] = useState(null);
+    const [logFilesMetadata, setLogFilesMetadata] = useState(null);
     const [filesForDropdown, setFilesForDropdown] = useState([]);
+    const [logFilesForDropdown, setLogFilesForDropdown] = useState([]);
     const [selectedRepository, setSelectedRepository] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedLogFile, setSelectedLogFile] = useState(null);
 
     useEffect(() => {
         setIsLoading(false);
@@ -31,6 +34,10 @@ function GetFilePopup(props) {
             const repositoryUrl = selectedRepository.label;//getRepositories().filter((repository) => repository.id === selectedRepository.value)[0]?.name;
             GetVisFilesMetadata(repositoryUrl).then(res => setFilesMetadata(res.data));
         }
+        if(selectedRepository){
+            const repositoryUrl = selectedRepository.label;//getRepositories().filter((repository) => repository.id === selectedRepository.value)[0]?.name;
+            GetLogFilesMetadata(repositoryUrl).then(res => {console.log(res.data); setLogFilesMetadata(res.data)});
+        }
     }, [selectedRepository]);
 
     useEffect(() => {
@@ -40,7 +47,13 @@ function GetFilePopup(props) {
                 return ({label: `${file.FileExtension} ${file.FileLabel}`, value: file.FileId})
             })
         );
-    }, [filesMetadata]);
+        if(logFilesMetadata !== null)
+        setLogFilesForDropdown(
+            logFilesMetadata.map((file) => {
+                return ({label: `${file.FileExtension} ${file.FileLabel}`, value: file.FileId})
+            })
+        );
+    }, [filesMetadata, logFilesMetadata]);
 
     const onRepositoryChange = (value) => {
         setSelectedRepository(value)
@@ -48,6 +61,12 @@ function GetFilePopup(props) {
 
     const onFileValueChange = (value) => {
         setSelectedFile(value);
+        setSelectedLogFile(null);
+    }
+
+    const onLogFileValueChange = (value) => {
+        setSelectedLogFile(value);
+        setSelectedFile(null);
     }
 
     const repositories = getRepositories().map((repository, index) => {
@@ -55,7 +74,12 @@ function GetFilePopup(props) {
     })
 
     const onConfirmClick = () => {
-        const fileToSave = filesMetadata.filter((file) => file.FileId === selectedFile.value);
+        let fileToSave = null;
+        if(selectedFile !== null) {
+            fileToSave = filesMetadata.filter((file) => file.FileId === selectedFile.value);
+        } else if(selectedLogFile !== null){
+            fileToSave = logFilesMetadata.filter((file) => file.FileId === selectedLogFile.value);
+        }
         if(fileToSave && fileToSave.length === 1){
             addFile(fileToSave[0].FileId, fileToSave[0]);
             toggleGetFilePopupOpen();
@@ -92,9 +116,17 @@ function GetFilePopup(props) {
                 <Dropdown
                     options = {filesForDropdown}
                     onValueChange = {onFileValueChange}
-                    label = {`Select file`}
+                    label = {`Select visualized file`}
                     value = {selectedFile}
                     loading = {filesForDropdown === null}
+                />
+
+                <Dropdown
+                    options = {logFilesForDropdown}
+                    onValueChange = {onLogFileValueChange}
+                    label = {`Select log file`}
+                    value = {selectedLogFile}
+                    loading = {logFilesForDropdown === null}
                 />
 
                 <PopupFooter
