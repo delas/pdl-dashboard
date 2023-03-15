@@ -18,8 +18,8 @@ const placeShape = (
 )
 
 const transitionShape = (
-    <symbol viewBox="0 0 100 50" id={`${TransitionId}`} key="0">
-        <rect x="0" y="0" rx="10" ry="10" width="100" height="50" />
+    <symbol viewBox="0 0 150 50" id={`${TransitionId}`} key="0">
+        <rect x="0" y="0" rx="10" ry="10" width="150" height="50"/>
     </symbol>
 )
 
@@ -36,12 +36,12 @@ const config = {
         place: {
             shape: placeShape,
             shapeId: `#${PlaceId}`,
-            typeText: 'None',
+            // typeText: 'None',
         },
         transition: {
             shape: transitionShape,
             shapeId: `#${TransitionId}`,
-            typeText: 'None',
+            // typeText: 'None',
         },
     },
 };

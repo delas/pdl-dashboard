@@ -15,7 +15,7 @@ function Visualizations(props) {
 
     useEffect(() => {
         setIsLoading(false);
-    });
+    }, []);
 
     const onTabChange = (tabIndex) => {
         setSelectedTab(tabIndex);

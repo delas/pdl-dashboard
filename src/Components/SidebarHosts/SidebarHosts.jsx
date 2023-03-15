@@ -1,5 +1,5 @@
 import './SidebarHosts.scss';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import { FaRegWindowClose } from 'react-icons/fa';
 import SidebarHostItem from './SidebarHostItem/SidebarHostItem';
 import {getMiners, getRepositories, getServiceRegistries} from '../../Store/LocalDataStore';
@@ -11,21 +11,22 @@ import HorizontalLine from '../Widgets/HorizontalLine/HorizontalLine';
 
 
 function SidebarHosts(props) {
-    
-    const [, forceUpdate] = useState();
-
     const {
         toggleSidebarHosts,
         openPopup,
         popups,
         removeHost,
+        setUpdateSidebarHosts
     } = props;
 
     const [isLoading, setIsLoading] = useState(false);
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() => updateState({}), []);
 
     useEffect(() => {
+        setUpdateSidebarHosts({update: forceUpdate});
         setIsLoading(false);
-    });
+    }, []);
 
     if(isLoading){
         return (

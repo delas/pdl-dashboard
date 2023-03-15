@@ -18,11 +18,13 @@ function App(props) {
     const [newHostPopupOpen, setNewHostPopupOpen] = useState(false);
     const [newHostFromSROpen, setNewHostFromSRPopupOpen] = useState(false);
     const [GetFilePopupOpen, setGetFilePopupOpen] = useState(false);
+    const [updateSidebarHosts, setUpdateSidebarHosts] = useState(null);
+    const [updateSidebar, setUpdateSidebar] = useState(null);
 
     let pingInterval = useRef(null);
 
-    const [, updateState] = useState();
-    const forceUpdate = useCallback(() => updateState({}), []);
+    // const [, updateState] = useState();
+    // const forceUpdate = useCallback(() => updateState({}), []);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -54,13 +56,16 @@ function App(props) {
 
     useEffect(() => {
         setIsLoading(false);
-    });
+    }, []);
 
     useEffect(() => {
         if(pingInterval.current !== null) clearInterval(pingInterval.current);
         pingInterval.current = setInterval(() => {
             pingAllAddedServices();
-            forceUpdate();
+            if(updateSidebarHosts !== null && updateSidebarHosts !== undefined){
+                updateSidebarHosts.update();
+            }
+            // forceUpdate();
         }, 15000);
     }, []);
 
@@ -80,26 +85,42 @@ function App(props) {
                 console.log(res.data);
                 host.config = res.data;
                 saveHost(id, host);
-                forceUpdate();
+                if(updateSidebarHosts !== null && updateSidebarHosts !== undefined){
+                    updateSidebarHosts.update();
+                }
+                // forceUpdate();
             })
         }
     }
 
     const deleteHost = (id) => {
         removeHost(id);
-        forceUpdate();
+        if(updateSidebarHosts !== null && updateSidebarHosts !== undefined){
+            updateSidebarHosts.update();
+        }
+        // forceUpdate();
     }
 
     const addFile = (id, file) => {
         if(file.FileExtension === "png" || file.FileExtension === "jpg")
         GetFileImage(file.RepositoryHost, id)
             .then((res) => { saveFile(id, {...file, fileContent: URL.createObjectURL(res.data) }) })
-            .then(() => setTimeout(() => { forceUpdate(); }, 500));
+            .then(() => setTimeout(() => { 
+                if(updateSidebar !== null && updateSidebar !== undefined){
+                    updateSidebar.update();
+                }
+                // forceUpdate(); 
+            }, 500));
 
         else 
         GetFileText(file.RepositoryHost, id)
             .then((res) => { console.log(file, res.data); saveFile(id, {...file, fileContent: res.data }) })
-            .then(() => setTimeout(() => { forceUpdate(); }, 500));
+            .then(() => setTimeout(() => { 
+                if(updateSidebar !== null && updateSidebar !== undefined){
+                    updateSidebar.update();
+                }
+                // forceUpdate(); 
+            }, 500));
 
         
         
@@ -107,7 +128,10 @@ function App(props) {
 
     const deleteFile = (id) => {
         removeFile(id);
-        forceUpdate();
+        if(updateSidebar !== null && updateSidebar !== undefined){
+            updateSidebar.update();
+        }
+        // forceUpdate();
     }
 
     if(isLoading){
@@ -141,7 +165,9 @@ function App(props) {
                     setActionPopupOpen: setActionPopupOpen,
                     setNewHostPopupOpen: setNewHostPopupOpen,
                     setNewHostFromSRPopupOpen: setNewHostFromSRPopupOpen,
-                    setGetFilePopupOpen: setGetFilePopupOpen
+                    setGetFilePopupOpen: setGetFilePopupOpen,
+                    setUpdateSidebarHosts: setUpdateSidebarHosts,
+                    setUpdateSidebar: setUpdateSidebar
                 }}
                 isOpen = {{
                     sidebarOpen: sidebarOpen,

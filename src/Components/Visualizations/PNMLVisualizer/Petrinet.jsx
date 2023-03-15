@@ -11,12 +11,8 @@ function Petrinet(props) {
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-
     const [figures, setFigures] = useState(null);
-
-    const [graph, setGraph] = useState(null);
     const [selected, setSelected] = useState("{}");
-
     const GraphViewRef = useRef(null);
 
     useEffect(() => {
@@ -24,16 +20,14 @@ function Petrinet(props) {
         setIsLoading(false);
     }, []);
 
-    
-
     const getNodes = (places, transitions) => {
         console.log(figures.figures.places)
         return places.map((place) => {
             return ({
                 id: place?.id,
                 title: place?.name?.text,
-                x: place?.graphics?.position?.x,
-                y: place?.graphics?.position?.y,
+                x: place?.graphics?.position?.x * 5,
+                y: place?.graphics?.position?.y * 5,
                 type: `${PlaceId}`
             })
         }).concat(
@@ -41,12 +35,11 @@ function Petrinet(props) {
             return ({
                 id: transition?.id,
                 title: transition?.name?.text,
-                x: transition?.graphics?.position?.x,
-                y: transition?.graphics?.position?.y,
+                x: transition?.graphics?.position?.x * 5,
+                y: transition?.graphics?.position?.y * 5,
                 type: `${TransitionId}`
             })
-        })
-        )
+        }))
     }
 
     const getEdges = (arcs) => {
@@ -59,8 +52,8 @@ function Petrinet(props) {
         })
     }
 
-    const onSelect = () => {
-        console.log('select');
+    const onSelect = (select) => {
+        setSelected(select);
     }
 
     const onCreateNode = () => {
@@ -103,66 +96,30 @@ function Petrinet(props) {
         )
     }
 
-    console.log(getNodes(figures.figures.places, figures.figures.transitions));
-    console.log(getEdges(figures.figures.arcs));
-
-    const items = {
-        nodes: [
-            {
-            "id": 1,
-            "title": "Node A",
-            "x": 258.3976135253906,
-            "y": 331.9783248901367,
-            "type": `${PlaceId}`
-            },
-            {
-            "id": 2,
-            "title": "Node B",
-            "x": 593.9393920898438,
-            "y": 260.6060791015625,
-            "type": `${TransitionId}`
-            },
-            {
-            "id": 3,
-            "title": "Node C",
-            "x": 237.5757598876953,
-            "y": 61.81818389892578,
-            "type": `${PlaceId}`
-            }
-        ],
-        edges: [
-            {
-            "source": 1,
-            "target": 2,
-            "type": `${EdgeId}`
-            },
-            {
-            "source": 2,
-            "target": 3,
-            "type": `${EdgeId}`
-            }
-        ]
-    }
-
     return (
         <div className="Petrinet">
             <GraphView  
                 ref={GraphViewRef}
                 nodeKey={NODE_KEY}
-                nodes={ items.nodes }
-                edges={ items.edges }
-                // selected={selected}
+                nodes={ getNodes(figures.figures.places, figures.figures.transitions) }
+                edges={ getEdges(figures.figures.arcs) }
+                selected={selected}
                 nodeTypes={config.NodeTypes}
                 nodeSubtypes={{}}
                 edgeTypes={config.EdgeTypes}
                 // allowMultiselect={true} // true by default, set to false to disable multi select.
-                // onSelect={onSelect}
-                // onCreateNode={onCreateNode}
-                // onUpdateNode={onUpdateNode}
-                // onDeleteNode={onDeleteNode}
-                // onCreateEdge={onCreateEdge}
-                // onSwapEdge={onSwapEdge}
-                // onDeleteEdge={onDeleteEdge}
+                onSelect={onSelect}
+                onCreateNode={onCreateNode}
+                onUpdateNode={onUpdateNode}
+                onDeleteNode={onDeleteNode}
+                onCreateEdge={onCreateEdge}
+                onSwapEdge={onSwapEdge}
+                onDeleteEdge={onDeleteEdge}
+                renderNodeText={data => { return (
+                    <foreignObject x='-75' y='-25' width='150' height='50'>
+                        <p className='job-title'>{data.title}</p>
+                    </foreignObject>
+                ) }}
                 />
         </div>
     )

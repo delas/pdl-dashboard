@@ -1,11 +1,12 @@
 import './Sidebar.scss';
 import Button from '../Button/Button';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import { FaCircle, FaCog, FaFileUpload, FaBuffer } from 'react-icons/fa';
 import SidebarFile from '../SidebarFiles/SidebarFile';
 import { getAllFiles } from '../../Store/LocalDataStore';
 // import { GetFile } from '../../Services/RepositoryServices';
 import { getFilesOfType } from '../../Store/LocalDataStore'
+import { type } from '@testing-library/user-event/dist/type';
 
 function Sidebar(props) {
 
@@ -13,14 +14,19 @@ function Sidebar(props) {
         openPopup,
         popups,
         deleteFile,
-        selectFileForVisualization
+        selectFileForVisualization,
+        setUpdateSidebar
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
     const [isFilesLoading, setIsFilesLoading] = useState(true);
     const [files, setFiles] = useState([]);
 
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() => updateState({}), []);
+
     useEffect(() => {
+        setUpdateSidebar({update: forceUpdate});
         setIsLoading(false);
     }, []);
 

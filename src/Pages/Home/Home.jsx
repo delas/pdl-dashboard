@@ -91,7 +91,7 @@ function Home(props) {
 
     useEffect(() => {
         setIsLoading(false);
-    });
+    }, []);
 
     if(isLoading){
         return (
@@ -100,6 +100,8 @@ function Home(props) {
             </div>
         )
     }
+
+    console.log("Reload on or above home");
 
     return (
         <div className="Home">
@@ -117,14 +119,9 @@ function Home(props) {
                             popups = {popups}
                             deleteFile = {deleteFile}
                             selectFileForVisualization = {selectFileForVisualization}
+                            setUpdateSidebar= {set.setUpdateSidebar}
                         />
                     </div>
-
-                    {/* <div className={`Home-Content Home-Content${isOpen.sidebarOpen ? "-sidebaropen" : "-sidebarclosed"}`}>
-                        <Link to="/Page1">
-                            <div>Hello world from home page</div>
-                        </Link>    
-                    </div> */}
 
                     {visualizationsFile && 
                         <div className='Home-Content-visualizations-container'>
@@ -142,6 +139,7 @@ function Home(props) {
                         popups = {popups}
                         addHost = {addHost}
                         removeHost = {removeHost}
+                        setUpdateSidebarHosts = {set.setUpdateSidebarHosts} 
                     />
                 </div>
 
