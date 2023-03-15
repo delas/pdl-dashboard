@@ -1,6 +1,7 @@
 import './PNMLVisualizer.scss';
 import PNMLVisualizerUtil from './PNMLVisualizerUtil';
 import {useState, useEffect} from 'react';
+import Petrinet from './Petrinet';
 // import Histogram from 'react-chart-histogram';
 // import { Chart } from "react-google-charts";
 
@@ -25,12 +26,13 @@ function PNMLVisualizer(props) {
     }
 
     console.log(PNMLVisualizerUtil.parsePnml(file.fileContent));
-    // console.log(PNMLVisualizerUtil.testXMLOptions());
-    // PNMLVisualizerUtil.readPnml('./running-examplePNML.pnml').then((res) => console.log(res));
+    // console.log(PetrinetVisualizer.convertToPetri('Petrinet'));
 
     return (
         <div className="PNMLVisualizer">
-            
+            <div className ='Petrinet-container'>
+                <Petrinet file={file}/>
+            </div>
         </div>
     )
 }
