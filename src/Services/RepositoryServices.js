@@ -15,12 +15,12 @@ export async function GetVisFilesMetadata(hostname){
     return axios.get(`${hostname}${urlExtension}`);
 }
 
-export async function GetFileImage(hostname, fileId){
+export async function GetFileImage(hostname, fileId){ //if the visualization is an image the reponseType needs to be blob
     const urlExtension = `/resources/${fileId}`;
     return axios.get(`${hostname}${urlExtension}`, {responseType: 'blob'});
 }
 
-export async function GetFileText(hostname, fileId){
+export async function GetFileText(hostname, fileId){ //If the visualization is text-formatted the responsetype can't be blolb
     const urlExtension = `/resources/${fileId}`;
     return axios.get(`${hostname}${urlExtension}`);
 }

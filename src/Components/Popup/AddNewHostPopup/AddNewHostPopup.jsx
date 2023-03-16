@@ -1,13 +1,11 @@
 import './AddNewHostPopup.scss';
 import {useState, useEffect} from 'react';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
-// import {saveHost} from '../../../Store/LocalDataStore';
 import {v4 as uuidv4} from 'uuid';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import InputField from '../../Widgets/InputField/InputField';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
-import {hostExits} from '../../../Store/LocalDataStore';
 
 function AddNewHostPopup(props) {
 
@@ -23,7 +21,7 @@ function AddNewHostPopup(props) {
 
     useEffect(() => {
         setIsLoading(false);
-    });
+    }, []);
 
     const handleSubmit = () => {
         const newHost = {
@@ -34,28 +32,11 @@ function AddNewHostPopup(props) {
             addedFrom: 'locally',
             config: {},
         };
-        // saveHost(newHost.id, newHost);
-
         addHost(newHost.id, newHost);
     }
 
-
-    // const necessaryInformation = {
-    //     id : "123"
-    //     name: "http://localhost:3000",
-    //     status: "online",
-    //     type: "miner",
-    //     addedFrom: "locally",
-    //     config: {
-    //         HostName: "repoUrl",
-    //         Label: "Public Repository",
-    //         Type: "Repository",
-    //         Access: "Public"
-    //     }
-    // }
-
-    const handleTextfieldChange = (event) => {
-        setHostname(event.target.value);
+    const handleTextfieldChange = (res) => {
+        setHostname(res.value);
     }
 
     const onConfirmClick = () => {

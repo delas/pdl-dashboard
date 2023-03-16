@@ -1,5 +1,5 @@
 import './App.css';
-import {useCallback, useState, useEffect, useRef} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
@@ -80,10 +80,9 @@ function App(props) {
 
     const addHost = (id, host) => {
         if(!hostExits(host.name)){
-            console.log(host.type.value);
             handleAddHostOfType(host.type.value, host.name).then((res) => {
-                console.log(res.data);
                 host.config = res.data;
+                console.log(host.config);
                 saveHost(id, host);
                 if(updateSidebarHosts !== null && updateSidebarHosts !== undefined){
                     updateSidebarHosts.update();

@@ -1,18 +1,26 @@
 import './HistogramVisualizer.scss';
 import {useState, useEffect} from 'react';
-import Histogram from 'react-chart-histogram';
+// import Histogram from 'react-chart-histogram';
 import { Chart } from "react-google-charts";
+import {GetFileText} from '../../../Services/RepositoryServices';
 
 function HistogramVisualizer(props) {
     const {
-        histogramData
+        file,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
+    const [fileContent, setFileContent] = useState([]);
 
     useEffect(() => {
         setIsLoading(false);
-    });
+
+        if(file.ResourceType === 'EventStream'){
+            setInterval(() => {
+                GetFileText().then( res => setFileContent(res.data) )
+            }, 500)
+        }
+    }, []);
 
     if(isLoading){
         return (
@@ -21,21 +29,33 @@ function HistogramVisualizer(props) {
             </div>
         )
     }
+
+    // const convertFileContentToHistogramData = (fileContent) => {
+    //     const data = ["Events", "Occurances"];
+    // }
+
+    const convertFileToHistogramOptions = (file) => {
+        console.log(file);
+        return {chart: {
+            title: `${file.FileLabel}`,
+            subtitle: "Occurances of events"
+        }}
+    }
     
     const data = [
-        ["Event", "Occurances",],
+        ["Events", "Occurances",],
         ["Event1", 1000,],
         ["Event2", 1170,],
         ["Event3", 660,],
         ["2017", 1030],
     ];
 
-    const options = {
-        chart: {
-            title: "<fileName>.<fileExtension>",
-            subtitle: "Occurance chart of events",
-        },
-    };
+    // const options = {
+    //     chart: {
+    //         title: "<fileName>.<fileExtension>",
+    //         subtitle: "Occurance chart of events",
+    //     },
+    // };
 
     return (
         <div className="HistogramVisualizer">
@@ -44,7 +64,7 @@ function HistogramVisualizer(props) {
                 width="100%"
                 height="400px"
                 data={data}
-                options={options}
+                options={convertFileToHistogramOptions(file)}
             />
         </div>
     )

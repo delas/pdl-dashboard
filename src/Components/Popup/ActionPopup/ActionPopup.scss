@@ -71,3 +71,19 @@ $theme: rgb(153, 0, 0);
     padding-top: 1em;
     padding-bottom: 0.5em;
 }
+
+.Dropdown-length-1{
+    padding-top: 0.5em;
+    text-align: left;
+
+    .Dropdown-legnth-1-text{
+        
+        text-decoration: underline;
+    }
+    &-label{
+
+    }
+    &-text{
+        
+    }
+}

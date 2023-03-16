@@ -1,8 +1,7 @@
-// import { type } from '@testing-library/user-event/dist/type';
 import axios from 'axios';
 
 export async function PingMiner(hostname) {
-    const urlExtension = "/system/Ping";
+    const urlExtension = "/Ping";
     return axios.get(`${hostname}${urlExtension}`);
 }
 

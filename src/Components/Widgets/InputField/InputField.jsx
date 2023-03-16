@@ -10,6 +10,9 @@ function InputField(props) {
         id = "",
         onChange = () => {},
         value = '',
+        min = null,
+        max = null,
+        index = null,
     } = props;
 
     return (
@@ -22,8 +25,10 @@ function InputField(props) {
                 className={`InputField InputField-${fieldType}`}
                 type={fieldType}
                 placeholder = {placeholder}
-                onChange = {onChange}
+                onChange = {(e) => {onChange({value: e.target.value, index: index})}}
                 value = {value}
+                min = {`${min}`}
+                max = {`${max}`}
             />
         </div>
     );

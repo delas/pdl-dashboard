@@ -6,7 +6,6 @@ import {getMiners, getRepositories, getServiceRegistries} from '../../Store/Loca
 import {PingServiceRegistry} from '../../Services/ServiceRegistryServices';
 import {PingMiner} from '../../Services/MinerServices';
 import {PingRepository} from '../../Services/RepositoryServices';
-import HorizontalLine from '../Widgets/HorizontalLine/HorizontalLine';
 
 
 
