@@ -189,7 +189,6 @@ function ActionPopup(props) {
     }
 
     const onOutputFiletypeChange = (res) => {
-        console.log(res);
         setFileOutputType(res);
     }
 

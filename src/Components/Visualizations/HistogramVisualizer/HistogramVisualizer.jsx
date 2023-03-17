@@ -35,7 +35,6 @@ function HistogramVisualizer(props) {
     // }
 
     const convertFileToHistogramOptions = (file) => {
-        console.log(file);
         return {chart: {
             title: `${file.FileLabel}`,
             subtitle: "Occurances of events"

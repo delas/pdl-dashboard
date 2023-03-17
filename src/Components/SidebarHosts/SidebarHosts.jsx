@@ -7,8 +7,6 @@ import {PingServiceRegistry} from '../../Services/ServiceRegistryServices';
 import {PingMiner} from '../../Services/MinerServices';
 import {PingRepository} from '../../Services/RepositoryServices';
 
-
-
 function SidebarHosts(props) {
     const {
         toggleSidebarHosts,
@@ -109,7 +107,6 @@ function SidebarHosts(props) {
 
                     {getServiceRegistries().map((serviceRegistry, index) => {
                         return (
-                        // <>
                             <SidebarHostItem key = {index}
                                 id = {serviceRegistry.id}
                                 hostName = {serviceRegistry.name}
@@ -122,7 +119,6 @@ function SidebarHosts(props) {
                                 status = {serviceRegistry.status}
                                 allowClick = {serviceRegistry.status === "online"}
                             />
-                            // </>
                         )
                     })}
                 </div>

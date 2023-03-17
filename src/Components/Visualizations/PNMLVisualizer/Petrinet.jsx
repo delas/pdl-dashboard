@@ -21,7 +21,6 @@ function Petrinet(props) {
     }, []);
 
     const getNodes = (places, transitions) => {
-        console.log(figures.figures.places)
         return places.map((place) => {
             return ({
                 id: place?.id,

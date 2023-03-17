@@ -32,9 +32,9 @@ function AddNewHostFromServiceRegistryPopup(props) {
         minerHostsSelected.forEach((miner, index) => {
             const newHost = {
                 id: uuidv4(),
-                name: miner,
+                name: miner.label,
                 status: "offline",
-                type: "miner",
+                type: {label: miner.value, value: miner.value},
                 addedFrom: serviceRegistry.label,
             };
             addHost(newHost.id, newHost);
@@ -43,9 +43,9 @@ function AddNewHostFromServiceRegistryPopup(props) {
         repositoryHostsSelected.forEach((repository, index) => {
             const newHost = {
                 id: uuidv4(),
-                name: repository,
+                name: repository.label,
                 status: "offline",
-                type: "repository",
+                type: {label: repository.value, value: repository.value},
                 addedFrom: serviceRegistry.label,
             };
             addHost(newHost.id, newHost);
@@ -57,7 +57,7 @@ function AddNewHostFromServiceRegistryPopup(props) {
     }
 
     const addRepositoryHost = (repository) => {
-        setRepositoryHostsSelected(repositoryHostsSelected.concat(repository.value));
+        setRepositoryHostsSelected(repositoryHostsSelected.concat(repository));
     }
 
     const removeMinerHost = (id) => {
@@ -86,12 +86,12 @@ function AddNewHostFromServiceRegistryPopup(props) {
     useEffect(() => {
         if(miners !== null)
         setMinersDropdownFormat(miners.map((miner) => {
-            return( {label: `${miner.Label} ${miner.HostName}`, value: miner.HostName} )
+            return( {label: `${miner.HostName}`, value: "miner"} )
         }));
 
         if(repositories !== null)
         setRepositoriesDropdownFormat(repositories.map((repository) => {
-            return( {label: `${repository.Label} ${repository.HostName}`, value: repository.HostName} )
+            return( {label: `${repository.HostName}`, value: "repository"} )
         }));
     }, [miners, repositories])
 
@@ -134,7 +134,7 @@ function AddNewHostFromServiceRegistryPopup(props) {
                                     return(
                                         <SidebarHostItem key = {index}
                                             id = {miner.id}
-                                            hostName = {miner}
+                                            hostName = {miner.value}
                                             hostType = {"miner"}
                                             addedFrom = {serviceRegistry.label}
                                             onRemove = {removeMinerHost}
@@ -165,7 +165,7 @@ function AddNewHostFromServiceRegistryPopup(props) {
                                         return(
                                             <SidebarHostItem key = {index}
                                                 id = {repository.id}
-                                                hostName = {repository}
+                                                hostName = {repository.value}
                                                 hostType = {"repository"}
                                                 addedFrom = {serviceRegistry.label}
                                                 onRemove = {removeRepositoryHost}

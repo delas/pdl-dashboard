@@ -82,8 +82,7 @@ function App(props) {
     const addHost = (id, host) => {
         if(!hostExits(host.name)){
             handleAddHostOfType(host.type.value, host.name).then((res) => {
-                host.config = res.data;
-                console.log(host.config);
+                host.config = res?.data;
                 saveHost(id, host);
                 if(updateSidebarHosts !== null && updateSidebarHosts !== undefined){
                     updateSidebarHosts.update();
@@ -114,7 +113,7 @@ function App(props) {
 
         else 
         GetFileText(file.RepositoryHost, id)
-            .then((res) => { console.log(file, res.data); saveFile(id, {...file, fileContent: res.data }) })
+            .then((res) => { saveFile(id, {...file, fileContent: res.data }) })
             .then(() => setTimeout(() => { 
                 if(updateSidebar !== null && updateSidebar !== undefined){
                     updateSidebar.update();

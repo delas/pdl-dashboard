@@ -36,7 +36,7 @@ function GetFilePopup(props) {
         }
         if(selectedRepository){
             const repositoryUrl = selectedRepository.label;//getRepositories().filter((repository) => repository.id === selectedRepository.value)[0]?.name;
-            GetLogFilesMetadata(repositoryUrl).then(res => {console.log(res.data); setLogFilesMetadata(res.data)});
+            GetLogFilesMetadata(repositoryUrl).then(res => {setLogFilesMetadata(res.data)});
         }
     }, [selectedRepository]);
 

@@ -101,8 +101,6 @@ function Home(props) {
         )
     }
 
-    console.log("Reload on or above home");
-
     return (
         <div className="Home">
             <div className='Home-PageLayout'>
