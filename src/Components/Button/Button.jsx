@@ -9,14 +9,15 @@ function Button(props) {
         icon,
         text,
         onClick = null,
+        theme = "secondary"
     } = props;
 
     return (
-        <button className={`Button ${className}`} type="button" disabled = {disabled} onClick = {() => {onClick()}}>
-            <div className={`Button-icon`}>
+        <button className={`Button ${className} Button-${theme}`} type="button" disabled = {disabled} onClick = {() => {onClick()}}>
+            <div className={`Button-icon Button-icon-${theme}`}>
                 {icon}
             </div>
-            <div className={`Button-text`}>
+            <div className={`Button-text Button-text-${theme}`}>
                 {text}
             </div>
         </button>

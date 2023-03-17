@@ -39,7 +39,7 @@ $Sidebar-width: 25%;
 }
 
 .Home-Content{
-    transition: width 0.5s ease-in-out;
+    transition: width 0.3s ease-in-out;
     &-sidebaropen{
         width: calc(100% - $Sidebar-width);
         height: 100%;
@@ -56,12 +56,13 @@ $Sidebar-width: 25%;
     top:0;
     left: 0;
 
-    transform: translateX(0);
-    transition: left 0.5s ease-in-out, width 0.5s ease-in-out;
-
+    // transform: translateX(0);
+    transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
+    // $max-width: 30em;
     &-sidebarHostsopen{
         left: 0;
         width: 50%;
+        max-width: 30em;
     }
     &-sidebarHostsclosed{
         left: -50%;

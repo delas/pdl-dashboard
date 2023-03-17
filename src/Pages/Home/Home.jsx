@@ -110,6 +110,8 @@ function Home(props) {
                     <Topbar
                         toggleSidebar = {toggles.toggleSidebar}
                         toggleSidebarHosts = {toggles.toggleSidebarHosts}
+                        sidebarOpen = {isOpen.sidebarOpen}
+                        sidebarHostsOpen = {isOpen.sidebarHostsOpen}
                     />
                 </div>
                 <div className={`Home-Page-below-topbar`}>

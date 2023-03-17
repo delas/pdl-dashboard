@@ -11,6 +11,16 @@
         background: #6c757d;
         border-color: #6c757d;
     }
+    &-primary{
+        background: #fff;
+        border: rgb(153, 0, 0);
+        color: rgb(153, 0, 0);
+        &:hover{
+            border: 1px solid#FFF;
+            color: #fff;
+            background: rgb(153, 0, 0);
+        }
+    }
 }
 
 .Button-icon{
@@ -19,6 +29,9 @@
         height: 100%;
         width: 100%;
     }
+    // &-primary{
+    //     // color: rgb(153, 0, 0);
+    // }
 }
 
 .Button-text{

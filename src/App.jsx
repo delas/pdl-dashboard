@@ -61,10 +61,11 @@ function App(props) {
     useEffect(() => {
         if(pingInterval.current !== null) clearInterval(pingInterval.current);
         pingInterval.current = setInterval(() => {
-            pingAllAddedServices();
-            if(updateSidebarHosts !== null && updateSidebarHosts !== undefined){
-                updateSidebarHosts.update();
-            }
+            pingAllAddedServices().then(() => {
+                if(updateSidebarHosts !== null && updateSidebarHosts !== undefined){
+                    updateSidebarHosts.update();
+                }
+            });
             // forceUpdate();
         }, 15000);
     }, []);
