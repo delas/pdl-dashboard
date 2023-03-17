@@ -101,8 +101,8 @@ function App(props) {
     }
 
     const addFile = (id, file) => {
-        if(file.FileExtension === "png" || file.FileExtension === "jpg")
-        GetFileImage(file.RepositoryHost, id)
+        if(file.FileInfo.FileExtension === "png" || file.FileInfo.FileExtension === "jpg")
+        GetFileImage(file.Host, id)
             .then((res) => { saveFile(id, {...file, fileContent: URL.createObjectURL(res.data) }) })
             .then(() => setTimeout(() => { 
                 if(updateSidebar !== null && updateSidebar !== undefined){
@@ -112,7 +112,7 @@ function App(props) {
             }, 500));
 
         else 
-        GetFileText(file.RepositoryHost, id)
+        GetFileText(file.Host, id)
             .then((res) => { saveFile(id, {...file, fileContent: res.data }) })
             .then(() => setTimeout(() => { 
                 if(updateSidebar !== null && updateSidebar !== undefined){
@@ -120,9 +120,6 @@ function App(props) {
                 }
                 // forceUpdate(); 
             }, 500));
-
-        
-        
     }
 
     const deleteFile = (id) => {

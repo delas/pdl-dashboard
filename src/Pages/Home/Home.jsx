@@ -4,7 +4,7 @@ import {useState, useEffect} from 'react';
 import Topbar from '../../Components/Topbar/Topbar';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
-import AddFilePopup from '../../Components/Popup/AddfilePopup/AddfilePopup';
+import UploadResourcePopup from '../../Components/Popup/UploadResourcePopup/UploadResourcePopup';
 import ActionPopup from '../../Components/Popup/ActionPopup/ActionPopup';
 import AddNewHostPopup from '../../Components/Popup/AddNewHostPopup/AddNewHostPopup';
 import AddNewHostFromServiceRegistryPopup from '../../Components/Popup/AddNewHostFromServiceRegistryPopup/AddNewHostFromServiceRegistryPopup';
@@ -144,7 +144,7 @@ function Home(props) {
                 </div>
 
                 {isOpen.filePopupOpen ?
-                    <AddFilePopup
+                    <UploadResourcePopup
                         toggleFilePopupOpen = {toggles.toggleFilePopupOpen}
                         {...popupProps}
                         closePopup = {closePopup}

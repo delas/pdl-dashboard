@@ -75,7 +75,7 @@ function ActionPopup(props) {
     });
 
     const convertFilesToDropdown = (files) => {
-        return files.map((file) => ({label: file.FileLabel, value: file}) );
+        return files.map((file) => ({label: file.ResourceLabel, value: file}) );
     }
 
     const getInputType = (param) => {

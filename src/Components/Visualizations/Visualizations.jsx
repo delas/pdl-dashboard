@@ -39,9 +39,9 @@ function Visualizations(props) {
                 />
             </div>
             <div className='Visualizations-VisualizerContainer'>
-                {(selectedTab === 0 && file.FileExtension.toUpperCase() === "BPMN") && <BPMNVisualizer file = {file}/>}
-                {(selectedTab === 1 && file.FileExtension.toUpperCase() === "XES") && <HistogramVisualizer file = {file}/>}
-                {(selectedTab === 2 && file.FileExtension.toUpperCase() === "PNML") && <PNMLVisualizer file = {file}/>}
+                {(selectedTab === 0 && file.FileInfo.FileExtension.toUpperCase() === "BPMN") && <BPMNVisualizer file = {file}/>}
+                {(selectedTab === 1 && file.FileInfo.FileExtension.toUpperCase() === "XES") && <HistogramVisualizer file = {file}/>}
+                {(selectedTab === 2 && file.FileInfo.FileExtension.toUpperCase() === "PNML") && <PNMLVisualizer file = {file}/>}
             </div>
         </div>
     );

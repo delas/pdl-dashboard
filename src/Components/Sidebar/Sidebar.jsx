@@ -43,13 +43,15 @@ function Sidebar(props) {
         )
     }
 
+    console.log(files);
+
     return (
         <div className={`Sidebar`}>
             <div className='Sidebar-flexContainer'>
                 <div className='Sidebar-flexContainer-top'>
                     <div className='Sidebar-flexContainer-buttons'>
                         <Button
-                            text = {`Upload file`}
+                            text = {`Upload resource`}
                             icon = {<FaFileUpload/>}
                             disabled = {false}
                             className = {``}
@@ -75,12 +77,12 @@ function Sidebar(props) {
                             files.map((file, index) => {
                                 return(
                                     <SidebarFile key={index}
-                                        filename = {file.FileLabel}
-                                        filetype = {file.FileExtension}
+                                        filename = {file.ResourceLabel}
+                                        filetype = {file.FileInfo.FileExtension}
                                         openPopup = {openPopup}
                                         popups = {popups}
                                         deleteFile = {deleteFile}
-                                        fileId = {file.FileId}
+                                        fileId = {file.ResourceId}
                                         selectFileForVisualization = {selectFileForVisualization}
                                     />
                                 )

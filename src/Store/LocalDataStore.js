@@ -60,7 +60,7 @@ function getAllKeysWithType(type) {
             const storageItem = JSON.parse(localStorage.getItem(key));
             if(storageItem !== null 
                 && storageItem !== undefined
-                && storageItem.type.value === type)
+                && storageItem?.type?.value === type)
             return storageItem;
         }
     })
@@ -95,8 +95,8 @@ export function getAllFiles(){
             const storageItem = JSON.parse(localStorage.getItem(key));
             if(storageItem !== null 
                 && storageItem !== undefined
-                && storageItem.FileExtension !== null 
-                && storageItem.FileExtension !== undefined )
+                && storageItem?.FileInfo?.FileExtension !== null 
+                && storageItem?.FileInfo?.FileExtension !== undefined )
             return storageItem;
         }
     })
