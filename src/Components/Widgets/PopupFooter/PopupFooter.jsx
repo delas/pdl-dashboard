@@ -7,6 +7,7 @@ function PopupFooter(props) {
         onNextClick,
         cancelText,
         nextText,
+        nextButtonDisabled
     } = props;
 
     return (
@@ -17,7 +18,7 @@ function PopupFooter(props) {
                     {cancelText}
                 </button>
 
-                <button className='Popup-button Popup-button-confirm' onClick={() => {onNextClick()}}>
+                <button className={`Popup-button Popup-button-confirm Popup-button-confirm-disabled-${nextButtonDisabled}`} onClick={() => {onNextClick()}} disabled = {nextButtonDisabled}>
                     {nextText}
                 </button>
 

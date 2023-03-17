@@ -46,6 +46,17 @@
                     border-color: #008bff;
                     cursor: pointer;
                 }
+                &-disabled-true{
+                    color: #fff;
+                    background-color: #5a6268;
+                    border-color: #545b62;
+                    &:hover{
+                        color: #fff;
+                        background-color: #5a6268;
+                        border-color: #545b62;
+                        cursor: not-allowed;
+                    }
+                }
             }
         }
     }

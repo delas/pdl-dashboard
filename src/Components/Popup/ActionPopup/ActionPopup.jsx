@@ -20,6 +20,7 @@ function ActionPopup(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [selected, setSelected] = useState(1);
     const [minerDestination, setMinerDestination] = useState(null);
+    const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
     
     const [repositoryFileOwner, setRepositoryFileOwner] = useState(null);
     const [repositoryDestination, setRepositoryDestination] = useState(null);
@@ -45,6 +46,10 @@ function ActionPopup(props) {
         onMinerChange(miner);
     }, []);
 
+    useEffect(() => {
+        handleNextButtonDisabled();
+    })
+
     const setFilesFromRepository = (hostname) => {
         GetVisFilesMetadata(hostname).then(res => {
             setVisFilesForDropdown(convertFilesToDropdown(res.data))
@@ -62,8 +67,9 @@ function ActionPopup(props) {
         setMinerDestination(value);
         const miner = getMiner(value.value);
         setMinerObject(miner);
-        setSelectedParams(miner.config.MinerParameters);
-        convertFileTypeToDropdown(miner.config.FileOutputExtension);
+        setSelectedParams(miner?.config?.MinerParameters);
+        console.log(miner?.config?.FileOutputExtension);
+        convertFileTypeToDropdown(miner?.config?.FileOutputExtension);
     }
 
     const miners = getMiners().map((miner, index) => {
@@ -110,12 +116,15 @@ function ActionPopup(props) {
     }
 
     const onMinerDropdownChange = (value) => {
+        setMinerObject(getMiner(value.value));
         setMinerDestination(value);
+        onMinerChange(value);
     }
 
     const onLogFileDropdownChange = (value) => {
         setSelectedLogFile(value);
         setSelectedVisualizationFile(null);
+        setNextButtonDisabled(false);
     }
 
     const onVisualizationFileDropdownChange = (value) => {
@@ -132,7 +141,42 @@ function ActionPopup(props) {
     }
 
     const handleNextButtonClick = () => {
+        if(selected === 0){
+            if(minerObject){
+                
+            }
+        }
         selected !== 4 ? setSelected(selected + 1) : handleConfirmClick();
+    }
+
+
+    const handleNextButtonDisabled = () => {
+        if(selected === 1){
+            if(minerObject){ setNextButtonDisabled(false); }
+        }
+        else if (selected === 2) {
+            if((repositoryFileOwner !== null && repositoryFileOwner !== undefined) && //Repository dropdown
+                ((selectedLogFile !== null && selectedLogFile !== undefined)  // either file dropdown
+                ||  (selectedVisualizationFile !== null && selectedVisualizationFile !== undefined))){
+                    setNextButtonDisabled(false);
+                } 
+            else setNextButtonDisabled(true);  
+        }
+        else if (selected === 3){
+            let params = selectedParams;
+            if(params !== undefined && params !== null) { //if the miner requires params
+                if(params.filter((param) => {
+                    return (param.selectedValue === null || param.selectedValue === undefined)}).length === 0
+                ) setNextButtonDisabled(false); 
+                else setNextButtonDisabled(true)
+            } else setNextButtonDisabled(false);
+        }
+        else if (selected === 4){
+            if(repositoryDestination && fileOutputName && 
+                ( (outputFileTypeForDropdown.length === 1 && outputFileTypeForDropdown[0]) || (fileOutputType) )
+            ){ setNextButtonDisabled(false);
+            } else setNextButtonDisabled(true);
+        }
     }
 
     const handleConfirmClick = () => {
@@ -180,12 +224,14 @@ function ActionPopup(props) {
         setFileOutputName(res.value);
     }
 
-    const convertFileTypeToDropdown = (FileOutputExtensions) => {
-        setOutputFileTypeForDropdown(
-            FileOutputExtensions.map((fileExtension) => {
-                return ({label: fileExtension, value: fileExtension});
-            })
-        );
+    const convertFileTypeToDropdown = (fileOutputExtensions) => {
+        if(fileOutputExtensions){
+            setOutputFileTypeForDropdown(
+                fileOutputExtensions.map((fileExtension) => {
+                    return ({label: fileExtension, value: fileExtension});
+                })
+            );
+        }
     }
 
     const onOutputFiletypeChange = (res) => {
@@ -349,6 +395,7 @@ function ActionPopup(props) {
                     onNextClick = {handleNextButtonClick}
                     cancelText = {getCancelButtonName()}
                     nextText = {getNextButtonName()}
+                    nextButtonDisabled = {nextButtonDisabled}
                 />
 
             </div>

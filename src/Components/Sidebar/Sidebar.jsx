@@ -43,8 +43,6 @@ function Sidebar(props) {
         )
     }
 
-    console.log(files);
-
     return (
         <div className={`Sidebar`}>
             <div className='Sidebar-flexContainer'>
