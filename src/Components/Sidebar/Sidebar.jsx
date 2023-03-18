@@ -23,7 +23,7 @@ function Sidebar(props) {
     const [files, setFiles] = useState([]);
 
     const [, updateState] = useState();
-    const forceUpdate = useCallback(() => updateState({}), []);
+    const forceUpdate = useCallback(() =>{ updateState({}); setFiles(getAllFiles());}, []);
 
     useEffect(() => {
         setUpdateSidebar({update: forceUpdate});

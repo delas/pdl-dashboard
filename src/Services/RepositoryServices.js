@@ -20,6 +20,11 @@ export async function GetFileImage(hostname, fileId){ //if the visualization is 
     return axios.get(`${hostname}${urlExtension}`, {responseType: 'blob'});
 }
 
+export async function GetSingleFileMetadata(hostname, fileId){
+    const urlExtension = `/resources/info/${fileId}`;
+    return axios.get(`${hostname}${urlExtension}`);
+}
+
 export async function GetFileText(hostname, fileId){ //If the visualization is text-formatted the responsetype can't be blolb
     const urlExtension = `Files/${fileId}`;
     return axios.get(`${hostname}${urlExtension}`);

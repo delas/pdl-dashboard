@@ -81,7 +81,7 @@ function GetFilePopup(props) {
             fileToSave = logFilesMetadata.filter((file) => file.ResourceId === selectedLogFile.value);
         }
         if(fileToSave && fileToSave.length === 1){
-            addFile(fileToSave[0].ResourceId, fileToSave[0]);
+            addFile(fileToSave[0]);
             toggleGetFilePopupOpen();
         }
     }

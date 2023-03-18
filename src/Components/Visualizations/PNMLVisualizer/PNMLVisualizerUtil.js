@@ -24,10 +24,10 @@ function PNMLParser() {
         }
 
         return {
-            id: data.net.id,
-            type: data.net.type,
-            name: data.net.name.text,
-            size: figures.length,
+            id: data?.net?.id,
+            type: data?.net?.type,
+            name: data?.net?.name?.text,
+            size: figures?.length,
             figures: figures
         };
     };

@@ -100,26 +100,22 @@ function App(props) {
         // forceUpdate();
     }
 
-    const addFile = (id, file) => {
-        if(file.FileInfo.FileExtension === "png" || file.FileInfo.FileExtension === "jpg")
-        GetFileImage(file.Host, id)
-            .then((res) => { saveFile(id, {...file, fileContent: URL.createObjectURL(res.data) }) })
-            .then(() => setTimeout(() => { 
-                if(updateSidebar !== null && updateSidebar !== undefined){
-                    updateSidebar.update();
-                }
-                // forceUpdate(); 
-            }, 500));
+    const addFile = (file, retries = 0) => {
+        let responsePromise;
+        const isImage = file.FileInfo.FileExtension === "png" || file.FileInfo.FileExtension === "jpg";
+        
+        isImage ? responsePromise = GetFileImage(file.Host, file.ResourceId) 
+        : responsePromise = GetFileText(file.Host, file.ResourceId);
 
-        else 
-        GetFileText(file.Host, id)
-            .then((res) => { saveFile(id, {...file, fileContent: res.data }) })
-            .then(() => setTimeout(() => { 
-                if(updateSidebar !== null && updateSidebar !== undefined){
-                    updateSidebar.update();
-                }
-                // forceUpdate(); 
-            }, 500));
+        responsePromise.then((res) => {
+            if(res.status === 200 && res.data) {
+                isImage ? saveFile(file.ResourceId, {...file, fileContent: URL.createObjectURL(res.data) }) :
+                saveFile(file.ResourceId, {...file, fileContent: res.data });
+                setTimeout(() => { updateSidebar.update() }, 500);
+            }
+            else if(retries < 10)
+                setTimeout(() => { addFile(file, retries + 1); updateSidebar.update() }, 6000);
+        });
     }
 
     const deleteFile = (id) => {
@@ -127,7 +123,6 @@ function App(props) {
         if(updateSidebar !== null && updateSidebar !== undefined){
             updateSidebar.update();
         }
-        // forceUpdate();
     }
 
     if(isLoading){

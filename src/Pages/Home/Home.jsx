@@ -157,6 +157,7 @@ function Home(props) {
                 {isOpen.actionPopupOpen ?
                     <ActionPopup
                         toggleActionPopupOpen = {toggles.toggleActionPopupOpen}
+                        addFile = {addFile}
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
