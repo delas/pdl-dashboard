@@ -5,6 +5,7 @@ import BPMNVisualizer from './BPMNVisualizer/BPMNVisualizer';
 import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
 import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
 import ResourceGraph from './ResourceGraph/ResourceGraph';
+import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
 
 function Visualizations(props) {
     const {
@@ -13,6 +14,7 @@ function Visualizations(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [selectedTab, setSelectedTab] = useState(0);
+    const [fileExtension, setFileExtension] = useState(file.FileInfo.FileExtension.toUpperCase());
 
     useEffect(() => {
         setIsLoading(false);
@@ -36,14 +38,15 @@ function Visualizations(props) {
                 <Tabs
                     onTabChange = {onTabChange}
                     selectedTab = {selectedTab}
-                    tablist = {[{title: 'BPMN'}, {title: 'Histogram'}, {title: 'PNML'}, {title: 'Resource Graph'}]}
+                    tablist = {[{title: 'BPMN'}, {title: 'Histogram'}, {title: 'PNML'}, {title: 'Resource Graph'}, {title: 'Image'}]}
                 />
             </div>
             <div className='Visualizations-VisualizerContainer'>
-                {(selectedTab === 0 && file.FileInfo.FileExtension.toUpperCase() === "BPMN") && <BPMNVisualizer file = {file}/>}
-                {(selectedTab === 1 && file.FileInfo.FileExtension.toUpperCase() === "XES") && <HistogramVisualizer file = {file}/>}
-                {(selectedTab === 2 && file.FileInfo.FileExtension.toUpperCase() === "PNML") && <PNMLVisualizer file = {file}/>}
-                {(selectedTab === 3 && file.FileInfo.FileExtension.toUpperCase() === "PNML") && <ResourceGraph file = {file}/>}
+                {(selectedTab === 0 && fileExtension === "BPMN") && <BPMNVisualizer file = {file}/>}
+                {(selectedTab === 1 && fileExtension === "XES") && <HistogramVisualizer file = {file}/>}
+                {(selectedTab === 2 && fileExtension === "PNML") && <PNMLVisualizer file = {file}/>}
+                {(selectedTab === 3 && fileExtension === "DOT") && <ResourceGraph file = {file}/>}
+                {(selectedTab === 4 && (fileExtension === "PNG" || fileExtension === "JPG" ||  fileExtension === "SVG")) && <ImageVisualizer file = {file}/>}
             </div>
         </div>
     );
