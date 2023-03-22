@@ -24,7 +24,10 @@ function PNMLVisualizer(props) {
     return (
         <div className="PNMLVisualizer">
             <div className ='Petrinet-container'>
-                <Petrinet file={file}/>
+                {/* <Petrinet file={file}/> */}
+                <div>
+                    This feature is corrently under development.
+                </div>
             </div>
         </div>
     )

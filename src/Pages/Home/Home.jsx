@@ -1,5 +1,5 @@
 import './Home.scss';
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect, Suspense} from 'react';
 // import { Link } from "react-router-dom";
 import Topbar from '../../Components/Topbar/Topbar';
 import Sidebar from '../../Components/Sidebar/Sidebar';
@@ -12,6 +12,10 @@ import GetFilePopup from '../../Components/Popup/GetFilePopup/GetFilePopup';
 // import Tabs from '../../Components/Tabs/Tabs';
 import Visualizations from '../../Components/Visualizations/Visualizations';
 import { getFile } from '../../Store/LocalDataStore';
+import ReactHtmlParser from 'react-html-parser';
+
+
+// import ReactDOMServer from 'react-dom/server'
 
 function Home(props) {
 
@@ -89,8 +93,16 @@ function Home(props) {
         setVisualizationsFile(file);
     }
 
+    // const [htmlString, setHtmlString] = useState(null); 
+
     useEffect(() => {
         setIsLoading(false);
+
+        // const tb = <Topbar/>;
+        // console.log(tb);
+        // setHtmlString(ReactDOMServer.renderToString(tb));
+        // // console.log(htmlString);
+
     }, []);
 
     if(isLoading){
@@ -100,6 +112,17 @@ function Home(props) {
             </div>
         )
     }
+    
+    // const htmlString = ReactDOMServer.renderToString(
+    //         <Topbar toggleSidebar = {toggles.toggleSidebar}
+    //         toggleSidebarHosts = {toggles.toggleSidebarHosts}
+    //         sidebarOpen = {isOpen.sidebarOpen}
+    //         sidebarHostsOpen = {isOpen.sidebarHostsOpen}
+    //         />
+    //     )
+    // console.log(htmlString);
+
+    // const ProfilePage = React.lazy(() => import(/* webpackIgnore: true */ htmlString));
 
     return (
         <div className="Home">
@@ -111,6 +134,7 @@ function Home(props) {
                         sidebarOpen = {isOpen.sidebarOpen}
                         sidebarHostsOpen = {isOpen.sidebarHostsOpen}
                     />
+                    {/* <div> { ReactHtmlParser(htmlString) } </div> */}
                 </div>
                 <div className={`Home-Page-below-topbar`}>
                     <div className={`Home-Sidebar Home-Sidebar${isOpen.sidebarOpen ? "-sidebaropen" : "-sidebarclosed"}`}>
@@ -129,6 +153,7 @@ function Home(props) {
                                 file = {visualizationsFile}
                             />
                         </div>
+                        
                     }
                 </div>
 
