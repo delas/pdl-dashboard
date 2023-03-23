@@ -22,6 +22,7 @@ export async function GetFileImage(hostname, fileId){ //if the visualization is 
 
 export async function GetSingleFileMetadata(hostname, fileId){
     const urlExtension = `/resources/info/${fileId}`;
+    console.log(`${hostname}${urlExtension}`);
     return axios.get(`${hostname}${urlExtension}`);
 }
 

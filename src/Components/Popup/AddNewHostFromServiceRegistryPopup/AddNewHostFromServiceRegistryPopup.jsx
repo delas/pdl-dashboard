@@ -30,6 +30,7 @@ function AddNewHostFromServiceRegistryPopup(props) {
 
     const handleSubmit = () => {
         minerHostsSelected.forEach((miner, index) => {
+            console.log(miner);
             const newHost = {
                 id: uuidv4(),
                 name: miner.label,
@@ -37,6 +38,8 @@ function AddNewHostFromServiceRegistryPopup(props) {
                 type: {label: miner.value, value: miner.value},
                 addedFrom: serviceRegistry.label,
             };
+            console.log(newHost);
+            console.log(miner);
             addHost(newHost.id, newHost);
         });
 
@@ -53,19 +56,20 @@ function AddNewHostFromServiceRegistryPopup(props) {
     }
 
     const addMinerHost = (miner) => {
-        setMinerHostsSelected(minerHostsSelected.concat(miner.value));
+        console.log(miner);
+        setMinerHostsSelected(minerHostsSelected.concat(miner));
     }
 
     const addRepositoryHost = (repository) => {
         setRepositoryHostsSelected(repositoryHostsSelected.concat(repository));
     }
 
-    const removeMinerHost = (id) => {
-        setMinerHostsSelected(minerHostsSelected.filter(listItem => listItem.id !== id));
+    const removeMinerHost = (hostName) => {
+        setMinerHostsSelected(minerHostsSelected.filter(listItem => listItem.label!== hostName));
     }
 
-    const removeRepositoryHost = (id) => {
-        setRepositoryHostsSelected(repositoryHostsSelected.filter(listItem => listItem.id !== id));
+    const removeRepositoryHost = (hostName) => {
+        setRepositoryHostsSelected(repositoryHostsSelected.filter(listItem => listItem.label !== hostName));
     }
 
     const onConfirmClick = () => {

@@ -127,7 +127,7 @@ function ActionPopup(props) {
         const onLogFileDropdownChange = (value) => {
             setSelectedLogFile(value);
             setSelectedVisualizationFile(null);
-            setNextButtonDisabled(false);
+            // setNextButtonDisabled(false);
         }
     
         const onVisualizationFileDropdownChange = (value) => {
@@ -228,18 +228,24 @@ function ActionPopup(props) {
             MinerId: selectedMinerHostMiner.value,
             Input: {
                 MetadataObject: file,//selectedLogFile ? selectedLogFile : selectedVisualizationFile,
-                MinerParameters: params,
+                MinerParameters: params ? params : {},
             },
             Output: {
                 Host: `${repositoryDestination.label}/resources/files/`,
+                HostInit: `${repositoryDestination.label}/resources/info/`,
                 ResourceLabel: outputFileName,
                 FileExtension: selectedOutputFileType?.value ? selectedOutputFileType.value : outputFileTypeForDropdown[0].value,
             }
         };
+
+        console.log(data);
         
         PostMineAction(minerHostDropdownValue.label, data)
             .then((res) => {
-                GetSingleFileMetadata(repositoryDestination.label, res.data).then((res) => {
+                    // console.log(repositoryDestination.label);
+                    // console.log(res.data);
+                    GetSingleFileMetadata(repositoryDestination.label, res.data).then((res) => {
+                        console.log(res);
                     addFile(res.data);
                 }).catch(() => {
                     alert("Something went wrong. There might an issue with the requested resource, or the repository. Please try again.");

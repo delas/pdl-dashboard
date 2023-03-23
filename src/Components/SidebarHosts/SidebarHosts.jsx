@@ -18,10 +18,21 @@ function SidebarHosts(props) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [, updateState] = useState();
-    const forceUpdate = useCallback(() => updateState({}), []);
+    const [repositoryHosts, setRepositoryHosts] = useState([]);
+    const [minerHosts, setMinerHosts] = useState([]);
+    const [SRHosts, setSRHosts] = useState([]);
+    // const forceUpdate = useCallback(() => updateState({}), []);
+    const forceUpdate = useCallback(() =>{ 
+        updateState({}); 
+        setRepositoryHosts(getRepositories());
+        setMinerHosts(getMiners());
+        setSRHosts(getServiceRegistries());
+    }, []);
+    
 
     useEffect(() => {
         setUpdateSidebarHosts({update: forceUpdate});
+        forceUpdate();
         setIsLoading(false);
     }, []);
 
@@ -57,7 +68,7 @@ function SidebarHosts(props) {
                 <div className='SidebarHosts-section SidebarHosts-repository'>
                     <h5>Repositories</h5>
                     <div className='SidebarHosts-hostsContainer'>
-                        {getRepositories().map((repository, index) => {
+                        {repositoryHosts.map((repository, index) => {
                             return(
                             // <>
                                 <SidebarHostItem key = {index}
@@ -82,7 +93,7 @@ function SidebarHosts(props) {
                 <div className='SidebarHosts-section SidebarHosts-miner'>
                     <h5>Miners</h5>
 
-                    {getMiners().map((miner, index) => {
+                    {minerHosts.map((miner, index) => {
                         return (
                         // <>
                             <SidebarHostItem key = {index}
@@ -105,7 +116,7 @@ function SidebarHosts(props) {
                 <div className='SidebarHosts-section SidebarHosts-serviceRegistry'>
                     <h5>Service Registries</h5>
 
-                    {getServiceRegistries().map((serviceRegistry, index) => {
+                    {SRHosts.map((serviceRegistry, index) => {
                         return (
                             <SidebarHostItem key = {index}
                                 id = {serviceRegistry.id}
