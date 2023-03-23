@@ -24,12 +24,12 @@ $theme: rgb(153, 0, 0);
     padding: 0.5rem 1rem;
     box-sizing: border-box;
     line-height: 1.3em;
+    gap: 0.3em;
 
     // background-color: #545b62;
     .ActionPopup-wizard-step{
         vertical-align: top;
-        width: 20%;
-        border-radius: 4px;
+        width: 25%;
         aspect-ratio: 3 / 1;
         background-color: #5a6268;
         text-align: center center;
@@ -42,6 +42,11 @@ $theme: rgb(153, 0, 0);
         }
         &-selected{
             background-color: rgb(153, 0, 0);
+        }
+        &-clickable{
+            &:hover{
+                cursor: pointer;
+            }
         }
     }
 }

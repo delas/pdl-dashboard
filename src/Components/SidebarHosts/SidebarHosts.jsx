@@ -21,7 +21,6 @@ function SidebarHosts(props) {
     const [repositoryHosts, setRepositoryHosts] = useState([]);
     const [minerHosts, setMinerHosts] = useState([]);
     const [SRHosts, setSRHosts] = useState([]);
-    // const forceUpdate = useCallback(() => updateState({}), []);
     const forceUpdate = useCallback(() =>{ 
         updateState({}); 
         setRepositoryHosts(getRepositories());

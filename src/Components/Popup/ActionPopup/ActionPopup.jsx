@@ -19,12 +19,11 @@ function ActionPopup(props) {
         addFile,
     } = props;
 
-    console.log(miner);
-
     const [isLoading, setIsLoading] = useState(true);
     const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
     const [wizardStep, setWizardStep] = useState(1);
     const [minerObject, setMinerObject] = useState(null); // The single miner config selected from first step
+    const [maxWizardStep, setMaxWizardStep] = useState(null);
 
     useEffect(() => {
         setIsLoading(false);
@@ -44,7 +43,12 @@ function ActionPopup(props) {
     }
 
     const handleNextButtonClick = () => {
-        wizardStep !== 4 ? setWizardStep(wizardStep + 1) : handleConfirmClick();
+        if(wizardStep !== 4) {
+            setWizardStep(wizardStep + 1)
+            if(wizardStep + 1 >= maxWizardStep) setMaxWizardStep(wizardStep + 1);
+        } else {
+            handleConfirmClick();
+        }
     }
 
     // Force rerender
@@ -270,6 +274,10 @@ function ActionPopup(props) {
         };
     }
 
+    const handleWizardStepsClick = (index) => {
+        if(index <= maxWizardStep) setWizardStep(index);
+    }
+
     if(isLoading){
         return (
             <div className="ActionPopup">
@@ -291,16 +299,24 @@ function ActionPopup(props) {
                 />
 
                 <div className='ActionPopup-wizard-steps'>
-                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${wizardStep === 1 ? "selected": ""}`}>
+                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${wizardStep === 1 ? "selected": ""}
+                        ActionPopup-wizard-step-${maxWizardStep >= 1 ? "clickable": "non-clickable"}
+                    `} onClick = {() => {handleWizardStepsClick(1)}}>
                         <span className='ActionPopup-wizard-step-text'>1. Miner</span>
                     </div>
-                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${wizardStep === 2 ? "selected": ""}`}>
+                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${wizardStep === 2 ? "selected": ""}
+                        ActionPopup-wizard-step-${maxWizardStep >= 2 ? "clickable": "non-clickable"}
+                    `} onClick = {() => {handleWizardStepsClick(2)}}>
                         <span className='ActionPopup-wizard-step-text'>2. Inputs</span>
                     </div>
-                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${wizardStep === 3 ? "selected": ""}`}>
+                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${wizardStep === 3 ? "selected": ""}
+                        ActionPopup-wizard-step-${maxWizardStep >= 3 ? "clickable": "non-clickable"}
+                    `} onClick = {() => {handleWizardStepsClick(3)}}>
                         <span className='ActionPopup-wizard-step-text'>3. Parameters</span>
                     </div>
-                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${wizardStep === 4 ? "selected": ""}`}>
+                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${wizardStep === 4 ? "selected": ""}
+                        ActionPopup-wizard-step-${maxWizardStep >= 4 ? "clickable": "non-clickable"}
+                    `} onClick = {() => {handleWizardStepsClick(4)}}>
                         <span className='ActionPopup-wizard-step-text'>4. Repository</span>
                     </div>
                 </div>
