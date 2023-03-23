@@ -13,7 +13,7 @@ function ResourceGraph(props) {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        GetResourceGraph(file.Host, "fe960d94-5928-4463-b0f8-c59072b5d449")// file.ResourceId)
+        GetResourceGraph(file.Host, file.ResourceId)
             .then((res) => {
                 setGraph(res.data);
             })
@@ -24,7 +24,6 @@ function ResourceGraph(props) {
                 setError(err);
                 setIsLoading(false);
             });
-        
     }, []);
     
     if(isLoading){
@@ -44,8 +43,13 @@ function ResourceGraph(props) {
         )
     }
 
+    const getAllNodes = () => {   
+        document.getElementsByClassName("node");
+        // console.log(document.getElementsByClassName("node"));
+    }
+
     return (
-        <div className="ResourceGraph">
+        <div className="ResourceGraph" onClick = {() => {getAllNodes()}}>
             <Graphviz dot={graph} className="ResourceGraph-graphviz"/>
         </div>
     )

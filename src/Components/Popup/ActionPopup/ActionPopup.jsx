@@ -19,6 +19,8 @@ function ActionPopup(props) {
         addFile,
     } = props;
 
+    console.log(miner);
+
     const [isLoading, setIsLoading] = useState(true);
     const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
     const [wizardStep, setWizardStep] = useState(1);
@@ -26,7 +28,7 @@ function ActionPopup(props) {
 
     useEffect(() => {
         setIsLoading(false);
-        setMinerHostMinersDropdownOptions(miner);
+        onMinerHostChange(miner);
     }, []);
 
     useEffect(() => {
@@ -242,14 +244,14 @@ function ActionPopup(props) {
         
         PostMineAction(minerHostDropdownValue.label, data)
             .then((res) => {
-                    // console.log(repositoryDestination.label);
-                    // console.log(res.data);
-                    GetSingleFileMetadata(repositoryDestination.label, res.data).then((res) => {
+                GetSingleFileMetadata(repositoryDestination.label, res.data)
+                    .then((res) => {
                         console.log(res);
-                    addFile(res.data);
-                }).catch(() => {
-                    alert("Something went wrong. There might an issue with the requested resource, or the repository. Please try again.");
-                });
+                        addFile(res.data);
+                    })
+                    .catch(() => {
+                        alert("Something went wrong. There might an issue with the requested resource, or the repository. Please try again.");
+                    });
             })
             .then(() => {
                 toggleActionPopupOpen();
@@ -261,8 +263,7 @@ function ActionPopup(props) {
     }
 
     const handleCancelButtonClick = () => {
-        if(wizardStep !== 1) 
-        setWizardStep(wizardStep - 1) 
+        if(wizardStep !== 1) setWizardStep(wizardStep - 1) 
         else {
             setWizardStep(wizardStep)
             toggleActionPopupOpen()
