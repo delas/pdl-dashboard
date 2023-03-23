@@ -45,7 +45,7 @@ function Visualizations(props) {
                 {(selectedTab === 0 && fileExtension === "BPMN") && <BPMNVisualizer file = {file}/>}
                 {(selectedTab === 1 && fileExtension === "XES") && <HistogramVisualizer file = {file}/>}
                 {(selectedTab === 2 && fileExtension === "PNML") && <PNMLVisualizer file = {file}/>}
-                {(selectedTab === 3 && fileExtension === "DOT") && <ResourceGraph file = {file}/>}
+                {(selectedTab === 3 && fileExtension) && <ResourceGraph file = {file}/>}
                 {(selectedTab === 4 && (fileExtension === "PNG" || fileExtension === "JPG" ||  fileExtension === "SVG")) && <ImageVisualizer file = {file}/>}
             </div>
         </div>

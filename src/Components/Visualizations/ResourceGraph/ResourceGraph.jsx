@@ -1,6 +1,7 @@
 import './ResourceGraph.scss';
 import {useState, useEffect} from 'react';
 import { Graphviz } from 'graphviz-react';
+import {GetResourceGraph} from '../../../Services/RepositoryServices';
 
 function ResourceGraph(props) {
     const {
@@ -8,13 +9,24 @@ function ResourceGraph(props) {
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
+    const [graph, setGraph] = useState(null);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        setIsLoading(false);
+        GetResourceGraph(file.Host, "fe960d94-5928-4463-b0f8-c59072b5d449")// file.ResourceId)
+            .then((res) => {
+                setGraph(res.data);
+            })
+            .then(() => {
+                setIsLoading(false);
+            })
+            .catch((err) => {
+                setError(err);
+                setIsLoading(false);
+            });
+        
     }, []);
-
-    const dot = 'graph{a--b}';
-
+    
     if(isLoading){
         return (
             <div className="ResourceGraph">
@@ -23,9 +35,18 @@ function ResourceGraph(props) {
         )
     }
 
+    if(error){
+        return (
+            <div className="ResourceGraph">
+                <div>Error loading graph</div>
+                <div>{error}</div>
+            </div>
+        )
+    }
+
     return (
         <div className="ResourceGraph">
-            <Graphviz dot={dot} className="ResourceGraph-graphviz"/>
+            <Graphviz dot={graph} className="ResourceGraph-graphviz"/>
         </div>
     )
 }
