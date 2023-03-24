@@ -57,6 +57,13 @@ $theme: rgb(153, 0, 0);
     box-sizing: border-box;
 }
 
+// Used for step 2
+.ActionPopup-wizard-step2{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
 //used for step 3
 .ActionPopup-wizard-parameter-inputs{
     width: 100%;

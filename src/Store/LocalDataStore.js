@@ -1,5 +1,7 @@
 // ---------------------- HOST STORAGE ----------------------
 
+import { getFileExtension } from "../Utils/FileUnpackHelper";
+
 export function saveHost(key, hostObject){
     
     localStorage.setItem(key, JSON.stringify(hostObject));
@@ -93,10 +95,11 @@ export function getAllFiles(){
     const fileKeys = Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a FileExtension not in json format
             const storageItem = JSON.parse(localStorage.getItem(key));
+            console.log(storageItem);
             if(storageItem !== null 
                 && storageItem !== undefined
-                && storageItem?.FileInfo?.FileExtension !== null 
-                && storageItem?.FileInfo?.FileExtension !== undefined )
+                && storageItem.ResourceId
+                && getFileExtension(storageItem))
             return storageItem;
         }
     })

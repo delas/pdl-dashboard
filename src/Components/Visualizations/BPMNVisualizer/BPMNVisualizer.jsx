@@ -42,13 +42,6 @@ function BPMNVisualizer(props) {
 
     return (
         <div className="BPMNVisualizer">
-            {/* <ReactBpmn
-                // url="/public/diagram.bpmn"
-                url = {file.fileContent}
-                onShown={ onShown }
-                onLoading={ onLoading }
-                onError={ onError }
-            /> */}
             <BPMNComponent
                 file = {file}
             />

@@ -8,6 +8,7 @@ import { pingAllAddedServices } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
 import { GetRepositoryConfig } from './Services/RepositoryServices';
+import { getFileExtension, getFileHost, getFileResourceId } from './Utils/FileUnpackHelper';
 
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -99,18 +100,20 @@ function App(props) {
     }
 
     const addFile = (file, retries = 0) => {
+        const fileExtension = getFileExtension(file);
+        const resourceId = getFileResourceId(file);
+        const host = getFileHost(file);
+
         let responsePromise;
-        const isImage = file.FileInfo.FileExtension === "png" || file.FileInfo.FileExtension === "jpg";
-        // console.log(file.Host, file.ResourceId);
-        // console.log(file);
-        isImage ? responsePromise = GetFileImage(file.Host, file.ResourceId) 
-        : responsePromise = GetFileText(file.Host, file.ResourceId);
+        const isImage = fileExtension === "png" || fileExtension === "jpg";
+        isImage ? responsePromise = GetFileImage(host, resourceId) 
+        : responsePromise = GetFileText(host, resourceId);
 
         responsePromise
         .then((res) => {
             if(res.status === 200 && res.data) {
-                isImage ? saveFile(file.ResourceId, {...file, fileContent: URL.createObjectURL(res.data) }) :
-                saveFile(file.ResourceId, {...file, fileContent: res.data });
+                isImage ? saveFile(resourceId, {...file, fileContent: URL.createObjectURL(res.data) }) :
+                saveFile(resourceId, {...file, fileContent: res.data });
                 setTimeout(() => { updateSidebar.update() }, 500);
             }
             else if(retries < 10)
@@ -122,7 +125,7 @@ function App(props) {
         });
     }
 
-    const deleteFile = (id) => {
+    const deleteFile = (id) => { //Deletes from local memory - not repository
         removeFile(id);
         if(updateSidebar !== null && updateSidebar !== undefined){
             updateSidebar.update();

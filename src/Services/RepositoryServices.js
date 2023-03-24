@@ -5,6 +5,11 @@ export async function PingRepository(hostname) {
     return axios.get(`${hostname}${urlExtension}`);
 }
 
+export async function GetRepositoryFilterMetadata(hostname, filters) {
+    const urlExtension = "/resources/filter/";
+    return axios.post(`${hostname}${urlExtension}`, filters);
+}
+
 export async function GetLogFilesMetadata(hostname){
     const urlExtension = "/resources/eventlogs";
     return axios.get(`${hostname}${urlExtension}`);
@@ -22,7 +27,6 @@ export async function GetFileImage(hostname, fileId){ //if the visualization is 
 
 export async function GetSingleFileMetadata(hostname, fileId){
     const urlExtension = `/resources/info/${fileId}`;
-    console.log(`${hostname}${urlExtension}`);
     return axios.get(`${hostname}${urlExtension}`);
 }
 
@@ -43,6 +47,7 @@ export async function GetResourceGraph(hostname, fileId){
 
 
 export const sendFileToRepository = async (hostname, file, fileType, description = "") => {
+    // The file param is the html input type, not the metadata object used elsewhere.
     const urlExtension = "/resources";
     const fileExtension = file.name.split('.')[file.name.split('.').length - 1];
     const formdata = new FormData();

@@ -106,7 +106,7 @@ function SidebarHosts(props) {
                                 popups = {popups}
                                 status = {miner.status}
                                 allowClick = {miner.status === "online"}
-                                hostProvidedValue = {miner.config.Label}
+                                hostProvidedValue = {miner.config.MinerLabel}
                             />)
                         // </>
                     })}

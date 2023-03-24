@@ -7,6 +7,7 @@ import { getAllFiles } from '../../Store/LocalDataStore';
 // import { GetFile } from '../../Services/RepositoryServices';
 import { getFilesOfType } from '../../Store/LocalDataStore'
 import { type } from '@testing-library/user-event/dist/type';
+import { getFileExtension, getFileResourceId, getFileResourceLabel } from '../../Utils/FileUnpackHelper';
 
 function Sidebar(props) {
 
@@ -75,12 +76,12 @@ function Sidebar(props) {
                             files.map((file, index) => {
                                 return(
                                     <SidebarFile key={index}
-                                        filename = {file.ResourceLabel}
-                                        filetype = {file.FileInfo.FileExtension}
+                                        filename = {getFileResourceLabel(file)}
+                                        filetype = {getFileExtension(file)}
                                         openPopup = {openPopup}
                                         popups = {popups}
                                         deleteFile = {deleteFile}
-                                        fileId = {file.ResourceId}
+                                        fileId = {getFileResourceId(file)}
                                         selectFileForVisualization = {selectFileForVisualization}
                                     />
                                 )

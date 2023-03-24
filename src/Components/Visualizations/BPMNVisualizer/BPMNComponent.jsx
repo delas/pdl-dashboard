@@ -7,6 +7,7 @@ import { BpmnPropertiesPanelModule, BpmnPropertiesProviderModule } from "bpmn-js
 import "bpmn-js-properties-panel/dist/assets/properties-panel.css";
 import camundaModdleDescriptor from "camunda-bpmn-moddle/resources/camunda";
 import './BPMNComponent.scss';
+import { getFileContent } from "../../../Utils/FileUnpackHelper";
 
 class BPMNComponent extends React.Component {
     constructor(props) {
@@ -67,7 +68,7 @@ class BPMNComponent extends React.Component {
     //
     // see index-async.js on how to load the diagram asynchronously from a url.
     // (requires a running webserver)
-    var diagramXML = this.props.file.fileContent;
+    var diagramXML = getFileContent(this.props.file);
 
     // import xml
     importXML(diagramXML, this.viewer);

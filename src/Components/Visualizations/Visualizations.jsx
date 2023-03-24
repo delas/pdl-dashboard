@@ -6,6 +6,7 @@ import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
 import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
 import ResourceGraph from './ResourceGraph/ResourceGraph';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
+import { getFileExtension } from '../../Utils/FileUnpackHelper';
 
 function Visualizations(props) {
     const {
@@ -14,7 +15,7 @@ function Visualizations(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [selectedTab, setSelectedTab] = useState(0);
-    const [fileExtension, setFileExtension] = useState(file.FileInfo.FileExtension.toUpperCase());
+    const [fileExtension, setFileExtension] = useState(getFileExtension(file).toUpperCase());
 
     useEffect(() => {
         setIsLoading(false);

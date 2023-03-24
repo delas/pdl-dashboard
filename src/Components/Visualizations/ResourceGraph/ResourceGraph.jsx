@@ -2,6 +2,7 @@ import './ResourceGraph.scss';
 import {useState, useEffect} from 'react';
 import { Graphviz } from 'graphviz-react';
 import {GetResourceGraph} from '../../../Services/RepositoryServices';
+import { getFileHost, getFileResourceId } from '../../../Utils/FileUnpackHelper';
 
 function ResourceGraph(props) {
     const {
@@ -13,7 +14,7 @@ function ResourceGraph(props) {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        GetResourceGraph(file.Host, file.ResourceId)
+        GetResourceGraph(getFileHost(file), getFileResourceId(file))
             .then((res) => {
                 setGraph(res.data);
             })

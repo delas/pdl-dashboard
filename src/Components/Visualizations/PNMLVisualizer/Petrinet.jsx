@@ -4,6 +4,7 @@ import PNMLVisualizerUtil from './PNMLVisualizerUtil';
 import config, {PlaceId, TransitionId, EdgeId, NODE_KEY} from './Petrinet-config';
 
 import { GraphView } from 'react-digraph';
+import { getFileContent } from '../../../Utils/FileUnpackHelper';
 
 function Petrinet(props) {
     const {
@@ -16,7 +17,7 @@ function Petrinet(props) {
     const GraphViewRef = useRef(null);
 
     useEffect(() => {
-        setFigures(PNMLVisualizerUtil.parsePnml(file.fileContent))
+        setFigures(PNMLVisualizerUtil.parsePnml(getFileContent(file)))
         setIsLoading(false);
     }, []);
 

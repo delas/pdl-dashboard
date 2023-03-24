@@ -11,10 +11,12 @@ function Dropdown(props) {
         onValueChange = () => {},
         value = null,
         loading = false,
+        extraParam = null,
     } = props;
     
     const handleValueChange = (value) => {
-        onValueChange(value);
+        if(extraParam != null) onValueChange(value, extraParam);
+        else onValueChange(value);
     }
 
     if(loading){

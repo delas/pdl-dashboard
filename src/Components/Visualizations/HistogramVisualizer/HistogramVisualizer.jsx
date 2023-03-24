@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react';
 // import Histogram from 'react-chart-histogram';
 import { Chart } from "react-google-charts";
 import {GetFileText} from '../../../Services/RepositoryServices';
+import { getFileResourceLabel, getFileResourceType } from '../../../Utils/FileUnpackHelper';
 
 function HistogramVisualizer(props) {
     const {
@@ -15,7 +16,7 @@ function HistogramVisualizer(props) {
     useEffect(() => {
         setIsLoading(false);
 
-        if(file.ResourceType === 'EventStream'){
+        if(getFileResourceType(file) === 'EventStream'){
             setInterval(() => {
                 GetFileText().then( res => setFileContent(res.data) )
             }, 500)
@@ -36,7 +37,7 @@ function HistogramVisualizer(props) {
 
     const convertFileToHistogramOptions = (file) => {
         return {chart: {
-            title: `${file.ResourceLabel}`,
+            title: `${getFileResourceLabel(file)}`,
             subtitle: "Occurances of events"
         }}
     }

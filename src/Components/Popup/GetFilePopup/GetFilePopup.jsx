@@ -6,6 +6,7 @@ import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {getRepositories} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { GetVisFilesMetadata, GetLogFilesMetadata } from '../../../Services/RepositoryServices';
+import { getFileExtension, getFileResourceId, getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
 
 function GetFilePopup(props) {
 
@@ -44,13 +45,13 @@ function GetFilePopup(props) {
         if(visFilesMetadata !== null)
         setFilesForDropdown(
             visFilesMetadata.map((file) => {
-                return ({label: `${file.FileInfo.FileExtension} ${file.ResourceLabel}`, value: file.ResourceId})
+                return ({label: `${getFileExtension(file)} ${getFileResourceLabel(file)}`, value: getFileResourceId(file)})
             })
         );
         if(logFilesMetadata !== null)
         setLogFilesForDropdown(
             logFilesMetadata.map((file) => {
-                return ({label: `${file.FileInfo.FileExtension} ${file.ResourceLabel}`, value: file.ResourceId})
+                return ({label: `${getFileExtension(file)} ${getFileResourceLabel(file)}`, value: getFileResourceId(file)})
             })
         );
     }, [visFilesMetadata, logFilesMetadata]);
@@ -76,9 +77,9 @@ function GetFilePopup(props) {
     const onConfirmClick = () => {
         let fileToSave = null;
         if(selectedFile !== null) {
-            fileToSave = visFilesMetadata.filter((file) => file.ResourceId === selectedFile.value);
+            fileToSave = visFilesMetadata.filter((file) => getFileResourceId(file) === selectedFile.value);
         } else if(selectedLogFile !== null){
-            fileToSave = logFilesMetadata.filter((file) => file.ResourceId === selectedLogFile.value);
+            fileToSave = logFilesMetadata.filter((file) => getFileResourceId(file) === selectedLogFile.value);
         }
         if(fileToSave && fileToSave.length === 1){
             addFile(fileToSave[0]);

@@ -9,7 +9,8 @@ import { getMiners, getRepositories, getMiner } from '../../../Store/LocalDataSt
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { PostMineAction } from '../../../Services/MinerServices';
 import {GetSingleFileMetadata} from '../../../Services/RepositoryServices';
-import {GetVisFilesMetadata, GetLogFilesMetadata} from '../../../Services/RepositoryServices';
+import {GetVisFilesMetadata, GetLogFilesMetadata, GetRepositoryFilterMetadata} from '../../../Services/RepositoryServices';
+import { getFileHost, getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
 
 function ActionPopup(props) {
 
@@ -92,33 +93,27 @@ function ActionPopup(props) {
         const repositories = getRepositories().map((repository, index) => { // dropdown options
             return {label: repository.name, value: repository.id}
         });
-        const [repositoryFileOwnerDropdownOptions, setRepositoryFileOwnerDropdownOptions] = useState(null); // dropdown selected option
-        
-        // Visualization dropdown
-        const [visDropdownLoading, setVisDropdownLoading] = useState(false);
-        const [visFilesForDropdown, setVisFilesForDropdown] = useState([]);
-        const [selectedVisualizationFile, setSelectedVisualizationFile] = useState(null);
-
-        // Log dropdown
-        const [logDropdownLoading, setLogDropdownLoading] = useState(false);
-        const [logFilesForDropdown, setLogFilesForDropdown] = useState([]);
-        const [selectedLogFile, setSelectedLogFile] = useState(null);
+        const [repositoryFileOwnerDropdownSelected, setRepositoryFileOwnerDropdownSelected] = useState(null); // dropdown selected option
+        const [selectedFiles, setSelectedFiles] = useState({});
+        const [filteredFilesForDropdown, setFileredFilesForDropdown] = useState([])
 
         const convertFilesToDropdown = (files) => {
-            return files.map((file) => ({label: file.ResourceLabel, value: file}) );
+            return files.map((file) => ({label: getFileResourceLabel(file), value: file}) );
         }
 
         const setFilesFromRepository = (hostname) => {
-            GetVisFilesMetadata(hostname).then(res => {
-                setVisFilesForDropdown(convertFilesToDropdown(res.data))
-            }).then(
-                setVisDropdownLoading(false)
-            );
-            GetLogFilesMetadata(hostname).then(res => {
-                setLogFilesForDropdown(convertFilesToDropdown(res.data))
-            }).then(
-                setLogDropdownLoading(false)
-            );
+
+            const uniqueResourceTypes = minerObject.ResourceInput.map((inputTypes) => {
+                return inputTypes.ResourceType;
+            }).filter((x, i, a) => a.indexOf(x) === i);
+
+            let filteredFilesTemp = {};
+            uniqueResourceTypes.forEach((filter) => {
+                GetRepositoryFilterMetadata(hostname, [filter]).then(res => {
+                    filteredFilesTemp[filter] = convertFilesToDropdown(res.data);
+                    setFileredFilesForDropdown(filteredFilesTemp);                
+                }).catch((e) => console.log(e));
+            });
         }
 
         const onRepositoryDestinationDropdownChange = (value) => {
@@ -126,19 +121,16 @@ function ActionPopup(props) {
         }
     
         const onRepositoryFileOwnerDropdownChange = (value) => {
-            setRepositoryFileOwnerDropdownOptions(value);
+            setRepositoryFileOwnerDropdownSelected(value);
             setFilesFromRepository(value.label);
         }
 
-        const onLogFileDropdownChange = (value) => {
-            setSelectedLogFile(value);
-            setSelectedVisualizationFile(null);
-            // setNextButtonDisabled(false);
-        }
-    
-        const onVisualizationFileDropdownChange = (value) => {
-            setSelectedVisualizationFile(value);
-            setSelectedLogFile(null);
+        const onFileDropdownChange = (value, resourceName) => {
+            let newSelectedFiles = selectedFiles;
+            newSelectedFiles[resourceName] = value;
+            setSelectedFiles(newSelectedFiles);
+            console.log(selectedFiles);
+            forceUpdate();
         }
     
     // ------------------ STEP 3 ------------------
@@ -191,9 +183,9 @@ function ActionPopup(props) {
             setOutputFileName(res.value);
         }
     
-        const onOutputFiletypeChange = (res) => {
-            setSelectedOutputFileType(res);
-        }
+        // const onOutputFiletypeChange = (res) => {
+        //     setSelectedOutputFileType(res);
+        // }
 
     // ------------------ Buttons and other default behavior ------------------
 
@@ -203,8 +195,8 @@ function ActionPopup(props) {
                 setNextButtonDisabled(!minerObject);
                 break;
             case 2:
-                const isFileValid = selectedLogFile || selectedVisualizationFile;
-                setNextButtonDisabled(!(repositoryFileOwnerDropdownOptions && isFileValid));
+                const isFileValid = true//selectedLogFile || selectedVisualizationFile;
+                setNextButtonDisabled(!(repositoryFileOwnerDropdownSelected && isFileValid));
                 break;
             case 3:
                 if (!selectedParams) setNextButtonDisabled(false);
@@ -214,8 +206,8 @@ function ActionPopup(props) {
                 }
                 break;
             case 4:
-                const isOutputFileValid = outputFileTypeForDropdown.some((option) => option) || selectedOutputFileType; // check if at least one output file option is selected
-                setNextButtonDisabled(!(repositoryDestination && outputFileName && isOutputFileValid));
+                // const isOutputFileValid = outputFileTypeForDropdown.some((option) => option) || selectedOutputFileType; // check if at least one output file option is selected
+                // setNextButtonDisabled(!(repositoryDestination && outputFileName && isOutputFileValid));
                 break;
             default:
                 setNextButtonDisabled(false); // default to enabled
@@ -223,24 +215,29 @@ function ActionPopup(props) {
     }
 
     const handleConfirmClick = () => {
-        const file = selectedLogFile ? selectedLogFile.value : selectedVisualizationFile.value;
+
+        let files = {};
+        minerObject?.ResourceInput?.forEach((resourceInput) => {
+            files[resourceInput.Name] = selectedFiles[resourceInput.Name].value;
+        });
+
         let params = {};
-        if(selectedParams)
+        if(selectedParams) 
             selectedParams.forEach(({ name, selectedValue, type }) => {
                 params[name] = convertInputResponseToType(selectedValue, type);
             });
-        else params = null;
+
         var data = {
             MinerId: selectedMinerHostMiner.value,
             Input: {
-                MetadataObject: file,//selectedLogFile ? selectedLogFile : selectedVisualizationFile,
+                Resources: files,//selectedLogFile ? selectedLogFile : selectedVisualizationFile,
                 MinerParameters: params ? params : {},
             },
             Output: {
                 Host: `${repositoryDestination.label}/resources/files/`,
                 HostInit: `${repositoryDestination.label}/resources/info/`,
                 ResourceLabel: outputFileName,
-                FileExtension: selectedOutputFileType?.value ? selectedOutputFileType.value : outputFileTypeForDropdown[0].value,
+                FileExtension: minerObject.ResourceOutput.FileExtension//selectedOutputFileType?.value ? selectedOutputFileType.value : outputFileTypeForDropdown[0].value,
             }
         };
 
@@ -250,7 +247,7 @@ function ActionPopup(props) {
             .then((res) => {
                 GetSingleFileMetadata(repositoryDestination.label, res.data)
                     .then((res) => {
-                        console.log(res);
+                        console.log(res.data);
                         addFile(res.data);
                     })
                     .catch(() => {
@@ -349,29 +346,22 @@ function ActionPopup(props) {
                             options = {repositories}
                             onValueChange = {onRepositoryFileOwnerDropdownChange}
                             label = {`Select repository to search for file:`}
-                            value = {repositoryFileOwnerDropdownOptions}
+                            value = {repositoryFileOwnerDropdownSelected}
                         />
-                        {repositoryFileOwnerDropdownOptions &&
-                            <div className='ActionPopup-wizard-step2-fileExplained'>Select one file from either:</div>
-                        }
 
-                        {logDropdownLoading ? <div>Loading...</div> :
-                            (repositoryFileOwnerDropdownOptions && minerObject.ResourceInputType === "EventLog") && 
-                            <Dropdown
-                                options = {logFilesForDropdown}
-                                onValueChange = {onLogFileDropdownChange}
-                                label = {`Log file:`}
-                                value = {selectedLogFile}
-                            />
-                        }
-                        {visDropdownLoading ? <div>Loading...</div> :
-                            (repositoryFileOwnerDropdownOptions && minerObject.ResourceInputType === "Visualization") && 
-                            <Dropdown
-                                options = {visFilesForDropdown}
-                                onValueChange = {onVisualizationFileDropdownChange}
-                                label = {`Visualization file:`}
-                                value = {selectedVisualizationFile}
-                            />
+                        {repositoryFileOwnerDropdownSelected && 
+                            minerObject?.ResourceInput?.map((resourceInput, index) => {
+                                return(
+                                    <Dropdown
+                                        options = {filteredFilesForDropdown[resourceInput.ResourceType]}
+                                        onValueChange = {onFileDropdownChange}
+                                        label = {`Select ${resourceInput.Name} file:`}
+                                        value = {selectedFiles[resourceInput.Name]}
+                                        extraParam = {resourceInput.Name}
+                                        key = {index}
+                                    />
+                                )
+                            })
                         }
                     </div> 
 
@@ -424,7 +414,15 @@ function ActionPopup(props) {
                             onChange = {onFileOutputNameChange}
                         />
 
-                        {(outputFileTypeForDropdown && outputFileTypeForDropdown.length > 1) ? 
+                        <div>
+                            output filetype:
+                        </div>
+                        <div>
+                            {`${minerObject.ResourceOutput.ResourceType} ${minerObject.ResourceOutput.FileExtension}`}
+                        </div>
+
+
+                        {/* {(outputFileTypeForDropdown && outputFileTypeForDropdown.length > 1) ? 
                             <Dropdown
                                 options = {outputFileTypeForDropdown}
                                 onValueChange = {onOutputFiletypeChange}
@@ -438,7 +436,7 @@ function ActionPopup(props) {
                                         {outputFileTypeForDropdown[0].label}
                                     </div>
                                 </div>
-                        }
+                        } */}
                     </div> 
                 : null}
 
