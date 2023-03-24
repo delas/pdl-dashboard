@@ -1,5 +1,5 @@
 import './Visualizations.scss';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import Tabs from '../Tabs/Tabs';
 import BPMNVisualizer from './BPMNVisualizer/BPMNVisualizer';
 import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
@@ -10,20 +10,30 @@ import { getFileExtension } from '../../Utils/FileUnpackHelper';
 
 function Visualizations(props) {
     const {
-        file
+        file,
+        setComponentUpdaterFunction,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
     const [selectedTab, setSelectedTab] = useState(0);
     const [fileExtension, setFileExtension] = useState(getFileExtension(file).toUpperCase());
+    const [fileToDisplay, setFileToDisplay] = useState(file);
+    
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() =>{ updateState({}); setFileToDisplay(file); }, []);
 
     useEffect(() => {
+        setComponentUpdaterFunction("Visualizations", {update: forceUpdate})
+        setFileToDisplay(file);
         setIsLoading(false);
-    }, []);
+    }, [file]);
 
     const onTabChange = (tabIndex) => {
         setSelectedTab(tabIndex);
     }
+
+    console.log("rerender visualizations");
+    console.log(fileToDisplay);
 
     if(isLoading){
         return (
@@ -43,11 +53,11 @@ function Visualizations(props) {
                 />
             </div>
             <div className='Visualizations-VisualizerContainer'>
-                {(selectedTab === 0 && fileExtension === "BPMN") && <BPMNVisualizer file = {file}/>}
-                {(selectedTab === 1 && fileExtension === "XES") && <HistogramVisualizer file = {file}/>}
-                {(selectedTab === 2 && fileExtension === "PNML") && <PNMLVisualizer file = {file}/>}
-                {(selectedTab === 3 && fileExtension) && <ResourceGraph file = {file}/>}
-                {(selectedTab === 4 && (fileExtension === "PNG" || fileExtension === "JPG" ||  fileExtension === "SVG")) && <ImageVisualizer file = {file}/>}
+                {(selectedTab === 0 && fileExtension === "BPMN") && <BPMNVisualizer file = {fileToDisplay}/>}
+                {(selectedTab === 1 && fileExtension === "XES") && <HistogramVisualizer file = {fileToDisplay}/>}
+                {(selectedTab === 2 && fileExtension === "PNML") && <PNMLVisualizer file = {fileToDisplay}/>}
+                {(selectedTab === 3 && fileExtension) && <ResourceGraph file = {fileToDisplay}/>}
+                {(selectedTab === 4 && (fileExtension === "PNG" || fileExtension === "JPG" ||  fileExtension === "SVG")) && <ImageVisualizer file = {fileToDisplay}/>}
             </div>
         </div>
     );

@@ -19,8 +19,9 @@ function App(props) {
     const [newHostPopupOpen, setNewHostPopupOpen] = useState(false);
     const [newHostFromSROpen, setNewHostFromSRPopupOpen] = useState(false);
     const [GetFilePopupOpen, setGetFilePopupOpen] = useState(false);
-    const [updateSidebarHosts, setUpdateSidebarHosts] = useState(null);
-    const [updateSidebar, setUpdateSidebar] = useState(null);
+    const [updateComponents, setUpdateComponents] = useState([]);
+    // const [updateSidebarHosts, setUpdateSidebarHosts] = useState(null);
+    // const [updateSidebar, setUpdateSidebar] = useState(null);
 
     let pingInterval = useRef(null);
 
@@ -63,12 +64,18 @@ function App(props) {
         if(pingInterval.current !== null) clearInterval(pingInterval.current);
         pingInterval.current = setInterval(() => {
             pingAllAddedServices().then(() => {
-                if(updateSidebarHosts){
-                    updateSidebarHosts.update();
+                if(updateComponents.SidebarHosts){
+                    updateComponents.SidebarHosts.update();
                 }
             });
         }, 10000);
     }, []);
+
+    const setComponentUpdaterFunction = (componentName, updateFunc) => {
+        let updateComponentsTemp = updateComponents;
+        updateComponentsTemp[componentName] = updateFunc;
+        setUpdateComponents(updateComponentsTemp);
+    }
 
     const handleAddHostOfType = async (type, hostname) => {
         switch(type){
@@ -84,8 +91,8 @@ function App(props) {
             handleAddHostOfType(host.type.value, host.name).then((res) => {
                 host.config = res?.data;
                 saveHost(id, host);
-                if(updateSidebarHosts){
-                    updateSidebarHosts.update();
+                if(updateComponents.SidebarHosts){
+                    updateComponents.SidebarHosts.update();
                 }
             })
         }
@@ -93,8 +100,8 @@ function App(props) {
 
     const deleteHost = (id) => {
         removeHost(id);
-        if(updateSidebarHosts !== null && updateSidebarHosts !== undefined){
-            updateSidebarHosts.update();
+        if(updateComponents.SidebarHosts){
+            updateComponents.SidebarHosts.update();
         }
         // forceUpdate();
     }
@@ -114,14 +121,14 @@ function App(props) {
             if(res.status === 200 && res.data) {
                 isImage ? saveFile(resourceId, {...file, fileContent: URL.createObjectURL(res.data) }) :
                 saveFile(resourceId, {...file, fileContent: res.data });
-                setTimeout(() => { updateSidebar.update() }, 500);
+                setTimeout(() => { updateComponents.Sidebar.update() }, 500);
             }
             else if(retries < 10)
-                setTimeout(() => { getAndAddFile(file, retries + 1); updateSidebar.update() }, 6000);
+                setTimeout(() => { getAndAddFile(file, retries + 1); updateComponents.Sidebar.update() }, 6000);
         })
         .catch((e) => {
             if(retries < 10)
-                setTimeout(() => { getAndAddFile(file, retries + 1); updateSidebar.update() }, 6000);
+                setTimeout(() => { getAndAddFile(file, retries + 1); updateComponents.Sidebar.update() }, 6000);
         });
     }
 
@@ -129,14 +136,15 @@ function App(props) {
         const resourceId = getFileResourceId(file);
         saveFile(resourceId, file);
         setTimeout(() => {
-            updateSidebar.update();
+            if(updateComponents.Sidebar)
+            updateComponents.Sidebar.update();
         }, 500);
     }
 
     const deleteFile = (id) => { //Deletes from local memory - not repository
         removeFile(id);
-        if(updateSidebar !== null && updateSidebar !== undefined){
-            updateSidebar.update();
+        if(updateComponents.Sidebar){
+            updateComponents.Sidebar.update();
         }
     }
 
@@ -156,6 +164,7 @@ function App(props) {
                 getAndAddFile = {getAndAddFile}
                 deleteFile = {deleteFile}
                 addFile = {addFile}
+                updateComponents = {updateComponents}
                 toggles = {{
                     toggleSidebar: toggleSidebar,
                     toggleSidebarHosts: toggleSidebarHosts,
@@ -173,8 +182,7 @@ function App(props) {
                     setNewHostPopupOpen: setNewHostPopupOpen,
                     setNewHostFromSRPopupOpen: setNewHostFromSRPopupOpen,
                     setGetFilePopupOpen: setGetFilePopupOpen,
-                    setUpdateSidebarHosts: setUpdateSidebarHosts,
-                    setUpdateSidebar: setUpdateSidebar
+                    setComponentUpdaterFunction: setComponentUpdaterFunction
                 }}
                 isOpen = {{
                     sidebarOpen: sidebarOpen,

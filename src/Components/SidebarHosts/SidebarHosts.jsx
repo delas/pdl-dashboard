@@ -13,7 +13,8 @@ function SidebarHosts(props) {
         openPopup,
         popups,
         removeHost,
-        setUpdateSidebarHosts
+        // setUpdateSidebarHosts
+        setComponentUpdaterFunction,
     } = props;
 
     const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +31,8 @@ function SidebarHosts(props) {
     
 
     useEffect(() => {
-        setUpdateSidebarHosts({update: forceUpdate});
+        // setUpdateSidebarHosts({update: forceUpdate});
+        setComponentUpdaterFunction("SidebarHosts", {update: forceUpdate});
         forceUpdate();
         setIsLoading(false);
     }, []);

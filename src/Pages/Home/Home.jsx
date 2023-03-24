@@ -27,7 +27,8 @@ function Home(props) {
         removeHost,
         getAndAddFile,
         deleteFile,
-        addFile
+        addFile,
+        updateComponents
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -92,6 +93,9 @@ function Home(props) {
     const selectFileForVisualization = (fileId) => {
         const file = getFile(fileId)
         setVisualizationsFile(file);
+        if(updateComponents.Visualizations) {
+            updateComponents.Visualizations.update();
+        }
     }
 
     // const [htmlString, setHtmlString] = useState(null); 
@@ -144,7 +148,8 @@ function Home(props) {
                             popups = {popups}
                             deleteFile = {deleteFile}
                             selectFileForVisualization = {selectFileForVisualization}
-                            setUpdateSidebar= {set.setUpdateSidebar}
+                            // setUpdateSidebar= {set.setUpdateSidebar}
+                            setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
                         />
                     </div>
 
@@ -152,6 +157,7 @@ function Home(props) {
                         <div className='Home-Content-visualizations-container'>
                             <Visualizations
                                 file = {visualizationsFile}
+                                setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
                             />
                         </div>
                         
@@ -165,7 +171,8 @@ function Home(props) {
                         popups = {popups}
                         addHost = {addHost}
                         removeHost = {removeHost}
-                        setUpdateSidebarHosts = {set.setUpdateSidebarHosts} 
+                        // setUpdateSidebarHosts = {set.setUpdateSidebarHosts} 
+                        setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
                     />
                 </div>
 

@@ -14,6 +14,7 @@ function ResourceGraph(props) {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        setIsLoading(true);
         GetResourceGraph(getFileHost(file), getFileResourceId(file))
             .then((res) => {
                 setGraph(res.data);
@@ -25,7 +26,7 @@ function ResourceGraph(props) {
                 setError(err);
                 setIsLoading(false);
             });
-    }, []);
+    }, [file]);
     
     if(isLoading){
         return (

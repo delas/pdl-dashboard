@@ -16,7 +16,8 @@ function Sidebar(props) {
         popups,
         deleteFile,
         selectFileForVisualization,
-        setUpdateSidebar
+        // setUpdateSidebar
+        setComponentUpdaterFunction,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +28,7 @@ function Sidebar(props) {
     const forceUpdate = useCallback(() =>{ updateState({}); setFiles(getAllFiles());}, []);
 
     useEffect(() => {
-        setUpdateSidebar({update: forceUpdate});
+        setComponentUpdaterFunction("Sidebar", {update: forceUpdate});
         setIsLoading(false);
     }, []);
 
