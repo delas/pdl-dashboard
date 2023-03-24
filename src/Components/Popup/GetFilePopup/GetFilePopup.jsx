@@ -5,56 +5,47 @@ import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {getRepositories} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
-import { GetVisFilesMetadata, GetLogFilesMetadata } from '../../../Services/RepositoryServices';
-import { getFileExtension, getFileResourceId, getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
+import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
+import { getFileExtension, getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
+import config from '../../../config';
 
 function GetFilePopup(props) {
 
     const {
         toggleGetFilePopupOpen,
-        addFile,
+        getAndAddFile,
         repository = {},
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-    const [visFilesMetadata, setVisFilesMetadata] = useState(null);
-    const [logFilesMetadata, setLogFilesMetadata] = useState(null);
-    const [filesForDropdown, setFilesForDropdown] = useState([]);
-    const [logFilesForDropdown, setLogFilesForDropdown] = useState([]);
+    const [filesForDropdown, setFilesForDropdown] = useState(null);
     const [selectedRepository, setSelectedRepository] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [selectedLogFile, setSelectedLogFile] = useState(null);
 
     useEffect(() => {
         setIsLoading(false);
         setSelectedRepository(repository);
     }, []);
 
-    useEffect(() => {
-        if(selectedRepository){
-            const repositoryUrl = selectedRepository.label;//getRepositories().filter((repository) => repository.id === selectedRepository.value)[0]?.name;
-            GetVisFilesMetadata(repositoryUrl).then(res => setVisFilesMetadata(res.data));
-        }
-        if(selectedRepository){
-            const repositoryUrl = selectedRepository.label;//getRepositories().filter((repository) => repository.id === selectedRepository.value)[0]?.name;
-            GetLogFilesMetadata(repositoryUrl).then(res => {setLogFilesMetadata(res.data)});
-        }
-    }, [selectedRepository]);
+    const convertFilesToDropdown = (files) => {
+        return files.map((file) => {
+            return ({label: `${getFileExtension(file)} ${getFileResourceLabel(file)}`, value: file})
+        })
+    }
 
     useEffect(() => {
-        if(visFilesMetadata !== null)
-        setFilesForDropdown(
-            visFilesMetadata.map((file) => {
-                return ({label: `${getFileExtension(file)} ${getFileResourceLabel(file)}`, value: getFileResourceId(file)})
-            })
-        );
-        if(logFilesMetadata !== null)
-        setLogFilesForDropdown(
-            logFilesMetadata.map((file) => {
-                return ({label: `${getFileExtension(file)} ${getFileResourceLabel(file)}`, value: getFileResourceId(file)})
-            })
-        );
-    }, [visFilesMetadata, logFilesMetadata]);
+        if(selectedRepository){
+            const repositoryUrl = selectedRepository.label;//getRepositories().filter((repository) => repository.id === selectedRepository.value)[0]?.name;
+            const filters = config.availableVisualizations
+                .map((visualization) => visualization.ResourceType)
+                .filter(function (x, i, a) { 
+                return a.indexOf(x) === i; 
+            });
+            GetRepositoryFilterMetadata(repositoryUrl, filters).then(res => {
+                setFilesForDropdown(convertFilesToDropdown(res.data));
+            });
+        }
+    }, selectedRepository);
 
     const onRepositoryChange = (value) => {
         setSelectedRepository(value)
@@ -62,12 +53,6 @@ function GetFilePopup(props) {
 
     const onFileValueChange = (value) => {
         setSelectedFile(value);
-        setSelectedLogFile(null);
-    }
-
-    const onLogFileValueChange = (value) => {
-        setSelectedLogFile(value);
-        setSelectedFile(null);
     }
 
     const repositories = getRepositories().map((repository, index) => {
@@ -75,14 +60,8 @@ function GetFilePopup(props) {
     })
 
     const onConfirmClick = () => {
-        let fileToSave = null;
-        if(selectedFile !== null) {
-            fileToSave = visFilesMetadata.filter((file) => getFileResourceId(file) === selectedFile.value);
-        } else if(selectedLogFile !== null){
-            fileToSave = logFilesMetadata.filter((file) => getFileResourceId(file) === selectedLogFile.value);
-        }
-        if(fileToSave && fileToSave.length === 1){
-            addFile(fileToSave[0]);
+        if(selectedFile) {
+            getAndAddFile(selectedFile.value);
             toggleGetFilePopupOpen();
         }
     }
@@ -114,21 +93,14 @@ function GetFilePopup(props) {
                     value = {selectedRepository}
                 />
 
+                {selectedRepository &&
                 <Dropdown
                     options = {filesForDropdown}
                     onValueChange = {onFileValueChange}
-                    label = {`Select visualization file`}
+                    label = {`Select log file`}
                     value = {selectedFile}
                     loading = {filesForDropdown === null}
-                />
-
-                <Dropdown
-                    options = {logFilesForDropdown}
-                    onValueChange = {onLogFileValueChange}
-                    label = {`Select log file`}
-                    value = {selectedLogFile}
-                    loading = {logFilesForDropdown === null}
-                />
+                />}
 
                 <PopupFooter
                     onCancelClick = {toggleGetFilePopupOpen}

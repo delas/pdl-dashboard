@@ -25,8 +25,9 @@ function Home(props) {
         set,
         addHost,
         removeHost,
-        addFile,
-        deleteFile
+        getAndAddFile,
+        deleteFile,
+        addFile
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -182,7 +183,7 @@ function Home(props) {
                 {isOpen.actionPopupOpen ?
                     <ActionPopup
                         toggleActionPopupOpen = {toggles.toggleActionPopupOpen}
-                        addFile = {addFile}
+                        getAndAddFile = {getAndAddFile}
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
@@ -219,7 +220,7 @@ function Home(props) {
                         closePopup = {closePopup}
                         popups = {popups}
                         // addHost = {addHost}
-                        addFile = {addFile}
+                        getAndAddFile = {getAndAddFile}
                     />
                     : null
                 }

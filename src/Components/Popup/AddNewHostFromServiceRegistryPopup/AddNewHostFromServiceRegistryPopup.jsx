@@ -30,7 +30,6 @@ function AddNewHostFromServiceRegistryPopup(props) {
 
     const handleSubmit = () => {
         minerHostsSelected.forEach((miner, index) => {
-            console.log(miner);
             const newHost = {
                 id: uuidv4(),
                 name: miner.label,
@@ -38,8 +37,6 @@ function AddNewHostFromServiceRegistryPopup(props) {
                 type: {label: miner.value, value: miner.value},
                 addedFrom: serviceRegistry.label,
             };
-            console.log(newHost);
-            console.log(miner);
             addHost(newHost.id, newHost);
         });
 
@@ -56,7 +53,6 @@ function AddNewHostFromServiceRegistryPopup(props) {
     }
 
     const addMinerHost = (miner) => {
-        console.log(miner);
         setMinerHostsSelected(minerHostsSelected.concat(miner));
     }
 

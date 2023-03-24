@@ -12,7 +12,6 @@ function UploadFileBody(props) {
         onFileUploadValueChange,
         radiobuttonsOptions,
         onRadioButtonChange,
-        selectedFileType,
         fileDescription,
         onFileDescriptionChange,
         repositories,

@@ -95,7 +95,6 @@ export function getAllFiles(){
     const fileKeys = Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a FileExtension not in json format
             const storageItem = JSON.parse(localStorage.getItem(key));
-            console.log(storageItem);
             if(storageItem !== null 
                 && storageItem !== undefined
                 && storageItem.ResourceId

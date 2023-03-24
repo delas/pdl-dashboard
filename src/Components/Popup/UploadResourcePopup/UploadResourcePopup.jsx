@@ -4,16 +4,20 @@ import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import {getRepositories} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
-import { sendFileToRepository } from '../../../Services/RepositoryServices';
+import { sendFileToRepository, GetSingleFileMetadata } from '../../../Services/RepositoryServices';
 import Tabs from '../../Tabs/Tabs';
 import UploadFileBody from './UploadFileBody/UploadFileBody';
 import UploadStreamBody from './UploadStreamBody/UploadStreamBody';
+import { saveFile } from '../../../Store/LocalDataStore';
+import config from '../../../config';
+import { getFileExtension } from '../../../Utils/FileUnpackHelper';
 
 function UploadResourcePopup(props) {
 
     const {
         toggleFilePopupOpen,
         repository = {},
+        addFile,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -65,17 +69,22 @@ function UploadResourcePopup(props) {
     }
 
     const onConfirmClick = () => {
-        if(isFilePicked && 
-            fileDestination !== null && fileDestination !== undefined
-            && selectedFileType !== null && selectedFileType !== undefined){
-            sendFileToRepository(fileDestination.label, selectedFile, selectedFileType.value, fileDescription).then(() => {
-                const reader = new FileReader();
-                reader.readAsText(selectedFile, 'UTF-8');
-                // console.log();
-                reader.onload = function (evt) {
-                    console.log(evt.target.result);
-                }
-            });
+        if(isFilePicked && fileDestination && selectedFileType){
+            sendFileToRepository(fileDestination.label, selectedFile, selectedFileType.value, fileDescription).then((res) => {
+                GetSingleFileMetadata(fileDestination.label, res.data).then((res) => {
+                    if(config.availableVisualizations.map((availVis) => {return availVis.FileExtension}).includes(getFileExtension(res.data).toUpperCase())){
+                        const reader = new FileReader();
+                        reader.readAsText(selectedFile, 'UTF-8');
+                        reader.onload = function (evt) {
+                            addFile({...res.data, fileContent: evt.target.result})
+                        }
+                    } else {
+                        addFile({...res.data, fileContent: null});
+                    }
+                });
+            })
+            .then(() => {toggleFilePopupOpen()})
+            .catch((err) => {console.log(err)});
         }
     }
 
@@ -129,7 +138,6 @@ function UploadResourcePopup(props) {
                         repositories = {repositories}
                         onFileDestinationDropdownChange = {onFileDestinationDropdownChange}
                         fileDestination = {fileDestination}
-                        selectedFileType = {selectedFileType}
                     />}
 
                     {(selectedTab === 1) && <UploadStreamBody

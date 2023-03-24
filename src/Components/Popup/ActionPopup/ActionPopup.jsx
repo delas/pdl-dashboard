@@ -8,16 +8,16 @@ import InputField from '../../Widgets/InputField/InputField';
 import { getMiners, getRepositories, getMiner } from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { PostMineAction } from '../../../Services/MinerServices';
-import {GetSingleFileMetadata} from '../../../Services/RepositoryServices';
-import {GetVisFilesMetadata, GetLogFilesMetadata, GetRepositoryFilterMetadata} from '../../../Services/RepositoryServices';
-import { getFileHost, getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
+import { GetSingleFileMetadata } from '../../../Services/RepositoryServices';
+import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
+import { getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
 
 function ActionPopup(props) {
 
     const {
         toggleActionPopupOpen,
         miner = {},
-        addFile,
+        getAndAddFile,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -129,7 +129,6 @@ function ActionPopup(props) {
             let newSelectedFiles = selectedFiles;
             newSelectedFiles[resourceName] = value;
             setSelectedFiles(newSelectedFiles);
-            console.log(selectedFiles);
             forceUpdate();
         }
     
@@ -240,15 +239,12 @@ function ActionPopup(props) {
                 FileExtension: minerObject.ResourceOutput.FileExtension//selectedOutputFileType?.value ? selectedOutputFileType.value : outputFileTypeForDropdown[0].value,
             }
         };
-
-        console.log(data);
         
         PostMineAction(minerHostDropdownValue.label, data)
             .then((res) => {
                 GetSingleFileMetadata(repositoryDestination.label, res.data)
                     .then((res) => {
-                        console.log(res.data);
-                        addFile(res.data);
+                        getAndAddFile(res.data);
                     })
                     .catch(() => {
                         alert("Something went wrong. There might an issue with the requested resource, or the repository. Please try again.");

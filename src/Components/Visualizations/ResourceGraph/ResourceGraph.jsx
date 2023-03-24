@@ -46,7 +46,6 @@ function ResourceGraph(props) {
 
     const getAllNodes = () => {   
         document.getElementsByClassName("node");
-        // console.log(document.getElementsByClassName("node"));
     }
 
     return (

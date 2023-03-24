@@ -99,7 +99,7 @@ function App(props) {
         // forceUpdate();
     }
 
-    const addFile = (file, retries = 0) => {
+    const getAndAddFile = (file, retries = 0) => {
         const fileExtension = getFileExtension(file);
         const resourceId = getFileResourceId(file);
         const host = getFileHost(file);
@@ -117,12 +117,20 @@ function App(props) {
                 setTimeout(() => { updateSidebar.update() }, 500);
             }
             else if(retries < 10)
-                setTimeout(() => { addFile(file, retries + 1); updateSidebar.update() }, 6000);
+                setTimeout(() => { getAndAddFile(file, retries + 1); updateSidebar.update() }, 6000);
         })
         .catch((e) => {
             if(retries < 10)
-                setTimeout(() => { addFile(file, retries + 1); updateSidebar.update() }, 6000);
+                setTimeout(() => { getAndAddFile(file, retries + 1); updateSidebar.update() }, 6000);
         });
+    }
+
+    const addFile = (file) => {
+        const resourceId = getFileResourceId(file);
+        saveFile(resourceId, file);
+        setTimeout(() => {
+            updateSidebar.update();
+        }, 500);
     }
 
     const deleteFile = (id) => { //Deletes from local memory - not repository
@@ -145,8 +153,9 @@ function App(props) {
             {props.page === "Home" ? <Home 
                 addHost = {addHost}
                 removeHost = {deleteHost}
-                addFile = {addFile}
+                getAndAddFile = {getAndAddFile}
                 deleteFile = {deleteFile}
+                addFile = {addFile}
                 toggles = {{
                     toggleSidebar: toggleSidebar,
                     toggleSidebarHosts: toggleSidebarHosts,
