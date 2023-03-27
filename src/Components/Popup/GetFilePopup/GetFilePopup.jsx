@@ -7,7 +7,7 @@ import {getRepositories} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
 import { getFileExtension, getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
-import config from '../../../config';
+import {availableVisualizations} from '../../../config';
 
 function GetFilePopup(props) {
 
@@ -36,12 +36,12 @@ function GetFilePopup(props) {
     useEffect(() => {
         if(selectedRepository){
             const repositoryUrl = selectedRepository.label;//getRepositories().filter((repository) => repository.id === selectedRepository.value)[0]?.name;
-            const filters = config.availableVisualizations
-                .map((visualization) => visualization.ResourceType)
-                .filter(function (x, i, a) { 
-                return a.indexOf(x) === i; 
-            });
-            GetRepositoryFilterMetadata(repositoryUrl, filters).then(res => {
+            // const filters = availableVisualizations
+            //     .map((visualization) => visualization.ResourceType)
+            //     .filter(function (x, i, a) { 
+            //     return a.indexOf(x) === i; 
+            // });
+            GetRepositoryFilterMetadata(repositoryUrl, availableVisualizations).then(res => {
                 setFilesForDropdown(convertFilesToDropdown(res.data));
             });
         }

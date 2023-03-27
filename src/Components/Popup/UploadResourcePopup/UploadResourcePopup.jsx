@@ -9,7 +9,7 @@ import Tabs from '../../Tabs/Tabs';
 import UploadFileBody from './UploadFileBody/UploadFileBody';
 import UploadStreamBody from './UploadStreamBody/UploadStreamBody';
 import { saveFile } from '../../../Store/LocalDataStore';
-import config from '../../../config';
+import {availableFileExtensions} from '../../../config';
 import { getFileExtension } from '../../../Utils/FileUnpackHelper';
 
 function UploadResourcePopup(props) {
@@ -28,14 +28,10 @@ function UploadResourcePopup(props) {
     const [selectedFileType, setSelectedFileType] = useState(null);
 
     const [fileDescription, setFileDescription] = useState(null);
-    const [selectedTab, setSelectedTab] = useState(0);
+    const [selectedTab, setSelectedTab] = useState({Title:"File"});
 
     const [streamBrokerLocation, setStreamBrokerLocation] = useState(null);
     const [streamTopic, setStreamTopic] = useState(null);
-
-
-       
-
 
     useEffect(() => {
         setIsLoading(false);
@@ -53,7 +49,7 @@ function UploadResourcePopup(props) {
     const onTabChange = (tabIndex) => {
         setSelectedTab(tabIndex);
     }
-    const fileTabs = [{title: 'File'}, {title: 'Stream'}];
+    const fileTabs = [{Title: 'File'}, {Title: 'Stream'}];
     
     const onFileUploadValueChange = (event) => {
         setSelectedFile(event.target.files[0]);
@@ -72,7 +68,7 @@ function UploadResourcePopup(props) {
         if(isFilePicked && fileDestination && selectedFileType){
             sendFileToRepository(fileDestination.label, selectedFile, selectedFileType.value, fileDescription).then((res) => {
                 GetSingleFileMetadata(fileDestination.label, res.data).then((res) => {
-                    if(config.availableVisualizations.map((availVis) => {return availVis.FileExtension}).includes(getFileExtension(res.data).toUpperCase())){
+                    if(availableFileExtensions.includes(getFileExtension(res.data).toUpperCase())){
                         const reader = new FileReader();
                         reader.readAsText(selectedFile, 'UTF-8');
                         reader.onload = function (evt) {
@@ -128,7 +124,7 @@ function UploadResourcePopup(props) {
                 
                 <div className='UploadResourcePopup-body'>
                     
-                    {(selectedTab === 0) && <UploadFileBody
+                    {(selectedTab.Title === "File") && <UploadFileBody
                         selectedFile = {selectedFile}
                         onFileUploadValueChange = {onFileUploadValueChange}
                         radiobuttonsOptions = {radiobuttonsFile}
@@ -140,7 +136,7 @@ function UploadResourcePopup(props) {
                         fileDestination = {fileDestination}
                     />}
 
-                    {(selectedTab === 1) && <UploadStreamBody
+                    {(selectedTab.Title === "Stream") && <UploadStreamBody
                         onStreamBrokerLocationChange = {onStreamBrokerLocationChange}
                         onStreamTopicChange = {onStreamTopicChange}
                         fileDescription = {fileDescription}

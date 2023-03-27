@@ -7,6 +7,7 @@ import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
 import ResourceGraph from './ResourceGraph/ResourceGraph';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
 import { getFileExtension } from '../../Utils/FileUnpackHelper';
+import {config} from '../../config';
 
 function Visualizations(props) {
     const {
@@ -15,7 +16,8 @@ function Visualizations(props) {
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedTab, setSelectedTab] = useState(0);
+    const [selectedTab, setSelectedTab] = useState(null);
+    const [tabList, setTabList] = useState([]);
     const [fileExtension, setFileExtension] = useState(getFileExtension(file).toUpperCase());
     const [fileToDisplay, setFileToDisplay] = useState(file);
     
@@ -26,14 +28,18 @@ function Visualizations(props) {
         setComponentUpdaterFunction("Visualizations", {update: forceUpdate})
         setFileToDisplay(file);
         setIsLoading(false);
+        setTabList(generateTabList(file));
     }, [file]);
 
-    const onTabChange = (tabIndex) => {
-        setSelectedTab(tabIndex);
+    const onTabChange = (tab) => {
+        setSelectedTab(tab);
     }
 
-    console.log("rerender visualizations");
-    console.log(fileToDisplay);
+    const generateTabList = (file) => {
+        if(file) return config[getFileExtension(file).toUpperCase()].Visualizations.map((visualization) => {
+            return visualization;
+        });
+    }
 
     if(isLoading){
         return (
@@ -49,16 +55,18 @@ function Visualizations(props) {
                 <Tabs
                     onTabChange = {onTabChange}
                     selectedTab = {selectedTab}
-                    tablist = {[{title: 'BPMN'}, {title: 'Histogram'}, {title: 'PNML'}, {title: 'Resource Graph'}, {title: 'Image'}]}
+                    tablist = {tabList}
                 />
             </div>
-            <div className='Visualizations-VisualizerContainer'>
-                {(selectedTab === 0 && fileExtension === "BPMN") && <BPMNVisualizer file = {fileToDisplay}/>}
-                {(selectedTab === 1 && fileExtension === "XES") && <HistogramVisualizer file = {fileToDisplay}/>}
-                {(selectedTab === 2 && fileExtension === "PNML") && <PNMLVisualizer file = {fileToDisplay}/>}
-                {(selectedTab === 3 && fileExtension) && <ResourceGraph file = {fileToDisplay}/>}
-                {(selectedTab === 4 && (fileExtension === "PNG" || fileExtension === "JPG" ||  fileExtension === "SVG")) && <ImageVisualizer file = {fileToDisplay}/>}
-            </div>
+            {selectedTab &&
+                <div className='Visualizations-VisualizerContainer'>
+                    {(selectedTab.ResourceType === "BPMN") && <BPMNVisualizer file = {fileToDisplay}/>}
+                    {(selectedTab.ResourceType === "XES") && <HistogramVisualizer file = {fileToDisplay}/>}
+                    {(selectedTab.ResourceType === "PNML") && <PNMLVisualizer file = {fileToDisplay}/>}
+                    {(selectedTab.ResourceType === "DOT") && <ResourceGraph file = {fileToDisplay}/>}
+                    {(selectedTab.ResourceType === "PNG" || selectedTab.ResourceType === "JPG" || fileExtension.ResourceType === "SVG") && <ImageVisualizer file = {fileToDisplay}/>}
+                </div>
+            }
         </div>
     );
 }
