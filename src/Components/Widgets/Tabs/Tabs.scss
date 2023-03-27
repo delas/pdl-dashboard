@@ -24,8 +24,12 @@ $inactive-hover-border-color: #6c757d;
     height: 100%;
     border: 1px solid transparent;
     border-top: 0;
+    border-bottom: 1px solid rgb(153, 0, 0);
     &:hover{
         cursor: pointer;
+        border: 1px solid $active;
+        border-top: 0;
+        color: $active;
     }
 
     display:flex;
@@ -42,9 +46,11 @@ $inactive-hover-border-color: #6c757d;
     &-true{
         background-color: $active;
         color: #FFF;
+        &:hover{
+            color: #FFF;
+        }
     }
     &-false{
-        
         background-color: $inactive;
         color: #000;
         &:hover{

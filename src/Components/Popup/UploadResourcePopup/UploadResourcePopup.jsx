@@ -5,7 +5,7 @@ import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import {getRepositories} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { sendFileToRepository, GetSingleFileMetadata } from '../../../Services/RepositoryServices';
-import Tabs from '../../Tabs/Tabs';
+import Tabs from '../../Widgets/Tabs/Tabs';
 import UploadFileBody from './UploadFileBody/UploadFileBody';
 import UploadStreamBody from './UploadStreamBody/UploadStreamBody';
 import { saveFile } from '../../../Store/LocalDataStore';
@@ -28,7 +28,7 @@ function UploadResourcePopup(props) {
     const [selectedFileType, setSelectedFileType] = useState(null);
 
     const [fileDescription, setFileDescription] = useState(null);
-    const [selectedTab, setSelectedTab] = useState({Title:"File"});
+    const [selectedTab, setSelectedTab] = useState({Title: "File"});
 
     const [streamBrokerLocation, setStreamBrokerLocation] = useState(null);
     const [streamTopic, setStreamTopic] = useState(null);
@@ -66,6 +66,7 @@ function UploadResourcePopup(props) {
 
     const onConfirmClick = () => {
         if(isFilePicked && fileDestination && selectedFileType){
+            setIsLoading(true);
             sendFileToRepository(fileDestination.label, selectedFile, selectedFileType.value, fileDescription).then((res) => {
                 GetSingleFileMetadata(fileDestination.label, res.data).then((res) => {
                     if(availableFileExtensions.includes(getFileExtension(res.data).toUpperCase())){
@@ -79,8 +80,8 @@ function UploadResourcePopup(props) {
                     }
                 });
             })
-            .then(() => {toggleFilePopupOpen()})
-            .catch((err) => {console.log(err)});
+            .then(() => {toggleFilePopupOpen(); setIsLoading(false);})
+            .catch((err) => {console.log(err); setIsLoading(false);});
         }
     }
 
@@ -105,7 +106,7 @@ function UploadResourcePopup(props) {
     }
 
     return (
-            <BackdropModal closeModal = {toggleFilePopupOpen}>
+            <BackdropModal closeModal = {toggleFilePopupOpen} showSpinner={isLoading}>
 
             <div className='UploadResourcePopup' 
                 onClick = {(e) => {e.stopPropagation()}}

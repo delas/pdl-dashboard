@@ -26,6 +26,7 @@ function ActionPopup(props) {
     const [minerObject, setMinerObject] = useState(null); // The single miner config selected from first step
     const [maxWizardStep, setMaxWizardStep] = useState(null);
 
+
     useEffect(() => {
         setIsLoading(false);
         onMinerHostChange(miner);
@@ -240,6 +241,8 @@ function ActionPopup(props) {
             }
         };
         
+        setIsLoading(true);
+
         PostMineAction(minerHostDropdownValue.label, data)
             .then((res) => {
                 GetSingleFileMetadata(repositoryDestination.label, res.data)
@@ -252,10 +255,12 @@ function ActionPopup(props) {
             })
             .then(() => {
                 toggleActionPopupOpen();
+                setIsLoading(false);
             })
             .catch((err) => {
                 alert("Something went wrong. Please try to reload your browser and check status of the requested resources");
                 toggleActionPopupOpen();
+                setIsLoading(false);
             });
     }
 
@@ -280,7 +285,7 @@ function ActionPopup(props) {
     }
 
     return (
-        <BackdropModal closeModal = {toggleActionPopupOpen}>
+        <BackdropModal closeModal = {toggleActionPopupOpen} showSpinner={isLoading}>
             
             <div className='ActionPopup' 
                 onClick = {(e) => {e.stopPropagation()}}

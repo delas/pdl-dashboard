@@ -1,10 +1,12 @@
 import './BackdropModal.scss';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 function BackdropModal(props) {
 
     const {
         children,
-        closeModal
+        closeModal,
+        showSpinner = false,
     } = props;
 
     return (
@@ -14,6 +16,15 @@ function BackdropModal(props) {
                 e.stopPropagation();
             }}
         >
+            <div className={`backdrop-overlay-spinner-${showSpinner}`} onClick = {(e) => {
+                e.stopPropagation();
+            }}>
+                <div className='Spinner-container'>
+                    <LoadingSpinner
+                        loading = {showSpinner}
+                    />
+                </div>
+            </div>
             {children}
         </div>
     );

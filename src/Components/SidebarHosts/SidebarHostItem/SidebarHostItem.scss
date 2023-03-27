@@ -12,6 +12,8 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    height: 100%;
+    gap: 0.4em;
 }
 
 .SidebarHostItem-flexContainer-left{
@@ -72,5 +74,15 @@
         transform: scale(1.1);
         cursor: pointer;
         color: rgb(153, 0, 0);
+    }
+}
+
+.SidebarHostItem-loadingSpinner{
+    &-true{
+        height: 60%;
+        aspect-ratio: 1 / 1;
+    }
+    &-false{
+        display:none;
     }
 }

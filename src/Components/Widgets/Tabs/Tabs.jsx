@@ -27,7 +27,7 @@ function Tabs(props) {
             <div className='Tabs-flexContainer'>
                 {tablist.map((tab, index) => {
                     return (
-                        <div className={`Tab Tab-selected-${selectedTab.Title === tab.Title}`} 
+                        <div className={`Tab Tab-selected-${selectedTab && selectedTab.Title === tab.Title}`} 
                             onClick={() => {onTabChange(tab)}} key = {index}>
                             <span className='Tab-text'>{tab.Title}</span>
                         </div>

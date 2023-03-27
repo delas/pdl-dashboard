@@ -1,6 +1,7 @@
 import './SidebarHostItem.scss';
 import {useState, useEffect} from 'react';
 import { FaTrash, FaServer, FaCogs, FaNetworkWired, FaQuestion } from 'react-icons/fa';
+import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function SidebarHostItem(props) {
 
@@ -62,10 +63,16 @@ function SidebarHostItem(props) {
                     </div>
                 </div>
 
+                <div className={`SidebarHostItem-loadingSpinner-${false}`}>
+                    <LoadingSpinner
+                        loading = {true}
+                    />
+                </div>
+
                 <div className='SidebarHostItem-delete' onClick = {() => {onRemove(id)}}>
                     <FaTrash/>
                 </div>
-
+                
             </div>
         </div>
     );

@@ -1,12 +1,13 @@
 import './Visualizations.scss';
 import {useState, useEffect, useCallback} from 'react';
-import Tabs from '../Tabs/Tabs';
+import Tabs from '../Widgets/Tabs/Tabs';
 import BPMNVisualizer from './BPMNVisualizer/BPMNVisualizer';
 import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
 import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
 import ResourceGraph from './ResourceGraph/ResourceGraph';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
 import { getFileExtension } from '../../Utils/FileUnpackHelper';
+import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 import {config} from '../../config';
 
 function Visualizations(props) {
@@ -43,8 +44,10 @@ function Visualizations(props) {
 
     if(isLoading){
         return (
-            <div className="Visualizations">
-                <div>Loading ...</div>
+            <div className="Visualizations-loading">
+                <div className='Spinner-container'>
+                    <LoadingSpinner loading={isLoading}/>
+                </div>
             </div>
         )
     }
