@@ -1,5 +1,6 @@
 import './ImageVisualizer.scss';
 import {useState, useEffect} from 'react';
+import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function ImageVisualizer(props) {
     const {
@@ -15,7 +16,9 @@ function ImageVisualizer(props) {
     if(isLoading){
         return (
             <div className="ImageVisualizer">
-                <div>Loading ...</div>
+                <div className='Spinner-container'>
+                    <LoadingSpinner loading={isLoading}/>
+                </div>
             </div>
         )
     }

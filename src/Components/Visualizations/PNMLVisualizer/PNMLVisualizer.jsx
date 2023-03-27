@@ -1,6 +1,7 @@
 import './PNMLVisualizer.scss';
 import {useState, useEffect} from 'react';
 import Petrinet from './Petrinet';
+import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function PNMLVisualizer(props) {
     const {
@@ -16,7 +17,9 @@ function PNMLVisualizer(props) {
     if(isLoading){
         return (
             <div className="PNMLVisualizer">
-                <div>Loading ...</div>
+                <div className='Spinner-container'>
+                    <LoadingSpinner loading={isLoading}/>
+                </div>
             </div>
         )
     }

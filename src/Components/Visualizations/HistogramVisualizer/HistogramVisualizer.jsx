@@ -4,6 +4,7 @@ import {useState, useEffect} from 'react';
 import { Chart } from "react-google-charts";
 import {GetFileText} from '../../../Services/RepositoryServices';
 import { getFileResourceLabel, getFileResourceType } from '../../../Utils/FileUnpackHelper';
+import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function HistogramVisualizer(props) {
     const {
@@ -26,7 +27,9 @@ function HistogramVisualizer(props) {
     if(isLoading){
         return (
             <div className="HistogramVisualizer">
-                <div>Loading ...</div>
+                <div className='Spinner-container'>
+                    <LoadingSpinner loading={isLoading}/>
+                </div>
             </div>
         )
     }

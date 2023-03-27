@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react';
 import { Graphviz } from 'graphviz-react';
 import {GetResourceGraph} from '../../../Services/RepositoryServices';
 import { getFileHost, getFileResourceId } from '../../../Utils/FileUnpackHelper';
+import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function ResourceGraph(props) {
     const {
@@ -31,7 +32,9 @@ function ResourceGraph(props) {
     if(isLoading){
         return (
             <div className="ResourceGraph">
-                <div>Loading ...</div>
+                <div className='Spinner-container'>
+                    <LoadingSpinner loading={isLoading}/>
+                </div>
             </div>
         )
     }

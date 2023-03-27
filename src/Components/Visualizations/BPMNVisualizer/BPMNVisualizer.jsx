@@ -7,6 +7,7 @@ import React from "react";
 import BPMNComponent from "./BPMNComponent";
 // import ModelerCreator from "./diagramCreator/index";
 // import "./styles.css";
+import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function BPMNVisualizer(props) {
     const {
@@ -14,15 +15,19 @@ function BPMNVisualizer(props) {
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
+    const [modeler, setModeler] = useState(null);
 
     useEffect(() => {
+        setModeler(<BPMNComponent file = {file} />)
         setIsLoading(false);
-    });
+    }, []);
 
     if(isLoading){
         return (
             <div className="BPMNVisualizer">
-                <div>Loading ...</div>
+                <div className='Spinner-container'>
+                    <LoadingSpinner loading={isLoading}/>
+                </div>
             </div>
         )
     }
@@ -37,14 +42,13 @@ function BPMNVisualizer(props) {
     function onError(err) {
         console.log('failed to show diagram');
     }
-    
-    console.log(file);
 
     return (
         <div className="BPMNVisualizer">
-            <BPMNComponent
+            {/* <BPMNComponent
                 file = {file}
-            />
+            /> */}
+            {modeler}
         </div>
     );
 }

@@ -44,7 +44,7 @@ function Visualizations(props) {
 
     if(isLoading){
         return (
-            <div className="Visualizations-loading">
+            <div className="Visualizations-loader">
                 <div className='Spinner-container'>
                     <LoadingSpinner loading={isLoading}/>
                 </div>
@@ -64,7 +64,7 @@ function Visualizations(props) {
             {selectedTab &&
                 <div className='Visualizations-VisualizerContainer'>
                     {(selectedTab.ResourceType === "BPMN") && <BPMNVisualizer file = {fileToDisplay}/>}
-                    {(selectedTab.ResourceType === "XES") && <HistogramVisualizer file = {fileToDisplay}/>}
+                    {(selectedTab.ResourceType === "HISTOGRAM") && <HistogramVisualizer file = {fileToDisplay}/>}
                     {(selectedTab.ResourceType === "PNML") && <PNMLVisualizer file = {fileToDisplay}/>}
                     {(selectedTab.ResourceType === "DOT") && <ResourceGraph file = {fileToDisplay}/>}
                     {(selectedTab.ResourceType === "PNG" || selectedTab.ResourceType === "JPG" || fileExtension.ResourceType === "SVG") && <ImageVisualizer file = {fileToDisplay}/>}
