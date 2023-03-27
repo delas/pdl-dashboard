@@ -23,6 +23,7 @@ $inactive-hover-border-color: #6c757d;
     min-width: 5em;
     height: 100%;
     border: 1px solid transparent;
+    border-top: 0;
     &:hover{
         cursor: pointer;
     }
@@ -33,6 +34,8 @@ $inactive-hover-border-color: #6c757d;
     justify-content: center;
 
     box-sizing: border-box;
+    padding-left: 0.35em;
+    padding-right: 0.35em;
 }
 
 .Tab-selected{
@@ -46,6 +49,7 @@ $inactive-hover-border-color: #6c757d;
         color: #000;
         &:hover{
             border: 1px solid $active;
+            border-top: 0;
             color: $active;
         }
     }

@@ -48,9 +48,7 @@ function Topbar(props) {
                     <div className='Topbar-title'>Process dry lab</div>
                     
                 </div>
-                <div className='Topbar-flexContainer-center'>
-
-                </div>
+                
                 <div className='Topbar-flexContainer-right'>
                     <div className='Topbar-button-container'>
 

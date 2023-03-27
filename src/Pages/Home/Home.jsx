@@ -1,6 +1,5 @@
 import './Home.scss';
 import React, {useState, useEffect, Suspense} from 'react';
-// import { Link } from "react-router-dom";
 import Topbar from '../../Components/Topbar/Topbar';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
@@ -9,7 +8,6 @@ import ActionPopup from '../../Components/Popup/ActionPopup/ActionPopup';
 import AddNewHostPopup from '../../Components/Popup/AddNewHostPopup/AddNewHostPopup';
 import AddNewHostFromServiceRegistryPopup from '../../Components/Popup/AddNewHostFromServiceRegistryPopup/AddNewHostFromServiceRegistryPopup';
 import GetFilePopup from '../../Components/Popup/GetFilePopup/GetFilePopup';
-// import Tabs from '../../Components/Tabs/Tabs';
 import Visualizations from '../../Components/Visualizations/Visualizations';
 import { getFile } from '../../Store/LocalDataStore';
 import ReactHtmlParser from 'react-html-parser';
