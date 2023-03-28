@@ -3,7 +3,7 @@ import {useState, useEffect, useRef} from 'react';
 import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
-import { saveHost, removeHost, saveFile, removeFile, hostExits } from './Store/LocalDataStore';
+import { saveHost, removeHost, saveFile, getFile, removeFile, hostExits } from './Store/LocalDataStore';
 import { pingAllAddedServices } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
@@ -19,14 +19,9 @@ function App(props) {
     const [newHostPopupOpen, setNewHostPopupOpen] = useState(false);
     const [newHostFromSROpen, setNewHostFromSRPopupOpen] = useState(false);
     const [GetFilePopupOpen, setGetFilePopupOpen] = useState(false);
-    const [updateComponents, setUpdateComponents] = useState([]);
-    // const [updateSidebarHosts, setUpdateSidebarHosts] = useState(null);
-    // const [updateSidebar, setUpdateSidebar] = useState(null);
+    const [updateComponents, setUpdateComponents] = useState([]); // force rerender child components
 
     let pingInterval = useRef(null);
-
-    // const [, updateState] = useState();
-    // const forceUpdate = useCallback(() => updateState({}), []);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -103,13 +98,14 @@ function App(props) {
         if(updateComponents.SidebarHosts){
             updateComponents.SidebarHosts.update();
         }
-        // forceUpdate();
     }
 
     const getAndAddFile = (file, retries = 0) => {
         const fileExtension = getFileExtension(file);
         const resourceId = getFileResourceId(file);
         const host = getFileHost(file);
+
+        saveFile(resourceId, file); // save the metadata without filecontent
 
         let responsePromise;
         const isImage = fileExtension === "png" || fileExtension === "jpg";
@@ -118,9 +114,9 @@ function App(props) {
 
         responsePromise
         .then((res) => {
-            if(res.status === 200 && res.data) {
-                isImage ? saveFile(resourceId, {...file, fileContent: URL.createObjectURL(res.data) }) :
-                saveFile(resourceId, {...file, fileContent: res.data });
+            if(res.status === 200 && res.data && getFile(resourceId)) { // file could have been removed before completed
+                (isImage) ? saveFile(resourceId, {...file, fileContent: URL.createObjectURL(res.data) }) :
+                saveFile(resourceId, {...file, fileContent: res.data }); // save the filecontent
                 setTimeout(() => { updateComponents.Sidebar.update() }, 500);
             }
             else if(retries < 10)

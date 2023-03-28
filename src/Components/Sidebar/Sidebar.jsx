@@ -77,8 +77,8 @@ function Sidebar(props) {
                             files.map((file, index) => {
                                 return(
                                     <SidebarFile key={index}
-                                        filename = {getFileResourceLabel(file)}
-                                        filetype = {getFileExtension(file)}
+                                        // filename = {getFileResourceLabel(file)}
+                                        // filetype = {getFileExtension(file)}
                                         openPopup = {openPopup}
                                         popups = {popups}
                                         deleteFile = {deleteFile}

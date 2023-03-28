@@ -1,4 +1,5 @@
 .SidebarFile{
+    position: relative;
     width: 100%;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
@@ -20,7 +21,7 @@
 }
 
 .SidebarFile-flexContainer-left{
-    width: calc(100% - 1em);
+    width: calc(100% - 2em);
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -55,6 +56,26 @@
         transform: scale(1.02);
         cursor: pointer;
     }
+}
+
+
+.SpinnerModal{
+    position: absolute;
+    width: calc(100% - 2em);
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.5);
+}
+
+.LoadingSpinner-container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1em;
+    aspect-ratio: 1 / 1;
 }
 
 .SidebarFile-delete{

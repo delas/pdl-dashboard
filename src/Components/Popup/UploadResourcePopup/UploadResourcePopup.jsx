@@ -69,7 +69,8 @@ function UploadResourcePopup(props) {
             setIsLoading(true);
             sendFileToRepository(fileDestination.label, selectedFile, selectedFileType.value, fileDescription).then((res) => {
                 GetSingleFileMetadata(fileDestination.label, res.data).then((res) => {
-                    if(availableFileExtensions.includes(getFileExtension(res.data).toUpperCase())){
+                    if(availableFileExtensions.includes(getFileExtension(res.data).toUpperCase())
+                     && selectedFileType.value !== "EventLog"){
                         const reader = new FileReader();
                         reader.readAsText(selectedFile, 'UTF-8');
                         reader.onload = function (evt) {
@@ -96,6 +97,7 @@ function UploadResourcePopup(props) {
 
     const onRadioButtonChange = (value) => {
         setSelectedFileType(value);
+        console.log(value);
     }
 
     const onStreamBrokerLocationChange = (res) => {
