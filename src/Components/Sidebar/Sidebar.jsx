@@ -3,7 +3,7 @@ import Button from '../Widgets/Button/Button';
 import {useState, useEffect, useCallback} from 'react';
 import { FaCircle, FaCog, FaFileUpload, FaBuffer } from 'react-icons/fa';
 import SidebarFile from './SidebarFiles/SidebarFile';
-import { getAllFiles } from '../../Store/LocalDataStore';
+import { getAllFiles, getAllStatus } from '../../Store/LocalDataStore';
 import { getFileResourceId } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 
@@ -21,9 +21,14 @@ function Sidebar(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [files, setFiles] = useState([]);
+    const [statuses, setStatuses] = useState([]);
 
     const [, updateState] = useState();
-    const forceUpdate = useCallback(() =>{ updateState({}); setFiles(getAllFiles());}, []);
+    const forceUpdate = useCallback(() =>{ 
+        updateState({}); 
+        setFiles(getAllFiles());
+        setStatuses(getAllStatus());
+    }, []);
 
     useEffect(() => {
         setComponentUpdaterFunction("Sidebar", {update: forceUpdate});
@@ -32,7 +37,35 @@ function Sidebar(props) {
 
     useEffect(() => {
         setFiles(getAllFiles());
-    }, []);
+        setStatuses(getAllStatus());
+    }, []);    
+
+    const statusIconDisplayer = () => {
+        const uniqueStatus = getAllStatus().filter((x, i, a) => a.indexOf(x) === i)
+        if(uniqueStatus.includes('online') && uniqueStatus.includes('offline')){ // if both true and false are present
+            return <FaCircle className='Sidebar-status-icon-yellow'/>
+        } else if (uniqueStatus.includes('online') && !uniqueStatus.includes('offline')){ // if only true is present
+            return <FaCircle className='Sidebar-status-icon-green'/>
+        } else if (uniqueStatus.includes('offline') && !uniqueStatus.includes('online')){ // if only false is present
+            return <FaCircle className='Sidebar-status-icon-red'/>
+        } else if (uniqueStatus.length === 0){
+            return <FaCircle className='Sidebar-status-icon-grey'/>
+        }
+    }
+
+    const statusTextDisplayer = () => {
+        const uniqueStatus = getAllStatus().filter((x, i, a) => a.indexOf(x) === i)
+        if(uniqueStatus.includes('online') && uniqueStatus.includes('offline')){ // if both true and false are present
+            return <span>Some systems offline</span>
+        } else if (uniqueStatus.includes('online') && !uniqueStatus.includes('offline')){ // if only true is present
+            return <span>All systems online</span>
+        } else if (uniqueStatus.includes('offline') && !uniqueStatus.includes('online')){ // if only false is present
+            return <span>All systems offline</span>
+        } else if (uniqueStatus.length === 0){
+            return <span>No hosts connected</span>
+        }
+    }
+
 
     if(isLoading){
         return (
@@ -101,12 +134,13 @@ function Sidebar(props) {
                 <div className='Sidebar-flexContainer-status'>
                     <div className='Sidebar-status'>
                         <div className='Sidebar-status-icon'>
-                            <FaCircle/>
+                            {/* <FaCircle/> */}
+                            {statusIconDisplayer()}
                         </div>
                         <div className='Sidebar-status-text'>
-                            All systems online
+                            {/* All systems online */}
+                            {statusTextDisplayer()}
                         </div>
-
                     </div>
                 </div>
             </div>

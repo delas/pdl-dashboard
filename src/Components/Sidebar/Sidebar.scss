@@ -49,10 +49,28 @@
     justify-items: center;
 }
 
+
 .Sidebar-status-icon{
-    svg{
-        color: #28a745;;
+    &-green{
+        color: #28a745;
     }
+    &-yellow{
+        color: #b4b923;
+    }
+    &-red{
+        color: rgb(153, 0, 0);
+    }
+    &-grey{
+        color: #6c757d;
+    }
+}
+
+.Sidebar-status-icon-yellow{
+    color: #b4b923;
+}
+
+.Sidebar-status-icon-red{
+    color: rgb(153, 0, 0);
 }
 
 .Sidebar-status-text{

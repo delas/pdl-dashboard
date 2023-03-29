@@ -40,6 +40,19 @@ export function getServiceRegistries(){
     return getAllType("service registry");
 }
 
+export function getAllStatus() {
+    const minerStatus = getMiners().map((miner) => {
+        return miner.status;
+    });
+    const repositoryStatus = getRepositories().map((repository) => {
+        return repository.status;
+    });
+    const SRstatus = getServiceRegistries().map((serviceRegistry) => {
+        return serviceRegistry.status;
+    });
+    return [...minerStatus, ...repositoryStatus, ...SRstatus];
+}
+
 export function setStatus(id, status) {
     const host = Object.keys(localStorage).filter((key) => key === id);
     if(host.length > 0){

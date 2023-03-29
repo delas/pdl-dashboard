@@ -64,6 +64,9 @@ function App(props) {
                 if(updateComponents.SidebarHosts){
                     updateComponents.SidebarHosts.update();
                 }
+                if(updateComponents.Sidebar){
+                    updateComponents.Sidebar.update();
+                }
             });
         }, 10000);
     }, []);
