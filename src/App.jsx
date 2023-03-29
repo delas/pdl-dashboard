@@ -127,7 +127,9 @@ function App(props) {
         setTimeout(() => { updateComponents.Sidebar.update() }, 500);
 
         let responsePromise;
-        const isImage = fileExtension === "png" || fileExtension === "jpg";
+        const isImage = fileExtension.toUpperCase() === "PNG" 
+            || fileExtension.toUpperCase() === "JPG" 
+            || fileExtension.toUpperCase() === "SVG";
         if(shouldSetFileContent(file)){
             if(isImage) responsePromise = GetFileImage(host, resourceId);
             else responsePromise = GetFileText(host, resourceId); 
@@ -149,15 +151,6 @@ function App(props) {
                     setTimeout(() => { getAndAddFile(file, retries + 1); updateComponents.Sidebar.update() }, 6000);
             });
     }
-
-    // const addFile = (file) => {
-    //     const resourceId = getFileResourceId(file);
-    //     saveFile(resourceId, file);
-    //     setTimeout(() => {
-    //         if(updateComponents.Sidebar)
-    //         updateComponents.Sidebar.update();
-    //     }, 500);
-    // }
 
     const deleteFile = (id) => { //Deletes from local memory - not repository
         removeFile(id);

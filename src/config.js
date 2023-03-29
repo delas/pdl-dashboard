@@ -1,83 +1,43 @@
-// export default {
-//     availableVisualizations: [
-//         {
-//             FileExtension: "XES", 
-//             ResourceType: "EVENTLOG",
-//             Title: "Histogram",
-//         }, 
-//         {
-//             FileExtension: "PNML", 
-//             ResourceType: "PETRINET",
-//             Title: "Petri net",
-//         },
-//         {
-//             FileExtension: "BPMN",
-//             ResourceType: "PROCESSMODEL",
-//             Title: "BPMN",
-//         },
-//         {
-//             FileExtension: "DOT", 
-//             ResourceType: "GRAPH",
-//             Title: "Related resources",
-//         },
-//         {
-//             FileExtension: "JPG", 
-//             ResourceType: "IMAGE",
-//             Title: "Jpg image",
-//         },
-//         {
-//             FileExtension: "PNG", 
-//             ResourceType: "IMAGE",
-//             Title: "Png image",
-//         },
-//     ]
-// }
-
-export const availableVisualizations = ["EVENTLOG", "PETRINET", "PROCESSMODEL", "GRAPH", "IMAGE"]
-export const availableFileExtensions = ["XES", "PNML", "BPMN", "DOT", "JPG", "PNG", "CSV"]
+const imageType = [
+    {
+        ResourceType: "JPG",
+        Title: "JPG image",
+    },
+    {
+        ResourceType: "PNG",
+        Title: "PNG image",
+    },
+    {
+        ResourceType: "SVG",
+        Title: "SVG image",
+    },
+]
 
 export const config = {
-    XES: {
-        ResourceType: "EVENTLOG",
-        Visualizations: [
+    EVENTLOG: {
+        XES: [
             {
-                ResourceType: "HISTOGRAM",
                 Title: "Histogram",
+                ResourceType: "HISTOGRAM",
             },
             {
                 ResourceType: "DOT",
                 Title: "Related resources",
             },
-            {
-                ResourceType: "JPG",
-                Title: "JPG image",
-            },
-            {
-                ResourceType: "PNG",
-                Title: "PNG image",
-            },
+            ...imageType,
         ]
     },
-    PNML: {
-        ResourceType: "PETRINET",
-        Visualizations: [
+    PETRINET: {
+        PNML: [
             {
                 ResourceType: "DOT",
                 Title: "Related resources",
             },
-            {
-                ResourceType: "JPG",
-                Title: "JPG image",
-            },
-            {
-                ResourceType: "PNG",
-                Title: "PNG image",
-            },
+            ...imageType,
         ]
     },
-    BPMN: {
-        ResourceType: "BPMN",
-        Visualizations: [
+    PROCESSMODEL: {
+        BPMN: [
             {
                 ResourceType: "BPMN",
                 Title: "BPMN",
@@ -86,20 +46,26 @@ export const config = {
                 ResourceType: "DOT",
                 Title: "Related resources",
             },
-            {
-                ResourceType: "JPG",
-                Title: "JPG image",
-            },
-            {
-                ResourceType: "PNG",
-                Title: "PNG image",
-            },
+            ...imageType,
         ]
     },
-    CSV: {
-        ResourceType: "EVENTLOG",
-        Visualizations: [
-            
-        ]
-    },
-};
+}
+
+export const isResourceTypeAndFileExtension = (resourceType, fileExtension) => {
+    return Object.keys(config).includes(resourceType) 
+    && Object.keys(config[resourceType]).includes(fileExtension);
+}
+
+export const getAvailableFileExtensions = (resourceType) => {
+    return Object.keys(config[resourceType]);
+}
+
+export const getAvailableResourceTypes = () => {
+    return Object.keys(config);
+}
+
+export const getAllAvailableFileExtensions = () => {
+    return Object.keys(config).reduce((acc, resourceType) => {
+        return [...acc, ...Object.keys(config[resourceType])];
+    }, []);
+}
