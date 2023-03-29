@@ -51,21 +51,25 @@ export const config = {
     },
 }
 
-export const isResourceTypeAndFileExtension = (resourceType, fileExtension) => {
-    return Object.keys(config).includes(resourceType) 
-    && Object.keys(config[resourceType]).includes(fileExtension);
+export const getAvailableResourceTypes = () => {
+    return Object.keys(config);
+}
+
+export const getAllAvailableFileExtensions = () => {
+    return getAvailableResourceTypes().reduce((acc, resourceType) => {
+        return [...acc, ...getAvailableFileExtensions(resourceType) ];
+    }, []);
+}
+
+export const getVisalizations = (resourceType, fileExtension) => {
+    if(resourceType) return config[resourceType][fileExtension];
 }
 
 export const getAvailableFileExtensions = (resourceType) => {
     return Object.keys(config[resourceType]);
 }
 
-export const getAvailableResourceTypes = () => {
-    return Object.keys(config);
-}
-
-export const getAllAvailableFileExtensions = () => {
-    return Object.keys(config).reduce((acc, resourceType) => {
-        return [...acc, ...Object.keys(config[resourceType])];
-    }, []);
+export const isResourceTypeAndFileExtension = (resourceType, fileExtension) => {
+    return getAvailableResourceTypes().includes(resourceType) 
+    && getAvailableFileExtensions(resourceType).includes(fileExtension);
 }

@@ -6,9 +6,9 @@ import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
 import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
 import ResourceGraph from './ResourceGraph/ResourceGraph';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
-import { getFileExtension } from '../../Utils/FileUnpackHelper';
+import { getFileExtension, getFileResourceType } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
-import {config} from '../../config';
+import {config, getVisalizations} from '../../config';
 
 function Visualizations(props) {
     const {
@@ -37,9 +37,7 @@ function Visualizations(props) {
     }
 
     const generateTabList = (file) => {
-        if(file) return config[getFileExtension(file).toUpperCase()].Visualizations.map((visualization) => {
-            return visualization;
-        });
+        if(file) return getVisalizations(getFileResourceType(file).toUpperCase(), getFileExtension(file).toUpperCase());       
     }
 
     if(isLoading){
