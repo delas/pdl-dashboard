@@ -1,6 +1,8 @@
 import './ImageVisualizer.scss';
 import {useState, useEffect} from 'react';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
+import { GetFileImage } from '../../../Services/RepositoryServices';
+import { getFileHost, getFileResourceId } from '../../../Utils/FileUnpackHelper';
 
 function ImageVisualizer(props) {
     const {
@@ -8,8 +10,15 @@ function ImageVisualizer(props) {
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
+    const [image, setImage] = useState(null);
 
     useEffect(() => {
+        const resourceId = getFileResourceId(file);
+        const host = getFileHost(file);
+        GetFileImage(host, resourceId).then((res) => {
+            console.log(res.data)
+            setImage(res.data);
+        });
         setIsLoading(false);
     }, []);
 

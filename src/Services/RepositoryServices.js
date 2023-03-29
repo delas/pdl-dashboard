@@ -25,6 +25,11 @@ export async function GetFileText(hostname, fileId){ //If the visualization is t
     return axios.get(`${hostname}${urlExtension}`);
 }
 
+export async function GetHistogramOfLog(hostname, fileId){
+    const urlExtension = `histograms/${fileId}`;
+    return axios.get(`${hostname}${urlExtension}`);
+}
+
 export async function GetRepositoryConfig(hostname) {
     const urlExtension = "/configurations";
     return axios.get(`${hostname}${urlExtension}`);

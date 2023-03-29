@@ -1,9 +1,9 @@
 import './SidebarFile.scss';
 import {useState, useEffect} from 'react';
 import { FaTrash } from 'react-icons/fa';
-import { getFile } from '../../Store/LocalDataStore';
-import { getFileExtension, getFileResourceLabel, getFileContent } from '../../Utils/FileUnpackHelper';
-import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
+import { getFile } from '../../../Store/LocalDataStore';
+import { getFileExtension, getFileResourceLabel, getFileContent } from '../../../Utils/FileUnpackHelper';
+import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function SidebarFile(props) {
 

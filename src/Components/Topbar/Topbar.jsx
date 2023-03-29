@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import { Link } from "react-router-dom";
 import Logo from '../../Assets/logo';
 import dtuImg from '../../Assets/dtu.png';
-import Button from '../Button/Button';
+import Button from '../Widgets/Button/Button';
 import {FaAngleRight, FaAngleLeft} from 'react-icons/fa';
 
 function Topbar(props) {

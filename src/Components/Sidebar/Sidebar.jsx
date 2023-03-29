@@ -1,8 +1,8 @@
 import './Sidebar.scss';
-import Button from '../Button/Button';
+import Button from '../Widgets/Button/Button';
 import {useState, useEffect, useCallback} from 'react';
 import { FaCircle, FaCog, FaFileUpload, FaBuffer } from 'react-icons/fa';
-import SidebarFile from '../SidebarFiles/SidebarFile';
+import SidebarFile from './SidebarFiles/SidebarFile';
 import { getAllFiles } from '../../Store/LocalDataStore';
 import { getFileResourceId } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';

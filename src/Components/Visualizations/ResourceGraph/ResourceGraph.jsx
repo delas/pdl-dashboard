@@ -43,7 +43,7 @@ function ResourceGraph(props) {
         return (
             <div className="ResourceGraph">
                 <div>Error loading graph</div>
-                <div>{error}</div>
+                <div>{`${error.response.statusText} ${error.response.status}`}</div>
             </div>
         )
     }

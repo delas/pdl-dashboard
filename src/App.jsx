@@ -12,14 +12,16 @@ import { getFileExtension, getFileHost, getFileResourceId } from './Utils/FileUn
 
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [sidebarHostsOpen, setSidebarHostsOpen] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false); // Is sidebar open
+    const [sidebarHostsOpen, setSidebarHostsOpen] = useState(false); // Is sidebarhost open
+    const [updateComponents, setUpdateComponents] = useState([]); // force rerender child components
+
+    // --------------- Is Popup open ----------------
     const [filePopupOpen, setFilePopupOpen] = useState(false);
     const [actionPopupOpen, setActionPopupOpen] = useState(false);
     const [newHostPopupOpen, setNewHostPopupOpen] = useState(false);
     const [newHostFromSROpen, setNewHostFromSRPopupOpen] = useState(false);
-    const [GetFilePopupOpen, setGetFilePopupOpen] = useState(false);
-    const [updateComponents, setUpdateComponents] = useState([]); // force rerender child components
+    const [GetFilePopupOpen, setGetFilePopupOpen] = useState(false);   
 
     let pingInterval = useRef(null);
 
@@ -128,21 +130,21 @@ function App(props) {
             else responsePromise = GetFileText(host, resourceId); 
         }
         if(responsePromise)
-        responsePromise
-        .then((res) => {
-            if(res.status === 200 && res.data && getFile(resourceId)) { // file could have been removed before completed
-                (isImage) ? 
-                saveFile(resourceId, {...file, fileContent: URL.createObjectURL(res.data) }) :
-                saveFile(resourceId, {...file, fileContent: res.data }); // save the filecontent
-                setTimeout(() => { updateComponents.Sidebar.update() }, 500);
-            }
-            else if(retries < 10)
-                setTimeout(() => { getAndAddFile(file, retries + 1); updateComponents.Sidebar.update() }, 6000);
-        })
-        .catch((e) => {
-            if(retries < 10)
-                setTimeout(() => { getAndAddFile(file, retries + 1); updateComponents.Sidebar.update() }, 6000);
-        });
+            responsePromise
+            .then((res) => {
+                if(res.status === 200 && res.data && getFile(resourceId)) { // file could have been removed before completed
+                    (isImage) ? 
+                    saveFile(resourceId, {...file, fileContent: URL.createObjectURL(res.data) }) :
+                    saveFile(resourceId, {...file, fileContent: res.data }); // save the filecontent
+                    setTimeout(() => { updateComponents.Sidebar.update() }, 500);
+                }
+                else if(retries < 10)
+                    setTimeout(() => { getAndAddFile(file, retries + 1); updateComponents.Sidebar.update() }, 6000);
+            })
+            .catch((e) => {
+                if(retries < 10)
+                    setTimeout(() => { getAndAddFile(file, retries + 1); updateComponents.Sidebar.update() }, 6000);
+            });
     }
 
     // const addFile = (file) => {
