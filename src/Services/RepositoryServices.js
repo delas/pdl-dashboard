@@ -31,7 +31,7 @@ export async function GetRepositoryConfig(hostname) {
 }
 
 export async function GetResourceGraph(hostname, fileId){
-    const urlExtension = `graph/${fileId}`;
+    const urlExtension = `graphs/${fileId}`;
     return axios.get(`${hostname}${urlExtension}`);
 }
 

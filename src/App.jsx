@@ -104,6 +104,11 @@ function App(props) {
         const fileExtension = getFileExtension(file);
         switch(fileExtension.toUpperCase()){
             case "XES": return false;
+            case "BPMN": return true;
+            case "PNG": return true;
+            case "JPG": return true;
+            case "DOT": return true;
+            case "PNML": return true;
             default: return true;
         }
     }

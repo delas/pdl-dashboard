@@ -2,7 +2,7 @@ import './SidebarFile.scss';
 import {useState, useEffect} from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { getFile } from '../../Store/LocalDataStore';
-import { getFileExtension, getFileResourceLabel } from '../../Utils/FileUnpackHelper';
+import { getFileExtension, getFileResourceLabel, getFileContent } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 
 function SidebarFile(props) {
@@ -27,12 +27,13 @@ function SidebarFile(props) {
             setFile(tempFile);
         }
         if(tempFile && shouldSetFileContent(tempFile)){
-            if(!tempFile.fileContent){
+            if(!getFileContent(tempFile)){
                 setFileContentLoading(true);
                 setTimeout(() => {getFileAndCheckContents()}, 1000);
+            } else {
+                setFileContentLoading(false);
             }
-        }
-        else {
+        } else {
             setFileContentLoading(false);
         }
     }
