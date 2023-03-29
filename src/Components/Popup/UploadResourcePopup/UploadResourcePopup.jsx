@@ -98,7 +98,6 @@ function UploadResourcePopup(props) {
 
     const onRadioButtonChange = (value) => {
         setSelectedFileType(value);
-        console.log(value);
     }
 
     const onStreamBrokerLocationChange = (res) => {

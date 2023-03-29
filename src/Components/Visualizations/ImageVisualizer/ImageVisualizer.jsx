@@ -16,11 +16,10 @@ function ImageVisualizer(props) {
         const resourceId = getFileResourceId(file);
         const host = getFileHost(file);
         GetFileImage(host, resourceId).then((res) => {
-            console.log(res.data)
             setImage(res.data);
         });
         setIsLoading(false);
-    }, []);
+    }, [file]);
 
     if(isLoading){
         return (

@@ -20,7 +20,7 @@ function BPMNVisualizer(props) {
     useEffect(() => {
         setModeler(<BPMNComponent file = {file} />)
         setIsLoading(false);
-    }, []);
+    }, [file]);
 
     if(isLoading){
         return (

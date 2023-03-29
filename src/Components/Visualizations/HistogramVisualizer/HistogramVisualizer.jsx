@@ -1,9 +1,9 @@
 import './HistogramVisualizer.scss';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 // import Histogram from 'react-chart-histogram';
 import { Chart } from "react-google-charts";
 import {GetFileText, GetHistogramOfLog} from '../../../Services/RepositoryServices';
-import { getFileResourceLabel, getFileResourceType, getFileResourceId, getFileHost } from '../../../Utils/FileUnpackHelper';
+import { getFileResourceLabel, getFileResourceType, getFileResourceId, getFileHost, getFileContent } from '../../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function HistogramVisualizer(props) {
@@ -17,20 +17,26 @@ function HistogramVisualizer(props) {
 
     useEffect(() => {
         if(getFileResourceType(file) === 'EventStream'){
-            setIsLoading(false);
             setInterval(() => {
-                GetFileText().then( res => setFileContent(res.data) )
+                setHistogramOfLog();
             }, 500)
         }
         else{
-            GetHistogramOfLog(getFileHost(file), getFileResourceId(file))
-                .then((res) => {
-                    setFileContent(convertFileContentToHistogramData(res.data));
-                    setIsLoading(false);
-                })
-                .catch((err) => { setError(err); setIsLoading(false);})
+            setHistogramOfLog();
         }
-    }, []);
+    }, [file]);
+
+    const setHistogramOfLog = async () => {
+        GetHistogramOfLog(getFileHost(file), getFileResourceId(file))
+            .then((res) => {
+                setFileContent(convertFileContentToHistogramData(res.data));
+                setIsLoading(false);
+            })
+            .catch((err) => { 
+                setError(err); 
+                setIsLoading(false);
+            })
+    }
 
     const convertFileContentToHistogramData = (fileContent) => {
         let data = [["Events", "Occurances"]];
