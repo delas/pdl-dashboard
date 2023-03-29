@@ -11,6 +11,7 @@ function SidebarFile(props) {
         fileId,
         deleteFile,
         selectFileForVisualization,
+        shouldSetFileContent,
     } = props;
 
     const [fileContentLoading, setFileContentLoading] = useState(true);
@@ -25,10 +26,13 @@ function SidebarFile(props) {
         if(tempFile){
             setFile(tempFile);
         }
-        if(!tempFile.fileContent){
-            setFileContentLoading(true);
-            setTimeout(() => {getFileAndCheckContents()}, 1000);
-        } else {
+        if(tempFile && shouldSetFileContent(tempFile)){
+            if(!tempFile.fileContent){
+                setFileContentLoading(true);
+                setTimeout(() => {getFileAndCheckContents()}, 1000);
+            }
+        }
+        else {
             setFileContentLoading(false);
         }
     }
@@ -36,7 +40,9 @@ function SidebarFile(props) {
     if(!file){
         return (
             <div className="SidebarFile">
-                <LoadingSpinner loading={true}/>
+                <div className='Spinner-container-s'>
+                    <LoadingSpinner loading={true}/>
+                </div>
             </div>
         )
     }
@@ -48,10 +54,7 @@ function SidebarFile(props) {
                     <div className='SidebarFile-filetype'>
                         {getFileExtension(file)}
                     </div>
-                    <div className='SidebarFile-filename' 
-                        // onClick = {() => { openPopup(popups.AddNewHostPopup, {repository: {}}) }}
-                        onClick = {() => {selectFileForVisualization(fileId)}}
-                    >
+                    <div className='SidebarFile-filename' onClick = {() => {selectFileForVisualization(fileId)}} >
                         {getFileResourceLabel(file)}
                     </div>
                 </div>
@@ -60,7 +63,7 @@ function SidebarFile(props) {
                     <FaTrash/>
                 </div>
             </div>
-            {!file.fileContent && 
+            {fileContentLoading && // Show spinner if file content is loading
             <div className='SpinnerModal'>
                 <div className='LoadingSpinner-container'>
                     <LoadingSpinner loading={fileContentLoading}/>

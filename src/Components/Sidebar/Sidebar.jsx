@@ -4,10 +4,8 @@ import {useState, useEffect, useCallback} from 'react';
 import { FaCircle, FaCog, FaFileUpload, FaBuffer } from 'react-icons/fa';
 import SidebarFile from '../SidebarFiles/SidebarFile';
 import { getAllFiles } from '../../Store/LocalDataStore';
-// import { GetFile } from '../../Services/RepositoryServices';
-import { getFilesOfType } from '../../Store/LocalDataStore'
-import { type } from '@testing-library/user-event/dist/type';
-import { getFileExtension, getFileResourceId, getFileResourceLabel } from '../../Utils/FileUnpackHelper';
+import { getFileResourceId } from '../../Utils/FileUnpackHelper';
+import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 
 function Sidebar(props) {
 
@@ -17,11 +15,11 @@ function Sidebar(props) {
         deleteFile,
         selectFileForVisualization,
         // setUpdateSidebar
+        shouldSetFileContent,
         setComponentUpdaterFunction,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-    const [isFilesLoading, setIsFilesLoading] = useState(true);
     const [files, setFiles] = useState([]);
 
     const [, updateState] = useState();
@@ -34,13 +32,14 @@ function Sidebar(props) {
 
     useEffect(() => {
         setFiles(getAllFiles());
-        setIsFilesLoading(false);
     }, []);
 
     if(isLoading){
         return (
             <div className="Sidebar">
-                <div>Loading ...</div>
+                <div className='Spinner-container-l'>
+                    <LoadingSpinner loading={isLoading}/>
+                </div>
             </div>
         )
     }
@@ -75,15 +74,15 @@ function Sidebar(props) {
                     <div className='Sidebar-flexContainer-files'>
                         {
                             files.map((file, index) => {
+                                const fileId = getFileResourceId(file);
                                 return(
                                     <SidebarFile key={index}
-                                        // filename = {getFileResourceLabel(file)}
-                                        // filetype = {getFileExtension(file)}
                                         openPopup = {openPopup}
                                         popups = {popups}
                                         deleteFile = {deleteFile}
-                                        fileId = {getFileResourceId(file)}
+                                        fileId = {fileId}
                                         selectFileForVisualization = {selectFileForVisualization}
+                                        shouldSetFileContent = {shouldSetFileContent}
                                     />
                                 )
                             })

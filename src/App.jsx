@@ -100,22 +100,34 @@ function App(props) {
         }
     }
 
+    const shouldSetFileContent = (file) => {
+        const fileExtension = getFileExtension(file);
+        switch(fileExtension.toUpperCase()){
+            case "XES": return false;
+            default: return true;
+        }
+    }
+
     const getAndAddFile = (file, retries = 0) => {
         const fileExtension = getFileExtension(file);
         const resourceId = getFileResourceId(file);
         const host = getFileHost(file);
 
         saveFile(resourceId, file); // save the metadata without filecontent
+        setTimeout(() => { updateComponents.Sidebar.update() }, 500);
 
         let responsePromise;
         const isImage = fileExtension === "png" || fileExtension === "jpg";
-        isImage ? responsePromise = GetFileImage(host, resourceId) 
-        : responsePromise = GetFileText(host, resourceId);
-
+        if(shouldSetFileContent(file)){
+            if(isImage) responsePromise = GetFileImage(host, resourceId);
+            else responsePromise = GetFileText(host, resourceId); 
+        }
+        if(responsePromise)
         responsePromise
         .then((res) => {
             if(res.status === 200 && res.data && getFile(resourceId)) { // file could have been removed before completed
-                (isImage) ? saveFile(resourceId, {...file, fileContent: URL.createObjectURL(res.data) }) :
+                (isImage) ? 
+                saveFile(resourceId, {...file, fileContent: URL.createObjectURL(res.data) }) :
                 saveFile(resourceId, {...file, fileContent: res.data }); // save the filecontent
                 setTimeout(() => { updateComponents.Sidebar.update() }, 500);
             }
@@ -128,14 +140,14 @@ function App(props) {
         });
     }
 
-    const addFile = (file) => {
-        const resourceId = getFileResourceId(file);
-        saveFile(resourceId, file);
-        setTimeout(() => {
-            if(updateComponents.Sidebar)
-            updateComponents.Sidebar.update();
-        }, 500);
-    }
+    // const addFile = (file) => {
+    //     const resourceId = getFileResourceId(file);
+    //     saveFile(resourceId, file);
+    //     setTimeout(() => {
+    //         if(updateComponents.Sidebar)
+    //         updateComponents.Sidebar.update();
+    //     }, 500);
+    // }
 
     const deleteFile = (id) => { //Deletes from local memory - not repository
         removeFile(id);
@@ -159,8 +171,8 @@ function App(props) {
                 removeHost = {deleteHost}
                 getAndAddFile = {getAndAddFile}
                 deleteFile = {deleteFile}
-                addFile = {addFile}
                 updateComponents = {updateComponents}
+                shouldSetFileContent = {shouldSetFileContent}
                 toggles = {{
                     toggleSidebar: toggleSidebar,
                     toggleSidebarHosts: toggleSidebarHosts,

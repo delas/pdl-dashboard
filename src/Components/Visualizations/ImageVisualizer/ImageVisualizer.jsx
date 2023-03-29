@@ -16,7 +16,7 @@ function ImageVisualizer(props) {
     if(isLoading){
         return (
             <div className="ImageVisualizer">
-                <div className='Spinner-container'>
+                <div className='Spinner-container-l'>
                     <LoadingSpinner loading={isLoading}/>
                 </div>
             </div>

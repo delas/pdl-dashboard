@@ -25,8 +25,9 @@ function Home(props) {
         removeHost,
         getAndAddFile,
         deleteFile,
-        addFile,
-        updateComponents
+        // addFile,
+        updateComponents,
+        shouldSetFileContent,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -147,6 +148,7 @@ function Home(props) {
                             deleteFile = {deleteFile}
                             selectFileForVisualization = {selectFileForVisualization}
                             // setUpdateSidebar= {set.setUpdateSidebar}
+                            shouldSetFileContent = {shouldSetFileContent}
                             setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
                         />
                     </div>
@@ -180,7 +182,8 @@ function Home(props) {
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
-                        addFile = {addFile}
+                        // addFile = {addFile}
+                        getAndAddFile = {getAndAddFile}
                     />
                     : null
                 }

@@ -17,7 +17,7 @@ function PNMLVisualizer(props) {
     if(isLoading){
         return (
             <div className="PNMLVisualizer">
-                <div className='Spinner-container'>
+                <div className='Spinner-container-l'>
                     <LoadingSpinner loading={isLoading}/>
                 </div>
             </div>

@@ -45,7 +45,7 @@ function Visualizations(props) {
     if(isLoading){
         return (
             <div className="Visualizations-loader">
-                <div className='Spinner-container'>
+                <div className='Spinner-container-l'>
                     <LoadingSpinner loading={isLoading}/>
                 </div>
             </div>

@@ -27,7 +27,7 @@ function HistogramVisualizer(props) {
     if(isLoading){
         return (
             <div className="HistogramVisualizer">
-                <div className='Spinner-container'>
+                <div className='Spinner-container-l'>
                     <LoadingSpinner loading={isLoading}/>
                 </div>
             </div>

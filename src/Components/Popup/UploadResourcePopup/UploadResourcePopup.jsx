@@ -17,7 +17,8 @@ function UploadResourcePopup(props) {
     const {
         toggleFilePopupOpen,
         repository = {},
-        addFile,
+        // addFile,
+        getAndAddFile,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -69,16 +70,16 @@ function UploadResourcePopup(props) {
             setIsLoading(true);
             sendFileToRepository(fileDestination.label, selectedFile, selectedFileType.value, fileDescription).then((res) => {
                 GetSingleFileMetadata(fileDestination.label, res.data).then((res) => {
-                    if(availableFileExtensions.includes(getFileExtension(res.data).toUpperCase())
-                     && selectedFileType.value !== "EventLog"){
-                        const reader = new FileReader();
-                        reader.readAsText(selectedFile, 'UTF-8');
-                        reader.onload = function (evt) {
-                            addFile({...res.data, fileContent: evt.target.result})
-                        }
-                    } else {
-                        addFile({...res.data, fileContent: null});
-                    }
+                    // if(availableFileExtensions.includes(getFileExtension(res.data).toUpperCase())){
+                        // const reader = new FileReader();
+                        // reader.readAsText(selectedFile, 'UTF-8');
+                        // reader.onload = function (evt) {
+                            // getAndAddFile({res.data, fileContent: evt.target.result})
+                        // }
+                        getAndAddFile(res.data);
+                    // } else {
+                    //     getAndAddFile({...res.data, fileContent: null});
+                    // }
                 });
             })
             .then(() => {toggleFilePopupOpen(); setIsLoading(false);})
