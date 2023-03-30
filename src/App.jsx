@@ -138,9 +138,12 @@ function App(props) {
             responsePromise
             .then((res) => {
                 if(res.status === 200 && res.data && getFile(resourceId)) { // file could have been removed before completed
-                    (isImage) ? 
-                    saveFile(resourceId, {...file, fileContent: URL.createObjectURL(res.data) }) :
-                    saveFile(resourceId, {...file, fileContent: res.data }); // save the filecontent
+                    if (isImage) { 
+                        console.log(res.data);
+                        saveFile(resourceId, {...file, fileContent: URL.createObjectURL(res.data) })
+                    } else {
+                        saveFile(resourceId, {...file, fileContent: res.data }); // save the filecontent
+                    }
                     setTimeout(() => { updateComponents.Sidebar.update() }, 500);
                 }
                 else if(retries < 10)

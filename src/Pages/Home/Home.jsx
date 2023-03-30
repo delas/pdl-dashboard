@@ -154,7 +154,7 @@ function Home(props) {
                     </div>
 
                     {visualizationsFile && 
-                        <div className='Home-Content-visualizations-container'>
+                        <div className={`Home-Content-visualizations-container Home-Content-visualizations-container${isOpen.sidebarOpen ? "-sidebaropen" : "-sidebarclosed"}`}>
                             <Visualizations
                                 file = {visualizationsFile}
                                 setComponentUpdaterFunction = {set.setComponentUpdaterFunction}

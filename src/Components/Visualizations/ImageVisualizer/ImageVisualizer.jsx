@@ -2,7 +2,7 @@ import './ImageVisualizer.scss';
 import {useState, useEffect} from 'react';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import { GetFileImage } from '../../../Services/RepositoryServices';
-import { getFileHost, getFileResourceId } from '../../../Utils/FileUnpackHelper';
+import { getFileContent, getFileHost, getFileResourceId } from '../../../Utils/FileUnpackHelper';
 
 function ImageVisualizer(props) {
     const {
@@ -15,10 +15,19 @@ function ImageVisualizer(props) {
     useEffect(() => {
         const resourceId = getFileResourceId(file);
         const host = getFileHost(file);
-        GetFileImage(host, resourceId).then((res) => {
-            setImage(res.data);
-        });
-        setIsLoading(false);
+        if(file && getFileContent(file)){
+            setImage(file.fileContent);
+            console.log("setting image")
+            setIsLoading(false);
+        } else {
+            GetFileImage(host, resourceId).then((res) => {
+                setImage(res.data);
+                setIsLoading(false);
+            }).catch((err) => {
+                setIsLoading(false);
+            });
+        }
+        
     }, [file]);
 
     if(isLoading){
@@ -33,7 +42,7 @@ function ImageVisualizer(props) {
 
     return (
         <div className="ImageVisualizer">
-            <img src="" alt=""/>
+            <img src={image} alt="Image"/>
         </div>
     )
 }

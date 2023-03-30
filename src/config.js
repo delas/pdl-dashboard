@@ -1,17 +1,72 @@
-const imageType = [
-    {
-        ResourceType: "JPG",
-        Title: "JPG image",
-    },
-    {
-        ResourceType: "PNG",
-        Title: "PNG image",
-    },
-    {
-        ResourceType: "SVG",
-        Title: "SVG image",
-    },
-]
+// export const displayTypes = {
+//     HISTOGRAM: {
+//         Title: "Histogram",
+//         ResourceTypes: [
+//             "HISTOGRAM",
+//         ],
+//     },
+//     GRAPH: {
+//         Title: "Related resources",
+//         ResourceTypes: [
+//             "DOT",
+//         ],
+//     },
+//     PROCESSMODEL: {
+//         Title: "Process model",
+//         ResourceTypes: [
+//             "BPMN",
+//             "DOT",
+//             "SVG",
+//             "PNG",
+//             "JPG",
+//         ],
+//     },
+//     PETRINET: {
+//         Title: "Petri net",
+//         ResourceTypes: [
+//             "SVG",
+//             "PNG",
+//             "JPG",
+//         ],
+//     },
+// }
+
+// export const resourceTypesCanGet = {
+//     EVENTLOG: {
+//         HISTOGRAM: displayTypes.HISTOGRAM,
+//         RELATEDRESOURCES: displayTypes.GRAPH,
+//     },
+//     PROCESSMODEL: {
+//         PROCESSMODEL: displayTypes.PROCESSMODEL,
+//         RELATEDRESOURCES: displayTypes.GRAPH,
+//     },
+//     PETRINET: {
+//         PETRINET: displayTypes.PETRINET,
+//         RELATEDRESOURCES: displayTypes.GRAPH,
+//     },
+// }
+
+// export const getAvailableVisualizations = (resourceType) => {
+//     return resourceTypesCanGet[resourceType];
+// }
+
+// export const getAvailableResourceType = (resourceType) => {
+//     return resourceTypesCanGet[resourceType];
+// }
+
+// export const getAvailableFileTypes = () => {
+//     return Object.keys(displayTypes).map((key) => { // will extract the resourcetypes arrays
+//         return displayTypes[key].ResourceTypes;
+//     })
+//     .reduce((acc, val) => acc.concat(val), []) // will combine the arrays
+//     .filter((v, i, a) => a.indexOf(v) === i); // will remove duplicates
+// }
+
+// export const getAvailableResourceTypes = () => {
+//     return Object.keys(resourceTypesCanGet);
+// }
+
+// console.log(getAvailableResourceTypes());
 
 export const config = {
     EVENTLOG: {
@@ -24,7 +79,6 @@ export const config = {
                 ResourceType: "DOT",
                 Title: "Related resources",
             },
-            ...imageType,
         ]
     },
     PETRINET: {
@@ -33,7 +87,36 @@ export const config = {
                 ResourceType: "DOT",
                 Title: "Related resources",
             },
-            ...imageType,
+        ],
+        SVG: [
+            {
+                ResourceType: "IMAGE",
+                Title: "Petri net",
+            },
+            {
+                ResourceType: "DOT",
+                Title: "Related resources",
+            },
+        ],
+        JPG: [
+            {
+                ResourceType: "IMAGE",
+                Title: "Petri net",
+            },
+            {
+                ResourceType: "DOT",
+                Title: "Related resources",
+            },
+        ],
+        PNG: [
+            {
+                ResourceType: "IMAGE",
+                Title: "Petri net",
+            },
+            {
+                ResourceType: "DOT",
+                Title: "Related resources",
+            },
         ]
     },
     PROCESSMODEL: {
@@ -46,7 +129,36 @@ export const config = {
                 ResourceType: "DOT",
                 Title: "Related resources",
             },
-            ...imageType,
+        ],
+        SVG: [
+            {
+                ResourceType: "IMAGE",
+                Title: "BPMN",
+            },
+            {
+                ResourceType: "DOT",
+                Title: "Related resources",
+            },
+        ],
+        JPG: [
+            {
+                ResourceType: "IMAGE",
+                Title: "BPMN",
+            },
+            {
+                ResourceType: "DOT",
+                Title: "Related resources",
+            },
+        ],
+        PNG: [
+            {
+                ResourceType: "IMAGE",
+                Title: "BPMN",
+            },
+            {
+                ResourceType: "DOT",
+                Title: "Related resources",
+            },
         ]
     },
 }

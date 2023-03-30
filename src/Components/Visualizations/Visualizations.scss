@@ -11,6 +11,17 @@ $tab-height: 3em;
     align-items: center;
 }
 
+.Visualizations-header{
+    width: 100%;
+    max-width: 100%;
+    overflow: none;
+    height: 3em;
+    text-align: left;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+    white-space: nowrap;
+}
+
 .Visualizations-tabsContainer{
     width: 100%;
     height: $tab-height;

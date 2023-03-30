@@ -6,7 +6,7 @@ import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
 import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
 import ResourceGraph from './ResourceGraph/ResourceGraph';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
-import { getFileExtension, getFileResourceType } from '../../Utils/FileUnpackHelper';
+import { getFileDescription, getFileExtension, getFileResourceLabel, getFileResourceType } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 import {config, getVisalizations} from '../../config';
 
@@ -59,13 +59,16 @@ function Visualizations(props) {
                     tablist = {tabList}
                 />
             </div>
+            <div className='Visualizations-header'>
+                <b>{`${getFileResourceLabel(file)}:`}</b>{`${getFileDescription(file)}`}
+            </div>
             {selectedTab &&
                 <div className='Visualizations-VisualizerContainer'>
-                    {(selectedTab.ResourceType === "BPMN") && <BPMNVisualizer file = {fileToDisplay}/>}
+                    {(selectedTab.ResourceType === "BPMN")      && <BPMNVisualizer file = {fileToDisplay}/>}
                     {(selectedTab.ResourceType === "HISTOGRAM") && <HistogramVisualizer file = {fileToDisplay}/>}
-                    {(selectedTab.ResourceType === "PNML") && <PNMLVisualizer file = {fileToDisplay}/>}
-                    {(selectedTab.ResourceType === "DOT") && <ResourceGraph file = {fileToDisplay}/>}
-                    {(selectedTab.ResourceType === "PNG" || selectedTab.ResourceType === "JPG" || fileExtension.ResourceType === "SVG") && <ImageVisualizer file = {fileToDisplay}/>}
+                    {(selectedTab.ResourceType === "PNML")      && <PNMLVisualizer file = {fileToDisplay}/>}
+                    {(selectedTab.ResourceType === "DOT")       && <ResourceGraph file = {fileToDisplay}/>}
+                    {(selectedTab.ResourceType === "IMAGE")     && <ImageVisualizer file = {fileToDisplay}/>}
                 </div>
             }
         </div>

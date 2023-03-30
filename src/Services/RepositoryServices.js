@@ -16,7 +16,8 @@ export async function GetSingleFileMetadata(hostname, fileId){
 }
 
 export async function getChildrenFromFile(hostname, fileId){
-    const urlExtension = `/resources/metadata/${fileId}/fe960d94-5928-4463-b0f8-c59072b5d449`;
+    const urlExtension = `metadata/${fileId}/children`;
+    console.log(`${hostname}${urlExtension}`);
     return axios.get(`${hostname}${urlExtension}`);
 }
 

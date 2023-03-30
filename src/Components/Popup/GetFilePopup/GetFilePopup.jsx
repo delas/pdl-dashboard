@@ -36,6 +36,7 @@ function GetFilePopup(props) {
     useEffect(() => {
         if(selectedRepository){
             const repositoryUrl = selectedRepository.label;
+            console.log(getAvailableResourceTypes());
             GetRepositoryFilterMetadata(repositoryUrl, getAvailableResourceTypes()).then(res => {
                 setFilesForDropdown(convertFilesToDropdown(res.data));
             });

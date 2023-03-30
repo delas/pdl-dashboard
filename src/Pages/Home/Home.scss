@@ -1,9 +1,8 @@
 $Topbar-height: 7vh;
-$Sidebar-width: 25%;
+$Sidebar-width: 20em;
 
 .Home{
     height: 100%;
-    // overflow-y: hidden;
 }
 
 .Home-PageLayout{
@@ -38,27 +37,12 @@ $Sidebar-width: 25%;
     }
 }
 
-// .Home-Content{
-//     transition: width 0.3s ease-in-out;
-//     &-sidebaropen{
-//         width: calc(100% - $Sidebar-width);
-//         height: 100%;
-//     }
-//     &-sidebarclosed{
-//         width: 100%;
-//         height: 100%;
-//     }
-// }
-
 .Home-SidebarHosts{
     position: absolute;
     height: 100%;
     top:0;
     left: 0;
-
-    // transform: translateX(0);
     transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
-    // $max-width: 30em;
     &-sidebarHostsopen{
         left: 0;
         width: 50%;
@@ -73,4 +57,30 @@ $Sidebar-width: 25%;
 .Home-Content-visualizations-container{
     width: 100%;
     height: 100%;
+    &-sidebaropen{
+        width: calc(100% - $Sidebar-width);
+    }
+    &-sidebarclosed{
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    $Sidebar-width-phone: 10em;
+    .Home-Content-visualizations-container{
+        width: 100%;
+        &-sidebaropen{ width: calc(100% - $Sidebar-width-phone); }
+        &-sidebarclosed{ width: 100%; }
+    }
+    .Home-Sidebar{
+        width: $Sidebar-width-phone;
+        &-sidebaropen{
+            left: 0;
+            width: $Sidebar-width-phone;
+        }
+        &-sidebarclosed{
+            left: -$Sidebar-width-phone;
+            width: 0px;
+        }
+    }
 }
