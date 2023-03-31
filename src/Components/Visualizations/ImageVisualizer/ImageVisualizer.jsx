@@ -17,7 +17,6 @@ function ImageVisualizer(props) {
         const host = getFileHost(file);
         if(file && getFileContent(file)){
             setImage(file.fileContent);
-            console.log("setting image")
             setIsLoading(false);
         } else {
             GetFileImage(host, resourceId).then((res) => {

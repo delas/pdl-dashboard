@@ -9,6 +9,12 @@
     // &:hover{
     //     transform: scale(1.02);
     // }
+    &-selected{
+        &-true{
+            background-color: #e9ecef;
+            color: #212529;
+        }
+    }
 }
 
 .SidebarFile-flexContainer{

@@ -144,7 +144,7 @@ function App(props) {
                     } else {
                         saveFile(resourceId, {...file, fileContent: res.data }); // save the filecontent
                     }
-                    setTimeout(() => { updateComponents.Sidebar.update() }, 500);
+                    setTimeout(() => { updateComponents.Sidebar.update() }, 1000);
                 }
                 else if(retries < 10)
                     setTimeout(() => { getAndAddFile(file, retries + 1); updateComponents.Sidebar.update() }, 6000);

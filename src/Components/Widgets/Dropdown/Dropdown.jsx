@@ -23,6 +23,29 @@ function Dropdown(props) {
         return <div>... loading</div>
     }
 
+    const colourStyles = {
+        menuList: (styles) => {
+            return {
+                ...styles,
+                flexWrap: "nowrap", 
+                whiteSpace: "nowrap", 
+                width: "inherit",
+                textOverflow: 'ellipsis',
+                overflowX: "hidden",
+            };
+        },
+        valueContainer: (styles) => {
+            return {
+                ...styles,
+                flexWrap: "nowrap", 
+                whiteSpace: "nowrap", 
+                width: "inherit",
+                textOverflow: 'ellipsis',
+                overflowX: "hidden",
+            };
+        },
+    };
+
     return (
         <div className='Dropdown-container'>
             <span className='Dropdown-label'>{label}</span>
@@ -37,6 +60,7 @@ function Dropdown(props) {
                     onClick={(e) => {e.stopPropagation()}}
                     onMouseDown={(e) => e.stopPropagation()}
                     onValueClick={(e) => {e.stopPropagation()}}
+                    styles = {colourStyles}
                 />
             </div>
         </div>

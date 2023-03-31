@@ -38,8 +38,17 @@ function HistogramVisualizer(props) {
             })
     }
 
+    // const generateColors = () => { // didn't work
+    //     let colors = {}
+    //     if(fileContent);
+    //     fileContent.forEach((event, index) => {
+    //         colors[index] = {color: "#990000"};
+    //     });
+    //     return colors;
+    // }
+
     const convertFileContentToHistogramData = (fileContent) => {
-        let data = [["Events", "Occurances"]];
+        let data = [["Events", "Event"]];
         return data.concat(fileContent);
     }
 
@@ -65,7 +74,8 @@ function HistogramVisualizer(props) {
     const convertFileToHistogramOptions = (file) => {
         return {chart: {
             title: `${getFileResourceLabel(file)}`,
-            subtitle: "Occurances of events"
+            subtitle: "Occurances of events",
+            // series: generateColors(), // didn't work
         }}
     }
 
@@ -74,7 +84,7 @@ function HistogramVisualizer(props) {
             <Chart
                 chartType="Bar"
                 width="100%"
-                height="400px"
+                height="500px"
                 data={fileContent}
                 options={convertFileToHistogramOptions(file)}
             />

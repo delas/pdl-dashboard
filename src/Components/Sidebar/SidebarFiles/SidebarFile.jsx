@@ -12,6 +12,7 @@ function SidebarFile(props) {
         deleteFile,
         selectFileForVisualization,
         shouldSetFileContent,
+        isSelected,
     } = props;
 
     const [fileContentLoading, setFileContentLoading] = useState(true);
@@ -19,7 +20,7 @@ function SidebarFile(props) {
 
     useEffect(() => {
         getFileAndCheckContents();
-    }, []);
+    }, [fileId]);
 
     const getFileAndCheckContents = () => {
         const tempFile = getFile(fileId);
@@ -38,6 +39,13 @@ function SidebarFile(props) {
         }
     }
 
+    const deleteFileHandler = () => {
+        deleteFile(fileId);
+        if(isSelected){
+            selectFileForVisualization(null);
+        }
+    }
+
     if(!file){
         return (
             <div className="SidebarFile">
@@ -49,7 +57,7 @@ function SidebarFile(props) {
     }
 
     return (
-        <div className="SidebarFile">
+        <div className={`SidebarFile SidebarFile-selected-${isSelected}`}>
             <div className='SidebarFile-flexContainer'>
                 <div className='SidebarFile-flexContainer-left'>
                     <div className='SidebarFile-filetype'>
@@ -60,7 +68,7 @@ function SidebarFile(props) {
                     </div>
                 </div>
 
-                <div className='SidebarFile-delete' onClick = {() => {deleteFile(fileId)}}>
+                <div className='SidebarFile-delete' onClick = {() => {deleteFileHandler(fileId)}}>
                     <FaTrash/>
                 </div>
             </div>

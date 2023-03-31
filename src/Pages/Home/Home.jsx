@@ -90,6 +90,7 @@ function Home(props) {
     }
 
     const selectFileForVisualization = (fileId) => {
+        if(!fileId) setVisualizationsFile(null);
         const file = getFile(fileId)
         setVisualizationsFile(file);
         if(updateComponents.Visualizations) {
@@ -150,6 +151,7 @@ function Home(props) {
                             // setUpdateSidebar= {set.setUpdateSidebar}
                             shouldSetFileContent = {shouldSetFileContent}
                             setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
+                            selectedFile = {visualizationsFile}
                         />
                     </div>
 
@@ -158,6 +160,7 @@ function Home(props) {
                             <Visualizations
                                 file = {visualizationsFile}
                                 setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
+                                getAndAddFile = {getAndAddFile}
                             />
                         </div>
                         

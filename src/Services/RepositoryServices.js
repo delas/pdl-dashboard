@@ -33,7 +33,7 @@ export async function GetFileText(hostname, fileId){ //If the visualization is t
 
 export async function GetHistogramOfLog(hostname, fileId){
     const urlExtension = `histograms/${fileId}`;
-    return axios.get(`${hostname}${urlExtension}`);
+    return axios.post(`${hostname}${urlExtension}`);
 }
 
 export async function GetRepositoryConfig(hostname) {

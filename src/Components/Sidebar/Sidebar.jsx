@@ -17,6 +17,7 @@ function Sidebar(props) {
         // setUpdateSidebar
         shouldSetFileContent,
         setComponentUpdaterFunction,
+        selectedFile,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -108,6 +109,7 @@ function Sidebar(props) {
                         {
                             files.map((file, index) => {
                                 const fileId = getFileResourceId(file);
+                                const isSelected = selectedFile ? getFileResourceId(selectedFile) === getFileResourceId(file) : false;
                                 return(
                                     <SidebarFile key={index}
                                         openPopup = {openPopup}
@@ -116,6 +118,7 @@ function Sidebar(props) {
                                         fileId = {fileId}
                                         selectFileForVisualization = {selectFileForVisualization}
                                         shouldSetFileContent = {shouldSetFileContent}
+                                        isSelected = {isSelected}
                                     />
                                 )
                             })
