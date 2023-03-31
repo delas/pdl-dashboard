@@ -36,6 +36,7 @@ function Visualizations(props) {
         setFileToDisplay(file);
         setIsLoading(false);
         setTabList(generateTabList(file));
+        setSelectedChild(null);
         getChildrenFromFile(getFileHost(file), getFileResourceId(file))
             .then((res) => {setChildren(res.data); generateChildren(res.data)} )
             .catch((err) => {console.log(err)} );
@@ -46,22 +47,19 @@ function Visualizations(props) {
     }
 
     const generateTabList = (file) => {
-        if(file) {
-            console.log(getFileResourceType(file).toUpperCase())
-            console.log(getFileExtension(file).toUpperCase())
-        }
         if(file) return getVisalizations(getFileResourceType(file).toUpperCase(), getFileExtension(file).toUpperCase()); 
     }
 
     const generateChildren = (children) => {
         if(children);
-        setChildrenForDropdown(children.map((childMetadata) => {
-            // console.log(getVisalizations(getFileResourceType(childMetadata).toUpperCase(), getFileExtension(childMetadata).toUpperCase()));
-            // if(getVisalizations(getFileResourceType(file).toUpperCase(), getFileExtension(file).toUpperCase()))
-            //     console.log(childMetadata);
-            if(getVisalizations(getFileResourceType(childMetadata).toUpperCase(), getFileExtension(childMetadata).toUpperCase()))
-            return ({label: getFileResourceLabel(childMetadata), value: getFileResourceId(childMetadata)})
-        }).filter((child) => { if(child) return child })
+        setChildrenForDropdown(
+            children.map((childMetadata) => {
+                const isVisualizable = !!getVisalizations(getFileResourceType(childMetadata).toUpperCase(), getFileExtension(childMetadata).toUpperCase());
+                console.log(getFileResourceType(childMetadata).toUpperCase(), getFileExtension(childMetadata).toUpperCase(), isVisualizable);
+                if(isVisualizable)
+                return ({label: getFileResourceLabel(childMetadata), value: getFileResourceId(childMetadata)})
+                })
+                .filter((child) => { if(child) return child })
         );
     }
 

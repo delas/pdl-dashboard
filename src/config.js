@@ -174,7 +174,15 @@ export const getAllAvailableFileExtensions = () => {
 }
 
 export const getVisalizations = (resourceType, fileExtension) => {
-    if(resourceType) return config[resourceType][fileExtension];
+    if(resourceType) {
+        if(config[resourceType]) {
+            return config[resourceType][fileExtension];
+        } else {
+            return undefined;
+        }
+    } else {
+        return undefined;
+    }
 }
 
 export const getAvailableFileExtensions = (resourceType) => {
