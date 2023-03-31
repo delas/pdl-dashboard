@@ -39,7 +39,7 @@ function Home(props) {
         AddFilePopup: 'AddFilePopup',
         ActionPopup: 'ActionPopup',
         NewSRHostPopup: 'NewSRHostPopup',
-        GetFilePopupOpen: 'GetFilePopupOpen',
+        GetFilePopup: 'GetFilePopup',
     }
     
     const openPopup = (popup, props = {}) => {
@@ -60,7 +60,7 @@ function Home(props) {
                 set.setNewHostFromSRPopupOpen(true); 
                 setPopupProps(props);
                 break;
-            case 'GetFilePopupOpen':
+            case 'GetFilePopup':
                 set.setGetFilePopupOpen(true);
                 setPopupProps(props);
                 break;
@@ -82,7 +82,7 @@ function Home(props) {
             case 'NewSRHostPopup': 
                 set.setNewHostFromSRPopupOpen(false);
                 break;
-            case 'GetFilePopupOpen':
+            case 'GetFilePopup':
                 set.setGetFilePopupOpen(false);
                 break;
             default: (() => {})(); break; // Do nothing. Produces empty lambda expression call

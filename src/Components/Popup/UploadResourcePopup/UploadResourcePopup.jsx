@@ -65,6 +65,21 @@ function UploadResourcePopup(props) {
         setFileDescription(res.value);
     }
 
+    const handleConfirmButtonDisabled = () => { // return true = disabled
+        if(!fileDestination || Object.keys(fileDestination).length <= 0){
+            return true;
+        }
+
+        if(selectedTab.Title === "File"){
+            return !(isFilePicked && selectedFileType && fileDescription);
+        } 
+        else if(selectedTab.Title === "Stream") {
+            return !(streamBrokerLocation && streamTopic && fileDescription);
+        } else {
+            return true;
+        }
+    }
+
     const onConfirmClick = () => {
         if(isFilePicked && fileDestination && selectedFileType){
             setIsLoading(true);
@@ -158,6 +173,7 @@ function UploadResourcePopup(props) {
                     onNextClick = {onConfirmClick}
                     cancelText = {`Cancel`}
                     nextText = {`Confirm`}
+                    nextButtonDisabled = {handleConfirmButtonDisabled()}
                 />
 
             </div>

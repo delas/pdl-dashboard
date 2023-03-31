@@ -6,7 +6,7 @@ import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {getRepositories} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
-import { getFileExtension, getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
+import { getFileExtension, getFileHost, getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
 import {getAvailableResourceTypes } from '../../../config';
 
 function GetFilePopup(props) {
@@ -25,26 +25,29 @@ function GetFilePopup(props) {
     useEffect(() => {
         setIsLoading(false);
         setSelectedRepository(repository);
+        setFilesForDropdownMetadata(repository)
     }, []);
 
-    const convertFilesToDropdown = (files) => {
+    const convertFilesToDropdown = (files) => { // param structure = [fileMetadata1, fileMetadata2, ...]
         return files.map((file) => {
             return ({label: `${getFileExtension(file)} ${getFileResourceLabel(file)}`, value: file})
         })
     }
 
-    useEffect(() => {
-        if(selectedRepository){
-            const repositoryUrl = selectedRepository.label;
-            console.log(getAvailableResourceTypes());
+    const setFilesForDropdownMetadata = (repository) => { // param structure = {label: "Repository Name", value: "Repository Id"}
+        if(repository && Object.keys(repository).length > 0){
+            console.log(repository);
+            const repositoryUrl = repository.label;
             GetRepositoryFilterMetadata(repositoryUrl, getAvailableResourceTypes()).then(res => {
+                console.log(res.data);
                 setFilesForDropdown(convertFilesToDropdown(res.data));
             });
         }
-    }, selectedRepository);
+    }
 
-    const onRepositoryChange = (value) => {
-        setSelectedRepository(value)
+    const onRepositoryChange = (selectedDropdownValue) => { // param structure = {label: "Repository Name", value: "Repository Id"}
+        setSelectedRepository(selectedDropdownValue);
+        setFilesForDropdownMetadata(selectedDropdownValue);
     }
 
     const onFileValueChange = (value) => {
@@ -89,7 +92,7 @@ function GetFilePopup(props) {
                     value = {selectedRepository}
                 />
 
-                {selectedRepository &&
+                {(selectedRepository && Object.keys(selectedRepository).length > 0) &&
                 <Dropdown
                     options = {filesForDropdown}
                     onValueChange = {onFileValueChange}

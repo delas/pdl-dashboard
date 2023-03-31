@@ -1,7 +1,7 @@
 import './Sidebar.scss';
 import Button from '../Widgets/Button/Button';
 import {useState, useEffect, useCallback} from 'react';
-import { FaCircle, FaCog, FaFileUpload, FaBuffer } from 'react-icons/fa';
+import { FaCircle, FaCog, FaFileUpload, FaBuffer, FaFileDownload } from 'react-icons/fa';
 import SidebarFile from './SidebarFiles/SidebarFile';
 import { getAllFiles, getAllStatus } from '../../Store/LocalDataStore';
 import { getFileResourceId } from '../../Utils/FileUnpackHelper';
@@ -89,6 +89,13 @@ function Sidebar(props) {
                             disabled = {false}
                             className = {``}
                             onClick = {() => {openPopup(popups.AddFilePopup)}}
+                        />
+                        <Button
+                            text = {`Download resource`}
+                            icon = {<FaFileDownload/>}
+                            disabled = {false}
+                            className = {``}
+                            onClick = {() => {openPopup(popups.GetFilePopup)}}
                         />
                         <Button
                             text = {`Execute action`}
