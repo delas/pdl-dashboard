@@ -21,7 +21,8 @@ function App(props) {
     const [actionPopupOpen, setActionPopupOpen] = useState(false);
     const [newHostPopupOpen, setNewHostPopupOpen] = useState(false);
     const [newHostFromSROpen, setNewHostFromSRPopupOpen] = useState(false);
-    const [GetFilePopupOpen, setGetFilePopupOpen] = useState(false);   
+    const [GetFilePopupOpen, setGetFilePopupOpen] = useState(false); 
+    const [processOverviewPopupOpen, setProcessOverviewPopupOpen] = useState(false);
 
     let pingInterval = useRef(null);
 
@@ -51,6 +52,10 @@ function App(props) {
 
     const toggleGetFilePopupOpen = () => {
         setGetFilePopupOpen(!GetFilePopupOpen)
+    }
+
+    const toggleProcessOverviewPopupOpen = () => {
+        setProcessOverviewPopupOpen(!processOverviewPopupOpen);
     }
 
     useEffect(() => {
@@ -186,7 +191,8 @@ function App(props) {
                     toggleActionPopupOpen: toggleActionPopupOpen,
                     toggleNewHostPopupOpen: toggleNewHostPopupOpen,
                     togglenewHostFromSRPopupOpen: togglenewHostFromSRPopupOpen,
-                    toggleGetFilePopupOpen: toggleGetFilePopupOpen
+                    toggleGetFilePopupOpen: toggleGetFilePopupOpen,
+                    toggleProcessOverviewPopupOpen: toggleProcessOverviewPopupOpen
                 }}
                 set = {{
                     setSidebarOpen: setSidebarOpen,
@@ -196,7 +202,8 @@ function App(props) {
                     setNewHostPopupOpen: setNewHostPopupOpen,
                     setNewHostFromSRPopupOpen: setNewHostFromSRPopupOpen,
                     setGetFilePopupOpen: setGetFilePopupOpen,
-                    setComponentUpdaterFunction: setComponentUpdaterFunction
+                    setComponentUpdaterFunction: setComponentUpdaterFunction,
+                    setProcessOverviewPopupOpen: setProcessOverviewPopupOpen
                 }}
                 isOpen = {{
                     sidebarOpen: sidebarOpen,
@@ -206,6 +213,7 @@ function App(props) {
                     newHostPopupOpen: newHostPopupOpen,
                     newHostFromSROpen: newHostFromSROpen,
                     GetFilePopupOpen: GetFilePopupOpen,
+                    processOverviewPopupOpen: processOverviewPopupOpen
                 }}
             /> : null}
             {props.page === "Page1" ? <Page1/> : null}

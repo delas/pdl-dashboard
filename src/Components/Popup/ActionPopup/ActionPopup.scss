@@ -17,6 +17,7 @@ $theme: rgb(153, 0, 0);
 // Numbers incating the step of the wizard at the top of popup
 .ActionPopup-wizard-steps{
     width: 100%;
+    height: 3em;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -30,7 +31,8 @@ $theme: rgb(153, 0, 0);
     .ActionPopup-wizard-step{
         vertical-align: top;
         width: 25%;
-        aspect-ratio: 3 / 1;
+        height: 100%;
+        // aspect-ratio: 3 / 1;
         background-color: #5a6268;
         text-align: center center;
 

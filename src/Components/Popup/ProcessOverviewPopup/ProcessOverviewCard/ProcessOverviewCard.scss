@@ -1,0 +1,125 @@
+.ProcessOverviewCard{
+    width: 100%;
+    height: 3em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 0.5rem 1rem;
+    box-sizing:border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+}
+
+.ProcessOverviewCard-Left{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.ProcessOverviewCard-status{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.3em;
+    width: 25%;
+}
+
+@keyframes pickaxe {
+    0%   {transform: rotate(-5deg);}
+    10%  {transform: rotate(-20deg);}
+    20%  {transform: rotate(-50deg);}
+    30% {transform: rotate(-110deg);}
+    85% {transform: rotate(-5deg);}
+    90% {transform: rotate(0deg);}
+    100% {transform: rotate(0deg);}
+}
+
+.ProcessOverviewCard-status-icon{
+    color: #28a745;
+    height: 1.5em;
+    aspect-ratio: 1 / 1;
+    // padding-left: 0.75em;
+    svg{
+        height: 100%;
+        width: 100%;
+    }
+    &-Running{
+        svg{
+            // transform-origin: bottom 1em;
+            animation: pickaxe 2s infinite linear;
+        }
+    }
+    &-Stopped{
+        svg{
+            color: rgb(153, 0, 0);
+        }
+    }
+    &-Paused{
+        svg{
+            color: rgb(255, 193, 7);
+        }
+    }
+}
+
+.ProcessOverviewCard-host{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5em;
+    width: 50%;
+}
+
+.ProcessOverviewCard-change-process-status{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5em;
+    box-sizing: border-box;
+}
+
+.ProcessOverviewCard-pause-resume{
+    // color: #28a745;
+    height: 1.5em;
+    aspect-ratio: 1 / 1;
+    svg{
+        height: 100%;
+        width: 100%;
+    }
+    &:hover{
+        cursor: pointer;
+        transform: scale(1.1);
+    }
+}
+
+.ProcessOverviewCard-endProcess{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5em;
+    box-sizing: border-box;
+    &:hover{
+        cursor: pointer;
+        transform: scale(1.1);
+    }
+    svg{
+        height: 1.5em;
+        width: 1.5em;
+        color: rgb(153, 0, 0);
+        
+    }
+}
+

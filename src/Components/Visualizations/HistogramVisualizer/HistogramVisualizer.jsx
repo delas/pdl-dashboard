@@ -63,10 +63,15 @@ function HistogramVisualizer(props) {
     }
 
     if(error){
+        console.log(error);
+        const errorStatusText = error?.response?.statusText;
+        const errorStatusCode = error?.response?.status;
+        const errorStatusData = error?.response?.data;
         return (
             <div className="ResourceGraph">
                 <div>Error loading histogram</div>
-                <div>{`${error.response.statusText} ${error.response.status}`}</div>
+                <div>{`${errorStatusText ? errorStatusText : "Unexpected problem occured while trying to get resource."} 
+                    Status code: ${errorStatusCode ? errorStatusCode : "unknown"}`}</div>
             </div>
         )
     }

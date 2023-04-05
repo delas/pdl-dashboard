@@ -1,6 +1,7 @@
 import './SidebarHostItem.scss';
 import {useState, useEffect} from 'react';
 import { FaTrash, FaServer, FaCogs, FaNetworkWired, FaQuestion } from 'react-icons/fa';
+import {GiMiner} from 'react-icons/gi';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function SidebarHostItem(props) {
@@ -47,26 +48,33 @@ function SidebarHostItem(props) {
             <div className='SidebarHostItem-flexContainer'>
 
                 <div className='SidebarHostItem-flexContainer-left'>
-                    <div className='SidebarHostItem-flexContainer-topleft'>
-                        <div className={`SidebarHostItem-filetype SidebarHostItem-filetype-${status}`}>
-                            {icon}
+                    <div className='SidebarHostItem-flexContainer-left-left'>
+                        <div className='SidebarHostItem-flexContainer-topleft'>
+                            <div className={`SidebarHostItem-filetype SidebarHostItem-filetype-${status}`}>
+                                {icon}
+                            </div>
+                            <span className='SidebarHostItem-filename' onClick={allowClick ? openPopupHandler : undefined}>
+                                {hostProvidedValue} {hostName}
+                            </span>
+                            
                         </div>
-                        <div className='SidebarHostItem-filename' onClick={allowClick ? openPopupHandler : undefined}>
-                            {hostProvidedValue} {hostName}
-                        </div>
-                    </div>
 
-                    <div className='SidebarHostItem-flexContainer-bottomleft'>
-                        <div className='SidebarHostItem-addedFrom'>
-                            <b>Added from:</b> {addedFrom}
+                        <div className='SidebarHostItem-flexContainer-bottomleft'>
+                            <div className='SidebarHostItem-addedFrom'>
+                                <b>Added from:</b> {addedFrom}
+                            </div>
                         </div>
-                    </div>
+                    </div>                    
                 </div>
 
+                {hostType.value === 'miner' && 
+                    <div className='SidebarHostItem-MinerIcon' onClick={() => {
+                        openPopup(popups.ProcessOverviewPopup, {miner: {label: hostName, value: id}})
+                    }}><GiMiner/></div>
+                }
+
                 <div className={`SidebarHostItem-loadingSpinner-${false}`}>
-                    <LoadingSpinner
-                        loading = {true}
-                    />
+                    <LoadingSpinner loading = {true} />
                 </div>
 
                 <div className='SidebarHostItem-delete' onClick = {() => {onRemove(id)}}>

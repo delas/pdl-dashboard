@@ -33,6 +33,9 @@
     justify-content: flex-start;
     align-items: center;
     gap: 0.5em;
+    &-stream-true{
+        width: calc(100% - 3em);
+    }
 }
 
 .SidebarFile-filetype{
@@ -73,6 +76,9 @@
     top: 0;
     z-index: 100;
     background: rgba(255,255,255,0.5);
+    &-stream-true{
+        width: calc(100% - 3em);
+    }
 }
 
 .LoadingSpinner-container{
@@ -82,6 +88,13 @@
     transform: translate(-50%, -50%);
     width: 1em;
     aspect-ratio: 1 / 1;
+}
+
+.SidebarFile-stream{
+    width: 1em;
+    aspect-ratio: 1 / 1;
+    margin-right: 0.25em;
+
 }
 
 .SidebarFile-delete{

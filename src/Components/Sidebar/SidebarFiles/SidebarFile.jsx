@@ -1,8 +1,9 @@
 import './SidebarFile.scss';
 import {useState, useEffect} from 'react';
 import { FaTrash } from 'react-icons/fa';
+import { CiStreamOn } from 'react-icons/ci';
 import { getFile } from '../../../Store/LocalDataStore';
-import { getFileExtension, getFileResourceLabel, getFileContent } from '../../../Utils/FileUnpackHelper';
+import { getFileExtension, getFileResourceLabel, getFileContent, getFileDynamic } from '../../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function SidebarFile(props) {
@@ -59,7 +60,7 @@ function SidebarFile(props) {
     return (
         <div className={`SidebarFile SidebarFile-selected-${isSelected}`}>
             <div className='SidebarFile-flexContainer'>
-                <div className='SidebarFile-flexContainer-left'>
+                <div className={`SidebarFile-flexContainer-left SidebarFile-flexContainer-left-stream-${getFileDynamic(file)}`}>
                     <div className='SidebarFile-filetype'>
                         {getFileExtension(file)}
                     </div>
@@ -68,12 +69,16 @@ function SidebarFile(props) {
                     </div>
                 </div>
 
+                {getFileDynamic(file) && <div className='SidebarFile-stream'>
+                    <CiStreamOn/>
+                </div>}
+
                 <div className='SidebarFile-delete' onClick = {() => {deleteFileHandler(fileId)}}>
                     <FaTrash/>
                 </div>
             </div>
             {fileContentLoading && // Show spinner if file content is loading
-            <div className='SpinnerModal'>
+            <div className={`SpinnerModal SpinnerModal-stream-${getFileDynamic(file)}`}>
                 <div className='LoadingSpinner-container'>
                     <LoadingSpinner loading={fileContentLoading}/>
                 </div>

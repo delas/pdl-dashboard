@@ -75,8 +75,6 @@ function ResourceGraph(props) {
         "tooltip.adjust.resize.flip": "none",
         "tooltip.adjust.resize.scroll": true,
     }
-
-    console.log(graph);
     
     if(isLoading){
         return (

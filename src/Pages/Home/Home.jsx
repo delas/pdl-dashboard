@@ -1,13 +1,17 @@
 import './Home.scss';
 import React, {useState, useEffect, Suspense} from 'react';
-import Topbar from '../../Components/Topbar/Topbar';
-import Sidebar from '../../Components/Sidebar/Sidebar';
-import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
+//Popups
 import UploadResourcePopup from '../../Components/Popup/UploadResourcePopup/UploadResourcePopup';
 import ActionPopup from '../../Components/Popup/ActionPopup/ActionPopup';
 import AddNewHostPopup from '../../Components/Popup/AddNewHostPopup/AddNewHostPopup';
 import AddNewHostFromServiceRegistryPopup from '../../Components/Popup/AddNewHostFromServiceRegistryPopup/AddNewHostFromServiceRegistryPopup';
 import GetFilePopup from '../../Components/Popup/GetFilePopup/GetFilePopup';
+import ProcessOverviewPopup from '../../Components/Popup/ProcessOverviewPopup/ProcessOverviewPopup';
+
+//Components
+import Topbar from '../../Components/Topbar/Topbar';
+import Sidebar from '../../Components/Sidebar/Sidebar';
+import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
 import Visualizations from '../../Components/Visualizations/Visualizations';
 import { getFile } from '../../Store/LocalDataStore';
 import ReactHtmlParser from 'react-html-parser';
@@ -40,6 +44,7 @@ function Home(props) {
         ActionPopup: 'ActionPopup',
         NewSRHostPopup: 'NewSRHostPopup',
         GetFilePopup: 'GetFilePopup',
+        ProcessOverviewPopup: 'ProcessOverviewPopup',
     }
     
     const openPopup = (popup, props = {}) => {
@@ -64,6 +69,10 @@ function Home(props) {
                 set.setGetFilePopupOpen(true);
                 setPopupProps(props);
                 break;
+            case 'ProcessOverviewPopup':
+                set.setProcessOverviewPopupOpen(true);
+                setPopupProps(props);
+                break;
             default: (() => {})(); break; // Do nothing. Produces empty lambda expression call
         }
     }
@@ -85,6 +94,9 @@ function Home(props) {
             case 'GetFilePopup':
                 set.setGetFilePopupOpen(false);
                 break;
+            case 'ProcessOverviewPopup':
+                set.setProcessOverviewPopupOpen(false);
+                break;  
             default: (() => {})(); break; // Do nothing. Produces empty lambda expression call
         }
     }
@@ -232,6 +244,18 @@ function Home(props) {
                         popups = {popups}
                         // addHost = {addHost}
                         getAndAddFile = {getAndAddFile}
+                    />
+                    : null
+                }
+
+                {isOpen.processOverviewPopupOpen ?
+                    <ProcessOverviewPopup
+                        toggleProcessOverviewPopupOpen = {toggles.toggleProcessOverviewPopupOpen}
+                        {...popupProps}
+                        closePopup = {closePopup}
+                        popups = {popups}
+                        // addHost = {addHost}
+                        // getAndAddFile = {getAndAddFile}
                     />
                     : null
                 }

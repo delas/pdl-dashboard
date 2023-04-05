@@ -37,6 +37,7 @@ function Visualizations(props) {
         setIsLoading(false);
         setTabList(generateTabList(file));
         setSelectedChild(null);
+        setSelectedTab(null);
         getChildrenFromFile(getFileHost(file), getFileResourceId(file))
             .then((res) => {setChildren(res.data); generateChildren(res.data)} )
             .catch((err) => {console.log(err)} );
@@ -55,7 +56,6 @@ function Visualizations(props) {
         setChildrenForDropdown(
             children.map((childMetadata) => {
                 const isVisualizable = !!getVisalizations(getFileResourceType(childMetadata).toUpperCase(), getFileExtension(childMetadata).toUpperCase());
-                console.log(getFileResourceType(childMetadata).toUpperCase(), getFileExtension(childMetadata).toUpperCase(), isVisualizable);
                 if(isVisualizable)
                 return ({label: getFileResourceLabel(childMetadata), value: getFileResourceId(childMetadata)})
                 })
@@ -71,11 +71,7 @@ function Visualizations(props) {
         if(selectedChild){
             const child = children.find((child) => getFileResourceId(child) === selectedChild.value);
             getAndAddFile(child);
-            // if(child){
-            //     setFileToDisplay(child);
-            // }
         }
-        
     }
 
     if(isLoading){
@@ -92,7 +88,6 @@ function Visualizations(props) {
         return <div></div>
     }
 
-
     return (
         <div className="Visualizations">
             
@@ -104,7 +99,7 @@ function Visualizations(props) {
                 />
             </div>
             <div className='Visualizations-header'>
-                <b>{`${getFileResourceLabel(file)}:`}</b>{`${getFileDescription(file)}`}
+                <b>{`${getFileResourceLabel(file)}:`}</b>{` ${getFileDescription(file)}`}
             </div>
             <div className='Visualizations-children-dropdown-container'>
                 <button className={`Visualizations-children-button Visualizations-children-button${selectedChild ? `-disabled-false` : `-disabled-true`}`}  

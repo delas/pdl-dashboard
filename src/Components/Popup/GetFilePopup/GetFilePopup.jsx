@@ -36,10 +36,8 @@ function GetFilePopup(props) {
 
     const setFilesForDropdownMetadata = (repository) => { // param structure = {label: "Repository Name", value: "Repository Id"}
         if(repository && Object.keys(repository).length > 0){
-            console.log(repository);
             const repositoryUrl = repository.label;
             GetRepositoryFilterMetadata(repositoryUrl, getAvailableResourceTypes()).then(res => {
-                console.log(res.data);
                 setFilesForDropdown(convertFilesToDropdown(res.data));
             });
         }
