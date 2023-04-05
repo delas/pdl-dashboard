@@ -11,9 +11,7 @@ export function hostExits(url){
     const hostsWithSameUrl = Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a value not in json format
             const storageItem = JSON.parse(localStorage.getItem(key));
-            if(storageItem !== null 
-                && storageItem !== undefined
-                && storageItem.name === url)
+            if(storageItem && storageItem.name === url)
             return storageItem;
         }
     });
@@ -73,9 +71,7 @@ function getAllKeysWithType(type) {
     return Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a value not in json format
             const storageItem = JSON.parse(localStorage.getItem(key));
-            if(storageItem !== null 
-                && storageItem !== undefined
-                && storageItem?.type?.value === type)
+            if(storageItem && storageItem?.type?.value === type)
             return storageItem;
         }
     })
@@ -108,10 +104,7 @@ export function getAllFiles(){
     const fileKeys = Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a FileExtension not in json format
             const storageItem = JSON.parse(localStorage.getItem(key));
-            if(storageItem !== null 
-                && storageItem !== undefined
-                && storageItem.ResourceId
-                && getFileExtension(storageItem))
+            if(storageItem && storageItem.ResourceId && getFileExtension(storageItem))
             return storageItem;
         }
     })
@@ -134,10 +127,56 @@ function getAllFileKeysWithType(type) {
     return Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a FileExtension not in json format
             const storageItem = JSON.parse(localStorage.getItem(key));
-            if(storageItem !== null 
-                && storageItem !== undefined
-                && storageItem.FileExtension === type)
+            if(storageItem && storageItem.FileExtension === type)
             return storageItem;
         }
     })
+}
+
+// ---------------------- PROCESS STORAGE ----------------------
+export function saveProcess(process){
+    console.log(process);
+    localStorage.setItem(process.id, JSON.stringify(process));
+}
+
+export function removeProcess(key){
+    removeItem(key);
+}
+
+export function getProcess(key) {
+    return JSON.parse(localStorage.getItem(key));
+}
+
+export function getAllProcesses(){
+    return getAllProcessKeys().map((key) => {
+        return JSON.parse(localStorage.getItem(key));
+    })
+}
+
+export function getAllRunningProcesses(){
+    return getAllProcesses().filter((process) => process.status.toUpperCase() === "RUNNING");
+}
+
+export function getAllProcessKeys() {
+    return Object.keys(localStorage).filter((key) => {
+        if(key !== "debug"){ // because there is default a value not in json format
+            const storageItem = JSON.parse(localStorage.getItem(key));
+            if(storageItem && storageItem.objectType === "process")
+            return storageItem;
+        }
+    })
+}
+
+export function setProcessKey(id, key, value) {
+    const process = Object.keys(localStorage).filter((key) => key === id);
+    if(process.length > 0){
+        try{
+            const storageItem = JSON.parse(localStorage.getItem(process[0]));
+            storageItem[key] = value;
+            removeHost(id);
+            saveHost(id, storageItem);
+        } catch {
+            console.log("Error while setting process key");
+        }
+    }
 }

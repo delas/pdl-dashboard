@@ -5,12 +5,13 @@ import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import InputField from '../../Widgets/InputField/InputField';
 // import HorizontalLine from '../../Widgets/HorizontalLine/HorizontalLine';
-import { getMiners, getRepositories, getMiner } from '../../../Store/LocalDataStore';
+import { getMiners, getRepositories, getMiner, saveProcess } from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { PostMineAction } from '../../../Services/MinerServices';
 import { GetSingleFileMetadata } from '../../../Services/RepositoryServices';
 import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
 import { getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
+import {v4 as uuidv4} from 'uuid';
 
 function ActionPopup(props) {
 
@@ -214,6 +215,33 @@ function ActionPopup(props) {
         }
     }
 
+    const handleSaveProcess = (processId) => {
+        const status = {
+            id: uuidv4(),
+            objectType: "process",
+            hostname: getMiner(minerHostDropdownValue.value).name,
+            processId: processId,
+            processName: selectedMinerHostMiner.label,
+            status: "Running",
+            progress: 0,
+            startTime: new Date(),
+            endTime: null,
+            output: null,
+            error: null,
+        };
+        console.log(status);
+        saveProcess(status);
+    }
+
+    const handleSaveTempMetadata = () => {
+        const metadata = {
+            ResourceInfo: {
+                Description: outputFileName,
+                Host: repositoryDestination.label
+            }
+        }
+    }
+
     const handleConfirmClick = () => {
 
         let files = {};
@@ -234,24 +262,27 @@ function ActionPopup(props) {
                 MinerParameters: params ? params : {},
             },
             Output: {
-                Host: `${repositoryDestination.label}/resources/files/`,
-                HostInit: `${repositoryDestination.label}/resources/info/`,
+                Host: `${repositoryDestination.label}/resources/`,
+                HostInit: `${repositoryDestination.label}/resources/metadata/`,
                 ResourceLabel: outputFileName,
                 FileExtension: minerObject.ResourceOutput.FileExtension//selectedOutputFileType?.value ? selectedOutputFileType.value : outputFileTypeForDropdown[0].value,
             }
         };
+
+        console.log(data);
         
         setIsLoading(true);
 
         PostMineAction(minerHostDropdownValue.label, data)
             .then((res) => {
-                GetSingleFileMetadata(repositoryDestination.label, res.data)
-                    .then((res) => {
-                        getAndAddFile(res.data);
-                    })
-                    .catch(() => {
-                        alert("Something went wrong. There might an issue with the requested resource, or the repository. Please try again.");
-                    });
+                handleSaveProcess(res.data);
+                // GetSingleFileMetadata(repositoryDestination.label, res.data)
+                //     .then((res) => {
+                //         getAndAddFile(res.data);
+                //     })
+                //     .catch(() => {
+                //         alert("Something went wrong. There might an issue with the requested resource, or the repository. Please try again.");
+                //     });
             })
             .then(() => {
                 toggleActionPopupOpen();

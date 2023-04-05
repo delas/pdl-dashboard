@@ -14,3 +14,13 @@ export async function PostMineAction(hostname, data){
     const urlExtension = "/miner";
     return axios.post(`${hostname}${urlExtension}`, data);
 }
+
+export async function GetMinerProcessStatus(hostname, processId) {
+    const urlExtension = `/status/${processId}`;
+    return axios.get(`${hostname}${urlExtension}`);
+}
+
+export async function StopMinerProcess(hostname, processId) {
+    const urlExtension = `/stop/${processId}`;
+    return axios.delete(`${hostname}${urlExtension}`);
+}

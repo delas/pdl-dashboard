@@ -4,7 +4,7 @@ import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
 import { saveHost, removeHost, saveFile, getFile, removeFile, hostExits } from './Store/LocalDataStore';
-import { pingAllAddedServices } from './Utils/ServiceHelper';
+import { pingAllAddedServices, pingAllProcesses } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
 import { GetRepositoryConfig } from './Services/RepositoryServices';
@@ -25,6 +25,7 @@ function App(props) {
     const [processOverviewPopupOpen, setProcessOverviewPopupOpen] = useState(false);
 
     let pingInterval = useRef(null);
+    let pingProcessInterval = useRef(null);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -74,6 +75,20 @@ function App(props) {
                 }
             });
         }, 10000);
+    }, []);
+
+    useEffect(() => {
+        if(pingProcessInterval.current !== null) clearInterval(pingProcessInterval.current);
+        pingProcessInterval.current = setInterval(() => {
+            pingAllProcesses().then(() => {
+                if(updateComponents.SidebarHosts){
+                    updateComponents.SidebarHosts.update();
+                }
+                if(updateComponents.Sidebar){
+                    updateComponents.Sidebar.update();
+                }
+            });
+        }, 3000);
     }, []);
 
     const setComponentUpdaterFunction = (componentName, updateFunc) => {
