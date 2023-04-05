@@ -228,18 +228,9 @@ function ActionPopup(props) {
             endTime: null,
             output: null,
             error: null,
+            resourceId: null,
         };
-        console.log(status);
         saveProcess(status);
-    }
-
-    const handleSaveTempMetadata = () => {
-        const metadata = {
-            ResourceInfo: {
-                Description: outputFileName,
-                Host: repositoryDestination.label
-            }
-        }
     }
 
     const handleConfirmClick = () => {
@@ -268,21 +259,11 @@ function ActionPopup(props) {
                 FileExtension: minerObject.ResourceOutput.FileExtension//selectedOutputFileType?.value ? selectedOutputFileType.value : outputFileTypeForDropdown[0].value,
             }
         };
-
-        console.log(data);
-        
         setIsLoading(true);
 
         PostMineAction(minerHostDropdownValue.label, data)
             .then((res) => {
                 handleSaveProcess(res.data);
-                // GetSingleFileMetadata(repositoryDestination.label, res.data)
-                //     .then((res) => {
-                //         getAndAddFile(res.data);
-                //     })
-                //     .catch(() => {
-                //         alert("Something went wrong. There might an issue with the requested resource, or the repository. Please try again.");
-                //     });
             })
             .then(() => {
                 toggleActionPopupOpen();

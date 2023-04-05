@@ -4,7 +4,7 @@ import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
 import { saveHost, removeHost, saveFile, getFile, removeFile, hostExits } from './Store/LocalDataStore';
-import { pingAllAddedServices, pingAllProcesses } from './Utils/ServiceHelper';
+import { pingAllAddedServices, pingAllProcesses, getAllDynamicResources } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
 import { GetRepositoryConfig } from './Services/RepositoryServices';
@@ -26,6 +26,7 @@ function App(props) {
 
     let pingInterval = useRef(null);
     let pingProcessInterval = useRef(null);
+    let pingDynamicResourcesInterval = useRef(null);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -70,9 +71,6 @@ function App(props) {
                 if(updateComponents.SidebarHosts){
                     updateComponents.SidebarHosts.update();
                 }
-                if(updateComponents.Sidebar){
-                    updateComponents.Sidebar.update();
-                }
             });
         }, 10000);
     }, []);
@@ -80,16 +78,24 @@ function App(props) {
     useEffect(() => {
         if(pingProcessInterval.current !== null) clearInterval(pingProcessInterval.current);
         pingProcessInterval.current = setInterval(() => {
-            pingAllProcesses().then(() => {
+            pingAllProcesses(getAndAddFile).then(() => {
                 if(updateComponents.SidebarHosts){
                     updateComponents.SidebarHosts.update();
                 }
+            });
+        }, 3000);
+    }, []);
+
+    useEffect(() => {
+        if(pingDynamicResourcesInterval.current !== null) clearInterval(pingDynamicResourcesInterval.current);
+        pingDynamicResourcesInterval.current = setInterval(() => {
+            getAllDynamicResources(getAndAddFile).then(() => {
                 if(updateComponents.Sidebar){
                     updateComponents.Sidebar.update();
                 }
             });
         }, 3000);
-    }, []);
+    })
 
     const setComponentUpdaterFunction = (componentName, updateFunc) => {
         let updateComponentsTemp = updateComponents;
@@ -164,7 +170,7 @@ function App(props) {
                     } else {
                         saveFile(resourceId, {...file, fileContent: res.data }); // save the filecontent
                     }
-                    setTimeout(() => { updateComponents.Sidebar.update() }, 1000);
+                    setTimeout(() => { updateComponents.Sidebar.update() }, 500);
                 }
                 else if(retries < 10)
                     setTimeout(() => { getAndAddFile(file, retries + 1); updateComponents.Sidebar.update() }, 6000);
