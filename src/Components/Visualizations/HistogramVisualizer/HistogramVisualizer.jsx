@@ -2,8 +2,8 @@ import './HistogramVisualizer.scss';
 import {useState, useEffect, useCallback} from 'react';
 // import Histogram from 'react-chart-histogram';
 import { Chart } from "react-google-charts";
-import {GetFileText, GetHistogramOfLog} from '../../../Services/RepositoryServices';
-import { getFileResourceLabel, getFileResourceType, getFileResourceId, getFileHost, getFileContent } from '../../../Utils/FileUnpackHelper';
+import {GetHistogramOfLog} from '../../../Services/RepositoryServices';
+import { getFileResourceLabel, getFileResourceId, getFileHost, getFileContent, getFileDynamic } from '../../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function HistogramVisualizer(props) {
@@ -15,11 +15,16 @@ function HistogramVisualizer(props) {
     const [fileContent, setFileContent] = useState([]);
     const [error, setError] = useState(null);
 
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() =>{ 
+        updateState({}); 
+    }, []);
+
     useEffect(() => {
-        if(getFileResourceType(file) === 'EventStream'){
-            setInterval(() => {
-                setHistogramOfLog();
-            }, 500)
+        if(getFileDynamic(file)){
+            setFileContent(convertFileContentToHistogramData(getFileContent(file)));
+            forceUpdate();
+            setIsLoading(false);
         }
         else{
             setHistogramOfLog();
@@ -37,15 +42,6 @@ function HistogramVisualizer(props) {
                 setIsLoading(false);
             })
     }
-
-    // const generateColors = () => { // didn't work
-    //     let colors = {}
-    //     if(fileContent);
-    //     fileContent.forEach((event, index) => {
-    //         colors[index] = {color: "#990000"};
-    //     });
-    //     return colors;
-    // }
 
     const convertFileContentToHistogramData = (fileContent) => {
         let data = [["Events", "Event"]];
@@ -80,7 +76,6 @@ function HistogramVisualizer(props) {
         return {chart: {
             title: `${getFileResourceLabel(file)}`,
             subtitle: "Occurances of events",
-            // series: generateColors(), // didn't work
         }}
     }
 

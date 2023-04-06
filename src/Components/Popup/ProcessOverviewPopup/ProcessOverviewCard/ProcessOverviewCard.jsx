@@ -12,56 +12,63 @@ function ProcessOverviewCard(props) {
         resumeProcess = () => {},
     } = props;
 
-    // const [isLoading, setIsLoading] = useState(true);
-    
-    // useEffect(() => {
-    //     setIsLoading(false);
-    // }, []);
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [processObject, setProcessObject] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // if(isLoading){
-    //     return (
-    //         <div className="ProcessOverviewPopup">
-    //             <div>Loading ...</div>
-    //         </div>
-    //     )
-    // }
+    useEffect(() => {
+        setProcessObject(process);
+    }, [process]);
+
+    useEffect(() => {
+        if(processObject !== null)
+        setIsLoading(false);
+    }, [processObject])
+
+    if(isLoading){
+        return (
+            <div className='ProcessOverviewCard'>
+                <div>Loading...</div>
+            </div>
+        )
+    }
 
     return (
         <div className='ProcessOverviewCard'>
             <div className={`ProcessOverviewCard-status ProcessOverviewCard-status-${true}`}>
-                <div className={`ProcessOverviewCard-status-icon ProcessOverviewCard-status-icon-${process.status.toUpperCase()}`}>
-                    {process.status.toUpperCase() === 'RUNNING' && <GiWarPick/>}
-                    {process.status.toUpperCase() === 'PAUSED' && <GiPauseButton/>}
-                    {process.status.toUpperCase() === 'STOPPED' && <FaStop/>}
-                    {process.status.toUpperCase() === 'COMPLETE' && <FaCheck/>}
+                <div className={`ProcessOverviewCard-status-icon ProcessOverviewCard-status-icon-${processObject.status.toUpperCase()}`}>
+                    {processObject.status.toUpperCase() === 'RUNNING' && <GiWarPick/>}
+                    {processObject.status.toUpperCase() === 'PAUSED' && <GiPauseButton/>}
+                    {processObject.status.toUpperCase() === 'STOPPED' && <FaStop/>}
+                    {processObject.status.toUpperCase() === 'COMPLETE' && <FaCheck/>}
                 </div>
                 <div className='ProcessOverviewCard-status-text'>
                     <div className='ProcessOverviewCard-status-text-title'>
-                        {process.status.toUpperCase()}
+                        {processObject.status.toUpperCase()}
                     </div>
                 </div>
                 <span className='ProcessOverviewCard-status-runtime'>
-                    {process.progress}
+                    {processObject.progress}
                 </span>
             </div>
 
             <div className={`ProcessOverviewCard-host ProcessOverviewCard-host-${true}`}>
                 <div className={`ProcessOverviewCard-host-name ProcessOverviewCard-host-name-${true}`}>
-                    {process.hostname}
+                    {processObject.hostname}
                 </div>
                 <div className={`ProcessOverviewCard-host-processName ProcessOverviewCard-host-processName-${true}`}>
-                    {process.processName}
+                    {processObject.processName}
                 </div>
             </div>
 
             <div className={`ProcessOverviewCard-change-process-status`}>
                 <div className={`ProcessOverviewCard-pause-resume ProcessOverviewCard-pause-resume-${process.status.toUpperCase()}`}>
-                    {process.status.toUpperCase() === 'RUNNING' && <GiPauseButton onClick = {() => {pauseProcess(process.processId)}}/>}
-                    {process.status.toUpperCase() === 'PAUSED' && <GiPlayButton onClick = {() => {resumeProcess(process.processId)}}/>}
+                    {processObject.status.toUpperCase() === 'RUNNING' && <GiPauseButton onClick = {() => {pauseProcess(processObject.processId)}}/>}
+                    {processObject.status.toUpperCase() === 'PAUSED' && <GiPlayButton onClick = {() => {resumeProcess(processObject.processId)}}/>}
                 </div>
 
                 <div className={`ProcessOverviewCard-endProcess ProcessOverviewCard-endProcess-${true}`}>
-                    <FaStopCircle onClick = {() => {stopProcess(process.processId)}}/>
+                    <FaStopCircle onClick = {() => {stopProcess(processObject.processId)}}/>
                 </div>
             </div>
         </div>

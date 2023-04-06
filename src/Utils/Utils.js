@@ -17,7 +17,5 @@ export function msToTime(duration) {
         returnMilliseconds = `${milliseconds}`;
     }
 
-    console.log(`${returnHours}${returnMinutes}${returnSeconds}${returnMilliseconds}`)
-
     return `${returnHours}${returnMinutes}${returnSeconds}${returnMilliseconds}`;
 }

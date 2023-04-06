@@ -71,7 +71,7 @@ function ActionPopup(props) {
             setMinerHostDropdownValue(value);
             const minerHost = getMiner(value.value);
             setMinerHostMinersDropdownOptions(minerHost?.config.map((miner) => {
-                return {label: miner.Label, value: miner.MinerId}
+                return {label: miner.MinerLabel, value: miner.MinerId}
             }));
         }
 

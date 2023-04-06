@@ -11,6 +11,18 @@ export const config = {
             },
         ]
     },
+    HISTOGRAM: {
+        JSON: [
+            {
+                Title: "Histogram",
+                ResourceType: "HISTOGRAM",
+            },
+            {
+                ResourceType: "DOT",
+                Title: "Related resources",
+            },
+        ]
+    },
     PETRINET: {
         PNML: [
             {

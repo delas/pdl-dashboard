@@ -14,25 +14,6 @@ function ProcessOverviewPopup(props) {
         setComponentUpdaterFunction
     } = props;
 
-    const [isLoading, setIsLoading] = useState(true);
-    const [processes, setProcesses] = useState([]);
-    const [selectedSorting, setSelectedSorting] = useState(null);
-
-    const [, updateState] = useState();
-    const forceUpdate = useCallback(() =>{ 
-        updateState({}); 
-        setProcesses(sortProcesses(getAllProcesses(), selectedSorting.value ? selectedSorting.value : sortType.type));
-    }, []);
-
-    useEffect (() => {
-        if(!selectedSorting){
-            setSelectedSorting({value: sortType.type, label: "Type"});
-        }
-        setComponentUpdaterFunction("ProcessOverviewPopup", {update: forceUpdate})
-        setProcesses(sortProcesses(getAllProcesses(), sortType.type));
-        setIsLoading(false);
-    }, [])
-
     const sortingOrder = {
         Running: 1,
         Paused: 2,
@@ -47,6 +28,27 @@ function ProcessOverviewPopup(props) {
         endTimeDsc: "eDsc",
         type: "type",
     }
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [processes, setProcesses] = useState([]);
+    const [selectedSorting, setSelectedSorting] = useState(null);
+
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() =>{ 
+        updateState({}); 
+        setProcesses(sortProcesses(getAllProcesses(), selectedSorting?.value ? selectedSorting?.value : sortType.type));
+    }, []);
+
+    useEffect (() => {
+        if(!selectedSorting){
+            setSelectedSorting({value: sortType.type, label: "Type"});
+        }
+        setComponentUpdaterFunction("ProcessOverviewPopup", {update: forceUpdate})
+        setProcesses(sortProcesses(getAllProcesses(), sortType.type));
+        setIsLoading(false);
+    }, [])
+
+    
 
     const sortingOptions = [
         {value: sortType.startTimeAsc, label: "Started Ascending"},

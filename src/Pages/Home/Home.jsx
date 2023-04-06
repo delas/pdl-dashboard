@@ -1,5 +1,5 @@
 import './Home.scss';
-import React, {useState, useEffect, Suspense} from 'react';
+import React, {useState, useEffect, Suspense, useRef} from 'react';
 //Popups
 import UploadResourcePopup from '../../Components/Popup/UploadResourcePopup/UploadResourcePopup';
 import ActionPopup from '../../Components/Popup/ActionPopup/ActionPopup';
@@ -15,6 +15,7 @@ import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
 import Visualizations from '../../Components/Visualizations/Visualizations';
 import { getFile } from '../../Store/LocalDataStore';
 import ReactHtmlParser from 'react-html-parser';
+import { getFileDynamic, getFileResourceId, getFileContent } from '../../Utils/FileUnpackHelper';
 
 
 // import ReactDOMServer from 'react-dom/server'
@@ -37,6 +38,17 @@ function Home(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [popupProps, setPopupProps] = useState({});
     const [visualizationsFile, setVisualizationsFile] = useState(null);
+    let updateFileInterval = useRef(null);
+
+    const updateFile = (file) => {
+        if(getFileDynamic(file)) {
+            if(updateFileInterval.current !== null) clearInterval(updateFileInterval.current);
+            updateFileInterval.current = setInterval(() => {
+                const newfile = getFile(getFileResourceId(file));
+                setVisualizationsFile(newfile);
+            }, 1500);
+        }
+    }
 
     const popups = {
         AddNewHostPopup: 'AddNewHostPopup',
@@ -108,6 +120,7 @@ function Home(props) {
         if(updateComponents.Visualizations) {
             updateComponents.Visualizations.update();
         }
+        updateFile(file);
     }
 
     // const [htmlString, setHtmlString] = useState(null); 

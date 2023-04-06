@@ -80,7 +80,9 @@ function App(props) {
         pingProcessInterval.current = setInterval(() => {
             pingAllProcesses(getAndAddFile).then(() => {
                 if(updateComponents.ProcessOverviewPopup){
-                    updateComponents.ProcessOverviewPopup.update();
+                    setTimeout(() => {
+                        updateComponents.ProcessOverviewPopup.update();
+                    }, 200)
                 }
             });
         }, 3000);
@@ -92,6 +94,9 @@ function App(props) {
             getAllDynamicResources(getAndAddFile).then(() => {
                 if(updateComponents.Sidebar){
                     updateComponents.Sidebar.update();
+                }
+                if(updateComponents.Visualizations){
+                    updateComponents.Visualizations.update();
                 }
             });
         }, 3000);

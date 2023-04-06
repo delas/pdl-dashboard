@@ -6,7 +6,7 @@ import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
 import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
 import ResourceGraph from './ResourceGraph/ResourceGraph';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
-import { getFileDescription, getFileExtension, getFileHost, getFileResourceLabel, getFileResourceType, getFileResourceId } from '../../Utils/FileUnpackHelper';
+import { getFileDescription, getFileExtension, getFileHost, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileContent } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 import {config, getVisalizations} from '../../config';
 import Dropdown from '../Widgets/Dropdown/Dropdown';
@@ -22,14 +22,14 @@ function Visualizations(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [selectedTab, setSelectedTab] = useState(null);
     const [tabList, setTabList] = useState([]);
-    const [fileExtension, setFileExtension] = useState(getFileExtension(file).toUpperCase());
     const [fileToDisplay, setFileToDisplay] = useState(file);
     const [children, setChildren] = useState([]);
     const [childrenForDropdown, setChildrenForDropdown] = useState([]);
     const [selectedChild, setSelectedChild] = useState(null);
+    const [hasCalledChildren, setHasCalledChildren] = useState(null);
     
     const [, updateState] = useState();
-    const forceUpdate = useCallback(() =>{ updateState({}); setFileToDisplay(file); }, []);
+    const forceUpdate = useCallback(() =>{ updateState({}); }, []);
 
     useEffect(() => {
         setComponentUpdaterFunction("Visualizations", {update: forceUpdate})
@@ -37,10 +37,14 @@ function Visualizations(props) {
         setIsLoading(false);
         setTabList(generateTabList(file));
         setSelectedChild(null);
-        setSelectedTab(null);
+        if(getFileResourceId(file) !== getFileResourceId(fileToDisplay)) setSelectedTab(null);
+
+        if(hasCalledChildren !== getFileResourceId(file)){
         getChildrenFromFile(getFileHost(file), getFileResourceId(file))
             .then((res) => {setChildren(res.data); generateChildren(res.data)} )
+            .then(() => {setHasCalledChildren(getFileResourceId(file))})
             .catch((err) => {console.log(err)} );
+        }
     }, [file]);
 
     const onTabChange = (tab) => {
