@@ -24,6 +24,14 @@
     // }
 }
 
+.ProcessOverviewPopup-sorting-container{
+    // height: 3em;
+    width: 250px;
+    align-self: flex-end;
+    padding-bottom: 0.5em;
+    box-sizing: border-box;
+}
+
 $theme:       rgb(153, 0, 0);
 
 .ProcessOverviewPopup-body{

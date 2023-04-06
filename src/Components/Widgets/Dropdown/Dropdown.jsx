@@ -12,6 +12,7 @@ function Dropdown(props) {
         value = null,
         loading = false,
         extraParam = null,
+        labelPosition = "top",
     } = props;
     
     const handleValueChange = (value) => {
@@ -47,8 +48,8 @@ function Dropdown(props) {
     };
 
     return (
-        <div className='Dropdown-container'>
-            <span className='Dropdown-label'>{label}</span>
+        <div className={`Dropdown-container Dropdown-container-${labelPosition}`}>
+            <span className={`Dropdown-label Dropdown-label-${labelPosition}`}>{label}</span>
             <div className='Dropdown' onClick={(e) => {e.stopPropagation()}}>
                 <Select 
                     options={options} 
