@@ -108,10 +108,15 @@ function UploadResourcePopup(props) {
 
     const radiobuttonsFile = [
         {label: "Raw data/event log", value: "EventLog"},
-        {label: "Visualization/processed data", value: "Visualization"},
+        {label: "Process Model", value: "ProcessModel"},
+        {label: "Petri net", value: "Petrinet"}
     ];
 
     const onRadioButtonChange = (value) => {
+        changeSelectedFileType(value);
+    }
+
+    const changeSelectedFileType = (value) => {
         setSelectedFileType(value);
     }
 

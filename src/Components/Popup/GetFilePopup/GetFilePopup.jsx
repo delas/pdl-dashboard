@@ -63,6 +63,10 @@ function GetFilePopup(props) {
         }
     }
 
+    const handleConfirmButtonDisabled = () => {
+        return !selectedFile;
+    }
+
     if(isLoading){
         return (
             <div className="GetFilePopup">
@@ -104,6 +108,7 @@ function GetFilePopup(props) {
                     onNextClick = {onConfirmClick}
                     cancelText = {`Cancel`}
                     nextText = {`Download`}
+                    nextButtonDisabled = {handleConfirmButtonDisabled()}
                 />
 
             </div>
