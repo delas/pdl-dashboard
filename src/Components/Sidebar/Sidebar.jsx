@@ -28,7 +28,7 @@ function Sidebar(props) {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ 
         updateState({}); 
-        setFiles(getAllFiles());
+        setFiles(sortFiles(getAllFiles(), sortingOrder.dsc));
         setStatuses(getAllStatus());
     }, []);
 
@@ -38,30 +38,46 @@ function Sidebar(props) {
     }, []);
 
     useEffect(() => {
-        setFiles(sortFiles(getAllFiles()));
+        setFiles(sortFiles(getAllFiles(), sortingOrder.dsc));
         setStatuses(getAllStatus());
     }, []);
 
     const sortingOrder = {
-        Running: 1,
-        Paused: 2,
-        Stopped: 3,
-        Complete: 4,
+        asc: "asc",
+        dsc: "dsc",
+        // type: "type",
     }
 
-    const sortFiles = (files) => {
-        return files;
-        const sortedFiles = files.sort((a, b) => {
-            const cDate1 = new Date(getFileCreationDate(a));
-            const cDate2 = new Date(getFileCreationDate(b));
+    const sortFiles = (files, sortType) => {
+        switch(sortType){
+            case sortingOrder.asc:
+                return sortFilesAsc(files);
+            case sortingOrder.dsc:
+                return sortFilesDsc(files);
+            // case sortingOrder.type:
+            //     return sortFilesByType(files);
+            default:
+                return sortFilesDsc(files);
+        }
+    }
 
-            console.log(cDate1, cDate2);
-
-            console.log(cDate1.getTime() - cDate2.getTime());
-            return cDate1.getTime() - cDate2.getTime();
+    const sortFilesAsc = (files) => {
+        return files.sort((a, b) => {
+            return getFileCreationDate(a) - getFileCreationDate(b);
         });
-        return sortedFiles;
     }
+
+    const sortFilesDsc = (files) => {
+        return files.sort((a, b) => {
+            return getFileCreationDate(b) - getFileCreationDate(a);
+        });
+    }
+
+    // const sortFilesByType = (files) => {
+    //     return files.sort((a, b) => {
+    //         return getFileResourceId(a) - getFileResourceId(b);
+    //     });
+    // }
 
     const statusIconDisplayer = () => {
         const uniqueStatus = getAllStatus().filter((x, i, a) => a.indexOf(x) === i)
