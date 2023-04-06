@@ -51,18 +51,18 @@
         height: 100%;
         width: 100%;
     }
-    &-Running{
+    &-RUNNING{
         svg{
             // transform-origin: bottom 1em;
             animation: pickaxe 2s infinite linear;
         }
     }
-    &-Stopped{
+    &-STOPPED{
         svg{
             color: rgb(153, 0, 0);
         }
     }
-    &-Paused{
+    &-PAUSED{
         svg{
             color: rgb(255, 193, 7);
         }
