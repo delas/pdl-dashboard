@@ -79,8 +79,8 @@ function App(props) {
         if(pingProcessInterval.current !== null) clearInterval(pingProcessInterval.current);
         pingProcessInterval.current = setInterval(() => {
             pingAllProcesses(getAndAddFile).then(() => {
-                if(updateComponents.SidebarHosts){
-                    updateComponents.SidebarHosts.update();
+                if(updateComponents.ProcessOverviewPopup){
+                    updateComponents.ProcessOverviewPopup.update();
                 }
             });
         }, 3000);

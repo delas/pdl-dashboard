@@ -135,7 +135,6 @@ function getAllFileKeysWithType(type) {
 
 // ---------------------- PROCESS STORAGE ----------------------
 export function saveProcess(process){
-    console.log(process);
     localStorage.setItem(process.id, JSON.stringify(process));
 }
 

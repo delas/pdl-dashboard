@@ -29,7 +29,7 @@
     justify-content: flex-start;
     align-items: center;
     gap: 0.3em;
-    width: 25%;
+    width: 40%;
 }
 
 @keyframes pickaxe {
@@ -67,6 +67,12 @@
             color: rgb(255, 193, 7);
         }
     }
+}
+
+.ProcessOverviewCard-status-runtime{
+    // height: 100%;
+    line-height: 1;
+    white-space: nowrap;
 }
 
 .ProcessOverviewCard-host{

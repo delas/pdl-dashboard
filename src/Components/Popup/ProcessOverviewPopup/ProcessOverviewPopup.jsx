@@ -1,123 +1,32 @@
 import './ProcessOverviewPopup.scss';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import ProcessOverviewCard from './ProcessOverviewCard/ProcessOverviewCard';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
+import {getAllProcesses} from '../../../Store/LocalDataStore';
 
 function ProcessOverviewPopup(props) {
 
     const {
         toggleProcessOverviewPopupOpen,
+        setComponentUpdaterFunction
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
     const [processes, setProcesses] = useState([]);
-    
-    useEffect(() => {
-        const sortedProcesses = sortProcesses([
-            {
-                processId: '1',
-                processStatus: 'Running',
-                hostName: 'localhost',
-                processName: 'Process 1',
-            },
-            {
-                processId: '2',
-                processStatus: 'Paused',
-                hostName: 'localhost',
-                processName: 'Process 2',
-            },
-            {
-                processId: '3',
-                processStatus: 'Stopped',
-                hostName: 'localhost',
-                processName: 'Process 3',
-            },
-            {
-                processId: '4',
-                processStatus: 'Complete',
-                hostName: 'localhost',
-                processName: 'Process 4',
-            },
-            {
-                processId: '5',
-                processStatus: 'Running',
-                hostName: 'localhost',
-                processName: 'Process 5',
-            },
-            {
-                processId: '6',
-                processStatus: 'Paused',
-                hostName: 'localhost',
-                processName: 'Process 6',
-            },
-            {
-                processId: '7',
-                processStatus: 'Stopped',
-                hostName: 'localhost',
-                processName: 'Process 7',
-            },
-            {
-                processId: '8',
-                processStatus: 'Complete',
-                hostName: 'localhost',
-                processName: 'Process 8',
-            },
 
-            {
-                processId: '1',
-                processStatus: 'Running',
-                hostName: 'localhost',
-                processName: 'Process 1',
-            },
-            {
-                processId: '2',
-                processStatus: 'Paused',
-                hostName: 'localhost',
-                processName: 'Process 2',
-            },
-            {
-                processId: '3',
-                processStatus: 'Stopped',
-                hostName: 'localhost',
-                processName: 'Process 3',
-            },
-            {
-                processId: '4',
-                processStatus: 'Complete',
-                hostName: 'localhost',
-                processName: 'Process 4',
-            },
-            {
-                processId: '5',
-                processStatus: 'Running',
-                hostName: 'localhost',
-                processName: 'Process 5',
-            },
-            {
-                processId: '6',
-                processStatus: 'Paused',
-                hostName: 'localhost',
-                processName: 'Process 6',
-            },
-            {
-                processId: '7',
-                processStatus: 'Stopped',
-                hostName: 'localhost',
-                processName: 'Process 7',
-            },
-            {
-                processId: '8',
-                processStatus: 'Complete',
-                hostName: 'localhost',
-                processName: 'Process 8',
-            },
-        ]);
-        setProcesses(sortedProcesses);
-
-        setIsLoading(false);
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() =>{ 
+        updateState({}); 
+        setProcesses(sortProcesses(getAllProcesses()));
     }, []);
+
+    useEffect (() => {
+        setComponentUpdaterFunction("ProcessOverviewPopup", {update: forceUpdate})
+        setProcesses(sortProcesses(getAllProcesses()));
+        setIsLoading(false);
+    }, [])
 
     const sortingOrder = {
         Running: 1,
@@ -128,7 +37,7 @@ function ProcessOverviewPopup(props) {
 
     const sortProcesses = (processes) => {
         return processes.sort((a, b) => {
-            return sortingOrder[a.processStatus] - sortingOrder[b.processStatus];
+            return sortingOrder[a.status] - sortingOrder[b.status];
         });
     }
 
@@ -160,19 +69,27 @@ function ProcessOverviewPopup(props) {
                     title = {`Process Overview`}
                     closePopup = {toggleProcessOverviewPopupOpen}
                 />
-                <div className='ProcessOverviewPopup-body'>
-                {processes.map((process) => {
-                    return (
-                        <ProcessOverviewCard
-                            key = {process.processId}
-                            process = {process}
-                            stopProcess = {stopProcess}
-                            pauseProcess = {pauseProcess}
-                            resumeProcess = {resumeProcess}
-                        />
-                    )
-                })}
-                </div>
+                {processes.length > 0 && 
+                    <div className='ProcessOverviewPopup-body'>
+                        {processes.map((process) => {
+                            return (
+                                <ProcessOverviewCard
+                                    key = {process.processId}
+                                    process = {process}
+                                    stopProcess = {stopProcess}
+                                    pauseProcess = {pauseProcess}
+                                    resumeProcess = {resumeProcess}
+                                />
+                            )
+                        })}
+                    </div>
+                }
+
+                {processes.length === 0 && 
+                    <div>
+                        There are no processes to display.
+                    </div>
+                }
             </div>
         </BackdropModal>
     );

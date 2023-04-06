@@ -3,7 +3,7 @@ import { PingRepository, GetSingleFileMetadata } from '../Services/RepositorySer
 import { PingServiceRegistry } from '../Services/ServiceRegistryServices';
 import { getMiners, getRepositories, getServiceRegistries, setStatus, getAllRunningProcesses, setProcessKey, getAllFiles } from '../Store/LocalDataStore';
 import { getFileDynamic, getFileResourceId } from './FileUnpackHelper';
-import {dateDifferenceCalculator} from './Utils';
+import {msToTime} from './Utils';
 
 export async function pingAllAddedServices() {
     getMiners().forEach(miner => {
@@ -36,38 +36,43 @@ export async function pingAllAddedServices() {
 }
 
 export async function pingAllProcesses(getAndAddFile) {
+    getAllRunningProcesses();
     getAllRunningProcesses().forEach((process) => {
         GetMinerProcessStatus(process.hostname, process.processId)
             .then(res => {
-                if(res?.data?.ProcessStatus) // Update status
-                setProcessKey(process.id, "status", res?.data?.ProcessStatus);
+                if(res?.data?.ProcessStatus) { // Update status
+                    setProcessKey(process.id, "status", res?.data?.ProcessStatus);
 
-                switch(res?.data?.ProcessStatus?.toUpperCase()){
-                    case "RUNNING":
-                        setProcessKey(process.id, "progress", (new Date().getTime() - process.startTime.getTime()) / 1000);
-                        break;
-                    case "COMPLETE":
-                        setProcessKey(process.id, "endTime", new Date());
-                        const processDuration = dateDifferenceCalculator(process.startTime, process.endTime);
-                        setProcessKey(process.id, "progress", `${processDuration.days ? `D: ${processDuration.days}` : ""} ${processDuration.hours || processDuration.days ? `H: ${processDuration.hours}` : ""} ${processDuration.minutes || processDuration.hours || processDuration.days ? `m: ${processDuration.minutes}` : ""} s: ${processDuration.seconds} ms: ${processDuration.miliseconds}`)// (new Date().getTime() - process.startTime.getTime()) / 1000);
-                        try{
-                            GetSingleFileMetadata(res?.data?.ResourceId).then((res) => {
+                    switch(res.data.ProcessStatus?.toUpperCase()){
+                        case "RUNNING":
+                            setProcessKey(process.id, "progress", msToTime(new Date().getTime() - process.startTime))
+                            break;
+                        case "COMPLETE":
+                            const newEndTime = new Date().getTime();
+                            setProcessKey(process.id, "endTime", newEndTime);
+                            setProcessKey(process.id, "progress", msToTime(newEndTime - process.startTime));
+                            break;
+                        case "CRASH":
+                            setProcessKey(process.id, "endTime", new Date());
+                            setProcessKey(process.id, "progress", process.duration);
+                            setProcessKey(process.id, "error", res?.data?.Error);
+                            break;
+                        default:
+                            setProcessKey(process.id, "progress", 0);
+                            break;
+                    }
+
+                    if(res?.data?.ResourceId){
+                        GetSingleFileMetadata(process.outputDestination, res?.data?.ResourceId)
+                            .then((res) => {
                                 const resourceId = getFileResourceId(res?.data);
                                 setProcessKey(process.id, "resourceId", resourceId);
                                 getAndAddFile(res?.data);
                             })
-                        } catch {
-                            alert("Failed to get file");
-                        }
-                        break;
-                    case "CRASH":
-                        setProcessKey(process.id, "endTime", new Date());
-                        setProcessKey(process.id, "progress", process.duration);
-                        setProcessKey(process.id, "error", res?.data?.Error);
-                        break;
-                    default:
-                        setProcessKey(process.id, "progress", 0);
-                        break;
+                            .catch(() => {
+                                alert("Failed to get file");
+                            })
+                    }
                 }
             })
             .catch(e => {

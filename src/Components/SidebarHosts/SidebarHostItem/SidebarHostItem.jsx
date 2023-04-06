@@ -67,11 +67,11 @@ function SidebarHostItem(props) {
                     </div>                    
                 </div>
 
-                {hostType.value === 'miner' && 
+                {/* {hostType.value === 'miner' && 
                     <div className='SidebarHostItem-MinerIcon' onClick={() => {
                         openPopup(popups.ProcessOverviewPopup, {miner: {label: hostName, value: id}})
                     }}><GiMiner/></div>
-                }
+                } */}
 
                 <div className={`SidebarHostItem-loadingSpinner-${false}`}>
                     <LoadingSpinner loading = {true} />

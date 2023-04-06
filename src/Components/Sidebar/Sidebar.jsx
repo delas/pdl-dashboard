@@ -2,9 +2,10 @@ import './Sidebar.scss';
 import Button from '../Widgets/Button/Button';
 import {useState, useEffect, useCallback} from 'react';
 import { FaCircle, FaCog, FaFileUpload, FaBuffer, FaFileDownload } from 'react-icons/fa';
+import {ImCogs} from 'react-icons/im';
 import SidebarFile from './SidebarFiles/SidebarFile';
 import { getAllFiles, getAllStatus } from '../../Store/LocalDataStore';
-import { getFileResourceId } from '../../Utils/FileUnpackHelper';
+import { getFileCreationDate, getFileResourceId } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 
 function Sidebar(props) {
@@ -37,9 +38,30 @@ function Sidebar(props) {
     }, []);
 
     useEffect(() => {
-        setFiles(getAllFiles());
+        setFiles(sortFiles(getAllFiles()));
         setStatuses(getAllStatus());
-    }, []);    
+    }, []);
+
+    const sortingOrder = {
+        Running: 1,
+        Paused: 2,
+        Stopped: 3,
+        Complete: 4,
+    }
+
+    const sortFiles = (files) => {
+        return files;
+        const sortedFiles = files.sort((a, b) => {
+            const cDate1 = new Date(getFileCreationDate(a));
+            const cDate2 = new Date(getFileCreationDate(b));
+
+            console.log(cDate1, cDate2);
+
+            console.log(cDate1.getTime() - cDate2.getTime());
+            return cDate1.getTime() - cDate2.getTime();
+        });
+        return sortedFiles;
+    }
 
     const statusIconDisplayer = () => {
         const uniqueStatus = getAllStatus().filter((x, i, a) => a.indexOf(x) === i)
@@ -111,6 +133,13 @@ function Sidebar(props) {
                             className={``}
                             onClick = {() => {openPopup(popups.AddNewHostPopup)}}
                         />
+                        <Button
+                            text = {`Inspect processes`}
+                            icon = {<ImCogs/>}
+                            disabled = {false}
+                            className={``}
+                            onClick = {() => {openPopup(popups.ProcessOverviewPopup)}}
+                        />
                     </div>
                     <div className='Sidebar-flexContainer-files'>
                         {
@@ -132,7 +161,7 @@ function Sidebar(props) {
                         }
                     </div>
                 </div>
-                <div className='Sidebar-flexContainer-actions'>
+                {/* <div className='Sidebar-flexContainer-actions'> */}
                     {/* <div>
                         {
                             getFilesOfType("png").map((file) => {
@@ -140,7 +169,7 @@ function Sidebar(props) {
                             })
                         }
                     </div> */}
-                </div>
+                {/* </div> */}
                 <div className='Sidebar-flexContainer-status'>
                     <div className='Sidebar-status'>
                         <div className='Sidebar-status-icon'>

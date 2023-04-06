@@ -160,7 +160,6 @@ function Home(props) {
                             popups = {popups}
                             deleteFile = {deleteFile}
                             selectFileForVisualization = {selectFileForVisualization}
-                            // setUpdateSidebar= {set.setUpdateSidebar}
                             shouldSetFileContent = {shouldSetFileContent}
                             setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
                             selectedFile = {visualizationsFile}
@@ -186,7 +185,6 @@ function Home(props) {
                         popups = {popups}
                         addHost = {addHost}
                         removeHost = {removeHost}
-                        // setUpdateSidebarHosts = {set.setUpdateSidebarHosts} 
                         setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
                     />
                 </div>
@@ -197,7 +195,6 @@ function Home(props) {
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
-                        // addFile = {addFile}
                         getAndAddFile = {getAndAddFile}
                     />
                     : null
@@ -242,7 +239,6 @@ function Home(props) {
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
-                        // addHost = {addHost}
                         getAndAddFile = {getAndAddFile}
                     />
                     : null
@@ -254,8 +250,7 @@ function Home(props) {
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
-                        // addHost = {addHost}
-                        // getAndAddFile = {getAndAddFile}
+                        setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
                     />
                     : null
                 }

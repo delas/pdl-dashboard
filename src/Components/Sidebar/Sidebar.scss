@@ -15,6 +15,7 @@
 .Sidebar-flexContainer-top{
     display: flex;
     width: 100%;
+    height: calc(100% - 3em);
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
@@ -35,8 +36,28 @@
     display: flex;
     flex-direction: column;
     gap: 0.25em;
-    max-height: 60%;
+    // max-height: 50%;
     width: 90%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+      
+    &::-webkit-scrollbar-track {
+        background: #e9ecef;
+    }
+      
+      /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: #6c757d;
+    }
+      
+      /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: rgb(153, 0, 0);
+    }
 }
 
 .Sidebar-status{

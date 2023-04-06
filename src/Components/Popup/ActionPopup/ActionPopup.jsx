@@ -224,9 +224,9 @@ function ActionPopup(props) {
             processName: selectedMinerHostMiner.label,
             status: "Running",
             progress: 0,
-            startTime: new Date(),
+            startTime: new Date().getTime(),
             endTime: null,
-            output: null,
+            outputDestination: repositoryDestination.label,
             error: null,
             resourceId: null,
         };
@@ -259,6 +259,9 @@ function ActionPopup(props) {
                 FileExtension: minerObject.ResourceOutput.FileExtension//selectedOutputFileType?.value ? selectedOutputFileType.value : outputFileTypeForDropdown[0].value,
             }
         };
+
+        console.log(data);
+
         setIsLoading(true);
 
         PostMineAction(minerHostDropdownValue.label, data)

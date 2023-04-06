@@ -32,8 +32,9 @@ $theme: rgb(153, 0, 0);
         vertical-align: top;
         width: 25%;
         height: 100%;
+        border-radius: 5px;
         // aspect-ratio: 3 / 1;
-        background-color: #5a6268;
+        background-color: #6b7379;
         text-align: center center;
 
         display: flex;
@@ -44,6 +45,7 @@ $theme: rgb(153, 0, 0);
         }
         &-selected{
             background-color: rgb(153, 0, 0);
+            color: #fff;
         }
         &-clickable{
             &:hover{
