@@ -53,12 +53,6 @@ function Home(props) {
         }
     }
 
-    useEffect(() => {
-        if(visualizationsFile !== null){
-            console.log(visualizationsFile);
-        }
-    }, [visualizationsFile])
-
     const popups = {
         AddNewHostPopup: 'AddNewHostPopup',
         AddFilePopup: 'AddFilePopup',
@@ -128,7 +122,6 @@ function Home(props) {
             return;
         }
         const file = getFile(fileId)
-        console.log("Selecting file for visualization: ", file)
         setVisualizationsFile(file);
         if(updateComponents.Visualizations) {
             updateComponents.Visualizations.update();

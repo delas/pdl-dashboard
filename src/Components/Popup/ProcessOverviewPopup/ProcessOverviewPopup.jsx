@@ -1,5 +1,5 @@
 import './ProcessOverviewPopup.scss';
-import {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect, useCallback, useRef} from 'react';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import ProcessOverviewCard from './ProcessOverviewCard/ProcessOverviewCard';
@@ -33,11 +33,12 @@ function ProcessOverviewPopup(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [processes, setProcesses] = useState([]);
     const [selectedSorting, setSelectedSorting] = useState(null);
+    const sortingRef = useRef(null);
 
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ 
         updateState({}); 
-        setProcesses(sortProcesses(getAllProcesses(), selectedSorting?.value ? selectedSorting?.value : sortType.type));
+        setProcesses(sortProcesses(getAllProcesses(), sortingRef.current?.value ? sortingRef.current?.value : sortType.type));
     }, []);
 
     useEffect (() => {
@@ -45,10 +46,12 @@ function ProcessOverviewPopup(props) {
             setSelectedSorting({value: sortType.type, label: "Type"});
         }
         setComponentUpdaterFunction("ProcessOverviewPopup", {update: forceUpdate})
-        setProcesses(sortProcesses(getAllProcesses(), sortType.type));
+        console.log(selectedSorting)
+        setProcesses(sortProcesses(getAllProcesses(), selectedSorting?.value ? selectedSorting?.value : sortType.type));
         setIsLoading(false);
     }, [])
 
+    // console.log(selectedSorting.value);
     
 
     const sortingOptions = [
@@ -60,13 +63,16 @@ function ProcessOverviewPopup(props) {
     ]
 
     const onSortingDropdownValueChange = (value) => {
-        setProcesses(sortProcesses(getAllProcesses(), value));
-        console.log(value);
+        // console.log(value.value);
+        setProcesses(sortProcesses(getAllProcesses(), value.value));
+        console.log(value.value);
         setSelectedSorting(value);
+        sortingRef.current = value;
     }
 
-    const sortProcesses = (processes, sortType) => {
-        switch(sortType){
+    const sortProcesses = (processes, sort) => {
+        console.log(sort);
+        switch(sort){
             case sortType.startTimeAsc:
                 return sortProcessesAsc(processes, "startTime");
             case sortType.startTimeDsc:
