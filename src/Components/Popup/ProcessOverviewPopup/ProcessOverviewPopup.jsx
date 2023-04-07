@@ -46,7 +46,6 @@ function ProcessOverviewPopup(props) {
             setSelectedSorting({value: sortType.type, label: "Type"});
         }
         setComponentUpdaterFunction("ProcessOverviewPopup", {update: forceUpdate})
-        console.log(selectedSorting)
         setProcesses(sortProcesses(getAllProcesses(), selectedSorting?.value ? selectedSorting?.value : sortType.type));
         setIsLoading(false);
     }, []);

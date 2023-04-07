@@ -68,7 +68,7 @@ function ProcessOverviewCard(props) {
                 </div>
 
                 <div className={`ProcessOverviewCard-endProcess ProcessOverviewCard-endProcess-${true}`}>
-                    <FaStopCircle onClick = {() => {stopProcess(process.id)}}/>
+                    <FaStopCircle onClick = {() => {if(processObject.status.toUpperCase() === "RUNNING") stopProcess(process.id)}}/>
                 </div>
             </div>
         </div>
