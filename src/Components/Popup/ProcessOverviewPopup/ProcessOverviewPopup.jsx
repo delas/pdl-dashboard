@@ -37,7 +37,7 @@ function ProcessOverviewPopup(props) {
 
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ 
-        updateState({}); 
+        updateState({});
         setProcesses(sortProcesses(getAllProcesses(), sortingRef.current?.value ? sortingRef.current?.value : sortType.type));
     }, []);
 
@@ -49,9 +49,7 @@ function ProcessOverviewPopup(props) {
         console.log(selectedSorting)
         setProcesses(sortProcesses(getAllProcesses(), selectedSorting?.value ? selectedSorting?.value : sortType.type));
         setIsLoading(false);
-    }, [])
-
-    // console.log(selectedSorting.value);
+    }, []);
     
 
     const sortingOptions = [
@@ -63,15 +61,12 @@ function ProcessOverviewPopup(props) {
     ]
 
     const onSortingDropdownValueChange = (value) => {
-        // console.log(value.value);
         setProcesses(sortProcesses(getAllProcesses(), value.value));
-        console.log(value.value);
         setSelectedSorting(value);
         sortingRef.current = value;
     }
 
     const sortProcesses = (processes, sort) => {
-        console.log(sort);
         switch(sort){
             case sortType.startTimeAsc:
                 return sortProcessesAsc(processes, "startTime");

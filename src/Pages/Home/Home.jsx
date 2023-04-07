@@ -1,5 +1,7 @@
 import './Home.scss';
-import React, {useState, useEffect, Suspense, useRef} from 'react';
+import React, {useState, useEffect, useRef
+// ,Suspense
+} from 'react';
 //Popups
 import UploadResourcePopup from '../../Components/Popup/UploadResourcePopup/UploadResourcePopup';
 import ActionPopup from '../../Components/Popup/ActionPopup/ActionPopup';
@@ -14,7 +16,7 @@ import Sidebar from '../../Components/Sidebar/Sidebar';
 import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
 import Visualizations from '../../Components/Visualizations/Visualizations';
 import { getFile } from '../../Store/LocalDataStore';
-import ReactHtmlParser from 'react-html-parser';
+// import ReactHtmlParser from 'react-html-parser';
 import { getFileDynamic, getFileResourceId } from '../../Utils/FileUnpackHelper';
 
 
