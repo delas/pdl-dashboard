@@ -15,6 +15,8 @@ function UploadStreamBody(props) {
         onStreamBrokerLocationChange,
         streamTopic,
         onStreamTopicChange,
+        onResourceNameChange,
+        resourceName
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -47,7 +49,7 @@ function UploadStreamBody(props) {
             />
         
             <InputField
-                label = {"Stream broker location:"}
+                label = {"Stream broker host:"}
                 fieldType = {"text"}
                 placeholder = {"Streambroker.org.net.com.org"}
                 value = {streamBrokerLocation}
@@ -59,6 +61,14 @@ function UploadStreamBody(props) {
                 placeholder = {"My_very_special_topic"}
                 value = {streamTopic}
                 onChange = {onStreamTopicChange}
+            />
+
+            <InputField
+                label = {"Resource name:"}
+                fieldType = {"text"}
+                placeholder = {"Name of the resource:"}
+                value = {resourceName}
+                onChange = {onResourceNameChange}
             />
             
             <InputField

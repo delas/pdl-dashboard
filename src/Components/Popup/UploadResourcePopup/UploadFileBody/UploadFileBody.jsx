@@ -17,6 +17,10 @@ function UploadFileBody(props) {
         repositories,
         onFileDestinationDropdownChange,
         fileDestination,
+        onFileExtensionChange,
+        fileExtension,
+        onResourceNameChange,
+        resourceName
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -54,13 +58,29 @@ function UploadFileBody(props) {
                 label = {`Select the destination repository:`}
                 value = {fileDestination}
             />
+
+            <InputField
+                label = {"Resource name:"}
+                fieldType = {"text"}
+                placeholder = {"Name of the resource:"}
+                value = {resourceName}
+                onChange = {onResourceNameChange}
+            />
             
             <InputField
                 label = {"Resource description:"}
                 fieldType = {"text"}
-                placeholder = {"Consider adding a description of the resource contents"}
+                placeholder = {"Consider adding a description of the resource contents:"}
                 value = {fileDescription}
                 onChange = {onFileDescriptionChange}
+            />
+
+            <InputField
+                label = {"File extension:"}
+                fieldType = {"text"}
+                placeholder = {"svg, png, jpg, pnml, bpmn, ..."}
+                value = {fileExtension}
+                onChange = {onFileExtensionChange}
             />
             
         </div>

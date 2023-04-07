@@ -8,7 +8,7 @@ import { pingAllAddedServices, pingAllProcesses, getAllDynamicResources } from '
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
 import { GetRepositoryConfig } from './Services/RepositoryServices';
-import { getFileExtension, getFileHost, getFileResourceId } from './Utils/FileUnpackHelper';
+import { getFileExtension, getFileHost, getFileResourceId, getFileResourceType } from './Utils/FileUnpackHelper';
 
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -137,8 +137,12 @@ function App(props) {
     }
 
     const shouldSetFileContent = (file) => {
-        const fileExtension = getFileExtension(file);
-        switch(fileExtension.toUpperCase()){
+        if(getFileResourceType(file).toUpperCase() === "EVENTSTREAM"){
+            return false;
+        }
+
+        const fileExtension = getFileExtension(file).toUpperCase();
+        switch(fileExtension){
             case "XES": return false;
             case "BPMN": return true;
             case "PNG": return true;

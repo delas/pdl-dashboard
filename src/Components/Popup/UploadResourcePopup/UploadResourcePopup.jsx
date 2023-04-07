@@ -4,7 +4,7 @@ import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import {getRepositories} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
-import { sendFileToRepository, GetSingleFileMetadata } from '../../../Services/RepositoryServices';
+import { sendFileToRepository, GetSingleFileMetadata, sendStreamToRepository } from '../../../Services/RepositoryServices';
 import Tabs from '../../Widgets/Tabs/Tabs';
 import UploadFileBody from './UploadFileBody/UploadFileBody';
 import UploadStreamBody from './UploadStreamBody/UploadStreamBody';
@@ -17,7 +17,6 @@ function UploadResourcePopup(props) {
     const {
         toggleFilePopupOpen,
         repository = {},
-        // addFile,
         getAndAddFile,
     } = props;
 
@@ -34,6 +33,9 @@ function UploadResourcePopup(props) {
     const [streamBrokerLocation, setStreamBrokerLocation] = useState(null);
     const [streamTopic, setStreamTopic] = useState(null);
 
+    const [fileExtension, setFileExtension] = useState(null);
+    const [resourceName, setResourceName] = useState(null);
+
     useEffect(() => {
         setIsLoading(false);
         setFileDestination(repository);
@@ -49,11 +51,23 @@ function UploadResourcePopup(props) {
 
     const onTabChange = (tabIndex) => {
         setSelectedTab(tabIndex);
+        switch(tabIndex.Title){
+            case "File":
+                break;
+            case "Stream":
+                setSelectedFileType({label: "EventStream", value: "EventStream"});
+                setResourceName(null);
+                break;
+            default:
+                break;
+        }
     }
     const fileTabs = [{Title: 'File'}, {Title: 'Stream'}];
     
     const onFileUploadValueChange = (event) => {
         setSelectedFile(event.target.files[0]);
+        const filenameWithoutExtension = event.target.files[0].name.split('.')[0];
+        setResourceName(filenameWithoutExtension);
 		setIsFilePicked(true);
     }
 
@@ -70,35 +84,45 @@ function UploadResourcePopup(props) {
             return true;
         }
 
-        if(selectedTab.Title === "File"){
-            return !(isFilePicked && selectedFileType && fileDescription);
-        } 
-        else if(selectedTab.Title === "Stream") {
-            return !(streamBrokerLocation && streamTopic && fileDescription);
-        } else {
-            return true;
+        switch(selectedTab.Title){
+            case "File":
+                return !(isFilePicked && selectedFileType && fileDescription && fileExtension);
+            case "Stream":
+                return !(streamBrokerLocation && streamTopic && fileDescription);
+            default:
+                return true;
         }
     }
 
     const onConfirmClick = () => {
-        if(isFilePicked && fileDestination && selectedFileType){
-            setIsLoading(true);
-            sendFileToRepository(fileDestination.label, selectedFile, selectedFileType.value, fileDescription).then((res) => {
-                GetSingleFileMetadata(fileDestination.label, res.data).then((res) => {
-                    // if(availableFileExtensions.includes(getFileExtension(res.data).toUpperCase())){
-                        // const reader = new FileReader();
-                        // reader.readAsText(selectedFile, 'UTF-8');
-                        // reader.onload = function (evt) {
-                            // getAndAddFile({res.data, fileContent: evt.target.result})
-                        // }
+        switch(selectedTab.Title){
+            case "File":
+                setIsLoading(true);
+                sendFileToRepository(fileDestination.label, selectedFile, fileExtension, selectedFileType.value, resourceName, fileDescription)
+                .then((res) => {
+                    GetSingleFileMetadata(fileDestination.label, res.data)
+                    .then((res) => {
                         getAndAddFile(res.data);
-                    // } else {
-                    //     getAndAddFile({...res.data, fileContent: null});
-                    // }
-                });
-            })
-            .then(() => {toggleFilePopupOpen(); setIsLoading(false);})
-            .catch((err) => {console.log(err); setIsLoading(false);});
+                    });
+                })
+                .then(() => {toggleFilePopupOpen(); setIsLoading(false);})
+                .catch((err) => {console.log(err); setIsLoading(false);});
+                break;
+            case "Stream":
+                setIsLoading(true);
+                sendStreamToRepository(fileDestination.label, streamBrokerLocation, streamTopic, resourceName, selectedFileType.value, fileDescription)
+                .then((res) => {
+                    GetSingleFileMetadata(fileDestination.label, res.data)
+                    .then((res) => {
+                        getAndAddFile(res.data);
+                    });
+                })
+                .then(() => {toggleFilePopupOpen(); setIsLoading(false);})
+                .catch((err) => {console.log(err); setIsLoading(false);});
+                break;
+            default:
+                alert("It seems there was an error while uploading the resource. Please try selecting a tab in the popup and try again.")
+                setIsLoading(false);
         }
     }
 
@@ -109,7 +133,7 @@ function UploadResourcePopup(props) {
     const radiobuttonsFile = [
         {label: "Raw data/event log", value: "EventLog"},
         {label: "Process Model", value: "ProcessModel"},
-        {label: "Petri net", value: "Petrinet"}
+        {label: "Petri net", value: "PetriNet"}
     ];
 
     const onRadioButtonChange = (value) => {
@@ -118,6 +142,14 @@ function UploadResourcePopup(props) {
 
     const changeSelectedFileType = (value) => {
         setSelectedFileType(value);
+    }
+
+    const onFileExtensionChange = (value) => {
+        setFileExtension(value.value);
+    }
+
+    const onResourceNameChange = (value) => {
+        setResourceName(value.value);
     }
 
     const onStreamBrokerLocationChange = (res) => {
@@ -157,6 +189,10 @@ function UploadResourcePopup(props) {
                         repositories = {repositories}
                         onFileDestinationDropdownChange = {onFileDestinationDropdownChange}
                         fileDestination = {fileDestination}
+                        onFileExtensionChange = {onFileExtensionChange}
+                        fileExtension = {fileExtension}
+                        onResourceNameChange = {onResourceNameChange}
+                        resourceName = {resourceName}
                     />}
 
                     {(selectedTab.Title === "Stream") && <UploadStreamBody
@@ -169,6 +205,8 @@ function UploadResourcePopup(props) {
                         fileDestination = {fileDestination}
                         streamBrokerLocation = {streamBrokerLocation}
                         streamTopic = {streamTopic}
+                        onResourceNameChange = {onResourceNameChange}
+                        resourceName = {resourceName}
                     />}
                     
                 </div>

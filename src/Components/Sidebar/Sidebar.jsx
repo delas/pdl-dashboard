@@ -105,7 +105,6 @@ function Sidebar(props) {
         }
     }
 
-
     if(isLoading){
         return (
             <div className="Sidebar">

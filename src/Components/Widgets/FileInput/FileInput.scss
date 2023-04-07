@@ -4,7 +4,7 @@ $theme: rgb(153, 0, 0);
     float: left;
     clear: both;
     width: 100%;
-    padding: 2rem 1.5rem;
+    padding: 1rem 1.5rem;
     text-align: center;
     border: 3px solid #eee;
     transition: all .2s ease;
@@ -13,10 +13,12 @@ $theme: rgb(153, 0, 0);
 
     &:hover {
         border-color: $theme;
+        border: 3px solid $theme;
+        box-shadow: inset 0 0 0 2px #eee;
+        cursor: pointer;
     }
     &.hover {
-        border: 3px solid $theme;
-        box-shadow: inset 0 0 0 6px #eee;
+        
     }
 }
 
@@ -26,7 +28,7 @@ $theme: rgb(153, 0, 0);
 
 .fileInput-fileinput-button {
     display: inline-block;
-    margin: .5rem .5rem 1rem .5rem;
+    margin: .5rem .5rem 0rem .5rem;
     clear: both;
     font-family: inherit;
     font-weight: 700;

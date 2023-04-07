@@ -12,7 +12,7 @@ function BackdropModal(props) {
     return (
         <div className='Backdrop-modal' 
             onClick = {(e) => {
-                closeModal(); 
+                // closeModal(); 
                 e.stopPropagation();
             }}
         >

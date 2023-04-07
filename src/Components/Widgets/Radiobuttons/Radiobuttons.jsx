@@ -10,16 +10,18 @@ function Radiobuttons(props) {
 
 
     return (
-        <div className='Radiobuttons-container'>
+        <div className='Radiobuttons-component'>
             <span className='Radiobutton-title'>{title}</span>
-            {options.map((option, index) => {
-                return  (
-                    <label className="Radiobutton-label" key={index}>
-                        <input className='Radiobutton-button' type="radio" name="radiobutton" onClick={() => {onChange(option)}}/>
-                        {option.label}
-                    </label>
-                )
-            })}
+            <div className='Radiobuttons-container'>
+                {options.map((option, index) => {
+                    return  (
+                        <label className="Radiobutton-label" key={index}>
+                            <input className='Radiobutton-button' type="radio" name="radiobutton" onClick={() => {onChange(option)}}/>
+                            {option.label}
+                        </label>
+                    )
+                })}
+            </div>
         </div>
     );
 }

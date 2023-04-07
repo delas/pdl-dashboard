@@ -45,15 +45,26 @@ export async function GetResourceGraph(hostname, fileId){
     return axios.get(`${hostname}${urlExtension}`);
 }
 
-export const sendFileToRepository = async (hostname, file, fileType, description = "") => {
+export const sendFileToRepository = async (hostname, file, fileExtension, fileType, resourceLabel, description = "") => {
     // The file param is the html input type, not the metadata object used elsewhere.
     const urlExtension = "/resources/";
-    const fileExtension = file.name.split('.')[file.name.split('.').length - 1];
+    // const fileExtension = file.name.split('.')[file.name.split('.').length - 1];
     const formdata = new FormData();
     formdata.append('file', file);
-    formdata.append('ResourceLabel', file.name);
+    formdata.append('ResourceLabel', resourceLabel);
     formdata.append('ResourceType', fileType);
     formdata.append('FileExtension', fileExtension);
     formdata.append('Description', description);
     return axios.post(`${hostname}${urlExtension}`, formdata);
 };
+
+export const sendStreamToRepository = async (hostname, host, streamTopic, resourceLabel, resourceType = "EventStream", description = "") => {
+    const urlExtension = "/resources/metadata";
+    const formdata = new FormData();
+    formdata.append('Host', host);
+    formdata.append('StreamTopic', streamTopic);
+    formdata.append('ResourceLabel', resourceLabel);
+    formdata.append('ResourceType', resourceType);
+    formdata.append('Description', description);
+    return axios.post(`${hostname}${urlExtension}`, formdata);
+}

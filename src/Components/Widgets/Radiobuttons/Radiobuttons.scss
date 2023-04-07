@@ -1,9 +1,19 @@
-.Radiobuttons-container{
+.Radiobuttons-component{
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+
+}
+
+.Radiobuttons-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.5em;
 }
 
 .Radiobutton-title{
@@ -12,6 +22,9 @@
 
 .Radiobutton-label{
     font-size: 1.0em;
+    &:hover{
+        cursor: pointer;
+    }
 }
 
 .Radiobutton-button{

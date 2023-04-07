@@ -114,7 +114,7 @@ function Home(props) {
     }
 
     const selectFileForVisualization = (fileId) => {
-        if(!fileId) setVisualizationsFile(null);
+        if(fileId === null || fileId === undefined) setVisualizationsFile(null);
         const file = getFile(fileId)
         setVisualizationsFile(file);
         if(updateComponents.Visualizations) {
@@ -122,6 +122,8 @@ function Home(props) {
         }
         updateFile(file);
     }
+
+    
 
     // const [htmlString, setHtmlString] = useState(null); 
 
