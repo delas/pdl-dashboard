@@ -22,5 +22,6 @@ export async function GetMinerProcessStatus(hostname, processId) {
 
 export async function StopMinerProcess(hostname, processId) {
     const urlExtension = `/stop/${processId}`;
+    console.log(`${hostname}${urlExtension}`);
     return axios.delete(`${hostname}${urlExtension}`);
 }

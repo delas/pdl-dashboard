@@ -4,8 +4,9 @@ import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import ProcessOverviewCard from './ProcessOverviewCard/ProcessOverviewCard';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
-import {getAllProcesses} from '../../../Store/LocalDataStore';
+import {getAllProcesses, getProcess, setProcessKey} from '../../../Store/LocalDataStore';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
+import {StopMinerProcess} from '../../../Services/MinerServices';
 
 function ProcessOverviewPopup(props) {
 
@@ -142,7 +143,13 @@ function ProcessOverviewPopup(props) {
     }
 
     const stopProcess = (processId) => {
-        console.log(`stopping process: ${processId}`);
+        const process = getProcess(processId);
+
+        StopMinerProcess(process.hostname, process.processId).then((response) => {
+            setProcessKey(processId, "status", "stopped");
+        }).catch((error) => {
+            console.log(error);
+        });
     }
     const pauseProcess = (processId) => {
         console.log(`pausing process: ${processId}`);

@@ -16,13 +16,16 @@ $tab-height: 3em;
     width: 100%;
     max-width: 100%;
     overflow: none;
-    // height: 3em;
-    padding-bottom: 0.5em;
     text-align: left;
     text-overflow: ellipsis !important;
     overflow: hidden !important;
     white-space: nowrap;
     box-sizing: border-box;
+    padding: 0.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 .Visualizations-tabsContainer{
@@ -51,7 +54,7 @@ $tab-height: 3em;
 
 .Visualizations-children-dropdown-container{
     position: absolute;
-    // width: 70%;
+    max-width: 20em;
     top: 0;
     right: 0;
     padding-top: 0.5em;

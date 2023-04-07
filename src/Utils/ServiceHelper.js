@@ -1,8 +1,8 @@
 import { PingMiner, GetMinerProcessStatus } from '../Services/MinerServices';
 import { PingRepository, GetSingleFileMetadata } from '../Services/RepositoryServices';
 import { PingServiceRegistry } from '../Services/ServiceRegistryServices';
-import { getMiners, getRepositories, getServiceRegistries, setStatus, getAllRunningProcesses, setProcessKey, getAllFiles } from '../Store/LocalDataStore';
-import { getFileDynamic, getFileResourceId } from './FileUnpackHelper';
+import { getMiners, getRepositories, getServiceRegistries, setStatus, getAllRunningProcesses, setProcessKey, getAllFiles, getProcess } from '../Store/LocalDataStore';
+import { getFileDynamic, getFileHost, getFileResourceId } from './FileUnpackHelper';
 import {msToTime} from './Utils';
 
 export async function pingAllAddedServices() {
@@ -41,9 +41,10 @@ export async function pingAllProcesses(getAndAddFile) {
         GetMinerProcessStatus(process.hostname, process.processId)
             .then(res => {
                 if(res?.data?.ProcessStatus) { // Update status
-                    setProcessKey(process.id, "status", res?.data?.ProcessStatus);
+                    const result = res.data;
+                    setProcessKey(process.id, "status", result.ProcessStatus);
 
-                    switch(res.data.ProcessStatus?.toUpperCase()){
+                    switch(result.ProcessStatus?.toUpperCase()){
                         case "RUNNING":
                             setProcessKey(process.id, "progress", msToTime(new Date().getTime() - process.startTime))
                             break;
@@ -55,19 +56,23 @@ export async function pingAllProcesses(getAndAddFile) {
                         case "CRASH":
                             setProcessKey(process.id, "endTime", new Date());
                             setProcessKey(process.id, "progress", process.duration);
-                            setProcessKey(process.id, "error", res?.data?.Error);
+                            setProcessKey(process.id, "error", result.Error);
                             break;
                         default:
                             setProcessKey(process.id, "progress", 0);
                             break;
                     }
 
-                    if(res?.data?.ResourceId){
+                    if(process.saveOrUpdateFile && res?.data?.ResourceId){
                         GetSingleFileMetadata(process.outputDestination, res?.data?.ResourceId)
                             .then((res) => {
-                                const resourceId = getFileResourceId(res?.data);
-                                setProcessKey(process.id, "resourceId", resourceId);
-                                getAndAddFile(res?.data);
+                                if(res?.data){
+                                    const metadata = res.data;
+                                    const resourceId = getFileResourceId(metadata);
+                                    setProcessKey(process.id, "resourceId", resourceId);
+                                    metadata["processId"] = process.id;
+                                    getAndAddFile(metadata);
+                                }
                             })
                             .catch(() => {
                                 alert("Failed to get file");
@@ -83,9 +88,18 @@ export async function pingAllProcesses(getAndAddFile) {
 }
 
 export async function getAllDynamicResources(getAndAddFile) {
-    getAllFiles().filter(file => {
+    const files = getAllFiles();
+    if(files.length > 0)
+    files.filter(file => {
         return getFileDynamic(file); 
     }).forEach(file => {
-        getAndAddFile(file);
+        GetSingleFileMetadata(getFileHost(file), getFileResourceId(file)).then((res) => {
+            if(res?.data) {
+                getAndAddFile(res?.data);
+            }
+            // if(getProcess(file.processId)) 
+        }).catch(() => {
+            alert("Failed to get file");
+        });
     })
 }

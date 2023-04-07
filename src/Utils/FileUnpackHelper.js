@@ -38,6 +38,10 @@ export function getFileStreamTopic(file){
     return file.ResourceInfo.StreamTopic;
 }
 
+export function getFileProcessId(file){
+    return file.processId;
+}
+
 export function fileBuilder(file, properties = {}){
     return {
         ResourceId: properties.ResourceId || getFileResourceId(file),

@@ -15,7 +15,7 @@ import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
 import Visualizations from '../../Components/Visualizations/Visualizations';
 import { getFile } from '../../Store/LocalDataStore';
 import ReactHtmlParser from 'react-html-parser';
-import { getFileDynamic, getFileResourceId, getFileContent } from '../../Utils/FileUnpackHelper';
+import { getFileDynamic, getFileResourceId } from '../../Utils/FileUnpackHelper';
 
 
 // import ReactDOMServer from 'react-dom/server'
@@ -30,7 +30,6 @@ function Home(props) {
         removeHost,
         getAndAddFile,
         deleteFile,
-        // addFile,
         updateComponents,
         shouldSetFileContent,
     } = props;
@@ -44,11 +43,21 @@ function Home(props) {
         if(getFileDynamic(file)) {
             if(updateFileInterval.current !== null) clearInterval(updateFileInterval.current);
             updateFileInterval.current = setInterval(() => {
-                const newfile = getFile(getFileResourceId(file));
-                setVisualizationsFile(newfile);
+                if(getFileResourceId(file) === getFileResourceId(file)) {
+                    const newfile = getFile(getFileResourceId(file));
+                    setVisualizationsFile(newfile);
+                } else {
+                    clearInterval(updateFileInterval.current);
+                }
             }, 1500);
         }
     }
+
+    useEffect(() => {
+        if(visualizationsFile !== null){
+            console.log(visualizationsFile);
+        }
+    }, [visualizationsFile])
 
     const popups = {
         AddNewHostPopup: 'AddNewHostPopup',
@@ -114,8 +123,12 @@ function Home(props) {
     }
 
     const selectFileForVisualization = (fileId) => {
-        if(fileId === null || fileId === undefined) setVisualizationsFile(null);
+        if(fileId === null || fileId === undefined) {
+            setVisualizationsFile(null);
+            return;
+        }
         const file = getFile(fileId)
+        console.log("Selecting file for visualization: ", file)
         setVisualizationsFile(file);
         if(updateComponents.Visualizations) {
             updateComponents.Visualizations.update();
@@ -218,7 +231,6 @@ function Home(props) {
                 {isOpen.actionPopupOpen ?
                     <ActionPopup
                         toggleActionPopupOpen = {toggles.toggleActionPopupOpen}
-                        getAndAddFile = {getAndAddFile}
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}

@@ -153,11 +153,12 @@ function App(props) {
         }
     }
 
-    const getAndAddFile = (file, retries = 0) => {
+    const getAndAddFile = (file) => {
+        if(!file) return;
+
         const fileExtension = getFileExtension(file);
         const resourceId = getFileResourceId(file);
         const host = getFileHost(file);
-
         saveFile(resourceId, file); // save the metadata without filecontent
         setTimeout(() => { updateComponents.Sidebar.update() }, 500);
 
@@ -173,21 +174,14 @@ function App(props) {
             responsePromise
             .then((res) => {
                 if(res.status === 200 && res.data && getFile(resourceId)) { // file could have been removed before completed
-                    if (isImage) { 
-                        console.log(res.data);
+                    if (isImage) {
                         saveFile(resourceId, {...file, fileContent: URL.createObjectURL(res.data) })
                     } else {
                         saveFile(resourceId, {...file, fileContent: res.data }); // save the filecontent
                     }
                     setTimeout(() => { updateComponents.Sidebar.update() }, 500);
                 }
-                else if(retries < 10)
-                    setTimeout(() => { getAndAddFile(file, retries + 1); updateComponents.Sidebar.update() }, 6000);
-            })
-            .catch((e) => {
-                if(retries < 10)
-                    setTimeout(() => { getAndAddFile(file, retries + 1); updateComponents.Sidebar.update() }, 6000);
-            });
+                })
     }
 
     const deleteFile = (id) => { //Deletes from local memory - not repository

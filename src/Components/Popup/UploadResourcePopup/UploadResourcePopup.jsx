@@ -8,9 +8,6 @@ import { sendFileToRepository, GetSingleFileMetadata, sendStreamToRepository } f
 import Tabs from '../../Widgets/Tabs/Tabs';
 import UploadFileBody from './UploadFileBody/UploadFileBody';
 import UploadStreamBody from './UploadStreamBody/UploadStreamBody';
-import { saveFile } from '../../../Store/LocalDataStore';
-import {availableFileExtensions} from '../../../config';
-import { getFileExtension } from '../../../Utils/FileUnpackHelper';
 
 function UploadResourcePopup(props) {
 
@@ -102,6 +99,7 @@ function UploadResourcePopup(props) {
                 .then((res) => {
                     GetSingleFileMetadata(fileDestination.label, res.data)
                     .then((res) => {
+                        console.log("Calling getAndAddFile");
                         getAndAddFile(res.data);
                     });
                 })
@@ -114,6 +112,7 @@ function UploadResourcePopup(props) {
                 .then((res) => {
                     GetSingleFileMetadata(fileDestination.label, res.data)
                     .then((res) => {
+                        console.log("Calling getAndAddFile");
                         getAndAddFile(res.data);
                     });
                 })

@@ -3,7 +3,7 @@ import {useState, useEffect, useCallback} from 'react';
 // import Histogram from 'react-chart-histogram';
 import { Chart } from "react-google-charts";
 import {GetHistogramOfLog} from '../../../Services/RepositoryServices';
-import { getFileResourceLabel, getFileResourceId, getFileHost, getFileContent, getFileDynamic } from '../../../Utils/FileUnpackHelper';
+import { getFileResourceLabel, getFileResourceId, getFileHost, getFileContent, getFileDynamic, getFileExtension } from '../../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function HistogramVisualizer(props) {
@@ -21,7 +21,7 @@ function HistogramVisualizer(props) {
     }, []);
 
     useEffect(() => {
-        if(getFileDynamic(file)){
+        if(getFileDynamic(file) || getFileExtension(file).toUpperCase() === "JSON"){
             setFileContent(convertFileContentToHistogramData(getFileContent(file)));
             forceUpdate();
             setIsLoading(false);

@@ -103,21 +103,34 @@ function Visualizations(props) {
                 />
             </div>
             <div className='Visualizations-header'>
-                <b>{`${getFileResourceLabel(file)}:`}</b>{` ${getFileDescription(file)}`}
+                <div>
+                    <b>{`${getFileResourceLabel(file)}:`}</b>
+                </div>
+                <div>
+                    {` ${getFileDescription(file)}`}
+                </div>
             </div>
             <div className='Visualizations-children-dropdown-container'>
-                <button className={`Visualizations-children-button Visualizations-children-button${selectedChild ? `-disabled-false` : `-disabled-true`}`}  
+                
+                {childrenForDropdown.length > 0 && 
+                    <button className={`Visualizations-children-button Visualizations-children-button${selectedChild ? `-disabled-false` : `-disabled-true`}`}  
                         onClick = {onDropdownButtonClick} >
-                    Download
-                </button>
-                <div className='Visualizations-children-dropdown'>
-                    <Dropdown
-                        label = "Children of this resource"
-                        options = {childrenForDropdown}
-                        onValueChange = {onChildDropdownChange}
-                        value = {selectedChild}
-                    />
-                </div>
+                        Download
+                    </button> &&
+                    <div className='Visualizations-children-dropdown'>
+                        <Dropdown
+                            label = "Children of this resource"
+                            options = {childrenForDropdown}
+                            onValueChange = {onChildDropdownChange}
+                            value = {selectedChild}
+                        />
+                    </div>
+                }
+                {childrenForDropdown.length === 0 &&
+                    <div className='Visualizations-children-dropdown'>
+                        Resource has no children
+                    </div>
+                }
             </div>
             {selectedTab &&
                 <div className='Visualizations-VisualizerContainer'>

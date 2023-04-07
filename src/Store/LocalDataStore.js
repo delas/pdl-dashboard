@@ -1,10 +1,26 @@
-// ---------------------- HOST STORAGE ----------------------
-
 import { getFileExtension } from "../Utils/FileUnpackHelper";
+// ---------------------- Default utils ----------------------
+const setSavedItem = (key, value) => {
+    localStorage.setItem(key, JSON.stringify(value));
+}
 
+const getSavedItem = (key) => {
+    return JSON.parse(localStorage.getItem(key));
+}
+
+const removeSavedResource = (key) => {
+    try{
+        localStorage.removeItem(key);
+    }
+    catch(e) {
+        console.log(e);
+    }
+}
+
+
+// ---------------------- HOST STORAGE ----------------------
 export function saveHost(key, hostObject){
-    
-    localStorage.setItem(key, JSON.stringify(hostObject));
+    setSavedItem(key, hostObject);
 }
 
 export function hostExits(url){
@@ -19,11 +35,11 @@ export function hostExits(url){
 }
 
 export function removeHost(key){
-    removeItem(key);
+    removeSavedResource(key);
 }
 
 export function getMiner(key) {
-    return JSON.parse(localStorage.getItem(key));
+    return getSavedItem(key);
 }
 
 export function getMiners(){
@@ -89,15 +105,15 @@ export function removeItem(key){
 // ---------------------- FILE STORAGE ----------------------
 
 export function saveFile(key, file) {
-    localStorage.setItem(key, JSON.stringify(file));
+    setSavedItem(key, file);
 }
 
 export function removeFile(key){
-    removeItem(key);
+    removeSavedResource(key);
 }
 
 export function getFile(key) {
-    return JSON.parse(localStorage.getItem(key));
+    return getSavedItem(key);
 }
 
 export function getAllFiles(){
@@ -135,15 +151,15 @@ function getAllFileKeysWithType(type) {
 
 // ---------------------- PROCESS STORAGE ----------------------
 export function saveProcess(process){
-    localStorage.setItem(process.id, JSON.stringify(process));
+    setSavedItem(process.id, process);
 }
 
 export function removeProcess(key){
-    removeItem(key);
+    removeSavedResource(key);
 }
 
 export function getProcess(key) {
-    return JSON.parse(localStorage.getItem(key));
+    return getSavedItem(key);
 }
 
 export function getAllProcesses(){

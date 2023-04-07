@@ -58,6 +58,7 @@ function GetFilePopup(props) {
 
     const onConfirmClick = () => {
         if(selectedFile) {
+            console.log("Calling getAndAddFile");
             getAndAddFile(selectedFile.value);
             toggleGetFilePopupOpen();
         }

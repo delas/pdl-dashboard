@@ -11,7 +11,11 @@ export async function GetRepositoryFilterMetadata(hostname, filters) {
 }
 
 export async function GetSingleFileMetadata(hostname, fileId){
-    const urlExtension = `/resources/metadata/${fileId}`;
+    let urlExtension = `/resources/metadata/${fileId}`;
+    if(hostname.includes("/resources")){
+        urlExtension = `metadata/${fileId}`;
+    }
+    // const urlExtension = `/resources/metadata/${fileId}`;
     return axios.get(`${hostname}${urlExtension}`);
 }
 

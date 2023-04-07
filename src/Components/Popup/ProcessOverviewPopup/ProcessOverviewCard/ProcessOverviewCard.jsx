@@ -68,7 +68,7 @@ function ProcessOverviewCard(props) {
                 </div>
 
                 <div className={`ProcessOverviewCard-endProcess ProcessOverviewCard-endProcess-${true}`}>
-                    <FaStopCircle onClick = {() => {stopProcess(processObject.processId)}}/>
+                    <FaStopCircle onClick = {() => {stopProcess(process.id)}}/>
                 </div>
             </div>
         </div>

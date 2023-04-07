@@ -8,7 +8,6 @@ import InputField from '../../Widgets/InputField/InputField';
 import { getMiners, getRepositories, getMiner, saveProcess } from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { PostMineAction } from '../../../Services/MinerServices';
-import { GetSingleFileMetadata } from '../../../Services/RepositoryServices';
 import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
 import { getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
 import {v4 as uuidv4} from 'uuid';
@@ -18,7 +17,6 @@ function ActionPopup(props) {
     const {
         toggleActionPopupOpen,
         miner = {},
-        getAndAddFile,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -229,6 +227,7 @@ function ActionPopup(props) {
             outputDestination: repositoryDestination.label,
             error: null,
             resourceId: null,
+            saveOrUpdateFile: true,
         };
         saveProcess(status);
     }
