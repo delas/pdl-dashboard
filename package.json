@@ -19,7 +19,6 @@
     "react": "^18.2.0",
     "react-bpmn": "^0.2.0",
     "react-chart-histogram": "^0.2.4",
-    "react-digraph": "^8.1.0",
     "react-dom": "^18.2.0",
     "react-google-charts": "^4.0.0",
     "react-html-parser": "^2.0.2",
