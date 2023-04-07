@@ -394,7 +394,7 @@ function ActionPopup(props) {
                                     return (
                                         <InputField
                                             key = {index}
-                                            label = {param.name}
+                                            label = {param.Name}
                                             fieldType = {type}
                                             placeholder = {type}
                                             min = {param.min}
