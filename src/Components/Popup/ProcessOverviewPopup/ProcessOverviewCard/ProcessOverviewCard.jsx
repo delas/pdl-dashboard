@@ -2,6 +2,7 @@ import './ProcessOverviewCard.scss';
 import {useState, useEffect} from 'react';
 import {GiWarPick, GiPauseButton, GiPlayButton } from 'react-icons/gi';
 import {FaStopCircle, FaCheck, FaStop} from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa';
 
 function ProcessOverviewCard(props) {
 
@@ -10,6 +11,7 @@ function ProcessOverviewCard(props) {
         stopProcess = () => {},
         pauseProcess = () => {},
         resumeProcess = () => {},
+        deleteProcess = () => {},
     } = props;
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -67,9 +69,17 @@ function ProcessOverviewCard(props) {
                     {processObject.status.toUpperCase() === 'PAUSED' && <GiPlayButton onClick = {() => {resumeProcess(processObject.processId)}}/>}
                 </div>
 
+                {processObject.status.toUpperCase() !== 'RUNNING' && 
+                    <div className={`ProcessOverviewCard-delete ProcessOverviewCard-delete-${true}`} onClick = {() => {deleteProcess(processObject.id)}}>
+                        <FaTrash/>
+                    </div>
+                }
+
                 <div className={`ProcessOverviewCard-endProcess ProcessOverviewCard-endProcess-${true}`}>
                     <FaStopCircle onClick = {() => {if(processObject.status.toUpperCase() === "RUNNING") stopProcess(process.id)}}/>
                 </div>
+
+                
             </div>
         </div>
     );

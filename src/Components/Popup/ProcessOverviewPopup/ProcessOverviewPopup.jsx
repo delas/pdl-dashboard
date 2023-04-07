@@ -4,7 +4,7 @@ import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import ProcessOverviewCard from './ProcessOverviewCard/ProcessOverviewCard';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
-import {getAllProcesses, getProcess, setProcessKey} from '../../../Store/LocalDataStore';
+import {getAllProcesses, getProcess, setProcessKey, removeProcess} from '../../../Store/LocalDataStore';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {StopMinerProcess} from '../../../Services/MinerServices';
 
@@ -158,6 +158,11 @@ function ProcessOverviewPopup(props) {
         console.log(`resuming process: ${processId}`);
     }
 
+    const deleteProcess = (processId) => {
+        removeProcess(processId);
+        forceUpdate();
+    }
+
     return (
             <BackdropModal closeModal = {toggleProcessOverviewPopupOpen}>
 
@@ -185,6 +190,7 @@ function ProcessOverviewPopup(props) {
                                     stopProcess = {stopProcess}
                                     pauseProcess = {pauseProcess}
                                     resumeProcess = {resumeProcess}
+                                    deleteProcess = {deleteProcess}
                                 />
                             )
                         })}
