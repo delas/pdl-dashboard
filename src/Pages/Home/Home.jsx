@@ -45,7 +45,7 @@ function Home(props) {
         if(getFileDynamic(file)) {
             if(updateFileInterval.current !== null) clearInterval(updateFileInterval.current);
             updateFileInterval.current = setInterval(() => {
-                if(getFileResourceId(file) === getFileResourceId(file)) {
+                if(getFileResourceId(visualizationsFile) === getFileResourceId(file)) {
                     const newfile = getFile(getFileResourceId(file));
                     setVisualizationsFile(newfile);
                 } else {
