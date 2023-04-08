@@ -18,6 +18,7 @@ import Visualizations from '../../Components/Visualizations/Visualizations';
 import { getFile } from '../../Store/LocalDataStore';
 // import ReactHtmlParser from 'react-html-parser';
 import { getFileDynamic, getFileResourceId } from '../../Utils/FileUnpackHelper';
+import {pingMinerProcessInterval} from '../../config';
 
 
 // import ReactDOMServer from 'react-dom/server'
@@ -42,16 +43,16 @@ function Home(props) {
     let updateFileInterval = useRef(null);
 
     const updateFile = (file) => {
+        if(updateFileInterval.current !== null) clearInterval(updateFileInterval.current);
         if(getFileDynamic(file)) {
-            if(updateFileInterval.current !== null) clearInterval(updateFileInterval.current);
             updateFileInterval.current = setInterval(() => {
-                if(getFileResourceId(visualizationsFile) === getFileResourceId(file)) {
+                if(getFileResourceId(file)) {
                     const newfile = getFile(getFileResourceId(file));
                     setVisualizationsFile(newfile);
                 } else {
                     clearInterval(updateFileInterval.current);
                 }
-            }, 1500);
+            }, pingMinerProcessInterval);
         }
     }
 

@@ -9,6 +9,8 @@ import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
 import { GetRepositoryConfig } from './Services/RepositoryServices';
 import { getFileExtension, getFileHost, getFileResourceId, getFileResourceType } from './Utils/FileUnpackHelper';
+import { pingDynamicResourceInterval, pingHostInterval, pingMinerProcessInterval } from './config';
+
 
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +74,7 @@ function App(props) {
                     updateComponents.SidebarHosts.update();
                 }
             });
-        }, 10000);
+        }, pingHostInterval);
     }, []);
 
     useEffect(() => {
@@ -85,7 +87,7 @@ function App(props) {
                     }, 200)
                 }
             });
-        }, 3000);
+        }, pingMinerProcessInterval);
     }, []);
 
     useEffect(() => {
@@ -99,7 +101,7 @@ function App(props) {
                     updateComponents.Visualizations.update();
                 }
             });
-        }, 3000);
+        }, pingDynamicResourceInterval);
     })
 
     const setComponentUpdaterFunction = (componentName, updateFunc) => {

@@ -1,4 +1,8 @@
-export const config = {
+export const pingDynamicResourceInterval = 1000; // 3 seconds
+export const pingHostInterval = 10000; // 10 seconds
+export const pingMinerProcessInterval = 1000; // 3 seconds
+
+export const visualizationConfig = {
     EVENTLOG: {
         XES: [
             {
@@ -106,7 +110,7 @@ export const config = {
 }
 
 export const getAvailableResourceTypes = () => {
-    return Object.keys(config);
+    return Object.keys(visualizationConfig);
 }
 
 export const getAllAvailableFileExtensions = () => {
@@ -117,8 +121,8 @@ export const getAllAvailableFileExtensions = () => {
 
 export const getVisalizations = (resourceType, fileExtension) => {
     if(resourceType) {
-        if(config[resourceType]) {
-            return config[resourceType][fileExtension];
+        if(visualizationConfig[resourceType]) {
+            return visualizationConfig[resourceType][fileExtension];
         } else {
             return undefined;
         }
@@ -128,7 +132,7 @@ export const getVisalizations = (resourceType, fileExtension) => {
 }
 
 export const getAvailableFileExtensions = (resourceType) => {
-    return Object.keys(config[resourceType]);
+    return Object.keys(visualizationConfig[resourceType]);
 }
 
 export const isResourceTypeAndFileExtension = (resourceType, fileExtension) => {

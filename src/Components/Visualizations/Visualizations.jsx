@@ -8,7 +8,7 @@ import ResourceGraph from './ResourceGraph/ResourceGraph';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
 import { getFileDescription, getFileExtension, getFileHost, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileContent } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
-import {config, getVisalizations} from '../../config';
+import {visualizationConfig, getVisalizations} from '../../config';
 import Dropdown from '../Widgets/Dropdown/Dropdown';
 import {getChildrenFromFile} from '../../Services/RepositoryServices';
 
