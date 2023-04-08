@@ -49,6 +49,71 @@ function ProcessOverviewPopup(props) {
         setProcesses(sortProcesses(getAllProcesses(), selectedSorting?.value ? selectedSorting?.value : sortType.type));
         setIsLoading(false);
     }, []);
+
+    // const getTestProcesses = () => {
+    //     return [
+    //         {
+    //             endTime: 1680937438000,
+    //             error: "My god, something awful has happened",
+    //             hostname: "http://localhost:5000",
+    //             id: "c0d5d265-a29a-4794-81df-2ffd30d49209",
+    //             objectType: "process",
+    //             outputDestination: "https://localhost:4000",
+    //             processId: 18880,
+    //             processName: "test Miner 1",
+    //             progress: "15:591",
+    //             resourceId: "180a4524-b116-492c-8bd4-a067f5fd6f06",
+    //             saveOrUpdateFile: false,
+    //             startTime: 1680937424122,
+    //             status: "error",
+    //         },
+    //         {
+    //             endTime: 1680937415000,
+    //             error: "",
+    //             hostname: "http://localhost:5000",
+    //             id: "c0d5d265-a29a-4794-81df-2ffd30d49209",
+    //             objectType: "process",
+    //             outputDestination: "https://localhost:4000",
+    //             processId: 18880,
+    //             processName: "test Miner 2",
+    //             progress: "28:129",
+    //             resourceId: "180a4524-b116-492c-8bd4-a067f5fd6f06",
+    //             saveOrUpdateFile: false,
+    //             startTime: 1680937424122,
+    //             status: "running",
+    //         },
+    //         {
+    //             endTime: 1680937430000,
+    //             error: "",
+    //             hostname: "http://localhost:5000",
+    //             id: "c0d5d265-a29a-4794-81df-2ffd30d49209",
+    //             objectType: "process",
+    //             outputDestination: "https://localhost:4000",
+    //             processId: 18880,
+    //             processName: "test Miner 3",
+    //             progress: "19:009",
+    //             resourceId: "180a4524-b116-492c-8bd4-a067f5fd6f06",
+    //             saveOrUpdateFile: false,
+    //             startTime: 1680937424122,
+    //             status: "complete",
+    //         },
+    //         {
+    //             endTime: 1680937430000,
+    //             error: "",
+    //             hostname: "http://localhost:5000",
+    //             id: "c0d5d265-a29a-4794-81df-2ffd30d49209",
+    //             objectType: "process",
+    //             outputDestination: "https://localhost:4000",
+    //             processId: 18880,
+    //             processName: "test Miner 4",
+    //             progress: "23:019",
+    //             resourceId: "180a4524-b116-492c-8bd4-a067f5fd6f06",
+    //             saveOrUpdateFile: false,
+    //             startTime: 1680937424122,
+    //             status: "stopped",
+    //         },
+    //     ];
+    // }
     
 
     const sortingOptions = [

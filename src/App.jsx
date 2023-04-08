@@ -11,7 +11,6 @@ import { GetRepositoryConfig } from './Services/RepositoryServices';
 import { getFileExtension, getFileHost, getFileResourceId, getFileResourceType } from './Utils/FileUnpackHelper';
 import { pingDynamicResourceInterval, pingHostInterval, pingMinerProcessInterval } from './config';
 
-
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false); // Is sidebar open

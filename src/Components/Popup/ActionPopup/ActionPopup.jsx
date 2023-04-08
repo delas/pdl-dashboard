@@ -1,16 +1,18 @@
 import './ActionPopup.scss';
 import {useState, useEffect, useCallback} from 'react';
-import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
-import InputField from '../../Widgets/InputField/InputField';
-// import HorizontalLine from '../../Widgets/HorizontalLine/HorizontalLine';
 import { getMiners, getRepositories, getMiner, saveProcess } from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { PostMineAction } from '../../../Services/MinerServices';
 import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
 import { getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
 import {v4 as uuidv4} from 'uuid';
+import ActionPopupWizardSteps from './ActionPopupWizardSteps/ActionPopupWizardSteps';
+import ActionPopupPage1Miner from './ActionPopupPages/ActionPopupPage1Miner/ActionPopupPage1Miner';
+import ActionPopupPage2Inputs from './ActionPopupPages/ActionPopupPage2Inputs/ActionPopupPage2Inputs';
+import ActionPopupPage3Parameters from './ActionPopupPages/ActionPopupPage3Parameters/ActionPopupPage3Parameters';
+import ActionPopupPage4Repository from './ActionPopupPages/ActionPopupPage4Repository/ActionPopupPage4Repository';
 
 function ActionPopup(props) {
 
@@ -24,14 +26,17 @@ function ActionPopup(props) {
     const [wizardStep, setWizardStep] = useState(1);
     const [minerObject, setMinerObject] = useState(null); // The single miner config selected from first step
     const [maxWizardStep, setMaxWizardStep] = useState(null);
+    
+    // Force rerender
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() => updateState({}), []);
 
-
-    useEffect(() => {
+    useEffect(() => { // Component mounted
         setIsLoading(false);
-        onMinerHostChange(miner);
+        onMinerHostChange(miner); // If clicking configure host miner, select that as the miner host
     }, []);
 
-    useEffect(() => {
+    useEffect(() => { // Component mounted and updated
         handleNextButtonDisabled();
     });
 
@@ -52,139 +57,122 @@ function ActionPopup(props) {
         }
     }
 
-    // Force rerender
-    const [, updateState] = useState();
-    const forceUpdate = useCallback(() => updateState({}), []);
-
     // ------------------ STEP 1 ------------------
-        const miners = getMiners().map((miner, index) => { // Dropdown options 
-            return {label: miner.name, value: miner.id}
-        });
-        const [minerHostDropdownValue, setMinerHostDropdownValue] = useState(null); // dropdown selected option
+    const miners = getMiners().map((miner) => { // Dropdown options for miner hosts
+        return {label: miner.name, value: miner.id}
+    });
+    const [minerHostDropdownValue, setMinerHostDropdownValue] = useState(null); // Selected miner host
+    const [minerHostMinersDropdownOptions, setMinerHostMinersDropdownOptions] = useState([]); // Dropdown options for miners
+    const [selectedMinerHostMiner, setSelectedMinerHostMiner] = useState([]); // Selected miner {label: miner.MinerLabel, value: miner.MinerId}
 
-        const [minerHostMinersDropdownOptions, setMinerHostMinersDropdownOptions] = useState([]);
-        const [selectedMinerHostMiner, setSelectedMinerHostMiner] = useState([]);
+    const onMinerHostChange = (value) => { // Onchange function on miner host dropdown
+        setMinerHostDropdownValue(value);
+        const minerHost = getMiner(value.value);
+        setMinerHostMinersDropdownOptions(minerHost?.config.map((miner) => {
+            return {label: miner.MinerLabel, value: miner.MinerId}
+        }));
+    }
 
-        const onMinerHostChange = (value) => {
-            setMinerHostDropdownValue(value);
-            const minerHost = getMiner(value.value);
-            setMinerHostMinersDropdownOptions(minerHost?.config.map((miner) => {
-                return {label: miner.MinerLabel, value: miner.MinerId}
-            }));
-        }
-
-        const onMinerDropdownChange = (value) => {
-            setMinerObject(getMiner(value.value));
-            setSelectedMinerHostMiner(value);
-            const minerHostObject = getMiner(minerHostDropdownValue.value);
-            const miner = minerHostObject?.config.filter((minerFromHost) => {return (minerFromHost.MinerId === value.value)})[0];
-            setMinerObject(miner);
-            setSelectedParams(miner?.MinerParameters);
-            convertFileTypeToDropdown(miner?.FileOutputExtension);
-        }
-
-        const convertFileTypeToDropdown = (fileOutputExtensions) => {
-            if(fileOutputExtensions) setOutputFileTypeForDropdown(fileOutputExtensions.map((fileExtension) => {
-                return ({label: fileExtension, value: fileExtension});
-            }));
-        }
+    const onMinerDropdownChange = (value) => { // Onchange function on miner dropdown
+        setSelectedMinerHostMiner(value);
+        const minerHostObject = getMiner(minerHostDropdownValue.value);
+        const miner = minerHostObject?.config.filter((minerFromHost) => {return (minerFromHost.MinerId === value.value)})[0];
+        setMinerObject(miner);
+        setSelectedParams(miner?.MinerParameters);
+    }
 
     // ------------------ STEP 2 ------------------
-        const repositories = getRepositories().map((repository, index) => { // dropdown options
-            return {label: repository.name, value: repository.id}
+    const repositories = getRepositories().map((repository, index) => { // dropdown options for repositories
+        return {label: repository.name, value: repository.id}
+    });
+    const [repositoryFileOwnerDropdownSelected, setRepositoryFileOwnerDropdownSelected] = useState(null); // dropdown selected option for repository {label: repository.name, value: repository.id}
+    const [selectedFiles, setSelectedFiles] = useState({});
+    const [filteredFilesForDropdown, setFileredFilesForDropdown] = useState([])
+
+    const convertFilesToDropdown = (files) => {
+        return files.map((file) => ({label: getFileResourceLabel(file), value: file}) );
+    }
+
+    const getUniqueResourceTypesFromMinerObject = () => {
+        return minerObject.ResourceInput.map((inputTypes) => {
+            return inputTypes.ResourceType;
+        }).filter((x, i, a) => a.indexOf(x) === i);
+    }
+
+    const setFilesFromRepository = (hostname) => { // Create list of files for each filter type
+        let filteredFilesTemp = {};
+        getUniqueResourceTypesFromMinerObject().forEach((filter) => {
+            GetRepositoryFilterMetadata(hostname, [filter]) // Get files of each filter
+            .then(res => { 
+                filteredFilesTemp[filter] = convertFilesToDropdown(res.data); // Assign files to filter key in object {filter1: [files], filter2: [files]}      
+            })
+            .then(() => { 
+                console.log(filteredFilesTemp);
+                setFileredFilesForDropdown(filteredFilesTemp) // Set filteredFilesTemp in state
+            }) 
+            .catch((e) => console.log(e));
         });
-        const [repositoryFileOwnerDropdownSelected, setRepositoryFileOwnerDropdownSelected] = useState(null); // dropdown selected option
-        const [selectedFiles, setSelectedFiles] = useState({});
-        const [filteredFilesForDropdown, setFileredFilesForDropdown] = useState([])
+    }
 
-        const convertFilesToDropdown = (files) => {
-            return files.map((file) => ({label: getFileResourceLabel(file), value: file}) );
+    const onRepositoryFileOwnerDropdownChange = (value) => { // Onchange function on repository dropdown 
+        setRepositoryFileOwnerDropdownSelected(value);
+        setFilesFromRepository(value.label);
+    }
+
+    const onFileDropdownChange = (value, resourceName) => { // Onchange function for all file dropdowns
+        setSelectedFiles({...selectedFiles, [resourceName]: value});
+        forceUpdate();
+    }
+    
+    // ------------------ STEP 3 ------------------
+
+    const [selectedParams, setSelectedParams] = useState([]);
+
+    const getInputType = (param) => {
+        switch(param.type){
+            case 'string': return 'text';
+            case 'int' : return 'number';
+            case 'float': return 'number';
+            case 'bool': return 'checkbox';
+            case 'double': return 'number';
+            default: return 'text';
         }
+    }
 
-        const setFilesFromRepository = (hostname) => {
+    const convertInputResponseToType = (value, type) => {
+        switch(type){
+            case 'string': return value;
+            case 'int' : return parseInt(value);
+            case 'float': return parseFloat(value);
+            case 'bool': return value;
+            case 'double': return parseFloat(value);
+            default: return value;
+        }
+    }
 
-            const uniqueResourceTypes = minerObject.ResourceInput.map((inputTypes) => {
-                return inputTypes.ResourceType;
-            }).filter((x, i, a) => a.indexOf(x) === i);
+    const onParamValueChange = (res) => { // param = {value: e.target.value, index: index}
+        let params = selectedParams;
+        if(params) {
+            const param = params[res.index];
+            param.selectedValue = res.value;
+            if(param.selectedValue > param.max) param.selectedValue = param.max;
+            if(param.selectedValue < param.min) param.selectedValue = param.min;
+            setSelectedParams(params);
+            forceUpdate();
+        }
+    }
 
-            let filteredFilesTemp = {};
-            uniqueResourceTypes.forEach((filter) => {
-                GetRepositoryFilterMetadata(hostname, [filter]).then(res => {
-                    filteredFilesTemp[filter] = convertFilesToDropdown(res.data);
-                    setFileredFilesForDropdown(filteredFilesTemp);                
-                }).catch((e) => console.log(e));
-            });
+    // ------------------ STEP 4 ------------------
+        const [repositoryDestination, setRepositoryDestination] = useState(null);
+        const [outputFileName, setOutputFileName] = useState("");
+
+        const onFileOutputNameChange = (res) => {
+            setOutputFileName(res.value);
         }
 
         const onRepositoryDestinationDropdownChange = (value) => {
             setRepositoryDestination(value);
         }
-    
-        const onRepositoryFileOwnerDropdownChange = (value) => {
-            setRepositoryFileOwnerDropdownSelected(value);
-            setFilesFromRepository(value.label);
-        }
-
-        const onFileDropdownChange = (value, resourceName) => {
-            let newSelectedFiles = selectedFiles;
-            newSelectedFiles[resourceName] = value;
-            setSelectedFiles(newSelectedFiles);
-            forceUpdate();
-        }
-    
-    // ------------------ STEP 3 ------------------
-
-        const [selectedParams, setSelectedParams] = useState([]);
-
-        const getInputType = (param) => {
-            switch(param.type){
-                case 'string': return 'text';
-                case 'int' : return 'number';
-                case 'float': return 'number';
-                case 'bool': return 'checkbox';
-                case 'double': return 'number';
-                default: return 'text';
-            }
-        }
-    
-        const convertInputResponseToType = (value, type) => {
-            switch(type){
-                case 'string': return value;
-                case 'int' : return parseInt(value);
-                case 'float': return parseFloat(value);
-                case 'bool': return value;
-                case 'double': return parseFloat(value);
-                default: return value;
-            }
-        }
-
-        const onParamValueChange = (res) => { // param = {value: e.target.value, index: index}
-            let params = selectedParams;
-            if(params) {
-                const param = params[res.index];
-                param.selectedValue = res.value;
-                if(param.selectedValue > param.max) param.selectedValue = param.max;
-                if(param.selectedValue < param.min) param.selectedValue = param.min;
-                setSelectedParams(params);
-                forceUpdate();
-            }
-        }
-
-    // ------------------ STEP 4 ------------------
-        const [repositoryDestination, setRepositoryDestination] = useState(null);
-
-        const [outputFileName, setOutputFileName] = useState("");
-        const [selectedOutputFileType, setSelectedOutputFileType] = useState(null);
-
-        const [outputFileTypeForDropdown, setOutputFileTypeForDropdown] = useState(null);
-
-        const onFileOutputNameChange = (res) => {
-            setOutputFileName(res.value);
-        }
-    
-        // const onOutputFiletypeChange = (res) => {
-        //     setSelectedOutputFileType(res);
-        // }
 
     // ------------------ Buttons and other default behavior ------------------
 
@@ -194,7 +182,7 @@ function ActionPopup(props) {
                 setNextButtonDisabled(!minerObject);
                 break;
             case 2:
-                const isFileValid = true//selectedLogFile || selectedVisualizationFile;
+                const isFileValid = Object.keys(selectedFiles).length >= minerObject.ResourceInput.length; // check if all files are selected
                 setNextButtonDisabled(!(repositoryFileOwnerDropdownSelected && isFileValid));
                 break;
             case 3:
@@ -205,21 +193,20 @@ function ActionPopup(props) {
                 }
                 break;
             case 4:
-                // const isOutputFileValid = outputFileTypeForDropdown.some((option) => option) || selectedOutputFileType; // check if at least one output file option is selected
-                // setNextButtonDisabled(!(repositoryDestination && outputFileName && isOutputFileValid));
+                setNextButtonDisabled(!outputFileName); // check if output file name is defined
                 break;
             default:
                 setNextButtonDisabled(false); // default to enabled
         }
     }
 
-    const handleSaveProcess = (processId) => {
+    const handleSaveProcess = (processId) => { // Save process to localstorage
         const status = {
             id: uuidv4(),
             objectType: "process",
             hostname: getMiner(minerHostDropdownValue.value).name,
             processId: processId,
-            processName: selectedMinerHostMiner.label,
+            processName: minerObject.MinerLabel,
             status: "Running",
             progress: 0,
             startTime: new Date().getTime(),
@@ -232,24 +219,31 @@ function ActionPopup(props) {
         saveProcess(status);
     }
 
-    const handleConfirmClick = () => {
-
-        let files = {};
-        minerObject?.ResourceInput?.forEach((resourceInput) => {
-            files[resourceInput.Name] = selectedFiles[resourceInput.Name].value;
+    const convertFilesToDictionary = (files) => {
+        let filesDictionary = {};
+        minerObject?.ResourceInput?.forEach((resourceInput) => { // Convert files to object {param1: file1, param2: file2}
+            filesDictionary[resourceInput.Name] = selectedFiles[resourceInput.Name].value;
         });
+        return filesDictionary;
+    }
 
+    const convertParamsToDictionary = (selectedParams) => {
         let params = {};
         if(selectedParams) 
-            selectedParams.forEach(({ name, selectedValue, type }) => {
+            selectedParams.forEach(({ name, selectedValue, type }) => { // Convert params to object {param1: value1, param2: value2}
                 params[name] = convertInputResponseToType(selectedValue, type);
             });
+        return params;
+    }
+
+    const handleConfirmClick = () => {
+        setIsLoading(true);
 
         var data = {
-            MinerId: selectedMinerHostMiner.value,
+            MinerId: minerObject.MinerId,
             Input: {
-                Resources: files,//selectedLogFile ? selectedLogFile : selectedVisualizationFile,
-                MinerParameters: params ? params : {},
+                Resources: convertFilesToDictionary(minerObject?.ResourceInput),
+                MinerParameters: convertParamsToDictionary(selectedParams),// params ? params : {},
             },
             Output: {
                 Host: `${repositoryDestination.label}/resources/`,
@@ -258,10 +252,6 @@ function ActionPopup(props) {
                 FileExtension: minerObject.ResourceOutput.FileExtension//selectedOutputFileType?.value ? selectedOutputFileType.value : outputFileTypeForDropdown[0].value,
             }
         };
-
-        console.log(data);
-
-        setIsLoading(true);
 
         PostMineAction(minerHostDropdownValue.label, data)
             .then((res) => {
@@ -310,150 +300,58 @@ function ActionPopup(props) {
                     closePopup = {toggleActionPopupOpen}
                 />
 
-                <div className='ActionPopup-wizard-steps'>
-                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${wizardStep === 1 ? "selected": ""}
-                        ActionPopup-wizard-step-${maxWizardStep >= 1 ? "clickable": "non-clickable"}
-                    `} onClick = {() => {handleWizardStepsClick(1)}}>
-                        <span className='ActionPopup-wizard-step-text'>1. Miner</span>
-                    </div>
-                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${wizardStep === 2 ? "selected": ""}
-                        ActionPopup-wizard-step-${maxWizardStep >= 2 ? "clickable": "non-clickable"}
-                    `} onClick = {() => {handleWizardStepsClick(2)}}>
-                        <span className='ActionPopup-wizard-step-text'>2. Inputs</span>
-                    </div>
-                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${wizardStep === 3 ? "selected": ""}
-                        ActionPopup-wizard-step-${maxWizardStep >= 3 ? "clickable": "non-clickable"}
-                    `} onClick = {() => {handleWizardStepsClick(3)}}>
-                        <span className='ActionPopup-wizard-step-text'>3. Parameters</span>
-                    </div>
-                    <div className={`ActionPopup-wizard-step ActionPopup-wizard-step-${wizardStep === 4 ? "selected": ""}
-                        ActionPopup-wizard-step-${maxWizardStep >= 4 ? "clickable": "non-clickable"}
-                    `} onClick = {() => {handleWizardStepsClick(4)}}>
-                        <span className='ActionPopup-wizard-step-text'>4. Repository</span>
-                    </div>
-                </div>
+                <ActionPopupWizardSteps
+                    wizardStep = {wizardStep}
+                    maxWizardStep = {maxWizardStep}
+                    handleWizardStepsClick = {handleWizardStepsClick}
+                />
 
                 {/* ------------------ STEP 1 ------------------ */}
 
                 {wizardStep === 1 ? 
-                    <div className='ActionPopup-wizard-step1'>
-                        <Dropdown
-                            options = {miners}
-                            onValueChange = {onMinerHostChange}
-                            label = {`Select miner host`}
-                            value = {minerHostDropdownValue}
-                        />
-                        {(minerHostDropdownValue && minerHostMinersDropdownOptions) &&
-                            <Dropdown
-                            options = {minerHostMinersDropdownOptions}
-                            onValueChange = {onMinerDropdownChange}
-                            label = {`Select miner`}
-                            value = {selectedMinerHostMiner}
-                        />}
-                    </div>
+                    <ActionPopupPage1Miner
+                        miners = {miners}
+                        onMinerHostChange = {onMinerHostChange}
+                        minerHostDropdownValue = {minerHostDropdownValue}
+                        minerHostMinersDropdownOptions = {minerHostMinersDropdownOptions}
+                        onMinerDropdownChange = {onMinerDropdownChange}
+                        selectedMinerHostMiner = {selectedMinerHostMiner}
+                    />
                 : null}
 
                 {/* ------------------ STEP 2 ------------------ */}
 
                 {wizardStep === 2 ? 
-                    <div className='ActionPopup-wizard-step2'>
-                        <Dropdown
-                            options = {repositories}
-                            onValueChange = {onRepositoryFileOwnerDropdownChange}
-                            label = {`Select repository to search for file:`}
-                            value = {repositoryFileOwnerDropdownSelected}
-                        />
-
-                        {repositoryFileOwnerDropdownSelected && 
-                            minerObject?.ResourceInput?.map((resourceInput, index) => {
-                                return(
-                                    <Dropdown
-                                        options = {filteredFilesForDropdown[resourceInput.ResourceType]}
-                                        onValueChange = {onFileDropdownChange}
-                                        label = {`Select ${resourceInput.Name} file:`}
-                                        value = {selectedFiles[resourceInput.Name]}
-                                        extraParam = {resourceInput.Name}
-                                        key = {index}
-                                    />
-                                )
-                            })
-                        }
-                    </div> 
-
-                : null}
+                    <ActionPopupPage2Inputs
+                        repositories = {repositories}
+                        onRepositoryFileOwnerDropdownChange = {onRepositoryFileOwnerDropdownChange}
+                        repositoryFileOwnerDropdownSelected = {repositoryFileOwnerDropdownSelected}
+                        minerObject = {minerObject}
+                        filteredFilesForDropdown = {filteredFilesForDropdown}
+                        onFileDropdownChange = {onFileDropdownChange}
+                        selectedFiles = {selectedFiles}
+                    /> : null}
 
                 {/* ------------------ STEP 3 ------------------ */}
 
                 {wizardStep === 3 ? 
-                    <div className='ActionPopup-wizard-step3'>
-                        <div className='ActionPopup-wizard-parameter-inputs'>
-                            {selectedParams === null || selectedParams === undefined || selectedParams?.length === 0 ? 
-                                <span>Miner requires no parameters</span> :
-                                selectedParams.map((param, index) => {
-                                    const type = getInputType(param);
-                                    return (
-                                        <InputField
-                                            key = {index}
-                                            label = {param.Name}
-                                            fieldType = {type}
-                                            placeholder = {type}
-                                            min = {param.min}
-                                            index = {index}
-                                            max = {param.max}
-                                            value = {param.selectedValue}
-                                            onChange = {onParamValueChange}
-                                        />
-                                    )
-                                })
-                            }
-                        </div>
-                    </div> 
-                : null}
+                    <ActionPopupPage3Parameters
+                        selectedParams = {selectedParams}
+                        onParamValueChange = {onParamValueChange}
+                        getInputType = {getInputType}
+                    /> : null}
 
                 {/* ------------------ STEP 4 ------------------ */}
 
                 {wizardStep === 4 ? 
-                    <div className='ActionPopup-wizard-step4'>
-                        <Dropdown
-                            options = {repositories}
-                            onValueChange = {onRepositoryDestinationDropdownChange}
-                            label = {`Select the destination repository`}
-                            value = {repositoryDestination}
-                        />
-
-                        <InputField
-                            label = {"Name of output resource"}
-                            fieldType = {"text"}
-                            placeholder = {"Please choose a name for the output generated by the algorithm"}
-                            value = {outputFileName}
-                            onChange = {onFileOutputNameChange}
-                        />
-
-                        <div>
-                            output filetype:
-                        </div>
-                        <div>
-                            {`${minerObject.ResourceOutput.ResourceType} ${minerObject.ResourceOutput.FileExtension}`}
-                        </div>
-
-
-                        {/* {(outputFileTypeForDropdown && outputFileTypeForDropdown.length > 1) ? 
-                            <Dropdown
-                                options = {outputFileTypeForDropdown}
-                                onValueChange = {onOutputFiletypeChange}
-                                label = {`Select output filetype:`}
-                                value = {selectedOutputFileType}
-                            /> : <div className='Dropdown-length-1'>
-                                    <div className='Dropdown-legnth-1-label'>
-                                        Selected output filetype:
-                                    </div>
-                                    <div className='Dropdown-legnth-1-text'>
-                                        {outputFileTypeForDropdown[0].label}
-                                    </div>
-                                </div>
-                        } */}
-                    </div> 
-                : null}
+                    <ActionPopupPage4Repository
+                        repositories = {repositories}
+                        onRepositoryDestinationDropdownChange = {onRepositoryDestinationDropdownChange}
+                        repositoryDestination = {repositoryDestination}
+                        outputFileName = {outputFileName}
+                        onFileOutputNameChange = {onFileOutputNameChange}
+                        minerObject = {minerObject}
+                    /> : null}
 
                 <PopupFooter
                     onCancelClick = {handleCancelButtonClick}

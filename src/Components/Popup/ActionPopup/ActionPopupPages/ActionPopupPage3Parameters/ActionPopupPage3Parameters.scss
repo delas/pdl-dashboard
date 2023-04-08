@@ -1,0 +1,32 @@
+.ActionPopup-wizard-parameter-inputs{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 0.5rem 1rem;
+    box-sizing: border-box;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+      
+    &::-webkit-scrollbar-track {
+        background: #e9ecef;
+    }
+      
+      /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: #6c757d;
+    }
+      
+      /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: rgb(153, 0, 0);
+    }
+}
