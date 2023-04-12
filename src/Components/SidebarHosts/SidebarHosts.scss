@@ -6,6 +6,7 @@
     flex-direction: column;
     padding: 0.5rem 1rem;
     box-sizing:border-box;
+    gap: 0.5em;
 }
 
 .SidebarHosts-Top{
@@ -45,9 +46,13 @@
         flex-direction: column;
         align-items: flex-start;
         width: 100%;
-        h5{
-            font-size: 1.1em;
-            font-weight: 700;
+        .SidebarHosts-hostheader{
+            h5{
+                font-size: 1.1em;
+                font-weight: 700;
+                // margin-top: 1em;
+                margin: 0.5em 0em;
+            }
         }
 
         .SidebarHosts-hostsContainer{

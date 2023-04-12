@@ -13,7 +13,7 @@ import { pingDynamicResourceInterval, pingHostInterval, pingMinerProcessInterval
 
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
-    const [sidebarOpen, setSidebarOpen] = useState(false); // Is sidebar open
+    const [sidebarOpen, setSidebarOpen] = useState(true); // Is sidebar open
     const [sidebarHostsOpen, setSidebarHostsOpen] = useState(false); // Is sidebarhost open
     const [updateComponents, setUpdateComponents] = useState([]); // force rerender child components
 

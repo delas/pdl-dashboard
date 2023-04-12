@@ -6,6 +6,8 @@ import {getMiners, getRepositories, getServiceRegistries} from '../../Store/Loca
 import {PingServiceRegistry} from '../../Services/ServiceRegistryServices';
 import {PingMiner} from '../../Services/MinerServices';
 import {PingRepository} from '../../Services/RepositoryServices';
+import Button from '../Widgets/Button/Button';
+import {FaBuffer, FaPlus} from 'react-icons/fa';
 
 function SidebarHosts(props) {
     const {
@@ -65,9 +67,20 @@ function SidebarHosts(props) {
                     <FaRegWindowClose onClick = {() => {toggleSidebarHosts()}}/>
                 </div>
             </header>
+
+            <Button
+                text = {`Add new host`}
+                icon = {<FaPlus/>}
+                disabled = {false}
+                className={``}
+                onClick = {() => {openPopup(popups.AddNewHostPopup)}}
+            />
+
             <div className='SidebarHosts-body'>
                 <div className='SidebarHosts-section SidebarHosts-repository'>
-                    <h5>Repositories</h5>
+                    <div className='SidebarHosts-hostheader'>
+                        <h5>Repositories</h5>
+                    </div>
                     <div className='SidebarHosts-hostsContainer'>
                         {repositoryHosts.map((repository, index) => {
                             return(
@@ -92,7 +105,9 @@ function SidebarHosts(props) {
                 </div>
 
                 <div className='SidebarHosts-section SidebarHosts-miner'>
-                    <h5>Miners</h5>
+                    <div className='SidebarHosts-hostheader'>
+                        <h5>Miners</h5>
+                    </div>
 
                     {minerHosts.map((miner, index) => {
                         return (
@@ -115,7 +130,9 @@ function SidebarHosts(props) {
                 </div>
 
                 <div className='SidebarHosts-section SidebarHosts-serviceRegistry'>
-                    <h5>Service Registries</h5>
+                    <div className='SidebarHosts-hostheader'>
+                        <h5>Service Registries</h5>
+                    </div>
 
                     {SRHosts.map((serviceRegistry, index) => {
                         return (

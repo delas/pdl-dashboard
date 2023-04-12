@@ -141,13 +141,13 @@ function Sidebar(props) {
                             className = {``}
                             onClick = {() => {openPopup(popups.ActionPopup)}}
                         />
-                        <Button
+                        {/* <Button // Button is moved to configure host popup
                             text = {`Add new host`}
                             icon = {<FaBuffer/>}
                             disabled = {false}
                             className={``}
                             onClick = {() => {openPopup(popups.AddNewHostPopup)}}
-                        />
+                        /> */}
                         <Button
                             text = {`Inspect processes`}
                             icon = {<ImCogs/>}
