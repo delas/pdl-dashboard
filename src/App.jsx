@@ -3,7 +3,7 @@ import {useState, useEffect, useRef} from 'react';
 import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
-import { saveHost, removeHost, saveFile, getFile, removeFile, hostExits } from './Store/LocalDataStore';
+import { saveHostLocal, removeHostLocal, saveFileLocal, getFileLocal, removeFileLocal, hostExitsLocal } from './Store/LocalDataStore';
 import { pingAllAddedServices, pingAllProcesses, getAllDynamicResources } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
@@ -119,10 +119,10 @@ function App(props) {
     }
 
     const addHost = (id, host) => {
-        if(!hostExits(host.name)){
+        if(!hostExitsLocal(host.name)){
             handleAddHostOfType(host.type.value, host.name).then((res) => {
                 host.config = res?.data;
-                saveHost(id, host);
+                saveHostLocal(id, host);
                 if(updateComponents.SidebarHosts){
                     updateComponents.SidebarHosts.update();
                 }
@@ -131,7 +131,7 @@ function App(props) {
     }
 
     const deleteHost = (id) => {
-        removeHost(id);
+        removeHostLocal(id);
         if(updateComponents.SidebarHosts){
             updateComponents.SidebarHosts.update();
         }
@@ -160,7 +160,7 @@ function App(props) {
         const fileExtension = getFileExtension(file);
         const resourceId = getFileResourceId(file);
         const host = getFileHost(file);
-        saveFile(resourceId, file); // save the metadata without filecontent
+        saveFileLocal(resourceId, file); // save the metadata without filecontent
         setTimeout(() => { updateComponents.Sidebar.update() }, 500);
 
         let responsePromise;
@@ -174,11 +174,11 @@ function App(props) {
         if(responsePromise)
             responsePromise
             .then((res) => {
-                if(res.status === 200 && res.data && getFile(resourceId)) { // file could have been removed before completed
+                if(res.status === 200 && res.data && getFileLocal(resourceId)) { // file could have been removed before completed
                     if (isImage) {
-                        saveFile(resourceId, {...file, fileContent: URL.createObjectURL(res.data) })
+                        saveFileLocal(resourceId, {...file, fileContent: URL.createObjectURL(res.data) })
                     } else {
-                        saveFile(resourceId, {...file, fileContent: res.data }); // save the filecontent
+                        saveFileLocal(resourceId, {...file, fileContent: res.data }); // save the filecontent
                     }
                     setTimeout(() => { updateComponents.Sidebar.update() }, 500);
                 }
@@ -186,7 +186,7 @@ function App(props) {
     }
 
     const deleteFile = (id) => { //Deletes from local memory - not repository
-        removeFile(id);
+        removeFileLocal(id);
         if(updateComponents.Sidebar){
             updateComponents.Sidebar.update();
         }

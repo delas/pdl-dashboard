@@ -4,7 +4,7 @@ import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import ProcessOverviewCard from './ProcessOverviewCard/ProcessOverviewCard';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
-import {getAllProcesses, getProcess, setProcessKey, removeProcess} from '../../../Store/LocalDataStore';
+import {getAllProcessesLocal, getProcessLocal, setProcessKeyLocal, removeProcessLocal} from '../../../Store/LocalDataStore';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {StopMinerProcess} from '../../../Services/MinerServices';
 
@@ -38,7 +38,7 @@ function ProcessOverviewPopup(props) {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ 
         updateState({});
-        setProcesses(sortProcesses(getAllProcesses(), sortingRef.current?.value ? sortingRef.current?.value : sortType.type));
+        setProcesses(sortProcesses(getAllProcessesLocal(), sortingRef.current?.value ? sortingRef.current?.value : sortType.type));
     }, []);
 
     useEffect (() => {
@@ -46,7 +46,7 @@ function ProcessOverviewPopup(props) {
             setSelectedSorting({value: sortType.type, label: "Type"});
         }
         setComponentUpdaterFunction("ProcessOverviewPopup", {update: forceUpdate})
-        setProcesses(sortProcesses(getAllProcesses(), selectedSorting?.value ? selectedSorting?.value : sortType.type));
+        setProcesses(sortProcesses(getAllProcessesLocal(), selectedSorting?.value ? selectedSorting?.value : sortType.type));
         setIsLoading(false);
     }, []);
 
@@ -125,7 +125,7 @@ function ProcessOverviewPopup(props) {
     ]
 
     const onSortingDropdownValueChange = (value) => {
-        setProcesses(sortProcesses(getAllProcesses(), value.value));
+        setProcesses(sortProcesses(getAllProcessesLocal(), value.value));
         setSelectedSorting(value);
         sortingRef.current = value;
     }
@@ -208,10 +208,10 @@ function ProcessOverviewPopup(props) {
     }
 
     const stopProcess = (processId) => {
-        const process = getProcess(processId);
+        const process = getProcessLocal(processId);
 
         StopMinerProcess(process.hostname, process.processId).then((response) => {
-            setProcessKey(processId, "status", "stopped");
+            setProcessKeyLocal(processId, "status", "stopped");
         }).catch((error) => {
             console.log(error);
         });
@@ -224,7 +224,7 @@ function ProcessOverviewPopup(props) {
     }
 
     const deleteProcess = (processId) => {
-        removeProcess(processId);
+        removeProcessLocal(processId);
         forceUpdate();
     }
 

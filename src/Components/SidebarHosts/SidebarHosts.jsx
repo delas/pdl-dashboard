@@ -2,7 +2,7 @@ import './SidebarHosts.scss';
 import {useState, useEffect, useCallback} from 'react';
 import { FaRegWindowClose } from 'react-icons/fa';
 import SidebarHostItem from './SidebarHostItem/SidebarHostItem';
-import {getMiners, getRepositories, getServiceRegistries} from '../../Store/LocalDataStore';
+import {getMinersLocal, getRepositoriesLocal, getServiceRegistriesLocal} from '../../Store/LocalDataStore';
 import {PingServiceRegistry} from '../../Services/ServiceRegistryServices';
 import {PingMiner} from '../../Services/MinerServices';
 import {PingRepository} from '../../Services/RepositoryServices';
@@ -26,9 +26,9 @@ function SidebarHosts(props) {
     const [SRHosts, setSRHosts] = useState([]);
     const forceUpdate = useCallback(() =>{ 
         updateState({}); 
-        setRepositoryHosts(getRepositories());
-        setMinerHosts(getMiners());
-        setSRHosts(getServiceRegistries());
+        setRepositoryHosts(getRepositoriesLocal());
+        setMinerHosts(getMinersLocal());
+        setSRHosts(getServiceRegistriesLocal());
     }, []);
     
 
@@ -61,7 +61,7 @@ function SidebarHosts(props) {
 
             <header className='SidebarHosts-Top'>
                 <strong className='SidebarHosts-title'>
-                    <h1>Host configuration</h1>
+                    <h2>Host configuration</h2>
                 </strong>
                 <div className='SidebarHosts-closeButton'>
                     <FaRegWindowClose onClick = {() => {toggleSidebarHosts()}}/>

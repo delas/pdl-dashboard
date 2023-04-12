@@ -15,7 +15,7 @@ import Topbar from '../../Components/Topbar/Topbar';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
 import Visualizations from '../../Components/Visualizations/Visualizations';
-import { getFile } from '../../Store/LocalDataStore';
+import { getFileLocal } from '../../Store/LocalDataStore';
 // import ReactHtmlParser from 'react-html-parser';
 import { getFileDynamic, getFileResourceId } from '../../Utils/FileUnpackHelper';
 import {pingMinerProcessInterval} from '../../config';
@@ -47,7 +47,7 @@ function Home(props) {
         if(getFileDynamic(file)) {
             updateFileInterval.current = setInterval(() => {
                 if(getFileResourceId(file)) {
-                    const newfile = getFile(getFileResourceId(file));
+                    const newfile = getFileLocal(getFileResourceId(file));
                     setVisualizationsFile(newfile);
                 } else {
                     clearInterval(updateFileInterval.current);
@@ -124,7 +124,7 @@ function Home(props) {
             setVisualizationsFile(null);
             return;
         }
-        const file = getFile(fileId)
+        const file = getFileLocal(fileId)
         setVisualizationsFile(file);
         if(updateComponents.Visualizations) {
             updateComponents.Visualizations.update();

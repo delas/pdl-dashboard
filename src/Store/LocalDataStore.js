@@ -19,11 +19,11 @@ const removeSavedResource = (key) => {
 
 
 // ---------------------- HOST STORAGE ----------------------
-export function saveHost(key, hostObject){
+export function saveHostLocal(key, hostObject){
     setSavedItem(key, hostObject);
 }
 
-export function hostExits(url){
+export function hostExitsLocal(url){
     const hostsWithSameUrl = Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a value not in json format
             const storageItem = JSON.parse(localStorage.getItem(key));
@@ -34,56 +34,56 @@ export function hostExits(url){
     return hostsWithSameUrl.length !== 0;
 }
 
-export function removeHost(key){
+export function removeHostLocal(key){
     removeSavedResource(key);
 }
 
-export function getMiner(key) {
+export function getHostLocal(key) { // why dont I just have get host?
     return getSavedItem(key);
 }
 
-export function getMiners(){
-    return getAllType("miner");
+export function getMinersLocal(){
+    return getAllTypeLocal("miner");
 }
 
-export function getRepositories(){
-    return getAllType("repository");
+export function getRepositoriesLocal(){
+    return getAllTypeLocal("repository");
 }
 
-export function getServiceRegistries(){
-    return getAllType("service registry");
+export function getServiceRegistriesLocal(){
+    return getAllTypeLocal("service registry");
 }
 
-export function getAllStatus() {
-    const minerStatus = getMiners().map((miner) => {
+export function getAllHostStatusLocal() {
+    const minerStatus = getMinersLocal().map((miner) => {
         return miner.status;
     });
-    const repositoryStatus = getRepositories().map((repository) => {
+    const repositoryStatus = getRepositoriesLocal().map((repository) => {
         return repository.status;
     });
-    const SRstatus = getServiceRegistries().map((serviceRegistry) => {
+    const SRstatus = getServiceRegistriesLocal().map((serviceRegistry) => {
         return serviceRegistry.status;
     });
     return [...minerStatus, ...repositoryStatus, ...SRstatus];
 }
 
-export function setStatus(id, status) {
+export function setHostStatusLocal(id, status) {
     const host = Object.keys(localStorage).filter((key) => key === id);
     if(host.length > 0){
         const storageItem = JSON.parse(localStorage.getItem(host[0]));
         storageItem.status = status;
-        removeHost(id);
-        saveHost(id, storageItem);
+        removeHostLocal(id);
+        saveHostLocal(id, storageItem);
     }
 }
 
-function getAllType(type) { //Types ["miner", "repository", "service registry"]
-    return getAllKeysWithType(type).map((key) => {
+function getAllTypeLocal(type) { //Types ["miner", "repository", "service registry"]
+    return getAllKeysWithTypeLocal(type).map((key) => {
         return JSON.parse(localStorage.getItem(key));
     })
 }
 
-function getAllKeysWithType(type) {
+function getAllKeysWithTypeLocal(type) {
     return Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a value not in json format
             const storageItem = JSON.parse(localStorage.getItem(key));
@@ -93,7 +93,7 @@ function getAllKeysWithType(type) {
     })
 }
 
-export function removeItem(key){
+export function removeItemLocal(key){
     try{
         localStorage.removeItem(key);
     }
@@ -104,19 +104,19 @@ export function removeItem(key){
 
 // ---------------------- FILE STORAGE ----------------------
 
-export function saveFile(key, file) {
+export function saveFileLocal(key, file) {
     setSavedItem(key, file);
 }
 
-export function removeFile(key){
+export function removeFileLocal(key){
     removeSavedResource(key);
 }
 
-export function getFile(key) {
+export function getFileLocal(key) {
     return getSavedItem(key);
 }
 
-export function getAllFiles(){
+export function getAllFilesLocal(){
     const fileKeys = Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a FileExtension not in json format
             const storageItem = JSON.parse(localStorage.getItem(key));
@@ -129,17 +129,17 @@ export function getAllFiles(){
     })
 }
 
-export function getFilesOfType(type) {
-    return GetAllFileOfType(type);
+export function getFilesOfTypeLocal(type) {
+    return GetAllFileOfTypeLocal(type);
 }
 
-function GetAllFileOfType(type) { //Types ["PNML", "PNG", "BPMN"...]
-    return getAllFileKeysWithType(type).map((key) => {
+function GetAllFileOfTypeLocal(type) { //Types ["PNML", "PNG", "BPMN"...]
+    return getAllFileKeysWithTypeLocal(type).map((key) => {
         return JSON.parse(localStorage.getItem(key));
     })
 }
 
-function getAllFileKeysWithType(type) {
+function getAllFileKeysWithTypeLocal(type) {
     return Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a FileExtension not in json format
             const storageItem = JSON.parse(localStorage.getItem(key));
@@ -150,29 +150,29 @@ function getAllFileKeysWithType(type) {
 }
 
 // ---------------------- PROCESS STORAGE ----------------------
-export function saveProcess(process){
+export function saveProcessLocal(process){
     setSavedItem(process.id, process);
 }
 
-export function removeProcess(key){
+export function removeProcessLocal(key){
     removeSavedResource(key);
 }
 
-export function getProcess(key) {
+export function getProcessLocal(key) {
     return getSavedItem(key);
 }
 
-export function getAllProcesses(){
-    return getAllProcessKeys().map((key) => {
+export function getAllProcessesLocal(){
+    return getAllProcessKeysLocal().map((key) => {
         return JSON.parse(localStorage.getItem(key));
     })
 }
 
-export function getAllRunningProcesses(){
-    return getAllProcesses().filter((process) => process.status.toUpperCase() === "RUNNING");
+export function getAllRunningProcessesLocal(){
+    return getAllProcessesLocal().filter((process) => process.status.toUpperCase() === "RUNNING");
 }
 
-export function getAllProcessKeys() {
+export function getAllProcessKeysLocal() {
     return Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a value not in json format
             const storageItem = JSON.parse(localStorage.getItem(key));
@@ -182,14 +182,14 @@ export function getAllProcessKeys() {
     })
 }
 
-export function setProcessKey(id, key, value) {
+export function setProcessKeyLocal(id, key, value) {
     const process = Object.keys(localStorage).filter((key) => key === id);
     if(process.length > 0){
         try{
             const storageItem = JSON.parse(localStorage.getItem(process[0]));
             storageItem[key] = value;
-            removeHost(id);
-            saveHost(id, storageItem);
+            removeHostLocal(id);
+            saveHostLocal(id, storageItem);
         } catch {
             console.log("Error while setting process key");
         }

@@ -2,7 +2,7 @@ import './ActionPopup.scss';
 import {useState, useEffect, useCallback} from 'react';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
-import { getMiners, getRepositories, getMiner, saveProcess } from '../../../Store/LocalDataStore';
+import { getMinersLocal, getRepositoriesLocal, getHostLocal, saveProcessLocal } from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { PostMineAction } from '../../../Services/MinerServices';
 import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
@@ -58,7 +58,7 @@ function ActionPopup(props) {
     }
 
     // ------------------ STEP 1 ------------------
-    const miners = getMiners().map((miner) => { // Dropdown options for miner hosts
+    const miners = getMinersLocal().map((miner) => { // Dropdown options for miner hosts
         return {label: miner.name, value: miner.id}
     });
     const [minerHostDropdownValue, setMinerHostDropdownValue] = useState(null); // Selected miner host
@@ -67,7 +67,7 @@ function ActionPopup(props) {
 
     const onMinerHostChange = (value) => { // Onchange function on miner host dropdown
         setMinerHostDropdownValue(value);
-        const minerHost = getMiner(value.value);
+        const minerHost = getHostLocal(value.value);
         setMinerHostMinersDropdownOptions(minerHost?.config.map((miner) => {
             return {label: miner.MinerLabel, value: miner.MinerId}
         }));
@@ -75,14 +75,14 @@ function ActionPopup(props) {
 
     const onMinerDropdownChange = (value) => { // Onchange function on miner dropdown
         setSelectedMinerHostMiner(value);
-        const minerHostObject = getMiner(minerHostDropdownValue.value);
+        const minerHostObject = getHostLocal(minerHostDropdownValue.value);
         const miner = minerHostObject?.config.filter((minerFromHost) => {return (minerFromHost.MinerId === value.value)})[0];
         setMinerObject(miner);
         setSelectedParams(miner?.MinerParameters);
     }
 
     // ------------------ STEP 2 ------------------
-    const repositories = getRepositories().map((repository, index) => { // dropdown options for repositories
+    const repositories = getRepositoriesLocal().map((repository, index) => { // dropdown options for repositories
         return {label: repository.name, value: repository.id}
     });
     const [repositoryFileOwnerDropdownSelected, setRepositoryFileOwnerDropdownSelected] = useState(null); // dropdown selected option for repository {label: repository.name, value: repository.id}
@@ -204,7 +204,7 @@ function ActionPopup(props) {
         const status = {
             id: uuidv4(),
             objectType: "process",
-            hostname: getMiner(minerHostDropdownValue.value).name,
+            hostname: getHostLocal(minerHostDropdownValue.value).name,
             processId: processId,
             processName: minerObject.MinerLabel,
             status: "Running",
@@ -216,7 +216,7 @@ function ActionPopup(props) {
             resourceId: null,
             saveOrUpdateFile: true,
         };
-        saveProcess(status);
+        saveProcessLocal(status);
     }
 
     const convertFilesToDictionary = (files) => {

@@ -24,12 +24,16 @@
     }
 
     .SidebarHosts-closeButton{
-        height: 30%;
+        height: 40%;
         width: auto;
         aspect-ratio: 1 / 1;
         svg{
             width: 100%;
             height: 100%;
+        }
+        &:hover{
+            cursor: pointer;
+            transform: scale(1.1);
         }
     }
 }

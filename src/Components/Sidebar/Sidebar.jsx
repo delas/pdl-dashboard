@@ -4,7 +4,7 @@ import {useState, useEffect, useCallback} from 'react';
 import { FaCircle, FaCog, FaFileUpload, FaBuffer, FaFileDownload } from 'react-icons/fa';
 import {ImCogs} from 'react-icons/im';
 import SidebarFile from './SidebarFiles/SidebarFile';
-import { getAllFiles, getAllStatus } from '../../Store/LocalDataStore';
+import { getAllFilesLocal, getAllHostStatusLocal } from '../../Store/LocalDataStore';
 import { getFileCreationDate, getFileResourceId } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 
@@ -28,8 +28,8 @@ function Sidebar(props) {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ 
         updateState({}); 
-        setFiles(sortFiles(getAllFiles(), sortingOrder.dsc));
-        setStatuses(getAllStatus());
+        setFiles(sortFiles(getAllFilesLocal(), sortingOrder.dsc));
+        setStatuses(getAllHostStatusLocal());
     }, []);
 
     useEffect(() => {
@@ -38,8 +38,8 @@ function Sidebar(props) {
     }, []);
 
     useEffect(() => {
-        setFiles(sortFiles(getAllFiles(), sortingOrder.dsc));
-        setStatuses(getAllStatus());
+        setFiles(sortFiles(getAllFilesLocal(), sortingOrder.dsc));
+        setStatuses(getAllHostStatusLocal());
     }, []);
 
     const sortingOrder = {
@@ -80,7 +80,7 @@ function Sidebar(props) {
     // }
 
     const statusIconDisplayer = () => {
-        const uniqueStatus = getAllStatus().filter((x, i, a) => a.indexOf(x) === i)
+        const uniqueStatus = getAllHostStatusLocal().filter((x, i, a) => a.indexOf(x) === i)
         if(uniqueStatus.includes('online') && uniqueStatus.includes('offline')){ // if both true and false are present
             return <FaCircle className='Sidebar-status-icon-yellow'/>
         } else if (uniqueStatus.includes('online') && !uniqueStatus.includes('offline')){ // if only true is present
@@ -93,7 +93,7 @@ function Sidebar(props) {
     }
 
     const statusTextDisplayer = () => {
-        const uniqueStatus = getAllStatus().filter((x, i, a) => a.indexOf(x) === i)
+        const uniqueStatus = getAllHostStatusLocal().filter((x, i, a) => a.indexOf(x) === i)
         if(uniqueStatus.includes('online') && uniqueStatus.includes('offline')){ // if both true and false are present
             return <span>Some systems offline</span>
         } else if (uniqueStatus.includes('online') && !uniqueStatus.includes('offline')){ // if only true is present

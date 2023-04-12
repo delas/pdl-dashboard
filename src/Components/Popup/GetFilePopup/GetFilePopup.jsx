@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
-import {getRepositories} from '../../../Store/LocalDataStore';
+import {getRepositoriesLocal} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
 import { getFileExtension, getFileHost, getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
@@ -52,7 +52,7 @@ function GetFilePopup(props) {
         setSelectedFile(value);
     }
 
-    const repositories = getRepositories().map((repository, index) => {
+    const repositories = getRepositoriesLocal().map((repository, index) => {
         return {label: repository.name, value: repository.id}
     })
 

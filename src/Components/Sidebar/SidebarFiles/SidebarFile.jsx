@@ -2,7 +2,7 @@ import './SidebarFile.scss';
 import {useState, useEffect} from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { CiStreamOn } from 'react-icons/ci';
-import { getFile, setProcessKey } from '../../../Store/LocalDataStore';
+import { getFileLocal, setProcessKeyLocal } from '../../../Store/LocalDataStore';
 import { getFileExtension, getFileResourceLabel, getFileContent, getFileDynamic, getFileProcessId } from '../../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
@@ -24,7 +24,7 @@ function SidebarFile(props) {
     }, [fileId]);
 
     const getFileAndCheckContents = () => {
-        const tempFile = getFile(fileId);
+        const tempFile = getFileLocal(fileId);
         if(tempFile){
             setFile(tempFile);
         }
@@ -43,7 +43,7 @@ function SidebarFile(props) {
     const deleteFileHandler = () => {
         // Stop retrieving file content - it still updates process status
         const processId = getFileProcessId(file); 
-        if(processId) setProcessKey(processId, "saveOrUpdateFile", false);
+        if(processId) setProcessKeyLocal(processId, "saveOrUpdateFile", false);
         
         // Remove file from local memory - not repository
         deleteFile(fileId);
