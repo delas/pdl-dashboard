@@ -1,5 +1,5 @@
 import './Visualizations.scss';
-import {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect, useCallback, useMemo} from 'react';
 import Tabs from '../Widgets/Tabs/Tabs';
 import BPMNVisualizer from './BPMNVisualizer/BPMNVisualizer';
 import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
@@ -21,7 +21,6 @@ function Visualizations(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [selectedTab, setSelectedTab] = useState(null);
-    const [tabList, setTabList] = useState([]);
     const [fileToDisplay, setFileToDisplay] = useState(file);
     const [children, setChildren] = useState([]);
     const [childrenForDropdown, setChildrenForDropdown] = useState([]);
@@ -31,11 +30,16 @@ function Visualizations(props) {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ updateState({}); }, []);
 
+    const generateTabList = (file) => {
+        if(file) return getVisalizations(getFileResourceType(file).toUpperCase(), getFileExtension(file).toUpperCase()); 
+    }
+
+    const selectedTabList = useMemo(() => generateTabList(file), [file]);
+
     useEffect(() => {
         setComponentUpdaterFunction("Visualizations", {update: forceUpdate})
         setFileToDisplay(file);
         setIsLoading(false);
-        setTabList(generateTabList(file));
         setSelectedChild(null);
         if(getFileResourceId(file) !== getFileResourceId(fileToDisplay)) setSelectedTab(null);
 
@@ -47,12 +51,14 @@ function Visualizations(props) {
         }
     }, [file]);
 
+    useEffect(() => {
+        if(selectedTabList) {
+            setSelectedTab(selectedTabList[0] ? selectedTabList[0] : null);
+        }
+    }, [selectedTabList]);
+
     const onTabChange = (tab) => {
         setSelectedTab(tab);
-    }
-
-    const generateTabList = (file) => {
-        if(file) return getVisalizations(getFileResourceType(file).toUpperCase(), getFileExtension(file).toUpperCase()); 
     }
 
     const generateChildren = (children) => {
@@ -99,7 +105,7 @@ function Visualizations(props) {
                 <Tabs
                     onTabChange = {onTabChange}
                     selectedTab = {selectedTab}
-                    tablist = {tabList}
+                    tablist = {selectedTabList}
                 />
             </div>
             <div className='Visualizations-header'>
