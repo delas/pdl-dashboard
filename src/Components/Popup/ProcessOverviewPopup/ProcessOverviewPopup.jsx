@@ -7,6 +7,7 @@ import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import {getAllProcessesLocal, getProcessLocal, setProcessKeyLocal, removeProcessLocal} from '../../../Store/LocalDataStore';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {StopMinerProcess} from '../../../Services/MinerServices';
+import Popup from '../../Widgets/Popup/Popup';
 
 function ProcessOverviewPopup(props) {
 
@@ -229,13 +230,12 @@ function ProcessOverviewPopup(props) {
     }
 
     return (
-            <BackdropModal closeModal = {toggleProcessOverviewPopupOpen}>
-
-            <div className='ProcessOverviewPopup' onClick = {(e) => {e.stopPropagation()}} >
-                <PopupHeader
-                    title = {`Process Overview`}
-                    closePopup = {toggleProcessOverviewPopupOpen}
-                />
+        <BackdropModal closeModal = {toggleProcessOverviewPopupOpen}>
+            <Popup
+                closePopup = {toggleProcessOverviewPopupOpen}
+                title = {`Process Overview`}
+                showFooter = {false}
+            >
                 {<div className='ProcessOverviewPopup-sorting-container'>
                     <Dropdown
                         options = {sortingOptions}
@@ -267,7 +267,7 @@ function ProcessOverviewPopup(props) {
                         There are no processes to display.
                     </div>
                 }
-            </div>
+            </Popup>
         </BackdropModal>
     );
 }

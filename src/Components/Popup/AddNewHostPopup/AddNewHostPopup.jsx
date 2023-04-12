@@ -6,6 +6,7 @@ import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import InputField from '../../Widgets/InputField/InputField';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
+import Popup from '../../Widgets/Popup/Popup';
 
 function AddNewHostPopup(props) {
 
@@ -64,47 +65,33 @@ function AddNewHostPopup(props) {
 
     return (
         <BackdropModal closeModal = {toggleNewHostPopupOpen}>
-
-            <div className='AddNewHostPopup' 
-                onClick = {(e) => {e.stopPropagation()}}
+            <Popup
+                title = {`Add new host`}
+                closePopup = {toggleNewHostPopupOpen}
+                onCancelClick = {toggleNewHostPopupOpen}
+                onNextClick = {onConfirmClick}
+                cancelText = {`Cancel`}
+                nextText = {`Confirm`}
             >
 
-                <PopupHeader
-                    title = {`Add new host`}
-                    closePopup = {toggleNewHostPopupOpen}
+                <InputField
+                    className={`AddNewHostPopup-input`}
+                    type={`text`} 
+                    placeholder = {`http://miner.host.net`}
+                    id = "AddNewHostPopup-input-miner-id"
+                    onChange = {handleTextfieldChange}
+                    value = {hostName}
+                    label = {`Hostname:`}
                 />
 
-                <div className='AddNewHostPopup-body'>
-
-                    <InputField
-                        className={`AddNewHostPopup-input`}
-                        type={`text`} 
-                        placeholder = {`http://miner.host.net`}
-                        id = "AddNewHostPopup-input-miner-id"
-                        onChange = {handleTextfieldChange}
-                        value = {hostName}
-                        label = {`Hostname:`}
-                    />
-
-                    <Dropdown
-                        options = {hosttypes}
-                        onValueChange = {onDropdownValueChange}
-                        label = {`Host type:`}
-                        value = {selectedHosttype}
-                    />
-
-                </div>
-
-                <PopupFooter
-                    onCancelClick = {toggleNewHostPopupOpen}
-                    onNextClick = {onConfirmClick}
-                    cancelText = {`Cancel`}
-                    nextText = {`Confirm`}
+                <Dropdown
+                    options = {hosttypes}
+                    onValueChange = {onDropdownValueChange}
+                    label = {`Host type:`}
+                    value = {selectedHosttype}
                 />
-
-            </div>
-            
-            </BackdropModal>
+            </Popup>
+        </BackdropModal>
     );
 }
 

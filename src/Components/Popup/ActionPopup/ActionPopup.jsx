@@ -13,6 +13,7 @@ import ActionPopupPage1Miner from './ActionPopupPages/ActionPopupPage1Miner/Acti
 import ActionPopupPage2Inputs from './ActionPopupPages/ActionPopupPage2Inputs/ActionPopupPage2Inputs';
 import ActionPopupPage3Parameters from './ActionPopupPages/ActionPopupPage3Parameters/ActionPopupPage3Parameters';
 import ActionPopupPage4Repository from './ActionPopupPages/ActionPopupPage4Repository/ActionPopupPage4Repository';
+import Popup from '../../Widgets/Popup/Popup';
 
 function ActionPopup(props) {
 
@@ -290,23 +291,21 @@ function ActionPopup(props) {
 
     return (
         <BackdropModal closeModal = {toggleActionPopupOpen} showSpinner={isLoading}>
-            
-            <div className='ActionPopup' 
-                onClick = {(e) => {e.stopPropagation()}}
+            <Popup
+                title = {`New action`}
+                closePopup = {toggleActionPopupOpen}
+                onCancelClick = {handleCancelButtonClick}
+                onNextClick = {handleNextButtonClick}
+                cancelText = {getCancelButtonName()}
+                nextText = {getNextButtonName()}
+                nextButtonDisabled = {nextButtonDisabled}
             >
-
-                <PopupHeader
-                    title = {`New action`}
-                    closePopup = {toggleActionPopupOpen}
-                />
 
                 <ActionPopupWizardSteps
                     wizardStep = {wizardStep}
                     maxWizardStep = {maxWizardStep}
                     handleWizardStepsClick = {handleWizardStepsClick}
                 />
-
-                {/* ------------------ STEP 1 ------------------ */}
 
                 {wizardStep === 1 ? 
                     <ActionPopupPage1Miner
@@ -319,8 +318,6 @@ function ActionPopup(props) {
                     />
                 : null}
 
-                {/* ------------------ STEP 2 ------------------ */}
-
                 {wizardStep === 2 ? 
                     <ActionPopupPage2Inputs
                         repositories = {repositories}
@@ -332,16 +329,12 @@ function ActionPopup(props) {
                         selectedFiles = {selectedFiles}
                     /> : null}
 
-                {/* ------------------ STEP 3 ------------------ */}
-
                 {wizardStep === 3 ? 
                     <ActionPopupPage3Parameters
                         selectedParams = {selectedParams}
                         onParamValueChange = {onParamValueChange}
                         getInputType = {getInputType}
                     /> : null}
-
-                {/* ------------------ STEP 4 ------------------ */}
 
                 {wizardStep === 4 ? 
                     <ActionPopupPage4Repository
@@ -352,16 +345,7 @@ function ActionPopup(props) {
                         onFileOutputNameChange = {onFileOutputNameChange}
                         minerObject = {minerObject}
                     /> : null}
-
-                <PopupFooter
-                    onCancelClick = {handleCancelButtonClick}
-                    onNextClick = {handleNextButtonClick}
-                    cancelText = {getCancelButtonName()}
-                    nextText = {getNextButtonName()}
-                    nextButtonDisabled = {nextButtonDisabled}
-                />
-
-            </div>
+            </Popup>
         </BackdropModal>
     );
 }

@@ -88,6 +88,16 @@
     align-items: center;
     gap: 0.5em;
     width: 50%;
+
+    .ProcessOverviewCard-host-name, .ProcessOverviewCard-host-processName{
+        max-width: 50%;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    // .ProcessOverviewCard-host-processName{
+    // }
 }
 
 .ProcessOverviewCard-change-process-status{

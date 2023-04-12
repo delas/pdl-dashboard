@@ -8,6 +8,7 @@ import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
 import { getFileExtension, getFileHost, getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
 import {getAvailableResourceTypes } from '../../../config';
+import Popup from '../../Widgets/Popup/Popup';
 
 function GetFilePopup(props) {
 
@@ -77,25 +78,25 @@ function GetFilePopup(props) {
     }
 
     return (
-            <BackdropModal closeModal = {toggleGetFilePopupOpen}>
-
-            <div className='GetFilePopup' 
-                onClick = {(e) => {e.stopPropagation()}}
+        <BackdropModal closeModal = {toggleGetFilePopupOpen}>
+            <Popup
+                title = {`Download file from repository`}
+                closePopup = {toggleGetFilePopupOpen}
+                onCancelClick = {toggleGetFilePopupOpen}
+                onNextClick = {onConfirmClick}
+                cancelText = {`Cancel`}
+                nextText = {`Download`}
+                nextButtonDisabled = {handleConfirmButtonDisabled()}
             >
 
-                <PopupHeader
-                    title = {`Download file from repository`}
-                    closePopup = {toggleGetFilePopupOpen}
-                />
+            <Dropdown
+                options = {repositories}
+                onValueChange = {onRepositoryChange}
+                label = {`Select repository`}
+                value = {selectedRepository}
+            />
 
-                <Dropdown
-                    options = {repositories}
-                    onValueChange = {onRepositoryChange}
-                    label = {`Select repository`}
-                    value = {selectedRepository}
-                />
-
-                {(selectedRepository && Object.keys(selectedRepository).length > 0) &&
+            {(selectedRepository && Object.keys(selectedRepository).length > 0) &&
                 <Dropdown
                     options = {filesForDropdown}
                     onValueChange = {onFileValueChange}
@@ -104,15 +105,7 @@ function GetFilePopup(props) {
                     loading = {filesForDropdown === null}
                 />}
 
-                <PopupFooter
-                    onCancelClick = {toggleGetFilePopupOpen}
-                    onNextClick = {onConfirmClick}
-                    cancelText = {`Cancel`}
-                    nextText = {`Download`}
-                    nextButtonDisabled = {handleConfirmButtonDisabled()}
-                />
-
-            </div>
+            </Popup>
         </BackdropModal>
     );
 }

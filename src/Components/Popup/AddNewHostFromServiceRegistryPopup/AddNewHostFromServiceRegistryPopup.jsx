@@ -7,6 +7,7 @@ import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import SidebarHostItem from '../../SidebarHosts/SidebarHostItem/SidebarHostItem';
 import {GetMinersFromServiceRegistry, GetRepositoriesFromServiceRegistry} from '../../../Services/ServiceRegistryServices';
+import Popup from '../../Widgets/Popup/Popup';
 
 function AddNewHostFromServiceRegistryPopup(props) {
 
@@ -105,15 +106,23 @@ function AddNewHostFromServiceRegistryPopup(props) {
 
     return (
         <BackdropModal closeModal = {togglenewHostFromSRPopupOpen}>
-
-            <div className='AddNewHostFromServiceRegistryPopup' 
-                onClick = {(e) => {e.stopPropagation()}}
+            <Popup
+                title = {`Add new host from service registry: ${serviceRegistry.label}`}
+                closePopup = {togglenewHostFromSRPopupOpen}
+                onCancelClick = {togglenewHostFromSRPopupOpen}
+                onNextClick = {onConfirmClick}
+                cancelText = {`Cancel`}
+                nextText = {`Add selected`}
             >
+            
+            {/* <div className='AddNewHostFromServiceRegistryPopup' 
+                onClick = {(e) => {e.stopPropagation()}}
+            > */}
 
-                <PopupHeader
+                {/* <PopupHeader
                     title = {`Add new host from service registry: ${serviceRegistry.label}`}
                     closePopup = {togglenewHostFromSRPopupOpen}
-                />
+                /> */}
 
                 <div className='AddNewHostFromServiceRegistryPopup-body'>
                     <div className='AddNewHostFromServiceRegistryPopup-body-miners'>
@@ -179,14 +188,15 @@ function AddNewHostFromServiceRegistryPopup(props) {
                     </div>
                 </div>
 
-                <PopupFooter
+                {/* <PopupFooter
                     onCancelClick = {togglenewHostFromSRPopupOpen}
                     onNextClick = {onConfirmClick}
                     cancelText = {`Cancel`}
                     nextText = {`Add selected`}
-                />
+                /> */}
 
-            </div>
+            {/* </div> */}
+            </Popup>
         </BackdropModal>
     );
 }
