@@ -6,6 +6,7 @@ import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import SidebarHostItem from '../../SidebarHosts/SidebarHostItem/SidebarHostItem';
 import {GetMinersFromServiceRegistry, GetRepositoriesFromServiceRegistry} from '../../../Services/ServiceRegistryServices';
 import Popup from '../../Widgets/Popup/Popup';
+import { getMinersLocal, getRepositoriesLocal } from '../../../Store/LocalDataStore';
 
 function AddNewHostFromServiceRegistryPopup(props) {
 
@@ -92,6 +93,10 @@ function AddNewHostFromServiceRegistryPopup(props) {
                 return !minerHostsSelected.find((selectedMiner) => {
                     return selectedMiner.label === miner.HostName;
                 });
+            }).filter((miner) => {
+                return !getMinersLocal().find((localMiner) => {
+                    return localMiner.name === miner.HostName;
+                });
             });
 
             setMinersDropdownFormat(nonSelectedMiners.map((miner) => {
@@ -104,7 +109,12 @@ function AddNewHostFromServiceRegistryPopup(props) {
                 return !repositoryHostsSelected.find((selectedRepository) => {
                     return selectedRepository.label === repository.HostName;
                 });
+            }).filter((repository) => {
+                return !getRepositoriesLocal().find((localRepository) => {
+                    return localRepository.name === repository.HostName;
+                });
             });
+
 
             setRepositoriesDropdownFormat(nonSelectedRepositories.map((repository) => {
                 return( {label: `${repository.HostName}`, value: "repository"} )
