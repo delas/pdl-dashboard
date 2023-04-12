@@ -53,7 +53,7 @@ function SidebarHostItem(props) {
                             <div className={`SidebarHostItem-filetype SidebarHostItem-filetype-${status}`}>
                                 {icon}
                             </div>
-                            <span className='SidebarHostItem-filename' onClick={allowClick ? openPopupHandler : undefined}>
+                            <span className={`SidebarHostItem-filename SidebarHostItem-filename-allowClick-${allowClick}`} onClick={allowClick ? openPopupHandler : undefined}>
                                 {hostProvidedValue} {hostName}
                             </span>
                             
@@ -66,12 +66,6 @@ function SidebarHostItem(props) {
                         </div>
                     </div>                    
                 </div>
-
-                {/* {hostType.value === 'miner' && 
-                    <div className='SidebarHostItem-MinerIcon' onClick={() => {
-                        openPopup(popups.ProcessOverviewPopup, {miner: {label: hostName, value: id}})
-                    }}><GiMiner/></div>
-                } */}
 
                 <div className={`SidebarHostItem-loadingSpinner-${false}`}>
                     <LoadingSpinner loading = {true} />

@@ -1,17 +1,17 @@
 $theme: rgb(153, 0, 0);
 
-.AddNewHostFromServiceRegistryPopup{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    pointer-events: auto;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.2);
-    border-radius: 0.3rem;
-    outline: 0;
-}
+// .AddNewHostFromServiceRegistryPopup{
+//     position: relative;
+//     display: flex;
+//     flex-direction: column;
+//     width: 50%;
+//     pointer-events: auto;
+//     background-color: #fff;
+//     background-clip: padding-box;
+//     border: 1px solid rgba(0,0,0,.2);
+//     border-radius: 0.3rem;
+//     outline: 0;
+// }
 
 .AddNewHostFromServiceRegistryPopup-body{
     width: 100%;
@@ -22,15 +22,13 @@ $theme: rgb(153, 0, 0);
     padding: 0.5rem 1rem;
     box-sizing: border-box;
     gap: 0.5em;
+    overflow: hidden;
 }
 
 .AddNewHostFromServiceRegistryPopup-body-miners, .AddNewHostFromServiceRegistryPopup-body-repositories{
-    width: 100%;
-}
-
-.AddNewHostFromServiceRegistryPopup-body-right-miners-list, .AddNewHostFromServiceRegistryPopup-body-right-repositories-list{
-    max-height: 150px;
-    overflow-y: auto;
+    width: 50%;
+    min-width: 50%;
+    max-width: 50%;
 }
 
 .AddNewHostFromServiceRegistryPopup-body-miners-bottom, .AddNewHostFromServiceRegistryPopup-body-repositories-bottom{
@@ -39,8 +37,12 @@ $theme: rgb(153, 0, 0);
     justify-content: flex-start;
     align-items: flex-start;
     width: 100%;
+    min-width: none;
+    max-width: 100%;
 }
 
 .AddNewHostFromServiceRegistryPopup-body-right-repositories-list, .AddNewHostFromServiceRegistryPopup-body-right-miners-list{
     width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
 }

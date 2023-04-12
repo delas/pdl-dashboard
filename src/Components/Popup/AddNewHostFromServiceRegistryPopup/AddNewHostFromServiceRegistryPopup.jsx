@@ -2,8 +2,6 @@ import './AddNewHostFromServiceRegistryPopup.scss';
 import {useState, useEffect} from 'react';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {v4 as uuidv4} from 'uuid';
-import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
-import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import SidebarHostItem from '../../SidebarHosts/SidebarHostItem/SidebarHostItem';
 import {GetMinersFromServiceRegistry, GetRepositoriesFromServiceRegistry} from '../../../Services/ServiceRegistryServices';
@@ -53,6 +51,10 @@ function AddNewHostFromServiceRegistryPopup(props) {
         });
     }
 
+    const handleNextConfirmDisabled = () => {
+        return (minerHostsSelected.length === 0 && repositoryHostsSelected.length === 0);
+    }
+
     const addMinerHost = (miner) => {
         setMinerHostsSelected(minerHostsSelected.concat(miner));
     }
@@ -61,12 +63,12 @@ function AddNewHostFromServiceRegistryPopup(props) {
         setRepositoryHostsSelected(repositoryHostsSelected.concat(repository));
     }
 
-    const removeMinerHost = (hostName) => {
-        setMinerHostsSelected(minerHostsSelected.filter(listItem => listItem.label!== hostName));
+    const removeMinerHost = (hostLabel) => {
+        setMinerHostsSelected(minerHostsSelected.filter(listItem => listItem.label!== hostLabel));
     }
 
-    const removeRepositoryHost = (hostName) => {
-        setRepositoryHostsSelected(repositoryHostsSelected.filter(listItem => listItem.label !== hostName));
+    const removeRepositoryHost = (hostLabel) => {
+        setRepositoryHostsSelected(repositoryHostsSelected.filter(listItem => listItem.label !== hostLabel));
     }
 
     const onConfirmClick = () => {
@@ -84,17 +86,35 @@ function AddNewHostFromServiceRegistryPopup(props) {
         )
     }, []);
 
-    useEffect(() => {
-        if(miners !== null)
-        setMinersDropdownFormat(miners.map((miner) => {
-            return( {label: `${miner.HostName}`, value: "miner"} )
-        }));
+    const createAndSetHostDropdownLists = () => {
+        if(miners !== null) {
+            const nonSelectedMiners = miners.filter((miner) => {
+                return !minerHostsSelected.find((selectedMiner) => {
+                    return selectedMiner.label === miner.HostName;
+                });
+            });
 
-        if(repositories !== null)
-        setRepositoriesDropdownFormat(repositories.map((repository) => {
-            return( {label: `${repository.HostName}`, value: "repository"} )
-        }));
-    }, [miners, repositories])
+            setMinersDropdownFormat(nonSelectedMiners.map((miner) => {
+                return( {label: `${miner.HostName}`, value: "miner"} )
+            }));
+        }
+
+        if(repositories !== null) {
+            const nonSelectedRepositories = repositories.filter((repository) => {
+                return !repositoryHostsSelected.find((selectedRepository) => {
+                    return selectedRepository.label === repository.HostName;
+                });
+            });
+
+            setRepositoriesDropdownFormat(nonSelectedRepositories.map((repository) => {
+                return( {label: `${repository.HostName}`, value: "repository"} )
+            }));
+        }
+    }
+
+    useEffect(() => {
+        createAndSetHostDropdownLists();
+    }, [miners, repositories, minerHostsSelected, repositoryHostsSelected])
 
     if(isLoading){
         return (
@@ -113,6 +133,7 @@ function AddNewHostFromServiceRegistryPopup(props) {
                 onNextClick = {onConfirmClick}
                 cancelText = {`Cancel`}
                 nextText = {`Add selected`}
+                nextButtonDisabled = {handleNextConfirmDisabled()}
             >
 
                 <div className='AddNewHostFromServiceRegistryPopup-body'>
@@ -133,13 +154,14 @@ function AddNewHostFromServiceRegistryPopup(props) {
                                 {minerHostsSelected.map((miner, index) => {
                                     return(
                                         <SidebarHostItem key = {index}
-                                            id = {miner.id}
-                                            hostName = {miner.value}
-                                            hostType = {"miner"}
+                                            id = {miner.label}
+                                            hostName = {miner.label}
+                                            hostType = {{value: "miner", label: "miner"}}
                                             addedFrom = {serviceRegistry.label}
                                             onRemove = {removeMinerHost}
                                             ping = {null}
                                             allowClick = {false}
+                                            
                                         />
                                     )
                                 })}
@@ -164,9 +186,9 @@ function AddNewHostFromServiceRegistryPopup(props) {
                                 {repositoryHostsSelected.map((repository, index) => {
                                         return(
                                             <SidebarHostItem key = {index}
-                                                id = {repository.id}
-                                                hostName = {repository.value}
-                                                hostType = {"repository"}
+                                                id = {repository.label}
+                                                hostName = {repository.label}
+                                                hostType = {{value: "repository", label: "repository"}}
                                                 addedFrom = {serviceRegistry.label}
                                                 onRemove = {removeRepositoryHost}
                                                 ping = {null}
