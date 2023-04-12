@@ -26,10 +26,10 @@ function AddNewHostFromServiceRegistryPopup(props) {
 
     useEffect(() => {
         setIsLoading(false);
-    });
+    }, []);
 
     const handleSubmit = () => {
-        minerHostsSelected.forEach((miner, index) => {
+        minerHostsSelected.forEach((miner) => {
             const newHost = {
                 id: uuidv4(),
                 name: miner.label,
@@ -40,7 +40,7 @@ function AddNewHostFromServiceRegistryPopup(props) {
             addHost(newHost.id, newHost);
         });
 
-        repositoryHostsSelected.forEach((repository, index) => {
+        repositoryHostsSelected.forEach((repository) => {
             const newHost = {
                 id: uuidv4(),
                 name: repository.label,
@@ -78,22 +78,18 @@ function AddNewHostFromServiceRegistryPopup(props) {
     }
 
     useEffect(() => {
-        GetMinersFromServiceRegistry(serviceRegistry.label).then(res => 
-            setMiners(res.data)
-        )
-
-        GetRepositoriesFromServiceRegistry(serviceRegistry.label).then(res => 
-            setRepositories(res.data)
-        )
+        GetMinersFromServiceRegistry(serviceRegistry.label).then(res => setMiners(res.data) )
+        GetRepositoriesFromServiceRegistry(serviceRegistry.label).then(res => setRepositories(res.data) )
     }, []);
 
     const createAndSetHostDropdownLists = () => {
         if(miners !== null) {
-            const nonSelectedMiners = miners.filter((miner) => {
+            const nonSelectedMiners = miners
+            .filter((miner) => { // Filter out miners that are already selected
                 return !minerHostsSelected.find((selectedMiner) => {
                     return selectedMiner.label === miner.HostName;
                 });
-            }).filter((miner) => {
+            }).filter((miner) => { // Filter out miners that are already added
                 return !getMinersLocal().find((localMiner) => {
                     return localMiner.name === miner.HostName;
                 });
@@ -105,16 +101,16 @@ function AddNewHostFromServiceRegistryPopup(props) {
         }
 
         if(repositories !== null) {
-            const nonSelectedRepositories = repositories.filter((repository) => {
+            const nonSelectedRepositories = repositories
+            .filter((repository) => { // Filter out repositories that are already selected
                 return !repositoryHostsSelected.find((selectedRepository) => {
                     return selectedRepository.label === repository.HostName;
                 });
-            }).filter((repository) => {
+            }).filter((repository) => { // Filter out repositories that are already added
                 return !getRepositoriesLocal().find((localRepository) => {
                     return localRepository.name === repository.HostName;
                 });
             });
-
 
             setRepositoriesDropdownFormat(nonSelectedRepositories.map((repository) => {
                 return( {label: `${repository.HostName}`, value: "repository"} )
@@ -148,14 +144,12 @@ function AddNewHostFromServiceRegistryPopup(props) {
 
                 <div className='AddNewHostFromServiceRegistryPopup-body'>
                     <div className='AddNewHostFromServiceRegistryPopup-body-miners'>
-                        <div className='AddNewHostFromServiceRegistryPopup-body-miners-top'>
-                            <Dropdown
-                                options = {minersDropdownFormat}
-                                onValueChange = {addMinerHost}
-                                label = {`Miners:`}
-                                loading = {minersDropdownFormat === null}
-                            />
-                        </div>
+                        <Dropdown
+                            options = {minersDropdownFormat}
+                            onValueChange = {addMinerHost}
+                            label = {`Miners:`}
+                            loading = {minersDropdownFormat === null}
+                        />
                         <div className='AddNewHostFromServiceRegistryPopup-body-miners-bottom'>
                             <span className='AddNewHostFromServiceRegistryPopup-body-right-miners-Title'>
                                 Selected Miners: 
@@ -171,41 +165,36 @@ function AddNewHostFromServiceRegistryPopup(props) {
                                             onRemove = {removeMinerHost}
                                             ping = {null}
                                             allowClick = {false}
-                                            
-                                        />
-                                    )
+                                        />)
                                 })}
                             </div>
                         </div>
                     </div>  
 
                     <div className='AddNewHostFromServiceRegistryPopup-body-repositories'>
-                        <div className='AddNewHostFromServiceRegistryPopup-body-repositories-top'>
-                            <Dropdown
-                                options = {repositoriesDropdownFormat}
-                                onValueChange = {addRepositoryHost}
-                                label = {`Repositories:`}
-                                loading = {repositoriesDropdownFormat === null}
-                            />
-                        </div>
+                        <Dropdown
+                            options = {repositoriesDropdownFormat}
+                            onValueChange = {addRepositoryHost}
+                            label = {`Repositories:`}
+                            loading = {repositoriesDropdownFormat === null}
+                        />
                         <div className='AddNewHostFromServiceRegistryPopup-body-repositories-bottom'>
                             <span className='AddNewHostFromServiceRegistryPopup-body-right-repositories-Title'>
                                 Selected Repositories:
                             </span>
                             <div className='AddNewHostFromServiceRegistryPopup-body-right-repositories-list'>
                                 {repositoryHostsSelected.map((repository, index) => {
-                                        return(
-                                            <SidebarHostItem key = {index}
-                                                id = {repository.label}
-                                                hostName = {repository.label}
-                                                hostType = {{value: "repository", label: "repository"}}
-                                                addedFrom = {serviceRegistry.label}
-                                                onRemove = {removeRepositoryHost}
-                                                ping = {null}
-                                                allowClick = {false}
-                                            />
-                                        )
-                                    })}
+                                    return(
+                                        <SidebarHostItem key = {index}
+                                            id = {repository.label}
+                                            hostName = {repository.label}
+                                            hostType = {{value: "repository", label: "repository"}}
+                                            addedFrom = {serviceRegistry.label}
+                                            onRemove = {removeRepositoryHost}
+                                            ping = {null}
+                                            allowClick = {false}
+                                        />)
+                                })}
                             </div>
                         </div>
                     </div>
