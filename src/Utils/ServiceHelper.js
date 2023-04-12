@@ -101,27 +101,3 @@ export async function pingAllProcesses(getAndAddFile) {
             })
     })
 }
-
-// export async function getAllDynamicResources(getAndAddFile) {
-    // const files = getAllFilesLocal();
-    // if(files.length > 0)
-    // files.filter(file => {
-    //     return getFileDynamic(file); 
-    // }).forEach(file => {
-    //     if(!getProcessLocal(getFileProcessId(file)).saveOrUpdateFile) return;
-    //     GetSingleFileMetadata(getFileHost(file), getFileResourceId(file)).then((res) => {
-    //         if(res?.data) {
-    //             getAndAddFile(res?.data);
-    //         }
-    //     }).catch(async () => {
-    //         setProcessKeyLocalAsync(getFileProcessId(file), "saveOrUpdateFile", false).then(() => {
-    //             const resourceId = getFileResourceId(file);
-    //             const metadata = resourceId ? getFileLocal(resourceId) : null;
-    //             if(metadata) {
-    //                 getAndAddFile(metadata, true);
-    //             }
-    //             alert("Failed to get file 1");
-    //         });
-    //     });
-    // })
-// }

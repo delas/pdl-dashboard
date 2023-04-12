@@ -45,6 +45,10 @@ function AddNewHostPopup(props) {
         toggleNewHostPopupOpen();
     }
 
+    const handleNextConfirmDisabled = () => {
+        return !(selectedHosttype && hostName);
+    }
+
     if(isLoading){
         return (
             <div className="AddNewHostPopup">
@@ -72,6 +76,7 @@ function AddNewHostPopup(props) {
                 onNextClick = {onConfirmClick}
                 cancelText = {`Cancel`}
                 nextText = {`Confirm`}
+                nextButtonDisabled = {handleNextConfirmDisabled()}
             >
 
                 <InputField

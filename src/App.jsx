@@ -89,20 +89,6 @@ function App(props) {
         }, pingMinerProcessInterval);
     }, []);
 
-    // useEffect(() => {
-    //     if(pingDynamicResourcesInterval.current !== null) clearInterval(pingDynamicResourcesInterval.current);
-    //     pingDynamicResourcesInterval.current = setInterval(() => {
-    //         getAllDynamicResources(getAndAddFile).then(() => {
-    //             if(updateComponents.Sidebar){
-    //                 updateComponents.Sidebar.update();
-    //             }
-    //             if(updateComponents.Visualizations){
-    //                 updateComponents.Visualizations.update();
-    //             }
-    //         });
-    //     }, pingDynamicResourceInterval);
-    // })
-
     const setComponentUpdaterFunction = (componentName, updateFunc) => {
         let updateComponentsTemp = updateComponents;
         updateComponentsTemp[componentName] = updateFunc;

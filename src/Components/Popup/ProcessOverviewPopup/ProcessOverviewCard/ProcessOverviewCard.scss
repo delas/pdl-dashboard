@@ -57,7 +57,7 @@
             animation: pickaxe 2s infinite linear;
         }
     }
-    &-STOPPED{
+    &-STOPPED, &-ERROR, &-CRASH{
         svg{
             color: rgb(153, 0, 0);
         }
@@ -67,11 +67,11 @@
             color: rgb(255, 193, 7);
         }
     }
-    &-ERROR{
-        svg{
-            color: rgb(153, 0, 0);
-        }
-    }
+    // &-ERROR{
+    //     svg{
+    //         color: rgb(153, 0, 0);
+    //     }
+    // }
 }
 
 .ProcessOverviewCard-status-runtime{

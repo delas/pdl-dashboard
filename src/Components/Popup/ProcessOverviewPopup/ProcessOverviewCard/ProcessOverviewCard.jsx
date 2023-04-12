@@ -2,6 +2,7 @@ import './ProcessOverviewCard.scss';
 import {useState, useEffect} from 'react';
 import {GiWarPick, GiPauseButton, GiPlayButton } from 'react-icons/gi';
 import {FaStopCircle, FaCheck, FaStop} from 'react-icons/fa';
+import {RxCrossCircled} from 'react-icons/rx';
 import { FaTrash } from 'react-icons/fa';
 import {RiErrorWarningLine} from 'react-icons/ri';
 
@@ -43,6 +44,7 @@ function ProcessOverviewCard(props) {
                     {processObject.status.toUpperCase() === 'RUNNING' && <GiWarPick/>}
                     {processObject.status.toUpperCase() === 'PAUSED' && <GiPauseButton/>}
                     {processObject.status.toUpperCase() === 'ERROR' && <RiErrorWarningLine/>}
+                    {processObject.status.toUpperCase() === 'CRASH' && <RxCrossCircled/>}
                     {processObject.status.toUpperCase() === 'STOPPED' && <FaStop/>}
                     {processObject.status.toUpperCase() === 'COMPLETE' && <FaCheck/>}
                 </div>
@@ -77,11 +79,12 @@ function ProcessOverviewCard(props) {
                     </div>
                 }
 
-                <div className={`ProcessOverviewCard-endProcess ProcessOverviewCard-endProcess-${true}`}>
-                    <FaStopCircle onClick = {() => {if(processObject.status.toUpperCase() === "RUNNING") stopProcess(process.id)}}/>
-                </div>
+                {processObject.status.toUpperCase() === 'RUNNING' && 
+                    <div className={`ProcessOverviewCard-endProcess ProcessOverviewCard-endProcess-${true}`}>
+                        <FaStopCircle onClick = {() => {if(processObject.status.toUpperCase() === "RUNNING") stopProcess(process.id)}}/>
+                    </div>
+                }
 
-                
             </div>
         </div>
     );
