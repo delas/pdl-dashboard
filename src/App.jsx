@@ -89,19 +89,19 @@ function App(props) {
         }, pingMinerProcessInterval);
     }, []);
 
-    useEffect(() => {
-        if(pingDynamicResourcesInterval.current !== null) clearInterval(pingDynamicResourcesInterval.current);
-        pingDynamicResourcesInterval.current = setInterval(() => {
-            getAllDynamicResources(getAndAddFile).then(() => {
-                if(updateComponents.Sidebar){
-                    updateComponents.Sidebar.update();
-                }
-                if(updateComponents.Visualizations){
-                    updateComponents.Visualizations.update();
-                }
-            });
-        }, pingDynamicResourceInterval);
-    })
+    // useEffect(() => {
+    //     if(pingDynamicResourcesInterval.current !== null) clearInterval(pingDynamicResourcesInterval.current);
+    //     pingDynamicResourcesInterval.current = setInterval(() => {
+    //         getAllDynamicResources(getAndAddFile).then(() => {
+    //             if(updateComponents.Sidebar){
+    //                 updateComponents.Sidebar.update();
+    //             }
+    //             if(updateComponents.Visualizations){
+    //                 updateComponents.Visualizations.update();
+    //             }
+    //         });
+    //     }, pingDynamicResourceInterval);
+    // })
 
     const setComponentUpdaterFunction = (componentName, updateFunc) => {
         let updateComponentsTemp = updateComponents;
@@ -154,8 +154,8 @@ function App(props) {
         }
     }
 
-    const getAndAddFile = (file) => {
-        if(!file) return;
+    const getAndAddFile = (file, retry = false, retries = 0) => {
+        if(!file || retries >= 10) return;
 
         const fileExtension = getFileExtension(file);
         const resourceId = getFileResourceId(file);
@@ -182,7 +182,10 @@ function App(props) {
                     }
                     setTimeout(() => { updateComponents.Sidebar.update() }, 500);
                 }
-                })
+            })
+            .catch((err) => {
+                if(retry) setTimeout(() => getAndAddFile(file, true, retries + 1), 3000);
+            })
     }
 
     const deleteFile = (id) => { //Deletes from local memory - not repository

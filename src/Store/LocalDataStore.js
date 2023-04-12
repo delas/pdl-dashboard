@@ -1,6 +1,6 @@
 import { getFileExtension } from "../Utils/FileUnpackHelper";
 // ---------------------- Default utils ----------------------
-const setSavedItem = (key, value) => {
+const setSavedItem = async (key, value) => {
     localStorage.setItem(key, JSON.stringify(value));
 }
 
@@ -8,7 +8,7 @@ const getSavedItem = (key) => {
     return JSON.parse(localStorage.getItem(key));
 }
 
-const removeSavedResource = (key) => {
+const removeSavedResource = async (key) => {
     try{
         localStorage.removeItem(key);
     }
@@ -182,16 +182,18 @@ export function getAllProcessKeysLocal() {
     })
 }
 
-export function setProcessKeyLocal(id, key, value) {
+export async function setProcessKeyLocalAsync(id, key, value) {
     const process = Object.keys(localStorage).filter((key) => key === id);
     if(process.length > 0){
         try{
             const storageItem = JSON.parse(localStorage.getItem(process[0]));
             storageItem[key] = value;
-            removeHostLocal(id);
-            saveHostLocal(id, storageItem);
+            await removeHostLocal(id);
+            await saveHostLocal(id, storageItem);
+            return;
         } catch {
             console.log("Error while setting process key");
+            return;
         }
     }
 }

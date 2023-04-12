@@ -108,7 +108,7 @@ function ActionPopup(props) {
                 filteredFilesTemp[filter] = convertFilesToDropdown(res.data); // Assign files to filter key in object {filter1: [files], filter2: [files]}      
             })
             .then(() => { 
-                console.log(filteredFilesTemp);
+                // console.log(filteredFilesTemp);
                 setFileredFilesForDropdown(filteredFilesTemp) // Set filteredFilesTemp in state
             }) 
             .catch((e) => console.log(e));

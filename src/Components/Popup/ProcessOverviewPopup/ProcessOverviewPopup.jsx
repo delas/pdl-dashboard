@@ -4,7 +4,7 @@ import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import ProcessOverviewCard from './ProcessOverviewCard/ProcessOverviewCard';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
-import {getAllProcessesLocal, getProcessLocal, setProcessKeyLocal, removeProcessLocal} from '../../../Store/LocalDataStore';
+import {getAllProcessesLocal, getProcessLocal, setProcessKeyLocalAsync, removeProcessLocal} from '../../../Store/LocalDataStore';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {StopMinerProcess} from '../../../Services/MinerServices';
 import Popup from '../../Widgets/Popup/Popup';
@@ -212,7 +212,7 @@ function ProcessOverviewPopup(props) {
         const process = getProcessLocal(processId);
 
         StopMinerProcess(process.hostname, process.processId).then((response) => {
-            setProcessKeyLocal(processId, "status", "stopped");
+            setProcessKeyLocalAsync(processId, "status", "stopped");
         }).catch((error) => {
             console.log(error);
         });

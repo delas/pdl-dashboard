@@ -114,15 +114,6 @@ function AddNewHostFromServiceRegistryPopup(props) {
                 cancelText = {`Cancel`}
                 nextText = {`Add selected`}
             >
-            
-            {/* <div className='AddNewHostFromServiceRegistryPopup' 
-                onClick = {(e) => {e.stopPropagation()}}
-            > */}
-
-                {/* <PopupHeader
-                    title = {`Add new host from service registry: ${serviceRegistry.label}`}
-                    closePopup = {togglenewHostFromSRPopupOpen}
-                /> */}
 
                 <div className='AddNewHostFromServiceRegistryPopup-body'>
                     <div className='AddNewHostFromServiceRegistryPopup-body-miners'>
@@ -187,15 +178,6 @@ function AddNewHostFromServiceRegistryPopup(props) {
                         </div>
                     </div>
                 </div>
-
-                {/* <PopupFooter
-                    onCancelClick = {togglenewHostFromSRPopupOpen}
-                    onNextClick = {onConfirmClick}
-                    cancelText = {`Cancel`}
-                    nextText = {`Add selected`}
-                /> */}
-
-            {/* </div> */}
             </Popup>
         </BackdropModal>
     );
