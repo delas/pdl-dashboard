@@ -3,7 +3,8 @@ import {useState, useEffect} from 'react';
 import { Link } from "react-router-dom";
 import Logo from '../../Assets/logo';
 import dtuImg from '../../Assets/dtu.png';
-import Button from '../Widgets/Button/Button';
+// import Button from '../Widgets/Button/Button';
+import IconizedButton from '../Widgets/Buttons/IconizedButton/IconizedButton';
 import {FaAngleRight, FaAngleLeft} from 'react-icons/fa';
 
 function Topbar(props) {
@@ -52,7 +53,7 @@ function Topbar(props) {
                 <div className='Topbar-flexContainer-right'>
                     <div className='Topbar-button-container'>
 
-                        <Button
+                        <IconizedButton
                             text = {`Configure hosts`}
                             icon = {sidebarHostsOpen ? <FaAngleLeft/> : <FaAngleRight/>}
                             disabled = {false}
@@ -61,7 +62,7 @@ function Topbar(props) {
                             theme = {"primary"}
                         />
 
-                        <Button
+                        <IconizedButton
                             text = {`Open sidebar`}
                             icon = {sidebarOpen ? <FaAngleLeft/> : <FaAngleRight/>}
                             disabled = {false}

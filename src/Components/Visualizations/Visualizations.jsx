@@ -11,6 +11,7 @@ import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 import {visualizationConfig, getVisalizations} from '../../config';
 import Dropdown from '../Widgets/Dropdown/Dropdown';
 import {getChildrenFromFile} from '../../Services/RepositoryServices';
+import DefaultButton from '../Widgets/Buttons/DefaultButton/DefaultButton';
 
 function Visualizations(props) {
     const {
@@ -119,11 +120,14 @@ function Visualizations(props) {
             <div className='Visualizations-children-dropdown-container'>
                 
                 {childrenForDropdown.length > 0 && 
-                    <button className={`Visualizations-children-button Visualizations-children-button${selectedChild ? `-disabled-false` : `-disabled-true`}`}  
-                        onClick = {onDropdownButtonClick} >
-                        Download
-                    </button> &&
+                    
                     <div className='Visualizations-children-dropdown'>
+                        <DefaultButton
+                            click = {onDropdownButtonClick}
+                            text = {`Download`}
+                            disabled = {!selectedChild}
+                            primary =  {true}
+                        />
                         <Dropdown
                             label = "Children of this resource"
                             options = {childrenForDropdown}

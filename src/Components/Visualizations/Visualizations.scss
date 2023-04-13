@@ -69,6 +69,11 @@ $tab-height: 3em;
 
 .Visualizations-children-dropdown{
     width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 0.5em;
 }
 
 .Visualizations-children-button{

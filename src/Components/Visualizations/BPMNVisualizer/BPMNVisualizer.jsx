@@ -8,6 +8,7 @@ import BPMNComponent from "./BPMNComponent";
 // import ModelerCreator from "./diagramCreator/index";
 // import "./styles.css";
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
+import DefaultButton from '../../Widgets/Buttons/DefaultButton/DefaultButton';
 
 function BPMNVisualizer(props) {
     const {
@@ -16,9 +17,16 @@ function BPMNVisualizer(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [modeler, setModeler] = useState(null);
+    const [getUpdatedBPMN, setGetUpdatedBPMN] = useState({});
+
+    const setComponentUpdaterFunction = (componentName, func) => {
+        let tempUpdatedBPMN = getUpdatedBPMN;
+        tempUpdatedBPMN[componentName] = func;
+        setGetUpdatedBPMN(tempUpdatedBPMN);
+    }
 
     useEffect(() => {
-        setModeler(<BPMNComponent file = {file} />)
+        setModeler(<BPMNComponent file = {file} setComponentUpdaterFunction={setComponentUpdaterFunction}/>)
         setIsLoading(false);
     }, [file]);
 
@@ -43,8 +51,23 @@ function BPMNVisualizer(props) {
         console.log('failed to show diagram');
     }
 
+    function saveChanges() {
+        console.log(getUpdatedBPMN?.getBPMNXML)
+        if(getUpdatedBPMN?.getBPMNXML){
+            const xml = getUpdatedBPMN.getBPMNXML.call();
+            // TODO: Send xml to backend
+        }
+    }
+
     return (
         <div className="BPMNVisualizer">
+            <div className='BPMNVisualizer-button-container'>
+                <DefaultButton
+                    text = 'Save'
+                    click = {saveChanges}
+                    disabled = {false}
+                    primary = {true}/>
+            </div>
             {/* <BPMNComponent
                 file = {file}
             /> */}

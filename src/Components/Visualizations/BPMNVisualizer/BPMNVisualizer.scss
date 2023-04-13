@@ -2,3 +2,18 @@
     width: 100%;
     height: 100%;
 }
+
+.BPMNVisualizer-button-container{
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+    z-index: 1; // to be on top of canvas
+    padding-top: 0.5em;
+    padding-right: 0.5em;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 0.3em;
+}

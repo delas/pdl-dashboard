@@ -1,4 +1,5 @@
 import './PopupFooter.scss';
+import DefaultButton from '../Buttons/DefaultButton/DefaultButton';
 
 function PopupFooter(props) {
 
@@ -14,13 +15,18 @@ function PopupFooter(props) {
         <footer className='Popup-footer'>
             <div className='Popup-buttonContainer'>
 
-                <button className='Popup-button Popup-button-cancel' onClick = {() => {onCancelClick()}}>
-                    {cancelText}
-                </button>
-
-                <button className={`Popup-button Popup-button-confirm Popup-button-confirm-disabled-${nextButtonDisabled}`} onClick={() => {onNextClick()}} disabled = {nextButtonDisabled}>
-                    {nextText}
-                </button>
+                <DefaultButton
+                    click = {onCancelClick}
+                    text = {cancelText}
+                    disabled = {false}
+                    primary =  {false}
+                />
+                <DefaultButton
+                    click = {onNextClick}
+                    text = {nextText}
+                    disabled = {nextButtonDisabled}
+                    primary =  {true}
+                />
 
             </div>
         </footer>

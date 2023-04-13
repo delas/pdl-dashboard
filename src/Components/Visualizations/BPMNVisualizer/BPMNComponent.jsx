@@ -12,7 +12,8 @@ import LoadingSpinner from "../../Widgets/LoadingSpinner/LoadingSpinner";
 
 function BPMNComponent(props) {
     const {
-        file
+        file,
+        setComponentUpdaterFunction,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -23,7 +24,16 @@ function BPMNComponent(props) {
     useEffect(() => {
         setDidMount(true); // Setting mount will ensure the divs are created before the viewer accesses them
         containerRef.current = null; // Resetting the container ref will ensure the viewer is reloaded when the file changes
+        // setComponentUpdaterFunction(getBPMNXML);
+        setComponentUpdaterFunction("getBPMNXML", {call: getBPMNXML});
     }, []);
+
+    const getBPMNXML = () => {
+        viewerRef.current.saveXML({ format: true }, function (err, xml) {
+            if (err) return;
+            return xml;
+        });
+    }
 
     useEffect(() => {
         viewerRef.current = new BpmnViewer({
@@ -68,6 +78,7 @@ function BPMNComponent(props) {
     return (
         <div className="BPMNComponent-parent">
             <div id="bpmn-component-canvas" ref={containerRef} />
+
             {/* <div id="propview" /> */}
         </div>
     );

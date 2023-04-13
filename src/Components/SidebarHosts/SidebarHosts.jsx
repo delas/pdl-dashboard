@@ -6,7 +6,7 @@ import {getMinersLocal, getRepositoriesLocal, getServiceRegistriesLocal} from '.
 import {PingServiceRegistry} from '../../Services/ServiceRegistryServices';
 import {PingMiner} from '../../Services/MinerServices';
 import {PingRepository} from '../../Services/RepositoryServices';
-import Button from '../Widgets/Button/Button';
+import IconizedButton from '../Widgets/Buttons/IconizedButton/IconizedButton';
 import {FaBuffer, FaPlus} from 'react-icons/fa';
 
 function SidebarHosts(props) {
@@ -68,7 +68,7 @@ function SidebarHosts(props) {
                 </div>
             </header>
 
-            <Button
+            <IconizedButton
                 text = {`Add new host`}
                 icon = {<FaPlus/>}
                 disabled = {false}

@@ -1,5 +1,6 @@
 import './Sidebar.scss';
-import Button from '../Widgets/Button/Button';
+// import Iconi from '../Widgets/Button/IconizedButton/IconizedButton';
+import IconizedButton from '../Widgets/Buttons/IconizedButton/IconizedButton';
 import {useState, useEffect, useCallback} from 'react';
 import { FaCircle, FaCog, FaFileUpload, FaBuffer, FaFileDownload } from 'react-icons/fa';
 import {ImCogs} from 'react-icons/im';
@@ -119,36 +120,36 @@ function Sidebar(props) {
         <div className={`Sidebar`}>
             <div className='Sidebar-flexContainer'>
                 <div className='Sidebar-flexContainer-top'>
-                    <div className='Sidebar-flexContainer-buttons'>
-                        <Button
+                    <div className='Sidebar-flexContainer-IconizedButtons'>
+                        <IconizedButton
                             text = {`Upload resource`}
                             icon = {<FaFileUpload/>}
                             disabled = {false}
                             className = {``}
                             onClick = {() => {openPopup(popups.AddFilePopup)}}
                         />
-                        <Button
+                        <IconizedButton
                             text = {`Download resource`}
                             icon = {<FaFileDownload/>}
                             disabled = {false}
                             className = {``}
                             onClick = {() => {openPopup(popups.GetFilePopup)}}
                         />
-                        <Button
+                        <IconizedButton
                             text = {`Execute action`}
                             icon = {<FaCog/>}
                             disabled = {false}
                             className = {``}
                             onClick = {() => {openPopup(popups.ActionPopup)}}
                         />
-                        {/* <Button // Button is moved to configure host popup
+                        {/* <IconizedButton // IconizedButton is moved to configure host popup
                             text = {`Add new host`}
                             icon = {<FaBuffer/>}
                             disabled = {false}
                             className={``}
                             onClick = {() => {openPopup(popups.AddNewHostPopup)}}
                         /> */}
-                        <Button
+                        <IconizedButton
                             text = {`Inspect processes`}
                             icon = {<ImCogs/>}
                             disabled = {false}
