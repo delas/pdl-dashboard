@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect, useRef} from "react";
 import BpmnViewer from "bpmn-js/lib/Modeler";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-font/dist/css/bpmn-embedded.css";
@@ -8,22 +8,26 @@ import "bpmn-js-properties-panel/dist/assets/properties-panel.css";
 import camundaModdleDescriptor from "camunda-bpmn-moddle/resources/camunda";
 import './BPMNComponent.scss';
 import { getFileContent } from "../../../Utils/FileUnpackHelper";
+import LoadingSpinner from "../../Widgets/LoadingSpinner/LoadingSpinner";
 
-class BPMNComponent extends React.Component {
-    constructor(props) {
-        super();
-    }
-    render() {
-        return (
-        <div className="BPMNComponent-parent">
-            <div id="bpmn-component-canvas" ref={this.containerRef} />
-            {/* <div id="propview" /> */}
-        </div>
-        );
-    }
-    componentDidMount() {
-        this.viewer = new BpmnViewer({
-            container: document.getElementById("bpmn-component-canvas"),
+function BPMNComponent(props) {
+    const {
+        file
+    } = props;
+
+    const [isLoading, setIsLoading] = useState(true);
+    const viewerRef = useRef(null);
+    const containerRef = useRef(null);
+    const [didMount, setDidMount] = useState(false);
+
+    useEffect(() => {
+        setDidMount(true); // Setting mount will ensure the divs are created before the viewer accesses them
+        containerRef.current = null; // Resetting the container ref will ensure the viewer is reloaded when the file changes
+    }, []);
+
+    useEffect(() => {
+        viewerRef.current = new BpmnViewer({
+            container: containerRef.current,
             keyboard: {
                 bindTo: window
             },
@@ -35,24 +39,38 @@ class BPMNComponent extends React.Component {
                 camunda: camundaModdleDescriptor
             }
         });
+        var diagramXML = getFileContent(file);
 
-    // import function
-    function importXML(xml, Viewer) {
-      // import diagram
-        Viewer.importXML(xml)
+
+        viewerRef.current.importXML(diagramXML)
             .then(() => {
-                var canvas = Viewer.get("canvas");
+                var canvas = viewerRef.current.get("canvas");
                 canvas.zoom("fit-viewport");
+                setIsLoading(false);
             })
             .catch(err => {
                 console.error("could not import BPMN 2.0 diagram", err);
+                setIsLoading(false);
             });
-    }
-    var diagramXML = getFileContent(this.props.file);
+    }, [file, didMount]);
 
-    // import xml
-    if(diagramXML) importXML(diagramXML, this.viewer);
-  }
+
+    if(isLoading){
+        return (
+            <div className="BPMNComponent">
+                <div className='Spinner-container-l'>
+                    <LoadingSpinner loading={isLoading}/>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className="BPMNComponent-parent">
+            <div id="bpmn-component-canvas" ref={containerRef} />
+            {/* <div id="propview" /> */}
+        </div>
+    );
 }
 
 export default BPMNComponent;
