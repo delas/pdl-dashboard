@@ -55,10 +55,11 @@ function Visualizations(props) {
     }, [file]);
 
     useEffect(() => {
-        if(selectedTabList) {
-            setSelectedTab(selectedTabList[0] ? selectedTabList[0] : null);
-        }
-    }, [selectedTabList]);
+        // if(selectedTabList) {
+            // setSelectedTab(selectedTabList[0] ? selectedTabList[0] : null);
+            setSelectedTab(generateTabList(fileToDisplay)[0] ? generateTabList(fileToDisplay)[0] : null);
+        // }
+    }, [fileToDisplay]);
 
     const onTabChange = (tab) => {
         setSelectedTab(tab);
