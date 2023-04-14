@@ -8,6 +8,7 @@ import { sendFileToRepository, GetSingleFileMetadata, sendStreamToRepository } f
 import Tabs from '../../Widgets/Tabs/Tabs';
 import UploadFileBody from './UploadFileBody/UploadFileBody';
 import UploadStreamBody from './UploadStreamBody/UploadStreamBody';
+import Popup from '../../Widgets/Popup/Popup';
 
 function UploadResourcePopup(props) {
 
@@ -159,16 +160,16 @@ function UploadResourcePopup(props) {
     }
 
     return (
-            <BackdropModal closeModal = {toggleFilePopupOpen} showSpinner={isLoading}>
-
-            <div className='UploadResourcePopup' 
-                onClick = {(e) => {e.stopPropagation()}}
+        <BackdropModal closeModal = {toggleFilePopupOpen} showSpinner={isLoading}>
+            <Popup
+                title = {`Upload file`}
+                closePopup = {toggleFilePopupOpen}
+                onCancelClick = {toggleFilePopupOpen}
+                onNextClick = {onConfirmClick}
+                cancelText = {`Cancel`}
+                nextText = {`Confirm`}
+                nextButtonDisabled = {handleConfirmButtonDisabled()}
             >
-
-                <PopupHeader
-                    title = {`Upload file`}
-                    closePopup = {toggleFilePopupOpen}
-                />
 
                 <Tabs
                     onTabChange = {onTabChange}
@@ -209,16 +210,7 @@ function UploadResourcePopup(props) {
                     />}
                     
                 </div>
-
-                <PopupFooter
-                    onCancelClick = {toggleFilePopupOpen}
-                    onNextClick = {onConfirmClick}
-                    cancelText = {`Cancel`}
-                    nextText = {`Confirm`}
-                    nextButtonDisabled = {handleConfirmButtonDisabled()}
-                />
-
-            </div>
+            </Popup>
         </BackdropModal>
     );
 }

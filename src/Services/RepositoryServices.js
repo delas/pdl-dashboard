@@ -49,16 +49,19 @@ export async function GetResourceGraph(hostname, fileId){
     return axios.get(`${hostname}${urlExtension}`);
 }
 
-export const sendFileToRepository = async (hostname, file, fileExtension, fileType, resourceLabel, description = "") => {
+export const sendFileToRepository = async (hostname, file, fileExtension, fileType, resourceLabel, description = "", parents = [], generatedFrom = {}) => {
     // The file param is the html input type, not the metadata object used elsewhere.
-    const urlExtension = "/resources/";
-    // const fileExtension = file.name.split('.')[file.name.split('.').length - 1];
+    const urlExtension = hostname.includes("/resources/") ? "" : "/resources/";
     const formdata = new FormData();
     formdata.append('file', file);
     formdata.append('ResourceLabel', resourceLabel);
     formdata.append('ResourceType', fileType);
     formdata.append('FileExtension', fileExtension);
     formdata.append('Description', description);
+    if(parents.length > 0) 
+        formdata.append('Parents', JSON.stringify(parents));
+    if(Object.keys(generatedFrom).length > 0) 
+        formdata.append('GeneratedFrom', JSON.stringify(generatedFrom));
     return axios.post(`${hostname}${urlExtension}`, formdata);
 };
 

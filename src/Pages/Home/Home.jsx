@@ -20,6 +20,7 @@ import { getFileLocal } from '../../Store/LocalDataStore';
 // import ReactHtmlParser from 'react-html-parser';
 import { getFileDynamic, getFileResourceId } from '../../Utils/FileUnpackHelper';
 import {pingMinerProcessInterval} from '../../config';
+import UploadManualChangesPopup from '../../Components/Popup/UploadManualChangesPopup/UploadManualChangesPopup';
 
 
 // import ReactDOMServer from 'react-dom/server'
@@ -36,6 +37,7 @@ function Home(props) {
         deleteFile,
         updateComponents,
         shouldSetFileContent,
+        saveFileAndUpdate,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -64,6 +66,7 @@ function Home(props) {
         NewSRHostPopup: 'NewSRHostPopup',
         GetFilePopup: 'GetFilePopup',
         ProcessOverviewPopup: 'ProcessOverviewPopup',
+        UploadManualChangesPopup: 'UploadManualChangesPopup',
     }
     
     const openPopup = (popup, props = {}) => {
@@ -92,6 +95,10 @@ function Home(props) {
                 set.setProcessOverviewPopupOpen(true);
                 setPopupProps(props);
                 break;
+            case 'UploadManualChangesPopup':
+                set.setUploadManualChangesPopup(true);
+                setPopupProps(props);
+                break;
             default: (() => {})(); break; // Do nothing. Produces empty lambda expression call
         }
     }
@@ -116,6 +123,9 @@ function Home(props) {
             case 'ProcessOverviewPopup':
                 set.setProcessOverviewPopupOpen(false);
                 break;  
+            case 'UploadManualChangesPopup':
+                set.setUploadManualChangesPopupOpen(false);
+                break;
             default: (() => {})(); break; // Do nothing. Produces empty lambda expression call
         }
     }
@@ -197,6 +207,8 @@ function Home(props) {
                                 file = {visualizationsFile}
                                 setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
                                 getAndAddFile = {getAndAddFile}
+                                openPopup = {openPopup}
+                                popups = {popups}
                             />
                         </div>
                         
@@ -275,6 +287,18 @@ function Home(props) {
                         closePopup = {closePopup}
                         popups = {popups}
                         setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
+                    />
+                    : null
+                }
+
+                {isOpen.uploadManualChangesPopup ? 
+                    <UploadManualChangesPopup
+                        toggleUploadManualChangesPopup = {toggles.toggleUploadManualChangesPopup}
+                        {...popupProps}
+                        closePopup = {closePopup}
+                        popups = {popups}
+                        getAndAddFile = {getAndAddFile}
+                        saveFileAndUpdate = {saveFileAndUpdate}
                     />
                     : null
                 }

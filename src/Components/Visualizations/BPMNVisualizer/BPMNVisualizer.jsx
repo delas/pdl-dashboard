@@ -1,5 +1,5 @@
 import './BPMNVisualizer.scss';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useMemo} from 'react';
 // import ReactBpmn from 'react-bpmn';
 
 import React from "react";
@@ -12,12 +12,15 @@ import DefaultButton from '../../Widgets/Buttons/DefaultButton/DefaultButton';
 
 function BPMNVisualizer(props) {
     const {
-        file
+        file,
+        uploadEditedFile,
+
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
     const [modeler, setModeler] = useState(null);
     const [getUpdatedBPMN, setGetUpdatedBPMN] = useState({});
+    const [extractedXML, setExtractedXML] = useState(null);
 
     const setComponentUpdaterFunction = (componentName, func) => {
         let tempUpdatedBPMN = getUpdatedBPMN;
@@ -26,7 +29,7 @@ function BPMNVisualizer(props) {
     }
 
     useEffect(() => {
-        setModeler(<BPMNComponent file = {file} setComponentUpdaterFunction={setComponentUpdaterFunction}/>)
+        setModeler(<BPMNComponent file = {file} setComponentUpdaterFunction={setComponentUpdaterFunction} setExtractedXML = {setExtractedXML}/>)
         setIsLoading(false);
     }, [file]);
 
@@ -39,6 +42,7 @@ function BPMNVisualizer(props) {
             </div>
         )
     }
+
     function onShown() {
         console.log('diagram shown');
     }
@@ -51,11 +55,13 @@ function BPMNVisualizer(props) {
         console.log('failed to show diagram');
     }
 
-    function saveChanges() {
-        console.log(getUpdatedBPMN?.getBPMNXML)
+    async function saveChanges() {
         if(getUpdatedBPMN?.getBPMNXML){
-            const xml = getUpdatedBPMN.getBPMNXML.call();
-            // TODO: Send xml to backend
+            const viewer = getUpdatedBPMN.getBPMNXML.call(); // getting the viewer from the child component
+            viewer.saveXML({ format: true }, function (err, xml) { // getting the xml from the viewer
+                if (err) {console.log(err); return};
+                uploadEditedFile(xml, file); // Sending xml and file to popup
+            });
         }
     }
 

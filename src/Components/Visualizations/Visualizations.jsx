@@ -8,7 +8,7 @@ import ResourceGraph from './ResourceGraph/ResourceGraph';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
 import { getFileDescription, getFileExtension, getFileHost, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileContent } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
-import {visualizationConfig, getVisalizations} from '../../config';
+import {getVisalizations} from '../../config';
 import Dropdown from '../Widgets/Dropdown/Dropdown';
 import {getChildrenFromFile} from '../../Services/RepositoryServices';
 import DefaultButton from '../Widgets/Buttons/DefaultButton/DefaultButton';
@@ -18,6 +18,8 @@ function Visualizations(props) {
         file,
         setComponentUpdaterFunction,
         getAndAddFile,
+        openPopup,
+        popups,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -85,6 +87,10 @@ function Visualizations(props) {
         }
     }
 
+    const uploadEditedFile = (xml, originalMetadata) => {
+        openPopup(popups.UploadManualChangesPopup, {xml: xml, originalMetadata: originalMetadata});
+    }
+
     if(isLoading){
         return (
             <div className="Visualizations-loader">
@@ -144,7 +150,7 @@ function Visualizations(props) {
             </div>
             {selectedTab &&
                 <div className='Visualizations-VisualizerContainer'>
-                    {(selectedTab.ResourceType === "BPMN")      && <BPMNVisualizer file = {fileToDisplay}/>}
+                    {(selectedTab.ResourceType === "BPMN")      && <BPMNVisualizer file = {fileToDisplay} uploadEditedFile = {uploadEditedFile}/>}
                     {(selectedTab.ResourceType === "HISTOGRAM") && <HistogramVisualizer file = {fileToDisplay}/>}
                     {(selectedTab.ResourceType === "PNML")      && <PNMLVisualizer file = {fileToDisplay}/>}
                     {(selectedTab.ResourceType === "DOT")       && <ResourceGraph file = {fileToDisplay}/>}

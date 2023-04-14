@@ -24,6 +24,7 @@ function App(props) {
     const [newHostFromSROpen, setNewHostFromSRPopupOpen] = useState(false);
     const [GetFilePopupOpen, setGetFilePopupOpen] = useState(false); 
     const [processOverviewPopupOpen, setProcessOverviewPopupOpen] = useState(false);
+    const [uploadManualChangesPopup, setUploadManualChangesPopup] = useState(false);
 
     let pingInterval = useRef(null);
     let pingProcessInterval = useRef(null);
@@ -59,6 +60,10 @@ function App(props) {
 
     const toggleProcessOverviewPopupOpen = () => {
         setProcessOverviewPopupOpen(!processOverviewPopupOpen);
+    }
+
+    const toggleUploadManualChangesPopup = () => {
+        setUploadManualChangesPopup(!uploadManualChangesPopup);
     }
 
     useEffect(() => {
@@ -161,17 +166,21 @@ function App(props) {
             responsePromise
             .then((res) => {
                 if(res.status === 200 && res.data && getFileLocal(resourceId)) { // file could have been removed before completed
-                    if (isImage) {
-                        saveFileLocal(resourceId, {...file, fileContent: URL.createObjectURL(res.data) })
-                    } else {
-                        saveFileLocal(resourceId, {...file, fileContent: res.data }); // save the filecontent
-                    }
-                    setTimeout(() => { updateComponents.Sidebar.update() }, 500);
+                    saveFileAndUpdate(file, res.data, isImage);
                 }
             })
             .catch((err) => {
                 if(retry) setTimeout(() => getAndAddFile(file, true, retries + 1), 3000);
             })
+    }
+
+    const saveFileAndUpdate = (file, fileContent, isImage) => {
+        if (isImage) {
+            saveFileLocal(getFileResourceId(file), {...file, fileContent: URL.createObjectURL(fileContent) })
+        } else {
+            saveFileLocal(getFileResourceId(file), {...file, fileContent: fileContent }); // save the filecontent
+        }
+        setTimeout(() => { updateComponents.Sidebar.update() }, 500);
     }
 
     const deleteFile = (id) => { //Deletes from local memory - not repository
@@ -198,6 +207,7 @@ function App(props) {
                 deleteFile = {deleteFile}
                 updateComponents = {updateComponents}
                 shouldSetFileContent = {shouldSetFileContent}
+                saveFileAndUpdate = {saveFileAndUpdate}
                 toggles = {{
                     toggleSidebar: toggleSidebar,
                     toggleSidebarHosts: toggleSidebarHosts,
@@ -206,7 +216,8 @@ function App(props) {
                     toggleNewHostPopupOpen: toggleNewHostPopupOpen,
                     togglenewHostFromSRPopupOpen: togglenewHostFromSRPopupOpen,
                     toggleGetFilePopupOpen: toggleGetFilePopupOpen,
-                    toggleProcessOverviewPopupOpen: toggleProcessOverviewPopupOpen
+                    toggleProcessOverviewPopupOpen: toggleProcessOverviewPopupOpen,
+                    toggleUploadManualChangesPopup: toggleUploadManualChangesPopup,
                 }}
                 set = {{
                     setSidebarOpen: setSidebarOpen,
@@ -217,7 +228,8 @@ function App(props) {
                     setNewHostFromSRPopupOpen: setNewHostFromSRPopupOpen,
                     setGetFilePopupOpen: setGetFilePopupOpen,
                     setComponentUpdaterFunction: setComponentUpdaterFunction,
-                    setProcessOverviewPopupOpen: setProcessOverviewPopupOpen
+                    setProcessOverviewPopupOpen: setProcessOverviewPopupOpen,
+                    setUploadManualChangesPopup: setUploadManualChangesPopup,
                 }}
                 isOpen = {{
                     sidebarOpen: sidebarOpen,
@@ -227,7 +239,8 @@ function App(props) {
                     newHostPopupOpen: newHostPopupOpen,
                     newHostFromSROpen: newHostFromSROpen,
                     GetFilePopupOpen: GetFilePopupOpen,
-                    processOverviewPopupOpen: processOverviewPopupOpen
+                    processOverviewPopupOpen: processOverviewPopupOpen,
+                    uploadManualChangesPopup: uploadManualChangesPopup,
                 }}
             /> : null}
             {props.page === "Page1" ? <Page1/> : null}

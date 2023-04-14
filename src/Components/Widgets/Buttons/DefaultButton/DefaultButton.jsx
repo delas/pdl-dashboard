@@ -13,7 +13,7 @@ function DefaultButton(props) {
     return (
         <button 
             className={`Default-button Default-button-primary-${primary} Default-button-primary-${primary}-disabled-${disabled}`} 
-            onClick={() => {console.log("click"); click(); }} 
+            onClick={() => { click(); }} 
             disabled = {disabled}
         >
             {text}
