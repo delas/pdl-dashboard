@@ -54,6 +54,18 @@ export function getServiceRegistriesLocal(){
     return getAllTypeLocal("service registry");
 }
 
+export function getAllHostLocallyAdded() {
+    return getMinersLocal().filter((miner) => miner.addedFrom === "locally")
+    .concat(getRepositoriesLocal().filter((repository) => repository.addedFrom === "locally"))
+    .concat(getServiceRegistriesLocal().filter((serviceRegistry) => serviceRegistry.addedFrom === "locally"));
+}
+
+export function getAllHostAddedFromServiceRegistry(serviceRegistryHostName) {
+    return getMinersLocal().filter((miner) => miner.addedFrom === serviceRegistryHostName)
+    .concat(getRepositoriesLocal().filter((repository) => repository.addedFrom === serviceRegistryHostName))
+    .concat(getServiceRegistriesLocal().filter((serviceRegistry) => serviceRegistry.addedFrom === serviceRegistryHostName));
+}
+
 export function getAllHostStatusLocal() {
     const minerStatus = getMinersLocal().map((miner) => {
         return miner.status;

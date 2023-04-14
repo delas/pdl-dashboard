@@ -1,38 +1,70 @@
 import { PingMiner, GetMinerProcessStatus } from '../Services/MinerServices';
 import { PingRepository, GetSingleFileMetadata } from '../Services/RepositoryServices';
-import { PingServiceRegistry } from '../Services/ServiceRegistryServices';
-import { getMinersLocal, getRepositoriesLocal, getServiceRegistriesLocal, setHostStatusLocal, getAllRunningProcessesLocal, setProcessKeyLocalAsync, getAllFilesLocal, getProcessLocal, getFileLocal } from '../Store/LocalDataStore';
-import { getFileDynamic, getFileHost, getFileProcessId, getFileResourceId } from './FileUnpackHelper';
+import { PingServiceRegistry, PingConnectedFilters } from '../Services/ServiceRegistryServices';
+import { getAllHostAddedFromServiceRegistry, getServiceRegistriesLocal, setHostStatusLocal, getAllRunningProcessesLocal, setProcessKeyLocalAsync, getAllHostLocallyAdded, getProcessLocal, getFileLocal } from '../Store/LocalDataStore';
+import { getFileResourceId } from './FileUnpackHelper';
 import {msToTime} from './Utils';
 
 export async function pingAllAddedServices() {
-    getMinersLocal().forEach(miner => {
-        PingMiner(miner.name).then((res) =>{
-            const status = res.status === 200 && res.data.toUpperCase() === "PONG";
-            setHostStatusLocal(miner.id, status ? "online" : "offline");
-        }).catch((e) => {
-            setHostStatusLocal(miner.id, "offline");
-            console.log(`Failed to connect to miner ${miner.name} with error: ${e}`)
-        });
+    pingAllLocallyAddedServices();
+    pingAllServicesAddedFromServicesRegistry();
+}
+
+function pingAllServicesAddedFromServicesRegistry(){
+    getServiceRegistriesLocal().forEach(SR => { // for each service registry
+        const filters = getAllHostAddedFromServiceRegistry(SR.name).map(host => { // get all hosts added from that service registry
+            return host.name;
+        })
+        PingConnectedFilters(SR.name, filters) // ping all hosts added from that service registry
+            .then((res) => {
+                if(res.status !== 200) return;
+                res.data.forEach(host => { // for each hostStatus {name: host.net.com, status: bool} in the response
+                    const localHost = getAllHostAddedFromServiceRegistry(SR.name).find(localHost => localHost.name = host.host);
+                    setHostStatusLocal(localHost.id, host.status ? "online" : "offline"); // set status of host
+                });
+            }).catch(() => {
+                console.log("Failed to ping connected filters");
+                getAllHostAddedFromServiceRegistry(SR.name).forEach(host => { // if failed to ping connected filters, set all hosts added from that service registry to offline
+                    setHostStatusLocal(host.id, "offline");
+                });
+            });
+    })
+}
+
+function pingAllLocallyAddedServices() {
+    getAllHostLocallyAdded().forEach(host => {
+        switch(host.type.value){
+            case "miner":
+                PingMiner(host.name).then((res) =>{
+                    const status = res.status === 200 && res.data.toUpperCase() === "PONG";
+                    setHostStatusLocal(host.id, status ? "online" : "offline");
+                }).catch((e) => {
+                    setHostStatusLocal(host.id, "offline");
+                    console.log(`Failed to connect to miner ${host.name} with error: ${e}`)
+                });
+                break;
+            case "repository":
+                PingRepository(host.name).then((res) =>{
+                    const status = res.status === 200 && res.data.toUpperCase() === "PONG";
+                    setHostStatusLocal(host.id, status ? "online" : "offline");
+                }).catch((e) => {
+                    setHostStatusLocal(host.id, "offline");
+                    console.log(`Failed to connect to repository ${host.name} with error: ${e}`)
+                });
+                break;
+            case "service registry":
+                PingServiceRegistry(host.name).then((res) =>{
+                    const status = res.status === 200 && res.data.toUpperCase() === "PONG";
+                    setHostStatusLocal(host.id, status ? "online" : "offline");
+                }).catch((e) => {
+                    setHostStatusLocal(host.id, "offline");
+                    console.log(`Failed to connect to service registry ${host.name} with error: ${e}`)
+                });
+                break;
+            default:
+                break;
+        }
     });
-    getRepositoriesLocal().forEach(repository => {
-        PingRepository(repository.name).then((res) =>{
-            const status = res.status === 200 && res.data.toUpperCase() === "PONG";
-            setHostStatusLocal(repository.id, status ? "online" : "offline");
-        }).catch((e) => {
-            setHostStatusLocal(repository.id, "offline");
-            console.log(`Failed to connect to repository ${repository.name} with error: ${e}`)
-        });
-    })
-    getServiceRegistriesLocal().forEach(SR => {
-        PingServiceRegistry(SR.name).then((res) =>{
-            const status = res.status === 200 && res.data.toUpperCase() === "PONG";
-            setHostStatusLocal(SR.id, status ? "online" : "offline");
-        }).catch((e) => {
-            setHostStatusLocal(SR.id, "offline");
-            console.log(`Failed to connect to service registry ${SR.name} with error: ${e}`)
-        });
-    })
 }
 
 export async function pingAllProcesses(getAndAddFile) {

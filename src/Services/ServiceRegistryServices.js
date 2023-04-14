@@ -14,3 +14,8 @@ export async function GetRepositoriesFromServiceRegistry(hostname) {
     const urlExtension = "/repositories";
     return axios.get(`${hostname}${urlExtension}`);
 }
+
+export async function PingConnectedFilters(hostname, filter) {
+    const urlExtension = "/connections/filters";
+    return axios.post(`${hostname}${urlExtension}`, filter);
+}
