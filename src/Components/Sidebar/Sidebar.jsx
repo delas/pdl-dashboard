@@ -4,9 +4,9 @@ import IconizedButton from '../Widgets/Buttons/IconizedButton/IconizedButton';
 import {useState, useEffect, useCallback} from 'react';
 import { FaCircle, FaCog, FaFileUpload, FaBuffer, FaFileDownload } from 'react-icons/fa';
 import {ImCogs} from 'react-icons/im';
-import SidebarFile from './SidebarFiles/SidebarFile';
+import SidebarFile from './SidebarFile/SidebarFile';
 import { getAllFilesLocal, getAllHostStatusLocal } from '../../Store/LocalDataStore';
-import { getFileCreationDate, getFileResourceId } from '../../Utils/FileUnpackHelper';
+import { getFileCreationDate, getFileResourceId, getFileResourceLabel, getFileResourceType } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 
 function Sidebar(props) {
@@ -29,7 +29,7 @@ function Sidebar(props) {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ 
         updateState({}); 
-        setFiles(sortFiles(getAllFilesLocal(), sortingOrder.dsc));
+        setFiles(sortFiles(getAllFilesLocal(), sortingOptions.dsc));
         setStatuses(getAllHostStatusLocal());
     }, []);
 
@@ -39,22 +39,26 @@ function Sidebar(props) {
     }, []);
 
     useEffect(() => {
-        setFiles(sortFiles(getAllFilesLocal(), sortingOrder.dsc));
+        setFiles(sortFiles(getAllFilesLocal(), sortingOptions.dsc));
         setStatuses(getAllHostStatusLocal());
     }, []);
 
-    const sortingOrder = {
+    const sortingOptions = {
         asc: "asc",
         dsc: "dsc",
+        alfabetical: "alfabetical",
         // type: "type",
     }
 
     const sortFiles = (files, sortType) => {
         switch(sortType){
-            case sortingOrder.asc:
+            case sortingOptions.asc:
                 return sortFilesAsc(files);
-            case sortingOrder.dsc:
+            case sortingOptions.dsc:
                 return sortFilesDsc(files);
+            case sortingOptions.alfabetical:
+                return sortFilesAlphabetical(files);
+            
             // case sortingOrder.type:
             //     return sortFilesByType(files);
             default:
@@ -74,11 +78,31 @@ function Sidebar(props) {
         });
     }
 
-    // const sortFilesByType = (files) => {
-    //     return files.sort((a, b) => {
-    //         return getFileResourceId(a) - getFileResourceId(b);
-    //     });
-    // }
+    const sortFilesAlphabetical = (files) => {
+        return files.sort((a, b) => {
+            if(getFileResourceLabel(a) < getFileResourceLabel(b)) return -1;
+            if(getFileResourceLabel(a) > getFileResourceLabel(b)) return 1;
+            return 0;
+        });
+    }
+
+    const sortingOrderTypes = {
+        BPMN: 0,
+        PNML: 1,
+        JSON: 2,
+        XML: 3,
+        PNG: 4,
+        SVG: 5,
+        JPG: 6,
+        JPEG: 7,
+        GIF: 8,
+    }
+
+    const sortFilesByType = (files) => {
+        return files.sort((a, b) => {
+            return sortingOrderTypes[getFileResourceType(a).toUpperCase()] - sortingOrderTypes[getFileResourceType(b).toUpperCase()];
+        });
+    }
 
     const statusIconDisplayer = () => {
         const uniqueStatus = getAllHostStatusLocal().filter((x, i, a) => a.indexOf(x) === i)
