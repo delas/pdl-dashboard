@@ -5,6 +5,7 @@ import { CiStreamOn } from 'react-icons/ci';
 import { getFileLocal, setProcessKeyLocalAsync } from '../../../Store/LocalDataStore';
 import { getFileExtension, getFileResourceLabel, getFileContent, getFileDynamic, getFileProcessId, getFileCreationDate } from '../../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
+import {getDateInMsAsString} from '../../../Utils/Utils';
 
 function SidebarFile(props) {
 
@@ -38,14 +39,6 @@ function SidebarFile(props) {
         } else {
             setFileContentLoading(false);
         }
-    }
-
-    const getCreationDateString = (file) => {
-        const timeInMs = parseInt(getFileCreationDate(file));
-        const date = new Date(timeInMs);
-
-        //data.getMonth() + 1 because months are 0-11
-        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     }
 
     const deleteFileHandler = () => {
@@ -82,7 +75,7 @@ function SidebarFile(props) {
                             {getFileResourceLabel(file)}
                         </div>
                         <div className='SidebarFile-creationDate'>
-                            {getCreationDateString(file)}
+                            {getDateInMsAsString(getFileCreationDate(file))}
                         </div>
                     </div>
                     

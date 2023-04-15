@@ -1,10 +1,8 @@
 .ProcessOverviewCard{
     width: 100%;
-    height: 3em;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    height: 4em;
+    display: grid;
+    grid-template-columns: 2.5em 1fr 1fr 1fr 2.5em;
     background-color: #f8f9fa;
     padding: 0.5rem 1rem;
     box-sizing:border-box;
@@ -44,6 +42,9 @@
 
 .ProcessOverviewCard-status-icon{
     color: #28a745;
+    grid-row: 1 / span 2; // takes up the two top most left spaces 
+    grid-column: 1 / 1;
+    align-self: center;
     height: 1.5em;
     aspect-ratio: 1 / 1;
     // padding-left: 0.75em;
@@ -67,37 +68,22 @@
             color: rgb(255, 193, 7);
         }
     }
-    // &-ERROR{
-    //     svg{
-    //         color: rgb(153, 0, 0);
-    //     }
-    // }
 }
 
 .ProcessOverviewCard-status-runtime{
-    // height: 100%;
     line-height: 1;
     white-space: nowrap;
 }
 
-.ProcessOverviewCard-host{
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 0.5em;
-    width: 50%;
+.ProcessOverviewCard-host-name, .ProcessOverviewCard-host-processName{
+    justify-self: start;
+    align-self: center;
 
-    .ProcessOverviewCard-host-name, .ProcessOverviewCard-host-processName{
-        max-width: 50%;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-
-    // .ProcessOverviewCard-host-processName{
-    // }
+    text-align: left;
+    max-width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .ProcessOverviewCard-change-process-status{
@@ -108,6 +94,9 @@
     align-items: center;
     gap: 0.5em;
     box-sizing: border-box;
+
+    grid-row: 1 / span 2; // takes up the two top most left spaces 
+    grid-column: 5 / span 1;
 }
 
 .ProcessOverviewCard-pause-resume{
@@ -148,9 +137,42 @@
     width: 1em;
     aspect-ratio: 1 / 1;
     margin-right: 0.25em;
+    align-self: center;
     &:hover{
         transform: scale(1.1);
         cursor: pointer;
         color: rgb(153, 0, 0);
     }
+}
+
+
+
+.ProcessOverviewCard-Creationtime{
+    justify-self: start;
+    align-self: center;
+    max-width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 0.8em;
+}
+
+.ProcessOverviewCard-LastModifiedTime{
+    justify-self: start;
+    align-self: center;
+    max-width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 0.8em;
+}
+
+.ProcessOverviewCard-outputName{
+    justify-self: start;
+    align-self: center;
+    max-width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 0.8em;
 }

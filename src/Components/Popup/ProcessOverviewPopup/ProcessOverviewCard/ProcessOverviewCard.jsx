@@ -5,6 +5,9 @@ import {FaStopCircle, FaCheck, FaStop} from 'react-icons/fa';
 import {RxCrossCircled} from 'react-icons/rx';
 import { FaTrash } from 'react-icons/fa';
 import {RiErrorWarningLine} from 'react-icons/ri';
+import {getDateInMsAsString} from '../../../../Utils/Utils';
+import { getFileResourceLabel } from '../../../../Utils/FileUnpackHelper';
+import {getFileLocal} from '../../../../Store/LocalDataStore';
 
 function ProcessOverviewCard(props) {
 
@@ -37,17 +40,20 @@ function ProcessOverviewCard(props) {
         )
     }
 
+    console.log(processObject.startTime);
+
     return (
         <div className='ProcessOverviewCard'>
+            <div className={`ProcessOverviewCard-status-icon ProcessOverviewCard-status-icon-${processObject.status.toUpperCase()}`}>
+                {processObject.status.toUpperCase() === 'RUNNING' && <GiWarPick/>}
+                {processObject.status.toUpperCase() === 'PAUSED' && <GiPauseButton/>}
+                {processObject.status.toUpperCase() === 'ERROR' && <RiErrorWarningLine/>}
+                {processObject.status.toUpperCase() === 'CRASH' && <RxCrossCircled/>}
+                {processObject.status.toUpperCase() === 'STOPPED' && <FaStop/>}
+                {processObject.status.toUpperCase() === 'COMPLETE' && <FaCheck/>}
+            </div>
             <div className={`ProcessOverviewCard-status ProcessOverviewCard-status-${true}`}>
-                <div className={`ProcessOverviewCard-status-icon ProcessOverviewCard-status-icon-${processObject.status.toUpperCase()}`}>
-                    {processObject.status.toUpperCase() === 'RUNNING' && <GiWarPick/>}
-                    {processObject.status.toUpperCase() === 'PAUSED' && <GiPauseButton/>}
-                    {processObject.status.toUpperCase() === 'ERROR' && <RiErrorWarningLine/>}
-                    {processObject.status.toUpperCase() === 'CRASH' && <RxCrossCircled/>}
-                    {processObject.status.toUpperCase() === 'STOPPED' && <FaStop/>}
-                    {processObject.status.toUpperCase() === 'COMPLETE' && <FaCheck/>}
-                </div>
+                
                 <div className='ProcessOverviewCard-status-text'>
                     <div className='ProcessOverviewCard-status-text-title'>
                         {processObject.status.toUpperCase()}
@@ -58,14 +64,14 @@ function ProcessOverviewCard(props) {
                 </span>
             </div>
 
-            <div className={`ProcessOverviewCard-host ProcessOverviewCard-host-${true}`}>
-                <div className={`ProcessOverviewCard-host-name ProcessOverviewCard-host-name-${true}`}>
-                    {processObject.hostname}
-                </div>
-                <div className={`ProcessOverviewCard-host-processName ProcessOverviewCard-host-processName-${true}`}>
-                    {processObject.processName}
-                </div>
+            {/* <div className={`ProcessOverviewCard-host ProcessOverviewCard-host-${true}`}> */}
+            <div className={`ProcessOverviewCard-host-name ProcessOverviewCard-host-name-${true}`}>
+                {processObject.hostname}
             </div>
+            <div className={`ProcessOverviewCard-host-processName ProcessOverviewCard-host-processName-${true}`}>
+                {processObject.processName}
+            </div>
+            {/* </div> */}
 
             <div className={`ProcessOverviewCard-change-process-status`}>
                 {/* <div className={`ProcessOverviewCard-pause-resume ProcessOverviewCard-pause-resume-${process.status.toUpperCase()}`}>
@@ -85,6 +91,20 @@ function ProcessOverviewCard(props) {
                     </div>
                 }
 
+            </div>
+
+            {/* Row 2 */}
+            <div className='ProcessOverviewCard-Creationtime'>
+                {`Started: ${processObject && processObject.startTime ? getDateInMsAsString(processObject.startTime) : ""}`}
+            </div>
+
+            <div className='ProcessOverviewCard-LastModifiedTime'>
+                {`${processObject.status.toUpperCase() === 'RUNNING' ? 'Last modified: ' : 'Ended: '}
+                ${processObject && processObject.startTime ? getDateInMsAsString(processObject.startTime) : ""}`}
+            </div>
+
+            <div className='ProcessOverviewCard-outputName'>
+            {`Resource: ${getFileResourceLabel(getFileLocal(processObject.resourceId))}`}
             </div>
         </div>
     );

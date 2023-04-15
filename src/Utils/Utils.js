@@ -1,3 +1,5 @@
+import { getFileCreationDate } from "./FileUnpackHelper";
+
 // CODE FROM: https://stackoverflow.com/questions/19700283/how-to-convert-time-in-milliseconds-to-hours-min-sec-format-in-javascript
 export function msToTime(duration) {
     var milliseconds = Math.floor((duration % 1000) / 100),
@@ -18,4 +20,13 @@ export function msToTime(duration) {
     }
 
     return `${returnHours}${returnMinutes}${returnSeconds}${returnMilliseconds}`;
+}
+
+export const getDateInMsAsString = (creationDate) => {
+    const timeInMs = parseInt(creationDate);
+    const date = new Date(timeInMs);
+
+    //data.getMonth() + 1 because months are 0-11
+    return `
+        ${date.getDate() < 10 ? `0${date.getDate()}`: date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours() < 10 ? `0${date.getHours()}`: date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}`: date.getMinutes()}:${date.getSeconds() < 10 ? `0${date.getSeconds()}`: date.getSeconds()}`;
 }
