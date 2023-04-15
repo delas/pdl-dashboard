@@ -18,7 +18,10 @@ function InputField(props) {
     return (
         <div className={`InputField-parent ${className}`}>
             <label className='InputField-label' htmlFor = {id ? id : `InputField-${fieldType}-${label}-${placeholder}-${className}`}>
-                {label}
+                <div className='InputField-label-text-container'>
+                    {label}
+                    {min !== null && max !== null ? <b>{`[${min} - ${max}]`}</b> : null}
+                </div>
             </label>
             <input 
                 id = {id ? id : `InputField-${fieldType}-${label}-${placeholder}-${className}`}

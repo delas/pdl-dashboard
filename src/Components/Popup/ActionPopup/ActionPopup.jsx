@@ -159,8 +159,8 @@ function ActionPopup(props) {
         if(params) {
             const param = params[res.index];
             param.selectedValue = res.value;
-            if(param.selectedValue > param.max) param.selectedValue = param.max;
-            if(param.selectedValue < param.min) param.selectedValue = param.min;
+            if(param.selectedValue > param.Max) param.selectedValue = param.max;
+            if(param.selectedValue < param.Min) param.selectedValue = param.min;
             setSelectedParams(params);
             forceUpdate();
         }
@@ -286,6 +286,7 @@ function ActionPopup(props) {
 
     const checkAndApplySavedInputValues = (minerHostId, minerObject) => {
         const minerId = minerObject.MinerId;
+        console.log(minerObject);
         const savedInputValues = getSavedInputValuesLocal(minerHostId, minerId);
         if(savedInputValues) {
             onRepositoryFileOwnerDropdownChange(savedInputValues.repositoryFileOwnerDropdownSelected);

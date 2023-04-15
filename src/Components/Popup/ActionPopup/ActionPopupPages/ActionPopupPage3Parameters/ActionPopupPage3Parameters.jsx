@@ -8,7 +8,7 @@ function ActionPopupPage3Paramters(props) {
         onParamValueChange,
         getInputType
     } = props;
-
+    
     return (
         <div className='ActionPopup-wizard-step3'>
             <div className='ActionPopup-wizard-parameter-inputs'>
@@ -21,10 +21,10 @@ function ActionPopupPage3Paramters(props) {
                                 key = {index}
                                 label = {param.Name}
                                 fieldType = {type}
-                                placeholder = {type}
-                                min = {param.min}
+                                placeholder = {param.Default}
+                                min = {param.Min}
                                 index = {index}
-                                max = {param.max}
+                                max = {param.Max}
                                 value = {param.selectedValue}
                                 onChange = {onParamValueChange}
                             />
