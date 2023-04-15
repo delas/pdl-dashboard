@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { CiStreamOn } from 'react-icons/ci';
 import { getFileLocal, setProcessKeyLocalAsync } from '../../../Store/LocalDataStore';
-import { getFileExtension, getFileResourceLabel, getFileContent, getFileDynamic, getFileProcessId } from '../../../Utils/FileUnpackHelper';
+import { getFileExtension, getFileResourceLabel, getFileContent, getFileDynamic, getFileProcessId, getFileCreationDate } from '../../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function SidebarFile(props) {
@@ -40,6 +40,14 @@ function SidebarFile(props) {
         }
     }
 
+    const getCreationDateString = (file) => {
+        const timeInMs = parseInt(getFileCreationDate(file));
+        const date = new Date(timeInMs);
+
+        //data.getMonth() + 1 because months are 0-11
+        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    }
+
     const deleteFileHandler = () => {
         // Stop retrieving file content - it still updates process status
         const processId = getFileProcessId(file); 
@@ -69,9 +77,15 @@ function SidebarFile(props) {
                     <div className='SidebarFile-filetype'>
                         {getFileExtension(file)}
                     </div>
-                    <div className='SidebarFile-filename' onClick = {() => {selectFileForVisualization(fileId)}} >
-                        {getFileResourceLabel(file)}
+                    <div className='SidebarFile-text-center'>
+                        <div className='SidebarFile-filename' onClick = {() => {selectFileForVisualization(fileId)}} >
+                            {getFileResourceLabel(file)}
+                        </div>
+                        <div className='SidebarFile-creationDate'>
+                            {getCreationDateString(file)}
+                        </div>
                     </div>
+                    
                 </div>
 
                 {getFileDynamic(file) && <div className='SidebarFile-stream'>

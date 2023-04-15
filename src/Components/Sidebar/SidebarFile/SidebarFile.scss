@@ -54,17 +54,29 @@
     border-radius: 0.25rem;
 }
 
-.SidebarFile-filename{
-    width: 100%;
+.SidebarFile-text-center{
+    width: calc(100% - 2.5em);
     font-size: 0.85em;
-    white-space: nowrap;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
     text-align: left;
     &:hover{
         transform: scale(1.02);
         cursor: pointer;
     }
+}
+
+.SidebarFile-filename{
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.SidebarFile-creationDate{
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-size: 0.8em;
 }
 
 
