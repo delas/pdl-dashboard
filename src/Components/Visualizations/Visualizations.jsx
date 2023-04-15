@@ -57,6 +57,8 @@ function Visualizations(props) {
     useEffect(() => {
         // if(selectedTabList) {
             // setSelectedTab(selectedTabList[0] ? selectedTabList[0] : null);
+            const tabList = generateTabList(fileToDisplay);
+            if(tabList && tabList.length > 0)
             setSelectedTab(generateTabList(fileToDisplay)[0] ? generateTabList(fileToDisplay)[0] : null);
         // }
     }, [fileToDisplay]);

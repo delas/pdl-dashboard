@@ -2,7 +2,7 @@ import './ActionPopup.scss';
 import {useState, useEffect, useCallback} from 'react';
 import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
-import { getMinersLocal, getRepositoriesLocal, getHostLocal, saveProcessLocal } from '../../../Store/LocalDataStore';
+import { getMinersLocal, getRepositoriesLocal, getHostLocal, saveProcessLocal, saveInputValuesLocal, getSavedInputValuesLocal } from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { PostMineAction } from '../../../Services/MinerServices';
 import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
@@ -53,6 +53,7 @@ function ActionPopup(props) {
         if(wizardStep !== 4) {
             setWizardStep(wizardStep + 1)
             if(wizardStep + 1 >= maxWizardStep) setMaxWizardStep(wizardStep + 1);
+            if(wizardStep === 1) checkAndApplySavedInputValues(minerHostDropdownValue.value, minerObject);
         } else {
             handleConfirmClick();
         }
@@ -94,13 +95,16 @@ function ActionPopup(props) {
         return files.map((file) => ({label: getFileResourceLabel(file), value: file}) );
     }
 
-    const getUniqueResourceTypesFromMinerObject = () => {
+    const getUniqueResourceTypesFromMinerObject = (retries = 0) => {
+        // if(!minerObject && retries === 0) setTimeout(() => { // TODO: the state doesn't get set immediately, so this is a hacky way to wait for it to be set
+        //     return getUniqueResourceTypesFromMinerObject(1);
+        // }, 200);
         return minerObject.ResourceInput.map((inputTypes) => {
             return inputTypes.ResourceType;
         }).filter((x, i, a) => a.indexOf(x) === i);
     }
 
-    const setFilesFromRepository = (hostname) => { // Create list of files for each filter type
+    const setFilesFromRepository = (hostname, minerObject) => { // Create list of files for each filter type - minerObject is optional param used to ensure it exists when needed instead of waiting for state to be set
         let filteredFilesTemp = {};
         getUniqueResourceTypesFromMinerObject().forEach((filter) => {
             GetRepositoryFilterMetadata(hostname, [filter]) // Get files of each filter
@@ -108,7 +112,6 @@ function ActionPopup(props) {
                 filteredFilesTemp[filter] = convertFilesToDropdown(res.data); // Assign files to filter key in object {filter1: [files], filter2: [files]}      
             })
             .then(() => { 
-                // console.log(filteredFilesTemp);
                 setFileredFilesForDropdown(filteredFilesTemp) // Set filteredFilesTemp in state
             }) 
             .catch((e) => console.log(e));
@@ -259,6 +262,7 @@ function ActionPopup(props) {
                 handleSaveProcess(res.data);
             })
             .then(() => {
+                handleSaveInputValues();
                 toggleActionPopupOpen();
                 setIsLoading(false);
             })
@@ -267,6 +271,36 @@ function ActionPopup(props) {
                 toggleActionPopupOpen();
                 setIsLoading(false);
             });
+    }
+
+    const handleSaveInputValues = () => {
+        const inputValues = {
+            repositoryFileOwnerDropdownSelected: repositoryFileOwnerDropdownSelected,
+            selectedFiles: selectedFiles,
+            selectedParams: selectedParams,
+            repositoryDestination: repositoryDestination,
+            outputFileName: outputFileName,
+        };
+        saveInputValuesLocal(minerHostDropdownValue.value, minerObject.MinerId, inputValues);
+    }
+
+    const checkAndApplySavedInputValues = (minerHostId, minerObject) => {
+        const minerId = minerObject.MinerId;
+        const savedInputValues = getSavedInputValuesLocal(minerHostId, minerId);
+        if(savedInputValues) {
+            onRepositoryFileOwnerDropdownChange(savedInputValues.repositoryFileOwnerDropdownSelected);
+            Object.keys(savedInputValues.selectedFiles).forEach((fileName) => {
+                const file = savedInputValues.selectedFiles[fileName];
+                onFileDropdownChange(file, `${fileName}`);
+            })
+            savedInputValues.selectedParams.forEach((param, index) => {
+                const paramInputValue = {value: param.selectedValue, index: index}
+                onParamValueChange(paramInputValue);
+            });
+            onRepositoryDestinationDropdownChange(savedInputValues.repositoryDestination);
+            onFileOutputNameChange({value: savedInputValues.outputFileName});
+            setWizardStep(4);
+        }
     }
 
     const handleCancelButtonClick = () => {

@@ -38,7 +38,7 @@ export function removeHostLocal(key){
     removeSavedResource(key);
 }
 
-export function getHostLocal(key) { // why dont I just have get host?
+export function getHostLocal(key) {
     return getSavedItem(key);
 }
 
@@ -113,6 +113,21 @@ export function removeItemLocal(key){
         console.log(e);
     }
 }
+
+export function saveInputValuesLocal(minerHostId, minerId, inputValues){
+    // create as object of type {minerId: inputValues} on the miner host object
+    const minerHost = getHostLocal(minerHostId);
+    minerHost["inputValues"] = {...minerHost[inputValues], [minerId]: inputValues};
+    removeHostLocal(minerHostId);
+    saveHostLocal(minerHostId, minerHost);
+}
+
+export function getSavedInputValuesLocal(minerHostId, minerId){
+    const minerHost = getHostLocal(minerHostId);
+    if(minerHost["inputValues"]) return minerHost["inputValues"][minerId];
+    else return null;
+}
+
 
 // ---------------------- FILE STORAGE ----------------------
 

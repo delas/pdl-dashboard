@@ -32,14 +32,14 @@ function pingAllServicesAddedFromServicesRegistry(){
 }
 
 function pingAllLocallyAddedServices() {
-    getAllHostLocallyAdded().forEach(host => {
+    getAllHostLocallyAdded().forEach(host => { // for each host added locally
         switch(host.type.value){
             case "miner":
-                PingMiner(host.name).then((res) =>{
+                PingMiner(host.name).then((res) =>{ // ping miner
                     const status = res.status === 200 && res.data.toUpperCase() === "PONG";
-                    setHostStatusLocal(host.id, status ? "online" : "offline");
+                    setHostStatusLocal(host.id, status ? "online" : "offline"); // set status of miner
                 }).catch((e) => {
-                    setHostStatusLocal(host.id, "offline");
+                    setHostStatusLocal(host.id, "offline"); // if failed to ping miner, set status to offline
                     console.log(`Failed to connect to miner ${host.name} with error: ${e}`)
                 });
                 break;
@@ -68,63 +68,21 @@ function pingAllLocallyAddedServices() {
 }
 
 export async function pingAllProcesses(getAndAddFile) {
-    getAllRunningProcessesLocal();
     getAllRunningProcessesLocal().forEach((process) => {
         GetMinerProcessStatus(process.hostname, process.processId)
             .then(async res => {
                 if(res?.data?.ProcessStatus) { // Update status
                     const result = res.data;
                     await setProcessKeyLocalAsync(process.id, "status", result.ProcessStatus);
-
-                    switch(result.ProcessStatus?.toUpperCase()){
-                        case "RUNNING":
-                            await setProcessKeyLocalAsync(process.id, "progress", msToTime(new Date().getTime() - process.startTime))
-                            break;
-                        case "COMPLETE":
-                            await setProcessKeyLocalAsync(process.id, "saveOrUpdateFile", false);
-                            await setProcessKeyLocalAsync(process.id, "endTime", new Date().getTime());
-                            await setProcessKeyLocalAsync(process.id, "progress", msToTime(new Date().getTime() - process.startTime));
-                            break;
-                        case "CRASH":
-                            await setProcessKeyLocalAsync(process.id, "saveOrUpdateFile", false);
-                            await setProcessKeyLocalAsync(process.id, "endTime", new Date().getTime());
-                            await setProcessKeyLocalAsync(process.id, "progress", msToTime(new Date().getTime() - process.startTime));
-                            await setProcessKeyLocalAsync(process.id, "error", result.Error);
-                            break;
-                        default:
-                            await setProcessKeyLocalAsync(process.id, "progress", 0);
-                            break;
-                    }
-                    
-                    process = getProcessLocal(process.id);
-
+                    process = getProcessLocal(process.id); // get updated process
                     if(res?.data?.Error){
                         alert(`An error has occured: ${res?.data?.Error}`);
                         return;
                     }
-
                     if(process.saveOrUpdateFile && res?.data?.ResourceId && !res?.data?.Error){
-                        GetSingleFileMetadata(process.outputDestination, res?.data?.ResourceId)
-                            .then(async (res) => {
-                                if(res?.data){
-                                    const metadata = res.data;
-                                    const resourceId = getFileResourceId(metadata);
-                                    await setProcessKeyLocalAsync(process.id, "resourceId", resourceId)
-                                    metadata["processId"] = process.id;
-                                    getAndAddFile(metadata);
-                                }
-                            })
-                            .catch(async () => {
-                                setProcessKeyLocalAsync(process.id, "saveOrUpdateFile", false).then(() => {
-                                    const resourceId = getFileResourceId(res?.data?.ResourceId);
-                                    const metadata = resourceId ? getFileLocal(resourceId) : null;
-                                    if(metadata) {
-                                        getAndAddFile(metadata, true);
-                                    }
-                                    alert(`Failed to get file: ${process.error}`);
-                                });
-                            })
+                        tryGetAndSaveMetadataFromProcess(process, res?.data?.ResourceId, getAndAddFile); // get metadata and save file
                     }
+                    await updateProcessKeys(process, result); // Update progress, endTime, saveOrUpdateFile, error
                 }
             })
             .catch(e => {
@@ -132,4 +90,50 @@ export async function pingAllProcesses(getAndAddFile) {
                 setProcessKeyLocalAsync(process.id, "error", e);
             })
     })
+}
+
+
+const updateProcessKeys = async (process, result) => {
+    switch(result.ProcessStatus?.toUpperCase()){
+        case "RUNNING":
+            await setProcessKeyLocalAsync(process.id, "progress", msToTime(new Date().getTime() - process.startTime))
+            break;
+        case "COMPLETE":
+            await setProcessKeyLocalAsync(process.id, "saveOrUpdateFile", false);
+            await setProcessKeyLocalAsync(process.id, "endTime", new Date().getTime());
+            await setProcessKeyLocalAsync(process.id, "progress", msToTime(new Date().getTime() - process.startTime));
+            break;
+        case "CRASH":
+            await setProcessKeyLocalAsync(process.id, "saveOrUpdateFile", false);
+            await setProcessKeyLocalAsync(process.id, "endTime", new Date().getTime());
+            await setProcessKeyLocalAsync(process.id, "progress", msToTime(new Date().getTime() - process.startTime));
+            await setProcessKeyLocalAsync(process.id, "error", result.Error);
+            break;
+        default:
+            await setProcessKeyLocalAsync(process.id, "progress", 0);
+            break;
+    }
+}
+
+const tryGetAndSaveMetadataFromProcess = (process, resourceId, getAndAddFile) => {
+    GetSingleFileMetadata(process.outputDestination, resourceId)
+        .then(async (res) => {
+            if(res?.data){
+                const metadata = res.data;
+                const resourceId = getFileResourceId(metadata);
+                await setProcessKeyLocalAsync(process.id, "resourceId", resourceId)
+                metadata["processId"] = process.id;
+                getAndAddFile(metadata);
+            }
+        })
+        .catch(async () => {
+            setProcessKeyLocalAsync(process.id, "saveOrUpdateFile", false).then(() => {
+                const newResourceId = getFileResourceId(resourceId);
+                const metadata = newResourceId ? getFileLocal(newResourceId) : null;
+                if(metadata) {
+                    getAndAddFile(metadata, true);
+                }
+                alert(`Failed to get file: ${process.error}`);
+            });
+        })
 }
