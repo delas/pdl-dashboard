@@ -25,6 +25,7 @@ function App(props) {
     const [GetFilePopupOpen, setGetFilePopupOpen] = useState(false); 
     const [processOverviewPopupOpen, setProcessOverviewPopupOpen] = useState(false);
     const [uploadManualChangesPopup, setUploadManualChangesPopup] = useState(false);
+    const [shadowPopupOpen, setShadowPopupOpen] = useState(true);
 
     let pingInterval = useRef(null);
     let pingProcessInterval = useRef(null);
@@ -64,6 +65,10 @@ function App(props) {
 
     const toggleUploadManualChangesPopup = () => {
         setUploadManualChangesPopup(!uploadManualChangesPopup);
+    }
+
+    const toggleShadowPopupOpen = () => {
+        setShadowPopupOpen(!shadowPopupOpen);
     }
 
     useEffect(() => {
@@ -218,6 +223,7 @@ function App(props) {
                     toggleGetFilePopupOpen: toggleGetFilePopupOpen,
                     toggleProcessOverviewPopupOpen: toggleProcessOverviewPopupOpen,
                     toggleUploadManualChangesPopup: toggleUploadManualChangesPopup,
+                    toggleShadowPopupOpen: toggleShadowPopupOpen,
                 }}
                 set = {{
                     setSidebarOpen: setSidebarOpen,
@@ -230,6 +236,7 @@ function App(props) {
                     setComponentUpdaterFunction: setComponentUpdaterFunction,
                     setProcessOverviewPopupOpen: setProcessOverviewPopupOpen,
                     setUploadManualChangesPopup: setUploadManualChangesPopup,
+                    setShadowPopupOpen: setShadowPopupOpen,
                 }}
                 isOpen = {{
                     sidebarOpen: sidebarOpen,
@@ -241,6 +248,7 @@ function App(props) {
                     GetFilePopupOpen: GetFilePopupOpen,
                     processOverviewPopupOpen: processOverviewPopupOpen,
                     uploadManualChangesPopup: uploadManualChangesPopup,
+                    shadowPopupOpen: shadowPopupOpen,
                 }}
             /> : null}
             {props.page === "Page1" ? <Page1/> : null}

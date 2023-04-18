@@ -8,6 +8,7 @@ import {PingMiner} from '../../Services/MinerServices';
 import {PingRepository} from '../../Services/RepositoryServices';
 import IconizedButton from '../Widgets/Buttons/IconizedButton/IconizedButton';
 import {FaBuffer, FaPlus} from 'react-icons/fa';
+import {BiTransfer} from 'react-icons/bi';
 
 function SidebarHosts(props) {
     const {
@@ -74,6 +75,14 @@ function SidebarHosts(props) {
                 disabled = {false}
                 className={``}
                 onClick = {() => {openPopup(popups.AddNewHostPopup)}}
+            />
+
+            <IconizedButton
+                text = {`Clone miner from host`}
+                icon = {<BiTransfer/>}
+                disabled = {false}
+                className={``}
+                onClick = {() => {openPopup(popups.ShadowPopup)}}
             />
 
             <div className='SidebarHosts-body'>

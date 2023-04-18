@@ -10,6 +10,7 @@ import AddNewHostPopup from '../../Components/Popup/AddNewHostPopup/AddNewHostPo
 import AddNewHostFromServiceRegistryPopup from '../../Components/Popup/AddNewHostFromServiceRegistryPopup/AddNewHostFromServiceRegistryPopup';
 import GetFilePopup from '../../Components/Popup/GetFilePopup/GetFilePopup';
 import ProcessOverviewPopup from '../../Components/Popup/ProcessOverviewPopup/ProcessOverviewPopup';
+import ShadowPopup from '../../Components/Popup/ShadowPopup/ShadowPopup';
 
 //Components
 import Topbar from '../../Components/Topbar/Topbar';
@@ -67,6 +68,7 @@ function Home(props) {
         GetFilePopup: 'GetFilePopup',
         ProcessOverviewPopup: 'ProcessOverviewPopup',
         UploadManualChangesPopup: 'UploadManualChangesPopup',
+        ShadowPopup: 'ShadowPopup',
     }
     
     const openPopup = (popup, props = {}) => {
@@ -99,6 +101,10 @@ function Home(props) {
                 set.setUploadManualChangesPopup(true);
                 setPopupProps(props);
                 break;
+            case 'ShadowPopup':
+                set.setShadowPopupOpen(true);
+                setPopupProps(props);
+                break;
             default: (() => {})(); break; // Do nothing. Produces empty lambda expression call
         }
     }
@@ -125,6 +131,9 @@ function Home(props) {
                 break;  
             case 'UploadManualChangesPopup':
                 set.setUploadManualChangesPopupOpen(false);
+                break;
+            case 'ShadowPopup':
+                set.setShadowPopupOpen(false);
                 break;
             default: (() => {})(); break; // Do nothing. Produces empty lambda expression call
         }
@@ -299,6 +308,16 @@ function Home(props) {
                         popups = {popups}
                         getAndAddFile = {getAndAddFile}
                         saveFileAndUpdate = {saveFileAndUpdate}
+                    />
+                    : null
+                }
+
+                {isOpen.shadowPopupOpen ?
+                    <ShadowPopup
+                        toggleShadowPopupOpen = {toggles.toggleShadowPopupOpen}
+                        {...popupProps}
+                        closePopup = {closePopup}
+                        popups = {popups}
                     />
                     : null
                 }

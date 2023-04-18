@@ -26,3 +26,8 @@ export async function StopMinerProcess(hostname, processId) {
     console.log(`${hostname}${urlExtension}`);
     return axios.delete(`${hostname}${urlExtension}`);
 }
+
+export async function ShadowMiner(hostname, body) {
+    const urlExtension = "/shadow";
+    return axios.post(`${hostname}${urlExtension}`, body);
+}
