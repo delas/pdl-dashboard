@@ -134,6 +134,7 @@ function App(props) {
     }
 
     const shouldSetFileContent = (file) => {
+        if(!file) return false;
         if(getFileResourceType(file).toUpperCase() === "EVENTSTREAM"){
             return false;
         }
@@ -181,7 +182,12 @@ function App(props) {
 
     const saveFileAndUpdate = (file, fileContent, isImage) => {
         if (isImage) {
-            saveFileLocal(getFileResourceId(file), {...file, fileContent: URL.createObjectURL(fileContent) })
+            var reader = new FileReader();
+            reader.readAsDataURL(fileContent);
+            reader.onload = (e) => {
+                saveFileLocal(getFileResourceId(file), {...file, fileContent: e.target.result });
+            };
+            // saveFileLocal(getFileResourceId(file), {...file, fileContent: URL.createObjectURL(fileContent) })
         } else {
             saveFileLocal(getFileResourceId(file), {...file, fileContent: fileContent }); // save the filecontent
         }

@@ -1,5 +1,5 @@
 import './SidebarFile.scss';
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect} from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { CiStreamOn } from 'react-icons/ci';
 import { getFileLocal, setProcessKeyLocalAsync } from '../../../Store/LocalDataStore';
@@ -19,7 +19,6 @@ function SidebarFile(props) {
 
     const [fileContentLoading, setFileContentLoading] = useState(true);
     const [file, setFile] = useState(null);
-    const reloaderRef = useRef(null);
 
     useEffect(() => {
         getFileOrSetLoading();
@@ -31,16 +30,22 @@ function SidebarFile(props) {
             setFile(tempFile);
         }
         if(!fileContentLoading && shouldSetFileContent(tempFile) && !getFileContent(tempFile)) {
+            console.log("setting from 1")
             setFileContentLoading(true);
         }
         if(shouldSetFileContent(tempFile) && getFileContent(tempFile)){
             setFileContentLoading(false);
         } else {
             setFileContentLoading(true);
+            console.log("setting from 2")
+        }
+
+        if(fileContentLoading){ // retry if file content is not loaded
+            setTimeout(() => {
+                getFileOrSetLoading();
+            }, 1000);
         }
     }
-    if(file)
-    console.log(getFileResourceLabel(file) + " " + fileContentLoading);
 
     const deleteFileHandler = () => {
         // Stop retrieving file content - it still updates process status
