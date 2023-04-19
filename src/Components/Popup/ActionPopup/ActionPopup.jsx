@@ -204,7 +204,7 @@ function ActionPopup(props) {
         }
     }
 
-    const handleSaveProcess = (processId) => { // Save process to localstorage
+    const handleSaveProcess = (processId, resourceLabel) => { // Save process to localstorage
         const status = {
             id: uuidv4(),
             objectType: "process",
@@ -219,6 +219,7 @@ function ActionPopup(props) {
             error: null,
             resourceId: null,
             saveOrUpdateFile: true,
+            resourceLabel: resourceLabel,
         };
         saveProcessLocal(status);
     }
@@ -259,7 +260,7 @@ function ActionPopup(props) {
 
         PostMineAction(minerHostDropdownValue.label, data)
             .then((res) => {
-                handleSaveProcess(res.data);
+                handleSaveProcess(res.data, outputFileName);
             })
             .then(() => {
                 handleSaveInputValues();

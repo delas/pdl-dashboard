@@ -104,7 +104,7 @@ function ProcessOverviewCard(props) {
             </div>
 
             <div className='ProcessOverviewCard-outputName'>
-            {`Resource: ${getFileResourceLabel(getFileLocal(processObject.resourceId))}`}
+                {`Resource: ${processObject.resourceLabel}`}
             </div>
         </div>
     );
