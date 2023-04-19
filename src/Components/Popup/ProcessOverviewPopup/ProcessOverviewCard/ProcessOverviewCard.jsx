@@ -40,8 +40,6 @@ function ProcessOverviewCard(props) {
         )
     }
 
-    console.log(processObject.startTime);
-
     return (
         <div className='ProcessOverviewCard'>
             <div className={`ProcessOverviewCard-status-icon ProcessOverviewCard-status-icon-${processObject.status.toUpperCase()}`}>

@@ -6,7 +6,7 @@ import { FaCircle, FaCog, FaFileUpload, FaBuffer, FaFileDownload } from 'react-i
 import {ImCogs} from 'react-icons/im';
 import SidebarFile from './SidebarFile/SidebarFile';
 import { getAllFilesLocal, getAllHostStatusLocal } from '../../Store/LocalDataStore';
-import { getFileCreationDate, getFileResourceId, getFileResourceLabel, getFileResourceType } from '../../Utils/FileUnpackHelper';
+import { getFileContent, getFileCreationDate, getFileResourceId, getFileResourceLabel, getFileResourceType } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 
 function Sidebar(props) {
@@ -23,13 +23,13 @@ function Sidebar(props) {
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-    const [files, setFiles] = useState([]);
+    // const [files, setFiles] = useState([]);
     const [statuses, setStatuses] = useState([]);
 
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ 
         updateState({}); 
-        setFiles(sortFiles(getAllFilesLocal(), sortingOptions.dsc));
+        // setFiles(sortFiles(getAllFilesLocal(), sortingOptions.dsc));
         setStatuses(getAllHostStatusLocal());
     }, []);
 
@@ -39,7 +39,7 @@ function Sidebar(props) {
     }, []);
 
     useEffect(() => {
-        setFiles(sortFiles(getAllFilesLocal(), sortingOptions.dsc));
+        // setFiles(sortFiles(getAllFilesLocal(), sortingOptions.dsc));
         setStatuses(getAllHostStatusLocal());
     }, []);
 
@@ -77,6 +77,12 @@ function Sidebar(props) {
             return getFileCreationDate(b) - getFileCreationDate(a);
         });
     }
+
+    const files = sortFiles(getAllFilesLocal(), sortingOptions.dsc);
+
+    // files.forEach(file => {
+    //     console.log(getFileResourceLabel(file), !!getFileContent(file));
+    // });
 
     const sortFilesAlphabetical = (files) => {
         return files.sort((a, b) => {

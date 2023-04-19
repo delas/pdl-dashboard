@@ -1,5 +1,5 @@
 import './SidebarFile.scss';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { CiStreamOn } from 'react-icons/ci';
 import { getFileLocal, setProcessKeyLocalAsync } from '../../../Store/LocalDataStore';
@@ -19,24 +19,22 @@ function SidebarFile(props) {
 
     const [fileContentLoading, setFileContentLoading] = useState(true);
     const [file, setFile] = useState(null);
+    const reloaderRef = useRef(null);
 
     useEffect(() => {
-        getFileAndCheckContents();
+        getFileOrSetLoading();
     }, [fileId]);
 
-    const getFileAndCheckContents = () => {
+    const getFileOrSetLoading = () => {
         const tempFile = getFileLocal(fileId);
-        if(tempFile){
+        if(tempFile && shouldSetFileContent(tempFile) && getFileContent(tempFile)){
             setFile(tempFile);
+            setFileContentLoading(false);
         }
-        if(tempFile && shouldSetFileContent(tempFile)){
-            if(!getFileContent(tempFile)){
-                setFileContentLoading(true);
-                setTimeout(() => {getFileAndCheckContents()}, 1000);
-            } else {
-                setFileContentLoading(false);
-            }
-        } else {
+        if(!fileContentLoading && shouldSetFileContent(tempFile) && !getFileContent(tempFile)) {
+            setFileContentLoading(true);
+        }
+        if(!shouldSetFileContent(tempFile)){
             setFileContentLoading(false);
         }
     }
