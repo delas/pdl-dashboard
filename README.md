@@ -68,3 +68,29 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+# Understanding the code
+
+This section is targeted towards developers
+
+## The systems
+
+The overall systems in the frontend is designed to support the desired flow of Process Mining professor Andrea Burratin.
+
+### Processes
+
+Processes is a javascript object located in local memory that has information of which foreign process is running. From the frontend, this is used to determine the state of the foreign process, and when to retreive the results. To create a process, create a process object, and save it to localmemory. In App.jsx, exists an interval, that will ping running processes, thus keeping the system up to date with all processes created from the current unit. 
+
+### Files
+
+Tied in with processes are files, which has two components: Metadata and content.
+
+#### Metadata
+
+The file metadata is a javascript object, that has relevant information pretaining to a file. The contents is used to display information in various areas of the frontend, and helped to determine that type, visualization posibilities and completion state of a file. Much of the information is also used to determine if communcation is necessary with either the producer, or the repository that holds it.
+
+#### Content
+
+The file contents are important for certain file types. This will be the actual text, image or other that the file consists of. For log files, we don't want to save it on the frontend, but BPMN is necessary to visualize the model. The contents is added to the file Metadata in local memory.
+
