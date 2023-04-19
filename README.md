@@ -131,10 +131,10 @@ Most actions that user can do, happens in a popup. This allows for clear distinc
 
 #### Create a new popup
 
-1: Add a state variable in App.jsx.
-2: Add a toggle function for the variable.
-3: Add the variable, setter and toggle function to the props object sent to the Home.jsx component.
-4: Create a new folder in /src/Components/Popup and add a jsx file and a scss file.
-5: Create a component using the utility components "<modal></modal>" and "<popup></popup>".
-6: Add the component in the Home.jsx return, and set the condition for displaying as the state variable from step 1.
+[^1] Add a state variable in App.jsx.
+[^2] Add a toggle function for the variable.
+[^3] Add the variable, setter and toggle function to the props object sent to the Home.jsx component.
+[^4] Create a new folder in /src/Components/Popup and add a jsx file and a scss file.
+[^5] Create a component using the utility components "<modal></modal>" and "<popup></popup>".
+[^6] Add the component in the Home.jsx return, and set the condition for displaying as the state variable from step 1.
 
