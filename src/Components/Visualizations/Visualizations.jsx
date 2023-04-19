@@ -42,16 +42,15 @@ function Visualizations(props) {
     useEffect(() => {
         setComponentUpdaterFunction("Visualizations", {update: forceUpdate})
         setFileToDisplay(file);
-        setIsLoading(false);
         setSelectedChild(null);
         if(getFileResourceId(file) !== getFileResourceId(fileToDisplay)) setSelectedTab(null);
-
         if(hasCalledChildren !== getFileResourceId(file)){
         getChildrenFromFile(getFileHost(file), getFileResourceId(file))
             .then((res) => {setChildren(res.data); generateChildren(res.data)} )
             .then(() => {setHasCalledChildren(getFileResourceId(file))})
             .catch((err) => {console.log(err)} );
         }
+        setIsLoading(false);
     }, [file]);
 
     useEffect(() => {
@@ -96,7 +95,7 @@ function Visualizations(props) {
 
     if(isLoading){
         return (
-            <div className="Visualizations-loader">
+            <div className="Visualizations-loading">
                 <div className='Spinner-container-l'>
                     <LoadingSpinner loading={isLoading}/>
                 </div>
