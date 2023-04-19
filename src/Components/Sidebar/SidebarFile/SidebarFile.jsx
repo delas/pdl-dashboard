@@ -3,7 +3,7 @@ import {useState, useEffect, useRef} from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { CiStreamOn } from 'react-icons/ci';
 import { getFileLocal, setProcessKeyLocalAsync } from '../../../Store/LocalDataStore';
-import { getFileExtension, getFileResourceLabel, getFileContent, getFileDynamic, getFileProcessId, getFileCreationDate } from '../../../Utils/FileUnpackHelper';
+import { getFileExtension, getFileResourceLabel, getFileContent, getFileDynamic, getFileProcessId, getFileCreationDate, getFileResourceId } from '../../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import {getDateInMsAsString} from '../../../Utils/Utils';
 
@@ -27,17 +27,20 @@ function SidebarFile(props) {
 
     const getFileOrSetLoading = () => {
         const tempFile = getFileLocal(fileId);
-        if(tempFile && shouldSetFileContent(tempFile) && getFileContent(tempFile)){
+        if(tempFile && shouldSetFileContent(tempFile)){
             setFile(tempFile);
-            setFileContentLoading(false);
         }
         if(!fileContentLoading && shouldSetFileContent(tempFile) && !getFileContent(tempFile)) {
             setFileContentLoading(true);
         }
-        if(!shouldSetFileContent(tempFile)){
+        if(shouldSetFileContent(tempFile) && getFileContent(tempFile)){
             setFileContentLoading(false);
+        } else {
+            setFileContentLoading(true);
         }
     }
+    if(file)
+    console.log(getFileResourceLabel(file) + " " + fileContentLoading);
 
     const deleteFileHandler = () => {
         // Stop retrieving file content - it still updates process status

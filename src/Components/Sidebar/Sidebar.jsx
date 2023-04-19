@@ -24,13 +24,11 @@ function Sidebar(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     // const [files, setFiles] = useState([]);
-    const [statuses, setStatuses] = useState([]);
 
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ 
         updateState({}); 
         // setFiles(sortFiles(getAllFilesLocal(), sortingOptions.dsc));
-        setStatuses(getAllHostStatusLocal());
     }, []);
 
     useEffect(() => {
@@ -40,14 +38,13 @@ function Sidebar(props) {
 
     useEffect(() => {
         // setFiles(sortFiles(getAllFilesLocal(), sortingOptions.dsc));
-        setStatuses(getAllHostStatusLocal());
     }, []);
 
     const sortingOptions = {
         asc: "asc",
         dsc: "dsc",
         alfabetical: "alfabetical",
-        // type: "type",
+        type: "type",
     }
 
     const sortFiles = (files, sortType) => {
@@ -58,9 +55,8 @@ function Sidebar(props) {
                 return sortFilesDsc(files);
             case sortingOptions.alfabetical:
                 return sortFilesAlphabetical(files);
-            
-            // case sortingOrder.type:
-            //     return sortFilesByType(files);
+            case sortingOptions.type:
+                return sortFilesByType(files);
             default:
                 return sortFilesDsc(files);
         }
@@ -79,10 +75,6 @@ function Sidebar(props) {
     }
 
     const files = sortFiles(getAllFilesLocal(), sortingOptions.dsc);
-
-    // files.forEach(file => {
-    //     console.log(getFileResourceLabel(file), !!getFileContent(file));
-    // });
 
     const sortFilesAlphabetical = (files) => {
         return files.sort((a, b) => {
@@ -172,13 +164,6 @@ function Sidebar(props) {
                             className = {``}
                             onClick = {() => {openPopup(popups.ActionPopup)}}
                         />
-                        {/* <IconizedButton // IconizedButton is moved to configure host popup
-                            text = {`Add new host`}
-                            icon = {<FaBuffer/>}
-                            disabled = {false}
-                            className={``}
-                            onClick = {() => {openPopup(popups.AddNewHostPopup)}}
-                        /> */}
                         <IconizedButton
                             text = {`Inspect processes`}
                             icon = {<ImCogs/>}
@@ -207,23 +192,12 @@ function Sidebar(props) {
                         }
                     </div>
                 </div>
-                {/* <div className='Sidebar-flexContainer-actions'> */}
-                    {/* <div>
-                        {
-                            getFilesOfType("png").map((file) => {
-                                return <img src={file.fileContent}></img>
-                            })
-                        }
-                    </div> */}
-                {/* </div> */}
                 <div className='Sidebar-flexContainer-status'>
                     <div className='Sidebar-status'>
                         <div className='Sidebar-status-icon'>
-                            {/* <FaCircle/> */}
                             {statusIconDisplayer()}
                         </div>
                         <div className='Sidebar-status-text'>
-                            {/* All systems online */}
                             {statusTextDisplayer()}
                         </div>
                     </div>

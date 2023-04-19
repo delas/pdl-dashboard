@@ -44,7 +44,7 @@ function ProcessOverviewPopup(props) {
 
     useEffect (() => {
         if(!selectedSorting){
-            setSelectedSorting({value: sortType.type, label: "Type"});
+            setSelectedSorting({value: sortType.endTimeDsc, label: "Finished Descending"});
         }
         setComponentUpdaterFunction("ProcessOverviewPopup", {update: forceUpdate})
         setProcesses(sortProcesses(getAllProcessesLocal(), selectedSorting?.value ? selectedSorting?.value : sortType.type));
