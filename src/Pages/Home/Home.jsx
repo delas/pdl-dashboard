@@ -318,6 +318,7 @@ function Home(props) {
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
+                        addHost = {addHost}
                     />
                     : null
                 }

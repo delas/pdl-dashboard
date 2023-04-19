@@ -115,7 +115,7 @@ function App(props) {
     }
 
     const addHost = (id, host) => {
-        if(!hostExitsLocal(host.name)){
+        // if(!hostExitsLocal(host.name)){
             handleAddHostOfType(host.type.value, host.name).then((res) => {
                 host.config = res?.data;
                 saveHostLocal(id, host);
@@ -123,7 +123,7 @@ function App(props) {
                     updateComponents.SidebarHosts.update();
                 }
             })
-        }
+        // }
     }
 
     const deleteHost = (id) => {

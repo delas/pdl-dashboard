@@ -4,12 +4,13 @@ import {getMinersLocal, getHostLocal} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import Popup from '../../Widgets/Popup/Popup';
-import {ShadowMiner} from '../../../Services/MinerServices';
+import {ShadowMiner, GetMinerConfig} from '../../../Services/MinerServices';
 import InputField from '../../Widgets/InputField/InputField';
 
 function ShadowPopup(props) {
     const {
         toggleShadowPopupOpen,
+        addHost,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -64,21 +65,34 @@ function ShadowPopup(props) {
     }
 
     const onSubmit = () => {
-        const ownerHostname = selectedMinerHostOwner.label;
-        const minerHost = getHostLocal(selectedMinerHostOwner.value);
+        const ownerHostname = selectedMinerHostOwner.label; // hostname e.g. localhost:5000
+        const minerHost = getHostLocal(selectedMinerHostOwner.value); // miner host object
         
-        const miners = minerHost.config;
-        const shadowableMinersTemp = miners.filter(miner => miner.Shadow === true);
-        const miner = shadowableMinersTemp.find(miner => miner.MinerId === selectedShadowableMiner.value);
-        miner.MinerLabel = newMinerName ? newMinerName : miner.MinerLabel;
-        const extension = "py";
+        const miners = minerHost.config; // miner host config
+        const shadowableMinersTemp = miners.filter(miner => miner.Shadow === true); // shadowable miners
+        const miner = shadowableMinersTemp.find(miner => miner.MinerId === selectedShadowableMiner.value); // selected shadowable miner
+        miner.MinerLabel = newMinerName ? newMinerName : miner.MinerLabel; // set new miner name if it exists
+        const extension = "py"; // TODO: remove this hardcode
         const body = {
             Host: ownerHostname + "/shadow/",
             Extension: extension,
             Config: miner
         }
         const receiverHostname = selectedMinerHostReceiver.label;
-        ShadowMiner(receiverHostname, body);
+        setIsLoading(true);
+
+        ShadowMiner(receiverHostname, body)
+            .then((res) => {
+                const receiverMiner = getMinersLocal().find(miner => miner.name === receiverHostname);
+                addHost(receiverMiner.id, receiverMiner);
+            })
+            .then(() => {
+                toggleShadowPopupOpen();
+            })
+            .catch(() => {
+                alert(`Something went wrong when trying to clone miner from ${ownerHostname} to ${receiverHostname}}`);
+                toggleShadowPopupOpen();
+            });
     }
 
     return (
