@@ -78,6 +78,24 @@ This section is targeted towards developers
 
 The overall systems in the frontend is designed to support the desired flow of Process Mining professor Andrea Burratin.
 
+### Hosts
+
+Hosts are represented as objects that are saved in local memory.
+
+```js
+{
+    addedFrom: hostname_of_service_registry_or_local,
+    config: config_of_resource,
+    id: uuid_id_made_in_frontend,
+    name: hostname_of_resource,
+    status: "online" || "offline",
+    type: { 
+        label: "miner" || "repository" || "service registry", 
+        value: "miner" || "repository" || "service registry"
+    }
+}
+```
+
 ### Processes
 
 Processes is are represented as javascript objects located in local memory that has information of which foreign process is running. From the frontend, this is used to determine the state of the foreign process, and when to retreive the results. To create a process, create a process object, and save it to localmemory. In App.jsx, exists an interval, that will ping running processes, thus keeping the system up to date with all processes created from the current unit.
@@ -108,6 +126,39 @@ A process looks like this:
 
 Files consist of two components: Metadata and content. Metadata is a bunch of information wrapping the contents in this application, while it might be seen differently on external services.
 
+the Files are saved like this in local memory:
+```js
+{
+    CreationDate: some_number_of_ms_since_1970,
+    GenerationTree : {
+        Children: null,
+        GeneratedFrom: {
+            SourceHost: some_miner_that_created_this_resource, 
+            SourceId: id_of_miner_that_created_this_resource, 
+            SourceLabel: name_of_miner_that_created_this_resource
+        },
+        Parents: [
+            {
+                ResourceId: parent_resourceId, 
+                UsedAs: miner_config_ResourceInput_value
+            }
+        ]
+    },
+    ResourceId: id_of_self_generated_from_repository,
+    ResourceInfo: {
+        Description: description_of_self,
+        Dynamic: bool_determines_if_resource_is_expected_to_keep_changing,
+        FileExtension: file_extension_of_self,
+        Host: "{hostname}/resources/",
+        ResourceLabel: name_of_self,
+        ResourceType: resource_type_of_self,
+        StreamTopic: topic_of_self_if_stream,
+    },
+    fileContent: the_file_contents,
+    processId: reference_to_process_that_created_file
+}
+```
+
 #### Metadata
 
 The file metadata is a javascript object, that has relevant information pretaining to a file. The contents is used to display information in various areas of the frontend, and helped to determine that type, visualization posibilities and completion state of a file. Much of the information is also used to determine if communcation is necessary with either the producer, or the repository that holds it.
@@ -137,6 +188,6 @@ Most actions that user can do, happens in a popup. This allows for clear distinc
 2. Add a toggle function for the variable.
 3. Add the variable, setter and toggle function to the props object sent to the Home.jsx component.
 4. Create a new folder in /src/Components/Popup and add a jsx file and a scss file.
-5. Create a component using the utility components "<modal></modal>" and "<popup></popup>".
+5. Create a component using the utility components BackdropModal Popup from the Widgets folder.
 6. Add the component in the Home.jsx return, and set the condition for displaying as the state variable from step 1.
 
