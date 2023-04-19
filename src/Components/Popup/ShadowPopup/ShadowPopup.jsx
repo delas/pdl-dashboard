@@ -67,13 +67,13 @@ function ShadowPopup(props) {
         const ownerHostname = selectedMinerHostOwner.label;
         const minerHost = getHostLocal(selectedMinerHostOwner.value);
         
-        const miners = minerHost.config + "/shadow";
+        const miners = minerHost.config;
         const shadowableMinersTemp = miners.filter(miner => miner.Shadow === true);
         const miner = shadowableMinersTemp.find(miner => miner.MinerId === selectedShadowableMiner.value);
         miner.MinerLabel = newMinerName ? newMinerName : miner.MinerLabel;
         const extension = "py";
         const body = {
-            Host: ownerHostname,
+            Host: ownerHostname + "/shadow/",
             Extension: extension,
             Config: miner
         }
