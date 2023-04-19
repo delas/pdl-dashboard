@@ -84,9 +84,27 @@ Processes is are represented as javascript objects located in local memory that 
 
 Processes are created upon submitting an action from the action popup. This will save a process to local memory, which will then be handled in an inverval which will check status, and respond accordingly by either getting a metadata and file, or by setting and error. Only "running" processes will be pinged. 
 
+A process looks like this:
+{
+    id: some_uuid,
+    objectType: "process",
+    hostname: somehostname.net.org.com,
+    processId: some_number_from_miner,
+    processName: label_from_miner,
+    status: "running",
+    progress: 0,
+    startTime: some_number_of_ms_since_1970,
+    endTime: some_number_of_ms_since_1970,
+    outputDestination: somedestinationhostname.net.org.com,
+    error: null,
+    resourceId: some_uuid,
+    saveOrUpdateFile: bool,
+    resourceLabel: name_of_generated_resource,
+}
+
 ### Files
 
-Tied in with processes are files, which has two components: Metadata and content. Metadata is a bunch of information wrapping the contents in this application, while it might be seen differently on external services.
+Files consist of two components: Metadata and content. Metadata is a bunch of information wrapping the contents in this application, while it might be seen differently on external services.
 
 #### Metadata
 
@@ -107,5 +125,16 @@ The rules that determine what visualizations the frontend can display, can be fo
 To add visualizations, go to config.js and change the visualizationConfig variable. The structure of the object is:
 The outer most key is a ResourceType, which determines what can be visualized. For example, there is no option for flowcharts, but there are options for processModels. Within the ResourceType object is a set of file extentions that is allowed for the representation of that ResourceType. Forexample, ProcessModels can be represented as BPMN or image types, but PetriNets can only be represented as images as there is no PNML visualizer currently implemented. 
 
+### Popups
 
+Most actions that user can do, happens in a popup. This allows for clear distinction of what a user can do, while keeping more space free for visualizations and overview of added processes and files. 
+
+#### Create a new popup
+
+1: Add a state variable in App.jsx.
+2: Add a toggle function for the variable.
+3: Add the variable, setter and toggle function to the props object sent to the Home.jsx component.
+4: Create a new folder in /src/Components/Popup and add a jsx file and a scss file.
+5: Create a component using the utility components "<modal></modal>" and "<popup></popup>".
+6: Add the component in the Home.jsx return, and set the condition for displaying as the state variable from step 1.
 

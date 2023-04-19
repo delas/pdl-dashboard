@@ -87,9 +87,11 @@ function ShadowPopup(props) {
                 addHost(receiverMiner.id, receiverMiner);
             })
             .then(() => {
+                setIsLoading(false);
                 toggleShadowPopupOpen();
             })
             .catch(() => {
+                setIsLoading(false);
                 alert(`Something went wrong when trying to clone miner from ${ownerHostname} to ${receiverHostname}}`);
                 toggleShadowPopupOpen();
             });
