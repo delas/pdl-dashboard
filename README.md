@@ -107,13 +107,13 @@ A process looks like this:
 {
     id: some_uuid,
     objectType: "process",
-    hostname: somehostname.net.org.com,
-    processId: some_number_from_miner,
+    hostname: hostname.net.org.com,
+    processId: number_from_miner,
     processName: label_from_miner,
     status: "running",
     progress: 0,
-    startTime: some_number_of_ms_since_1970,
-    endTime: some_number_of_ms_since_1970,
+    startTime: number_of_ms_since_1970,
+    endTime: number_of_ms_since_1970,
     outputDestination: somedestinationhostname.net.org.com,
     error: null,
     resourceId: some_uuid,
@@ -133,7 +133,7 @@ the Files are saved like this in local memory:
     GenerationTree : {
         Children: null,
         GeneratedFrom: {
-            SourceHost: some_miner_that_created_this_resource, 
+            SourceHost: hostname_of_miner_that_created_this_resource, 
             SourceId: id_of_miner_that_created_this_resource, 
             SourceLabel: name_of_miner_that_created_this_resource
         },
