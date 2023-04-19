@@ -85,6 +85,7 @@ Processes is are represented as javascript objects located in local memory that 
 Processes are created upon submitting an action from the action popup. This will save a process to local memory, which will then be handled in an inverval which will check status, and respond accordingly by either getting a metadata and file, or by setting and error. Only "running" processes will be pinged. 
 
 A process looks like this:
+```js
 {
     id: some_uuid,
     objectType: "process",
@@ -101,6 +102,7 @@ A process looks like this:
     saveOrUpdateFile: bool,
     resourceLabel: name_of_generated_resource,
 }
+```
 
 ### Files
 
