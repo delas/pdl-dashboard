@@ -178,6 +178,14 @@ The rules that determine what visualizations the frontend can display, can be fo
 To add visualizations, go to config.js and change the visualizationConfig variable. The structure of the object is:
 The outer most key is a ResourceType, which determines what can be visualized. For example, there is no option for flowcharts, but there are options for processModels. Within the ResourceType object is a set of file extentions that is allowed for the representation of that ResourceType. Forexample, ProcessModels can be represented as BPMN or image types, but PetriNets can only be represented as images as there is no PNML visualizer currently implemented. 
 
+#### Create a new visualization
+
+1. Add a new folder in /src/Components/Visualizations
+2. Add a .jsx and .scss file in the new folder
+3. Create the visualization component
+4. Add the component by importing your new component in Visualizations.jsx
+5. Near the bottom of the return in Visualizations.jsx, add your condition and component
+
 ### Popups
 
 Most actions that user can do, happens in a popup. This allows for clear distinction of what a user can do, while keeping more space free for visualizations and overview of added processes and files. 
@@ -187,7 +195,7 @@ Most actions that user can do, happens in a popup. This allows for clear distinc
 1. Add a state variable in App.jsx.
 2. Add a toggle function for the variable.
 3. Add the variable, setter and toggle function to the props object sent to the Home.jsx component.
-4. Create a new folder in /src/Components/Popup and add a jsx file and a scss file.
+4. Create a new folder in /src/Components/Popup and add a .jsx file and a .scss file.
 5. Create a component using the utility components BackdropModal Popup from the Widgets folder.
 6. Add the component in the Home.jsx return, and set the condition for displaying as the state variable from step 1.
 
