@@ -5,6 +5,7 @@ import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import Popup from '../../Widgets/Popup/Popup';
 import {ShadowMiner} from '../../../Services/MinerServices';
+import InputField from '../../Widgets/InputField/InputField';
 
 function ShadowPopup(props) {
     const {
@@ -16,6 +17,7 @@ function ShadowPopup(props) {
     const [selectedMinerHostReceiver, setSelectedMinerHostReceiver] = useState(null);
     const [shadowableMinersDropdownFormat, setShadowableMiners] = useState([]);
     const [selectedShadowableMiner, setSelectedShadowableMiner] = useState(null);
+    const [newMinerName, setNewMinerName] = useState(null);
 
     useEffect(() => {
         setIsLoading(false);
@@ -32,7 +34,6 @@ function ShadowPopup(props) {
         
         const shadowableMinersTemp = miners.filter(miner => miner.Shadow === true);
         setShadowableMiners(convertShadowableMinersToDropdownFormat(shadowableMinersTemp));
-        console.log(minerHost);
     }
 
     const convertShadowableMinersToDropdownFormat = (shadowableMiners) => {
@@ -54,6 +55,10 @@ function ShadowPopup(props) {
         setSelectedMinerHostReceiver(minerHost);
     }
 
+    const onNewMinerNameChange = (res) => {
+        setNewMinerName(res.value);
+    }
+
     const handleConfirmButtonDisabled = () => { // return true = disabled
         return(!selectedMinerHostOwner || !selectedShadowableMiner || !selectedMinerHostReceiver);      
     }
@@ -62,17 +67,16 @@ function ShadowPopup(props) {
         const ownerHostname = selectedMinerHostOwner.label;
         const minerHost = getHostLocal(selectedMinerHostOwner.value);
         
-        const miners = minerHost.config;
+        const miners = minerHost.config + "/shadow";
         const shadowableMinersTemp = miners.filter(miner => miner.Shadow === true);
         const miner = shadowableMinersTemp.find(miner => miner.MinerId === selectedShadowableMiner.value);
+        miner.MinerLabel = newMinerName ? newMinerName : miner.MinerLabel;
         const extension = "py";
         const body = {
             Host: ownerHostname,
             Extension: extension,
             Config: miner
         }
-
-        console.log(body);
         const receiverHostname = selectedMinerHostReceiver.label;
         ShadowMiner(receiverHostname, body);
     }
@@ -116,6 +120,18 @@ function ShadowPopup(props) {
                             label = {`Select miner host to clone miner to:`}
                             value = {selectedMinerHostReceiver}
                         />
+                    }
+
+                    {selectedMinerHostOwner &&
+                        <InputField
+                        className={`ShadowPopup-minername-input`}
+                        type={`text`} 
+                        placeholder = {`Alpha miner - cloned`}
+                        // id = "AddNewHostPopup-input-miner-id"
+                        onChange = {onNewMinerNameChange}
+                        value = {newMinerName}
+                        label = {`Hostname:`}
+                    />
                     }
                 </div>
             </Popup>

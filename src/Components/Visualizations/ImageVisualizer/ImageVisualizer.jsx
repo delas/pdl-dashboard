@@ -2,7 +2,7 @@ import './ImageVisualizer.scss';
 import {useState, useEffect} from 'react';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import { GetFileImage } from '../../../Services/RepositoryServices';
-import { getFileContent, getFileHost, getFileResourceId } from '../../../Utils/FileUnpackHelper';
+import { getFileContent, getFileDescription, getFileHost, getFileResourceId } from '../../../Utils/FileUnpackHelper';
 
 function ImageVisualizer(props) {
     const {
@@ -41,7 +41,7 @@ function ImageVisualizer(props) {
 
     return (
         <div className="ImageVisualizer">
-            <img src={image} alt="Image"/>
+            <img src={image} alt={`${getFileDescription(file)}`}/>
         </div>
     )
 }

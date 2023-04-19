@@ -4,12 +4,12 @@ import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
 import { saveHostLocal, removeHostLocal, saveFileLocal, getFileLocal, removeFileLocal, hostExitsLocal } from './Store/LocalDataStore';
-import { pingAllAddedServices, pingAllProcesses, getAllDynamicResources } from './Utils/ServiceHelper';
+import { pingAllAddedServices, pingAllProcesses } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
 import { GetRepositoryConfig } from './Services/RepositoryServices';
 import { getFileExtension, getFileHost, getFileResourceId, getFileResourceType } from './Utils/FileUnpackHelper';
-import { pingDynamicResourceInterval, pingHostInterval, pingMinerProcessInterval } from './config';
+import { pingHostInterval, pingMinerProcessInterval } from './config';
 
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -25,11 +25,11 @@ function App(props) {
     const [GetFilePopupOpen, setGetFilePopupOpen] = useState(false); 
     const [processOverviewPopupOpen, setProcessOverviewPopupOpen] = useState(false);
     const [uploadManualChangesPopup, setUploadManualChangesPopup] = useState(false);
-    const [shadowPopupOpen, setShadowPopupOpen] = useState(true);
+    const [shadowPopupOpen, setShadowPopupOpen] = useState(false);
 
     let pingInterval = useRef(null);
     let pingProcessInterval = useRef(null);
-    let pingDynamicResourcesInterval = useRef(null);
+    // let pingDynamicResourcesInterval = useRef(null);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);

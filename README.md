@@ -80,11 +80,13 @@ The overall systems in the frontend is designed to support the desired flow of P
 
 ### Processes
 
-Processes is a javascript object located in local memory that has information of which foreign process is running. From the frontend, this is used to determine the state of the foreign process, and when to retreive the results. To create a process, create a process object, and save it to localmemory. In App.jsx, exists an interval, that will ping running processes, thus keeping the system up to date with all processes created from the current unit. 
+Processes is are represented as javascript objects located in local memory that has information of which foreign process is running. From the frontend, this is used to determine the state of the foreign process, and when to retreive the results. To create a process, create a process object, and save it to localmemory. In App.jsx, exists an interval, that will ping running processes, thus keeping the system up to date with all processes created from the current unit.
+
+Processes are created upon submitting an action from the action popup. This will save a process to local memory, which will then be handled in an inverval which will check status, and respond accordingly by either getting a metadata and file, or by setting and error. Only "running" processes will be pinged. 
 
 ### Files
 
-Tied in with processes are files, which has two components: Metadata and content.
+Tied in with processes are files, which has two components: Metadata and content. Metadata is a bunch of information wrapping the contents in this application, while it might be seen differently on external services.
 
 #### Metadata
 
@@ -92,5 +94,18 @@ The file metadata is a javascript object, that has relevant information pretaini
 
 #### Content
 
-The file contents are important for certain file types. This will be the actual text, image or other that the file consists of. For log files, we don't want to save it on the frontend, but BPMN is necessary to visualize the model. The contents is added to the file Metadata in local memory.
+The file contents are important for certain file types. This will be the actual text, image or other that the file consists of. For log files, we don't want to save it on the frontend, but BPMN is necessary to visualize the model. The contents is added to the file Metadata in local memory. Metadata will always be requested before requesting the file contents. This is necessary because the frontend will never make changes to these objects, thus relying on external processes to update them. 
+
+### Service helper
+
+ServiceHelper.js is an important file, as it consist of function that measures external data such as process status, files and hosts. Each function is designed to run once, where an interval in the App.jsx will be responsible for running the functions. The interval-values can be found in the config.js. 
+
+### Visualizations
+
+The rules that determine what visualizations the frontend can display, can be found in config.js. The contents of metadata will be compared to the list of allowed visualizations, and pull information from repository as needed. Therefore, the frontend will not show content that cannot be visualized yet. 
+
+To add visualizations, go to config.js and change the visualizationConfig variable. The structure of the object is:
+The outer most key is a ResourceType, which determines what can be visualized. For example, there is no option for flowcharts, but there are options for processModels. Within the ResourceType object is a set of file extentions that is allowed for the representation of that ResourceType. Forexample, ProcessModels can be represented as BPMN or image types, but PetriNets can only be represented as images as there is no PNML visualizer currently implemented. 
+
+
 

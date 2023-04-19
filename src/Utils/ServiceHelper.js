@@ -123,7 +123,9 @@ const tryGetAndSaveMetadataFromProcess = (process, resourceId, getAndAddFile) =>
                 const resourceId = getFileResourceId(metadata);
                 await setProcessKeyLocalAsync(process.id, "resourceId", resourceId)
                 metadata["processId"] = process.id;
-                getAndAddFile(metadata);
+                setTimeout(() => {
+                    getAndAddFile(metadata);
+                }, 3000);
             }
         })
         .catch(async () => {

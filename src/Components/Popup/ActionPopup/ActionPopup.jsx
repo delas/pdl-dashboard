@@ -204,7 +204,15 @@ function ActionPopup(props) {
         }
     }
 
-    const handleSaveProcess = (processId, resourceLabel) => { // Save process to localstorage
+    /* 
+        Save process to localstorage
+        This will be used to display the process in the process list
+
+        All running statuses will be pinged from app.jsx - calling the pingAllProcesses function
+        This will update the status of the process in the process list
+        And handle saving files, and updating the file contents
+    */
+    const handleSaveProcess = (processId, resourceLabel) => {
         const status = {
             id: uuidv4(),
             objectType: "process",
@@ -287,7 +295,6 @@ function ActionPopup(props) {
 
     const checkAndApplySavedInputValues = (minerHostId, minerObject) => {
         const minerId = minerObject.MinerId;
-        console.log(minerObject);
         const savedInputValues = getSavedInputValuesLocal(minerHostId, minerId);
         if(savedInputValues) {
             onRepositoryFileOwnerDropdownChange(savedInputValues.repositoryFileOwnerDropdownSelected);
