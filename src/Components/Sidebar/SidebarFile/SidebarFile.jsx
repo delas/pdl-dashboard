@@ -30,14 +30,12 @@ function SidebarFile(props) {
             setFile(tempFile);
         }
         if(!fileContentLoading && shouldSetFileContent(tempFile) && !getFileContent(tempFile)) {
-            console.log("setting from 1")
             setFileContentLoading(true);
         }
         if(shouldSetFileContent(tempFile) && getFileContent(tempFile)){
             setFileContentLoading(false);
         } else {
             setFileContentLoading(true);
-            console.log("setting from 2")
         }
 
         if(fileContentLoading){ // retry if file content is not loaded

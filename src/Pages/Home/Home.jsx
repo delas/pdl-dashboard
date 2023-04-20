@@ -36,29 +36,13 @@ function Home(props) {
         removeHost,
         getAndAddFile,
         deleteFile,
-        updateComponents,
         shouldSetFileContent,
         saveFileAndUpdate,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
     const [popupProps, setPopupProps] = useState({});
-    const [visualizationsFile, setVisualizationsFile] = useState(null);
-    let updateFileInterval = useRef(null);
-
-    const updateFile = (file) => {
-        if(updateFileInterval.current !== null) clearInterval(updateFileInterval.current);
-        if(getFileDynamic(file)) {
-            updateFileInterval.current = setInterval(() => {
-                if(getFileResourceId(file)) {
-                    const newfile = getFileLocal(getFileResourceId(file));
-                    setVisualizationsFile(newfile);
-                } else {
-                    clearInterval(updateFileInterval.current);
-                }
-            }, pingMinerProcessInterval);
-        }
-    }
+    const [visualizationsFileId, setVisualizationsFileId] = useState(null);
 
     const popups = {
         AddNewHostPopup: 'AddNewHostPopup',
@@ -141,15 +125,10 @@ function Home(props) {
 
     const selectFileForVisualization = (fileId) => {
         if(fileId === null || fileId === undefined) {
-            setVisualizationsFile(null);
+            setVisualizationsFileId(null);
             return;
         }
-        const file = getFileLocal(fileId)
-        setVisualizationsFile(file);
-        if(updateComponents.Visualizations) {
-            updateComponents.Visualizations.update();
-        }
-        updateFile(file);
+        setVisualizationsFileId(fileId);
     }
 
     
@@ -206,14 +185,14 @@ function Home(props) {
                             selectFileForVisualization = {selectFileForVisualization}
                             shouldSetFileContent = {shouldSetFileContent}
                             setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
-                            selectedFile = {visualizationsFile}
+                            selectedFileId = {visualizationsFileId}
                         />
                     </div>
 
-                    {visualizationsFile && 
+                    {visualizationsFileId && 
                         <div className={`Home-Content-visualizations-container Home-Content-visualizations-container${isOpen.sidebarOpen ? "-sidebaropen" : "-sidebarclosed"}`}>
                             <Visualizations
-                                file = {visualizationsFile}
+                                selectedFileId = {visualizationsFileId}
                                 setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
                                 getAndAddFile = {getAndAddFile}
                                 openPopup = {openPopup}

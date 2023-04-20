@@ -132,6 +132,7 @@ export function getSavedInputValuesLocal(minerHostId, minerId){
 // ---------------------- FILE STORAGE ----------------------
 
 export function saveFileLocal(key, file) {
+    // console.log(file.fileContent);
     setSavedItem(key, file);
 }
 
@@ -196,7 +197,7 @@ export function getAllProcessesLocal(){
 }
 
 export function getAllRunningProcessesLocal(){
-    return getAllProcessesLocal().filter((process) => process.status.toUpperCase() === "RUNNING");
+    return getAllProcessesLocal().filter((process) => !process.resourceId);// process.status.toUpperCase() === "RUNNING");
 }
 
 export function getAllProcessKeysLocal() {

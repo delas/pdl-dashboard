@@ -1,21 +1,22 @@
 import './Visualizations.scss';
-import {useState, useEffect, useCallback, useMemo} from 'react';
+import {useState, useEffect, useCallback, useMemo, useRef} from 'react';
 import Tabs from '../Widgets/Tabs/Tabs';
 import BPMNVisualizer from './BPMNVisualizer/BPMNVisualizer';
 import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
 import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
 import ResourceGraph from './ResourceGraph/ResourceGraph';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
-import { getFileDescription, getFileExtension, getFileHost, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileContent } from '../../Utils/FileUnpackHelper';
+import { getFileDescription, getFileExtension, getFileHost, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileContent, getFileDynamic } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 import {getVisalizations} from '../../config';
 import Dropdown from '../Widgets/Dropdown/Dropdown';
 import {getChildrenFromFile} from '../../Services/RepositoryServices';
 import DefaultButton from '../Widgets/Buttons/DefaultButton/DefaultButton';
+import { getFileLocal } from '../../Store/LocalDataStore';
 
 function Visualizations(props) {
     const {
-        file,
+        selectedFileId,
         setComponentUpdaterFunction,
         getAndAddFile,
         openPopup,
@@ -24,11 +25,13 @@ function Visualizations(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [selectedTab, setSelectedTab] = useState(null);
-    const [fileToDisplay, setFileToDisplay] = useState(file);
+    // const [fileToDisplay, setFileToDisplay] = useState(getFileLocal(selectedFileId));
     const [children, setChildren] = useState([]);
     const [childrenForDropdown, setChildrenForDropdown] = useState([]);
     const [selectedChild, setSelectedChild] = useState(null);
     const [hasCalledChildren, setHasCalledChildren] = useState(null);
+
+    let updateFileInterval = useRef(null);
     
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ updateState({}); }, []);
@@ -37,30 +40,44 @@ function Visualizations(props) {
         if(file) return getVisalizations(getFileResourceType(file).toUpperCase(), getFileExtension(file).toUpperCase()); 
     }
 
+    const file = getFileLocal(selectedFileId);
+
     const selectedTabList = useMemo(() => generateTabList(file), [file]);
 
     useEffect(() => {
         setComponentUpdaterFunction("Visualizations", {update: forceUpdate})
-        setFileToDisplay(file);
+        // setFileToDisplay(file);
         setSelectedChild(null);
-        if(getFileResourceId(file) !== getFileResourceId(fileToDisplay)) setSelectedTab(null);
-        if(hasCalledChildren !== getFileResourceId(file)){
+        // if(getFileResourceId(file) !== getFileResourceId(fileToDisplay)) setSelectedTab(null);
+        setSelectedTab(null);
+        if(file && hasCalledChildren !== getFileResourceId(file)){
         getChildrenFromFile(getFileHost(file), getFileResourceId(file))
             .then((res) => {setChildren(res.data); generateChildren(res.data)} )
             .then(() => {setHasCalledChildren(getFileResourceId(file))})
             .catch((err) => {console.log(err)} );
         }
         setIsLoading(false);
-    }, [file]);
+
+        clearInterval(updateFileInterval.current);
+        
+        if(file && getFileDynamic(file)){
+            updateFileInterval.current = setInterval(() => {
+                const internalFile = getFileLocal(selectedFileId);
+                getAndAddFile(internalFile);
+                forceUpdate();
+            }, 1000);
+        }
+
+    }, [selectedFileId]);
 
     useEffect(() => {
         // if(selectedTabList) {
             // setSelectedTab(selectedTabList[0] ? selectedTabList[0] : null);
-            const tabList = generateTabList(fileToDisplay);
+            const tabList = generateTabList(file);
             if(tabList && tabList.length > 0)
-            setSelectedTab(generateTabList(fileToDisplay)[0] ? generateTabList(fileToDisplay)[0] : null);
+            setSelectedTab(generateTabList(file)[0] ? generateTabList(file)[0] : null);
         // }
-    }, [fileToDisplay]);
+    }, [file]);
 
     const onTabChange = (tab) => {
         setSelectedTab(tab);
@@ -103,7 +120,7 @@ function Visualizations(props) {
         )
     }
 
-    if(!fileToDisplay){
+    if(!file){
         return <div></div>
     }
 
@@ -152,11 +169,11 @@ function Visualizations(props) {
             </div>
             {selectedTab &&
                 <div className='Visualizations-VisualizerContainer'>
-                    {(selectedTab.ResourceType === "BPMN")      && <BPMNVisualizer file = {fileToDisplay} uploadEditedFile = {uploadEditedFile}/>}
-                    {(selectedTab.ResourceType === "HISTOGRAM") && <HistogramVisualizer file = {fileToDisplay}/>}
-                    {(selectedTab.ResourceType === "PNML")      && <PNMLVisualizer file = {fileToDisplay}/>}
-                    {(selectedTab.ResourceType === "DOT")       && <ResourceGraph file = {fileToDisplay}/>}
-                    {(selectedTab.ResourceType === "IMAGE")     && <ImageVisualizer file = {fileToDisplay}/>}
+                    {(selectedTab.ResourceType === "BPMN")      && <BPMNVisualizer file = {file} uploadEditedFile = {uploadEditedFile}/>}
+                    {(selectedTab.ResourceType === "HISTOGRAM") && <HistogramVisualizer file = {file}/>}
+                    {(selectedTab.ResourceType === "PNML")      && <PNMLVisualizer file = {file}/>}
+                    {(selectedTab.ResourceType === "DOT")       && <ResourceGraph file = {file}/>}
+                    {(selectedTab.ResourceType === "IMAGE")     && <ImageVisualizer file = {file}/>}
                 </div>
             }
         </div>
