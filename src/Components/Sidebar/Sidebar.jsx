@@ -138,6 +138,10 @@ function Sidebar(props) {
         )
     }
 
+    files.forEach((file) => {
+        console.log(getFileResourceLabel(file));
+    })
+
     return (
         <div className={`Sidebar`}>
             <div className='Sidebar-flexContainer'>
@@ -177,12 +181,14 @@ function Sidebar(props) {
                             files.map((file, index) => {
                                 const fileId = getFileResourceId(file);
                                 const isSelected = selectedFileId === fileId;
+                                console.log(getFileResourceLabel(file))
                                 return(
                                     <SidebarFile key={index}
                                         openPopup = {openPopup}
                                         popups = {popups}
                                         deleteFile = {deleteFile}
-                                        fileId = {fileId}
+                                        // fileId = {fileId}
+                                        file = {file}
                                         selectFileForVisualization = {selectFileForVisualization}
                                         shouldSetFileContent = {shouldSetFileContent}
                                         isSelected = {isSelected}

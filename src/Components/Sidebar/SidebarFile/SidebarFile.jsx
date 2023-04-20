@@ -15,24 +15,25 @@ function SidebarFile(props) {
         selectFileForVisualization,
         shouldSetFileContent,
         isSelected,
+        file,
     } = props;
 
     const [fileContentLoading, setFileContentLoading] = useState(true);
-    const [file, setFile] = useState(null);
+    // const [file, setFile] = useState(null);
 
     useEffect(() => {
         getFileOrSetLoading();
     }, [fileId]);
 
     const getFileOrSetLoading = () => {
-        const tempFile = getFileLocal(fileId);
-        if(tempFile && shouldSetFileContent(tempFile)){
-            setFile(tempFile);
-        }
-        if(!fileContentLoading && shouldSetFileContent(tempFile) && !getFileContent(tempFile)) {
+        // const tempFile = getFileLocal(fileId);
+        // if(tempFile && shouldSetFileContent(tempFile)){
+            // setFile(tempFile);
+        // }
+        if(!fileContentLoading && shouldSetFileContent(file) && !getFileContent(file)) {
             setFileContentLoading(true);
         }
-        if(shouldSetFileContent(tempFile) && getFileContent(tempFile)){
+        if(shouldSetFileContent(file) && getFileContent(file)){
             setFileContentLoading(false);
         } else {
             setFileContentLoading(true);
