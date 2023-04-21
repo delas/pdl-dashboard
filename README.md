@@ -82,7 +82,7 @@ The overall systems in the frontend is designed to support the desired flow of P
 
 Hosts are represented as objects that are saved in local memory.
 
-![Host update loop](./Flow_images/pingHosts.png)
+![Host update loop](./Flow_images/addHost.png)
 
 ```js
 {
@@ -102,7 +102,7 @@ Hosts are represented as objects that are saved in local memory.
 
 Processes is are represented as javascript objects located in local memory that has information of which foreign process is running. From the frontend, this is used to determine the state of the foreign process, and when to retreive the results. To create a process, create a process object, and save it to localmemory. In App.jsx, exists an interval, that will ping running processes, thus keeping the system up to date with all processes created from the current unit.
 
-![Process update loop](./Flow_images/pingProcess.png)
+![Start and add a process](./Flow_images/runMiner.png)
 
 Processes are created upon submitting an action from the action popup. This will save a process to local memory, which will then be handled in an inverval which will check status, and respond accordingly by either getting a metadata and file, or by setting and error. Only "running" processes will be pinged. 
 
@@ -206,12 +206,18 @@ The file contents are important for certain file types. This will be the actual 
 
 ServiceHelper.js is an important file, as it consist of function that measures external data such as process status, files and hosts. Each function is designed to run once, where an interval in the App.jsx will be responsible for running the functions. The interval-values can be found in the config.js. 
 
+![Process update loop](./Flow_images/pingProcess.png)
+
+![Process update loop](./Flow_images/pingHosts.png)
+
 ### Visualizations
 
 The rules that determine what visualizations the frontend can display, can be found in config.js. The contents of metadata will be compared to the list of allowed visualizations, and pull information from repository as needed. Therefore, the frontend will not show content that cannot be visualized yet. 
 
 To add visualizations, go to config.js and change the visualizationConfig variable. The structure of the object is:
 The outer most key is a ResourceType, which determines what can be visualized. For example, there is no option for flowcharts, but there are options for processModels. Within the ResourceType object is a set of file extentions that is allowed for the representation of that ResourceType. Forexample, ProcessModels can be represented as BPMN or image types, but PetriNets can only be represented as images as there is no PNML visualizer currently implemented. 
+
+![Process update loop](./Flow_images/selectVisualization.png)
 
 #### Create a new visualization
 
@@ -234,3 +240,8 @@ Most actions that user can do, happens in a popup. This allows for clear distinc
 5. Create a component using the utility components BackdropModal Popup from the Widgets folder.
 6. Add the component in the Home.jsx return, and set the condition for displaying as the state variable from step 1.
 
+### Clone a miner
+
+It is possible to close an executable miner from one host to another. This will update the configuration of the receiver and thereby requires all interested parties to retrieve the new configuration. The purpose of this feature is to allow users to run programs from a controlled environment, which provides options for using sensitive data, or measure efficiency. 
+
+![Shadow miner](./Flow_images/Shadow.png)
