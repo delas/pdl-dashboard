@@ -9,6 +9,7 @@ import BPMNComponent from "./BPMNComponent";
 // import "./styles.css";
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import DefaultButton from '../../Widgets/Buttons/DefaultButton/DefaultButton';
+import { getFileDynamic } from '../../../Utils/FileUnpackHelper';
 
 function BPMNVisualizer(props) {
     const {
@@ -21,6 +22,8 @@ function BPMNVisualizer(props) {
     const [modeler, setModeler] = useState(null);
     const [getUpdatedBPMN, setGetUpdatedBPMN] = useState({});
     const [extractedXML, setExtractedXML] = useState(null);
+
+    const fileDynamic = getFileDynamic(file);
 
     const setComponentUpdaterFunction = (componentName, func) => {
         let tempUpdatedBPMN = getUpdatedBPMN;
@@ -67,13 +70,16 @@ function BPMNVisualizer(props) {
 
     return (
         <div className="BPMNVisualizer">
-            <div className='BPMNVisualizer-button-container'>
-                <DefaultButton
-                    text = 'Save'
-                    click = {saveChanges}
-                    disabled = {false}
-                    primary = {true}/>
-            </div>
+            
+            {!fileDynamic && // Hides button if the resource is dynamic
+                <div className='BPMNVisualizer-button-container'>
+                    <DefaultButton
+                        text = 'Save'
+                        click = {saveChanges}
+                        disabled = {false}
+                        primary = {true}/>
+                </div>
+            }
             {/* <BPMNComponent
                 file = {file}
             /> */}

@@ -53,6 +53,7 @@ function ActionPopup(props) {
         if(wizardStep !== 4) {
             setWizardStep(wizardStep + 1)
             if(wizardStep + 1 >= maxWizardStep) setMaxWizardStep(wizardStep + 1);
+            if(wizardStep === 2 && minerObject?.MinerParameters.length <= 0) setWizardStep(wizardStep + 2); // Skip step 3 if no parameters
             if(wizardStep === 1) checkAndApplySavedInputValues(minerHostDropdownValue.value, minerObject);
         } else {
             handleConfirmClick();
@@ -308,7 +309,8 @@ function ActionPopup(props) {
             });
             onRepositoryDestinationDropdownChange(savedInputValues.repositoryDestination);
             onFileOutputNameChange({value: savedInputValues.outputFileName});
-            setWizardStep(4);
+            // setWizardStep(4);
+            setMaxWizardStep(4)
         }
     }
 
