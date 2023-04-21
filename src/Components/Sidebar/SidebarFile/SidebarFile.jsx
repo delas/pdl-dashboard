@@ -10,7 +10,6 @@ import {getDateInMsAsString} from '../../../Utils/Utils';
 function SidebarFile(props) {
 
     const {
-        fileId,
         deleteFile,
         selectFileForVisualization,
         shouldSetFileContent,
@@ -19,7 +18,8 @@ function SidebarFile(props) {
     } = props;
 
     const [fileContentLoading, setFileContentLoading] = useState(true);
-    // const [file, setFile] = useState(null);
+
+    const fileId = getFileResourceId(file);
 
     useEffect(() => {
         getFileOrSetLoading();

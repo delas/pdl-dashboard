@@ -155,7 +155,7 @@ function Sidebar(props) {
                             onClick = {() => {openPopup(popups.AddFilePopup)}}
                         />
                         <IconizedButton
-                            text = {`Download resource`}
+                            text = {`View resource`}
                             icon = {<FaFileDownload/>}
                             disabled = {false}
                             className = {``}

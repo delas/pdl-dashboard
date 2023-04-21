@@ -25,7 +25,7 @@ function BPMNComponent(props) {
         setDidMount(true); // Setting mount will ensure the divs are created before the viewer accesses them
         containerRef.current = null; // Resetting the container ref will ensure the viewer is reloaded when the file changes
         setComponentUpdaterFunction("getBPMNXML", {call: getBPMNJSViewer});
-    }, []);
+    }, [file]);
 
     const getBPMNJSViewer = () => {
         return viewerRef.current;
