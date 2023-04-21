@@ -74,7 +74,7 @@ function Visualizations(props) {
         // if(selectedTabList) {
             // setSelectedTab(selectedTabList[0] ? selectedTabList[0] : null);
             const tabList = generateTabList(file);
-            if(tabList && tabList.length > 0)
+            if(tabList && tabList.length > 0 && !selectedTab)
             setSelectedTab(generateTabList(file)[0] ? generateTabList(file)[0] : null);
         // }
     }, [file]);
@@ -172,7 +172,7 @@ function Visualizations(props) {
                     {(selectedTab.ResourceType === "BPMN")      && <BPMNVisualizer file = {file} uploadEditedFile = {uploadEditedFile}/>}
                     {(selectedTab.ResourceType === "HISTOGRAM") && <HistogramVisualizer file = {file}/>}
                     {(selectedTab.ResourceType === "PNML")      && <PNMLVisualizer file = {file}/>}
-                    {(selectedTab.ResourceType === "DOT")       && <ResourceGraph file = {file}/>}
+                    {(selectedTab.ResourceType === "DOT")       && <ResourceGraph selectedFileId = {selectedFileId}/>}
                     {(selectedTab.ResourceType === "IMAGE")     && <ImageVisualizer file = {file}/>}
                 </div>
             }

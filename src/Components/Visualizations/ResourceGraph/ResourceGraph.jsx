@@ -4,15 +4,22 @@ import { Graphviz } from 'graphviz-react';
 import {GetResourceGraph} from '../../../Services/RepositoryServices';
 import { getFileHost, getFileResourceId } from '../../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
+import { getFileLocal } from '../../../Store/LocalDataStore';
 
 function ResourceGraph(props) {
     const {
-        file
+        // file,
+        selectedFileId
+
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
     const [graph, setGraph] = useState(null);
     const [error, setError] = useState(null);
+
+    let file = getFileLocal(selectedFileId);
+
+    // const file = getFileLocal(selectedFileId);
 
     useEffect(() => {
         setIsLoading(true);
@@ -27,7 +34,7 @@ function ResourceGraph(props) {
                 setError(err);
                 setIsLoading(false);
             });
-    }, [file]);
+    }, [selectedFileId]);
 
     const options = {
         fit: true,
@@ -78,7 +85,7 @@ function ResourceGraph(props) {
     
     if(isLoading){
         return (
-            <div className="ResourceGraph">
+            <div className="ResourceGraph-loading">
                 <div className='Spinner-container-l'>
                     <LoadingSpinner loading={isLoading}/>
                 </div>
