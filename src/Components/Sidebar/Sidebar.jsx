@@ -36,9 +36,9 @@ function Sidebar(props) {
         setIsLoading(false);
     }, []);
 
-    useEffect(() => {
+    // useEffect(() => {
         // setFiles(sortFiles(getAllFilesLocal(), sortingOptions.dsc));
-    }, []);
+    // }, []);
 
     const sortingOptions = {
         asc: "asc",
@@ -137,10 +137,6 @@ function Sidebar(props) {
             </div>
         )
     }
-
-    files.forEach((file) => {
-        console.log(getFileResourceLabel(file));
-    })
 
     return (
         <div className={`Sidebar`}>

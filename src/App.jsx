@@ -3,13 +3,14 @@ import {useState, useEffect, useRef} from 'react';
 import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
-import { saveHostLocal, removeHostLocal, saveFileLocal, getFileLocal, removeFileLocal, hostExitsLocal } from './Store/LocalDataStore';
+import { saveHostLocal, removeHostLocal, saveFileLocal, getFileLocal, removeFileLocal, hostExitsLocal, getMinersLocal, getRepositoriesLocal, getServiceRegistriesLocal } from './Store/LocalDataStore';
 import { pingAllAddedServices, pingAllProcesses } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
 import { GetRepositoryConfig } from './Services/RepositoryServices';
 import { getFileExtension, getFileHost, getFileResourceId, getFileResourceType } from './Utils/FileUnpackHelper';
 import { pingHostInterval, pingMinerProcessInterval } from './config';
+import LoadingSpinner from './Components/Widgets/LoadingSpinner/LoadingSpinner';
 
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -72,10 +73,37 @@ function App(props) {
     }
 
     useEffect(() => {
+        startPingHosts();
+        startPingProcesses();
+        getAllHostConfig();
         setIsLoading(false);
     }, []);
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     if(pingInterval.current !== null) clearInterval(pingInterval.current);
+    //     pingInterval.current = setInterval(() => {
+    //         pingAllAddedServices().then(() => {
+    //             if(updateComponents.SidebarHosts){
+    //                 updateComponents.SidebarHosts.update();
+    //             }
+    //         });
+    //     }, pingHostInterval);
+    // }, []);
+
+    // useEffect(() => {
+    //     if(pingProcessInterval.current !== null) clearInterval(pingProcessInterval.current);
+    //     pingProcessInterval.current = setInterval(() => {
+    //         pingAllProcesses(getAndAddFile).then(() => {
+    //             if(updateComponents.ProcessOverviewPopup){
+    //                 setTimeout(() => {
+    //                     updateComponents.ProcessOverviewPopup.update();
+    //                 }, 200)
+    //             }
+    //         });
+    //     }, pingMinerProcessInterval);
+    // }, []);
+
+    const startPingHosts = () => {
         if(pingInterval.current !== null) clearInterval(pingInterval.current);
         pingInterval.current = setInterval(() => {
             pingAllAddedServices().then(() => {
@@ -84,9 +112,9 @@ function App(props) {
                 }
             });
         }, pingHostInterval);
-    }, []);
+    }
 
-    useEffect(() => {
+    const startPingProcesses = () => {
         if(pingProcessInterval.current !== null) clearInterval(pingProcessInterval.current);
         pingProcessInterval.current = setInterval(() => {
             pingAllProcesses(getAndAddFile).then(() => {
@@ -97,7 +125,19 @@ function App(props) {
                 }
             });
         }, pingMinerProcessInterval);
-    }, []);
+    }
+
+    const getAllHostConfig = () => {
+        getMinersLocal().forEach((miner) => {
+            addHost(miner.id, miner);
+        });
+        getRepositoriesLocal().forEach((repository) => {
+            addHost(repository.id, repository);
+        });
+        getServiceRegistriesLocal().forEach((serviceRegistry) => {
+            addHost(serviceRegistry.id, serviceRegistry);
+        });
+    }
 
     const setComponentUpdaterFunction = (componentName, updateFunc) => {
         let updateComponentsTemp = updateComponents;
@@ -204,7 +244,14 @@ function App(props) {
     if(isLoading){
         return (
             <div className="App">
-                <div>Loading ...</div>
+                <div className='App-Loading-container'>
+                    <div className='Spinner-container-l'>
+                        <LoadingSpinner loading={isLoading}/>
+                    </div>
+                    <div className='App-Loading-text'>
+                        Please wait while the application loads...
+                    </div>
+                </div>
             </div>
         )
     }
