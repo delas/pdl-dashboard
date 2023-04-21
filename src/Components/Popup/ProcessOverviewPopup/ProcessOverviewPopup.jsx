@@ -13,7 +13,8 @@ function ProcessOverviewPopup(props) {
 
     const {
         toggleProcessOverviewPopupOpen,
-        setComponentUpdaterFunction
+        setComponentUpdaterFunction,
+        openInformationPrompt,
     } = props;
 
     // const sortingOrder = {
@@ -244,6 +245,7 @@ function ProcessOverviewPopup(props) {
                                     pauseProcess = {pauseProcess}
                                     resumeProcess = {resumeProcess}
                                     deleteProcess = {deleteProcess}
+                                    openInformationPrompt = {openInformationPrompt}
                                 />
                             )
                         })}

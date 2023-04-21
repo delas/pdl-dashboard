@@ -14,7 +14,11 @@
     z-index: 1101;
     gap: 0.5em;
 
-    animation: fade 3.5s 1 linear;
+    &-auto-close-true{
+        animation: fade 3.5s 1 linear;
+    }
+
+    // animation: fade 3.5s 1 linear;
 
     pointer-events: auto;
     background-color: #fff;

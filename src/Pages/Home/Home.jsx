@@ -45,6 +45,7 @@ function Home(props) {
     const [visualizationsFileId, setVisualizationsFileId] = useState(null);
     const [promptText, setPromptText] = useState("null");
     const [promptTitle, setPromptTitle] = useState("null");
+    const [setTimeoutClosePrompt, setSetTimeoutClosePrompt] = useState(true);
 
     const popups = {
         AddNewHostPopup: 'AddNewHostPopup',
@@ -133,10 +134,11 @@ function Home(props) {
         setVisualizationsFileId(fileId);
     }
 
-    const openInformationPrompt = (promptTitle, promptText) => {
+    const openInformationPrompt = (promptTitle, promptText, setTimeoutClosePrompt = true) => {
         set.setIsInformationPromptOpen(true);
         setPromptTitle(promptTitle);
         setPromptText(promptText);
+        setSetTimeoutClosePrompt(setTimeoutClosePrompt);
     }    
 
     // const [htmlString, setHtmlString] = useState(null); 
@@ -282,6 +284,7 @@ function Home(props) {
                         closePopup = {closePopup}
                         popups = {popups}
                         setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
+                        openInformationPrompt = {openInformationPrompt}
                     />
                     : null
                 }
@@ -317,6 +320,7 @@ function Home(props) {
                         onClosePrompt = {toggles.toggleIsInformationPromptOpen}
                         disabled = {false}
                         primary = {true}
+                        setTimeoutClose = {setTimeoutClosePrompt}
                     />
                     : null
                 }

@@ -197,7 +197,7 @@ export function getAllProcessesLocal(){
 }
 
 export function getAllRunningProcessesLocal(){
-    return getAllProcessesLocal().filter((process) => !process.resourceId);// process.status.toUpperCase() === "RUNNING");
+    return getAllProcessesLocal().filter((process) => process.status.toUpperCase() === "RUNNING"); // !process.resourceId);
 }
 
 export function getAllProcessKeysLocal() {

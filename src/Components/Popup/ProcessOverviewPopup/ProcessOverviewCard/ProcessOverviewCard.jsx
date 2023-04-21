@@ -17,6 +17,7 @@ function ProcessOverviewCard(props) {
         pauseProcess = () => {},
         resumeProcess = () => {},
         deleteProcess = () => {},
+        openInformationPrompt = () => {},
     } = props;
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -46,7 +47,8 @@ function ProcessOverviewCard(props) {
                 {processObject.status.toUpperCase() === 'RUNNING' && <GiWarPick/>}
                 {processObject.status.toUpperCase() === 'PAUSED' && <GiPauseButton/>}
                 {processObject.status.toUpperCase() === 'ERROR' && <RiErrorWarningLine/>}
-                {processObject.status.toUpperCase() === 'CRASH' && <RxCrossCircled/>}
+                {processObject.status.toUpperCase() === 'CRASH' && <RxCrossCircled 
+                    onClick = {() => { openInformationPrompt("Crash details", processObject.error ? processObject.error : "No error message available", false); }} />}
                 {processObject.status.toUpperCase() === 'STOPPED' && <FaStop/>}
                 {processObject.status.toUpperCase() === 'COMPLETE' && <FaCheck/>}
             </div>

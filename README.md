@@ -185,7 +185,7 @@ The file metadata is a javascript object, that has relevant information pretaini
 How this information is used for this project:
 
 1. <b>CreationDate:</b> This is used for sorting files, as well as a deplay value on file cards in the sidebar. Utility functions found in /src/Utils/Utils are used to convert the format into human readable information.
-2. <b>Generation tree:</b> This is information is only used in repository and miner
+2. <b>Generation tree:</b> This is information is only used in repository.
 3. <b>ResourceId:</b> The metadata is stored in localMemory using this key, and therefore the key to accessing the information from a specific file.
 4. <b>ResourceInfo:</b>
     1. <b>Description:</b> Not implemented. Intented for additional information.

@@ -11,16 +11,18 @@ function InformationPrompt(props) {
         onClosePrompt,
         disabled,
         primary,
+        setTimeoutClose = true,
     } = props;
 
     useEffect(() => {
+        if(setTimeoutClose)
         setTimeout(() => {
             onClosePrompt();
         }, 3000);
     })
 
     return (
-        <div className='InformationPrompt'>
+        <div className={`InformationPrompt InformationPrompt-auto-close-${setTimeoutClose}`}>
             <h4>{title}</h4>
             <div className='InformationPrompt-text'>
                 {text}

@@ -77,9 +77,10 @@ export async function pingAllProcesses(getAndAddFile) {
                     process = getProcessLocal(process.id); // get updated process
                     if(res?.data?.Error){
                         alert(`An error has occured: ${res?.data?.Error}`);
+                        setProcessKeyLocalAsync(process.id, "error", res?.data?.Error);
                         return;
                     }
-                    if(process.saveOrUpdateFile && res?.data?.ResourceId && !res?.data?.Error){
+                    if(process.saveOrUpdateFile && !process.resourceId && res?.data?.ResourceId && !res?.data?.Error){
                         tryGetAndSaveMetadataFromProcess(process, res?.data?.ResourceId, getAndAddFile); // get metadata and save file
                     }
                     await updateProcessKeys(process, result); // Update progress, endTime, saveOrUpdateFile, error
@@ -108,6 +109,11 @@ const updateProcessKeys = async (process, result) => {
             await setProcessKeyLocalAsync(process.id, "endTime", new Date().getTime());
             await setProcessKeyLocalAsync(process.id, "progress", msToTime(new Date().getTime() - process.startTime));
             await setProcessKeyLocalAsync(process.id, "error", result.Error);
+            break;
+        case "STOPPED":
+            await setProcessKeyLocalAsync(process.id, "saveOrUpdateFile", false);
+            await setProcessKeyLocalAsync(process.id, "endTime", new Date().getTime());
+            await setProcessKeyLocalAsync(process.id, "progress", msToTime(new Date().getTime() - process.startTime));
             break;
         default:
             await setProcessKeyLocalAsync(process.id, "progress", 0);
