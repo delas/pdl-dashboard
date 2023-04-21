@@ -27,6 +27,7 @@ function App(props) {
     const [processOverviewPopupOpen, setProcessOverviewPopupOpen] = useState(false);
     const [uploadManualChangesPopup, setUploadManualChangesPopup] = useState(false);
     const [shadowPopupOpen, setShadowPopupOpen] = useState(false);
+    const [isInformationPromptOpen, setIsInformationPromptOpen] = useState(true);
 
     let pingInterval = useRef(null);
     let pingProcessInterval = useRef(null);
@@ -70,6 +71,10 @@ function App(props) {
 
     const toggleShadowPopupOpen = () => {
         setShadowPopupOpen(!shadowPopupOpen);
+    }
+
+    const toggleIsInformationPromptOpen = () => {
+        setIsInformationPromptOpen(!isInformationPromptOpen);
     }
 
     useEffect(() => {
@@ -267,41 +272,44 @@ function App(props) {
                 shouldSetFileContent = {shouldSetFileContent}
                 saveFileAndUpdate = {saveFileAndUpdate}
                 toggles = {{
-                    toggleSidebar: toggleSidebar,
-                    toggleSidebarHosts: toggleSidebarHosts,
-                    toggleFilePopupOpen: toggleFilePopupOpen,
-                    toggleActionPopupOpen: toggleActionPopupOpen,
-                    toggleNewHostPopupOpen: toggleNewHostPopupOpen,
-                    togglenewHostFromSRPopupOpen: togglenewHostFromSRPopupOpen,
-                    toggleGetFilePopupOpen: toggleGetFilePopupOpen,
-                    toggleProcessOverviewPopupOpen: toggleProcessOverviewPopupOpen,
-                    toggleUploadManualChangesPopup: toggleUploadManualChangesPopup,
-                    toggleShadowPopupOpen: toggleShadowPopupOpen,
+                    toggleSidebar,
+                    toggleSidebarHosts,
+                    toggleFilePopupOpen,
+                    toggleActionPopupOpen,
+                    toggleNewHostPopupOpen,
+                    togglenewHostFromSRPopupOpen,
+                    toggleGetFilePopupOpen,
+                    toggleProcessOverviewPopupOpen,
+                    toggleUploadManualChangesPopup,
+                    toggleShadowPopupOpen,
+                    toggleIsInformationPromptOpen
                 }}
                 set = {{
-                    setSidebarOpen: setSidebarOpen,
-                    setSidebarHostsOpen: setSidebarHostsOpen,
-                    setFilePopupOpen: setFilePopupOpen,
-                    setActionPopupOpen: setActionPopupOpen,
-                    setNewHostPopupOpen: setNewHostPopupOpen,
-                    setNewHostFromSRPopupOpen: setNewHostFromSRPopupOpen,
-                    setGetFilePopupOpen: setGetFilePopupOpen,
-                    setComponentUpdaterFunction: setComponentUpdaterFunction,
-                    setProcessOverviewPopupOpen: setProcessOverviewPopupOpen,
-                    setUploadManualChangesPopup: setUploadManualChangesPopup,
-                    setShadowPopupOpen: setShadowPopupOpen,
+                    setSidebarOpen,
+                    setSidebarHostsOpen,
+                    setFilePopupOpen,
+                    setActionPopupOpen,
+                    setNewHostPopupOpen,
+                    setNewHostFromSRPopupOpen,
+                    setGetFilePopupOpen,
+                    setComponentUpdaterFunction,
+                    setProcessOverviewPopupOpen,
+                    setUploadManualChangesPopup,
+                    setShadowPopupOpen,
+                    setIsInformationPromptOpen
                 }}
                 isOpen = {{
-                    sidebarOpen: sidebarOpen,
-                    sidebarHostsOpen: sidebarHostsOpen,
-                    filePopupOpen: filePopupOpen,
-                    actionPopupOpen: actionPopupOpen,
-                    newHostPopupOpen: newHostPopupOpen,
-                    newHostFromSROpen: newHostFromSROpen,
-                    GetFilePopupOpen: GetFilePopupOpen,
-                    processOverviewPopupOpen: processOverviewPopupOpen,
-                    uploadManualChangesPopup: uploadManualChangesPopup,
-                    shadowPopupOpen: shadowPopupOpen,
+                    sidebarOpen,
+                    sidebarHostsOpen,
+                    filePopupOpen,
+                    actionPopupOpen,
+                    newHostPopupOpen,
+                    newHostFromSROpen,
+                    GetFilePopupOpen,
+                    processOverviewPopupOpen,
+                    uploadManualChangesPopup,
+                    shadowPopupOpen,
+                    isInformationPromptOpen,
                 }}
             /> : null}
             {props.page === "Page1" ? <Page1/> : null}

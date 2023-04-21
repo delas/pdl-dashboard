@@ -1,0 +1,49 @@
+.InformationPrompt{
+    position: absolute;
+    top: 3em;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    // height: 8em;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    // align-items: flex-start;
+    z-index: 1101;
+    gap: 0.5em;
+
+    animation: fade 3.5s 1 linear;
+
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 0.3rem;
+    outline: 0;
+    padding: 0.5rem 1rem;
+    box-sizing: border-box;
+
+    h4{
+        line-height: 0.7;
+        margin:0;
+        padding: 1rem;
+        width: calc(100% - 2rem);
+        text-align: left;
+        align-self: flex-start;
+        border-bottom: 1px solid #dee2e6;
+        border-top-left-radius: calc(0.3rem - 1px);
+        border-top-right-radius: calc(0.3rem - 1px);
+    }
+}
+
+@keyframes fade {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.InformationPrompt-text{
+    width: calc(100% - 0rem);
+    text-align: left;
+    align-self: flex-start;
+}

@@ -22,7 +22,7 @@ import { getFileLocal } from '../../Store/LocalDataStore';
 import { getFileDynamic, getFileResourceId } from '../../Utils/FileUnpackHelper';
 import {pingMinerProcessInterval} from '../../config';
 import UploadManualChangesPopup from '../../Components/Popup/UploadManualChangesPopup/UploadManualChangesPopup';
-
+import InformationPrompt from '../../Components/Widgets/InformationPrompt/InformationPrompt';
 
 // import ReactDOMServer from 'react-dom/server'
 
@@ -43,6 +43,8 @@ function Home(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [popupProps, setPopupProps] = useState({});
     const [visualizationsFileId, setVisualizationsFileId] = useState(null);
+    const [promptText, setPromptText] = useState("null");
+    const [promptTitle, setPromptTitle] = useState("null");
 
     const popups = {
         AddNewHostPopup: 'AddNewHostPopup',
@@ -131,7 +133,11 @@ function Home(props) {
         setVisualizationsFileId(fileId);
     }
 
-    
+    const openInformationPrompt = (promptTitle, promptText) => {
+        set.setIsInformationPromptOpen(true);
+        setPromptTitle(promptTitle);
+        setPromptText(promptText);
+    }    
 
     // const [htmlString, setHtmlString] = useState(null); 
 
@@ -231,6 +237,7 @@ function Home(props) {
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
+                        openInformationPrompt = {openInformationPrompt}
                     />
                     : null
                 }
@@ -298,6 +305,18 @@ function Home(props) {
                         closePopup = {closePopup}
                         popups = {popups}
                         addHost = {addHost}
+                    />
+                    : null
+                }
+
+                {isOpen.isInformationPromptOpen ?
+                    <InformationPrompt
+                        text = {promptText}
+                        title= {promptTitle}
+                        closeButtonText = {"Close"}
+                        onClosePrompt = {toggles.toggleIsInformationPromptOpen}
+                        disabled = {false}
+                        primary = {true}
                     />
                     : null
                 }
