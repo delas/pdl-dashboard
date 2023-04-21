@@ -117,7 +117,7 @@ export function removeItemLocal(key){
 export function saveInputValuesLocal(minerHostId, minerId, inputValues){
     // create as object of type {minerId: inputValues} on the miner host object
     const minerHost = getHostLocal(minerHostId);
-    minerHost["inputValues"] = {...minerHost[inputValues], [minerId]: inputValues};
+    minerHost["inputValues"] = {...minerHost.inputValues, [minerId]: inputValues};
     removeHostLocal(minerHostId);
     saveHostLocal(minerHostId, minerHost);
 }
