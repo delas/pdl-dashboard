@@ -27,7 +27,7 @@ function App(props) {
     const [processOverviewPopupOpen, setProcessOverviewPopupOpen] = useState(false);
     const [uploadManualChangesPopup, setUploadManualChangesPopup] = useState(false);
     const [shadowPopupOpen, setShadowPopupOpen] = useState(false);
-    const [isInformationPromptOpen, setIsInformationPromptOpen] = useState(true);
+    const [isInformationPromptOpen, setIsInformationPromptOpen] = useState(false);
 
     let pingInterval = useRef(null);
     let pingProcessInterval = useRef(null);
@@ -134,13 +134,13 @@ function App(props) {
 
     const getAllHostConfig = () => {
         getMinersLocal().forEach((miner) => {
-            addHost(miner.id, miner);
+            addOrUpdateHost(miner.id, miner);
         });
         getRepositoriesLocal().forEach((repository) => {
-            addHost(repository.id, repository);
+            addOrUpdateHost(repository.id, repository);
         });
         getServiceRegistriesLocal().forEach((serviceRegistry) => {
-            addHost(serviceRegistry.id, serviceRegistry);
+            addOrUpdateHost(serviceRegistry.id, serviceRegistry);
         });
     }
 
@@ -159,7 +159,7 @@ function App(props) {
         }
     }
 
-    const addHost = (id, host) => {
+    const addOrUpdateHost = (id, host) => {
         // if(!hostExitsLocal(host.name)){
             handleAddHostOfType(host.type.value, host.name).then((res) => {
                 host.config = res?.data;
@@ -264,7 +264,7 @@ function App(props) {
     return (
         <div className="App">
             {props.page === "Home" ? <Home 
-                addHost = {addHost}
+                addOrUpdateHost = {addOrUpdateHost}
                 removeHost = {deleteHost}
                 getAndAddFile = {getAndAddFile}
                 deleteFile = {deleteFile}

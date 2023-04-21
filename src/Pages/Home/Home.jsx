@@ -32,7 +32,7 @@ function Home(props) {
         toggles,
         isOpen,
         set,
-        addHost,
+        addOrUpdateHost,
         removeHost,
         getAndAddFile,
         deleteFile,
@@ -214,7 +214,7 @@ function Home(props) {
                         toggleSidebarHosts = {toggles.toggleSidebarHosts}
                         openPopup = {openPopup}
                         popups = {popups}
-                        addHost = {addHost}
+                        addHost = {addOrUpdateHost}
                         removeHost = {removeHost}
                         setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
                     />
@@ -248,7 +248,7 @@ function Home(props) {
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
-                        addHost = {addHost}
+                        addHost = {addOrUpdateHost}
                     />
                     : null
                 }
@@ -259,7 +259,7 @@ function Home(props) {
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
-                        addHost = {addHost}
+                        addHost = {addOrUpdateHost}
                     />
                     : null
                 }
@@ -304,7 +304,7 @@ function Home(props) {
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
-                        addHost = {addHost}
+                        addOrUpdateHost = {addOrUpdateHost}
                     />
                     : null
                 }

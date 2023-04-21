@@ -10,7 +10,8 @@ import InputField from '../../Widgets/InputField/InputField';
 function ShadowPopup(props) {
     const {
         toggleShadowPopupOpen,
-        addHost,
+        // addHost,
+        addOrUpdateHost,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -84,7 +85,8 @@ function ShadowPopup(props) {
         ShadowMiner(receiverHostname, body)
             .then((res) => {
                 const receiverMiner = getMinersLocal().find(miner => miner.name === receiverHostname);
-                addHost(receiverMiner.id, receiverMiner);
+                // addHost(receiverMiner.id, receiverMiner);
+                addOrUpdateHost(receiverMiner.id, receiverMiner)
             })
             .then(() => {
                 setIsLoading(false);
