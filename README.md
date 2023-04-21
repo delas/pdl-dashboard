@@ -82,6 +82,8 @@ The overall systems in the frontend is designed to support the desired flow of P
 
 Hosts are represented as objects that are saved in local memory.
 
+![Host update loop](./Flow_images/pingHosts.png)
+
 ```js
 {
     addedFrom: hostname_of_service_registry_or_local,
@@ -99,6 +101,8 @@ Hosts are represented as objects that are saved in local memory.
 ### Processes
 
 Processes is are represented as javascript objects located in local memory that has information of which foreign process is running. From the frontend, this is used to determine the state of the foreign process, and when to retreive the results. To create a process, create a process object, and save it to localmemory. In App.jsx, exists an interval, that will ping running processes, thus keeping the system up to date with all processes created from the current unit.
+
+![Process update loop](./Flow_images/pingProcess.png)
 
 Processes are created upon submitting an action from the action popup. This will save a process to local memory, which will then be handled in an inverval which will check status, and respond accordingly by either getting a metadata and file, or by setting and error. Only "running" processes will be pinged. 
 
