@@ -185,7 +185,7 @@ How this information is used for this project:
 3. <b>ResourceId:</b> The metadata is stored in localMemory using this key, and therefore the key to accessing the information from a specific file.
 4. <b>ResourceInfo:</b>
     1. <b>Description:</b> Not implemented. Intented for additional information.
-    2. <b>Dynamic:</b> Is resource expected to update. Resource will be requested in regular intervals.
+    2. <b>Dynamic:</b> Is resource expected to update. Resource will be requested in regular intervals when selected in the visualizations screen (only the file that is selected).
     3. <b>FileExtension:</b> Used by miner and repository for running and saving.
     4. <b>Host:</b> Owner of the file. Used to request for updates, or by miner to fetch the file from repository.
     5. <b>ResourceLabel:</b> The name of the file seen everywhere on the frontend.
