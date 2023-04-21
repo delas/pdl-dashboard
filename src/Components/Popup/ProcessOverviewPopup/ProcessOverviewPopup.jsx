@@ -16,19 +16,19 @@ function ProcessOverviewPopup(props) {
         setComponentUpdaterFunction
     } = props;
 
-    const sortingOrder = {
-        Running: 1,
-        Paused: 2,
-        Stopped: 3,
-        Complete: 4,
-    }
+    // const sortingOrder = {
+    //     Running: 1,
+    //     Paused: 2,
+    //     Stopped: 3,
+    //     Complete: 4,
+    // }
 
     const sortType = {
         startTimeAsc: "sAsc",
         startTimeDsc: "sDsc",
         endTimeAsc: "eAsc",
         endTimeDsc: "eDsc",
-        type: "type",
+        // type: "type",
     }
 
     const [isLoading, setIsLoading] = useState(true);
@@ -51,78 +51,12 @@ function ProcessOverviewPopup(props) {
         setIsLoading(false);
     }, []);
 
-    // const getTestProcesses = () => {
-    //     return [
-    //         {
-    //             endTime: 1680937438000,
-    //             error: "My god, something awful has happened",
-    //             hostname: "http://localhost:5000",
-    //             id: "c0d5d265-a29a-4794-81df-2ffd30d49209",
-    //             objectType: "process",
-    //             outputDestination: "https://localhost:4000",
-    //             processId: 18880,
-    //             processName: "test Miner 1",
-    //             progress: "15:591",
-    //             resourceId: "180a4524-b116-492c-8bd4-a067f5fd6f06",
-    //             saveOrUpdateFile: false,
-    //             startTime: 1680937424122,
-    //             status: "error",
-    //         },
-    //         {
-    //             endTime: 1680937415000,
-    //             error: "",
-    //             hostname: "http://localhost:5000",
-    //             id: "c0d5d265-a29a-4794-81df-2ffd30d49209",
-    //             objectType: "process",
-    //             outputDestination: "https://localhost:4000",
-    //             processId: 18880,
-    //             processName: "test Miner 2",
-    //             progress: "28:129",
-    //             resourceId: "180a4524-b116-492c-8bd4-a067f5fd6f06",
-    //             saveOrUpdateFile: false,
-    //             startTime: 1680937424122,
-    //             status: "running",
-    //         },
-    //         {
-    //             endTime: 1680937430000,
-    //             error: "",
-    //             hostname: "http://localhost:5000",
-    //             id: "c0d5d265-a29a-4794-81df-2ffd30d49209",
-    //             objectType: "process",
-    //             outputDestination: "https://localhost:4000",
-    //             processId: 18880,
-    //             processName: "test Miner 3",
-    //             progress: "19:009",
-    //             resourceId: "180a4524-b116-492c-8bd4-a067f5fd6f06",
-    //             saveOrUpdateFile: false,
-    //             startTime: 1680937424122,
-    //             status: "complete",
-    //         },
-    //         {
-    //             endTime: 1680937430000,
-    //             error: "",
-    //             hostname: "http://localhost:5000",
-    //             id: "c0d5d265-a29a-4794-81df-2ffd30d49209",
-    //             objectType: "process",
-    //             outputDestination: "https://localhost:4000",
-    //             processId: 18880,
-    //             processName: "test Miner 4",
-    //             progress: "23:019",
-    //             resourceId: "180a4524-b116-492c-8bd4-a067f5fd6f06",
-    //             saveOrUpdateFile: false,
-    //             startTime: 1680937424122,
-    //             status: "stopped",
-    //         },
-    //     ];
-    // }
-    
-
     const sortingOptions = [
         {value: sortType.startTimeAsc, label: "Started Ascending"},
         {value: sortType.startTimeDsc, label: "Started Descending"},
         {value: sortType.endTimeAsc, label: "Finished Ascending"},
         {value: sortType.endTimeDsc, label: "Finished Descending"},
-        {value: sortType.type, label: "Type"},
+        // {value: sortType.type, label: "Type"},
     ]
 
     const onSortingDropdownValueChange = (value) => {
@@ -132,19 +66,73 @@ function ProcessOverviewPopup(props) {
     }
 
     const sortProcesses = (processes, sort) => {
+        const completedProcesses = processes.filter(process => process.status.toUpperCase() === "COMPLETE");
+        const runningProcesses = processes.filter(process => process.status.toUpperCase() === "RUNNING");
+        const stoppedProcesses = processes.filter(process => process.status.toUpperCase() === "STOPPED");
+        const errorProcesses = processes.filter(process => process.status.toUpperCase() === "ERROR");
+        const otherProcesses = processes.filter(process => process.status.toUpperCase() !== "COMPLETE" && process.status.toUpperCase() !== "RUNNING" && process.status.toUpperCase() !== "STOPPED" && process.status.toUpperCase() !== "ERROR");
+
         switch(sort){
             case sortType.startTimeAsc:
-                return sortProcessesAsc(processes, "startTime");
+                return (
+                    sortProcessesAsc(runningProcesses, "startTime").concat(
+                    sortProcessesAsc(completedProcesses, "startTime")).concat(
+                    sortProcessesAsc(stoppedProcesses, "startTime")).concat(
+                    sortProcessesAsc(errorProcesses, "startTime")).concat(
+                    sortProcessesAsc(otherProcesses, "startTime"))
+                );
+                
+                // sortProcessesAsc(processes, "startTime");
             case sortType.startTimeDsc:
-                return sortProcessesDsc(processes, "startTime");
+                return (
+                    sortProcessesDsc(runningProcesses, "startTime").concat(
+                    sortProcessesDsc(completedProcesses, "startTime")).concat(
+                    sortProcessesDsc(stoppedProcesses, "startTime")).concat(
+                    sortProcessesDsc(errorProcesses, "startTime")).concat(
+                    sortProcessesDsc(otherProcesses, "startTime"))
+                );
+                
+                // sortProcessesDsc(processes, "startTime");
             case sortType.endTimeAsc:
-                return sortProcessesAsc(processes, "endTime");
+                return (
+                    sortProcessesAsc(runningProcesses, "endTime").concat(
+                    sortProcessesAsc(completedProcesses, "endTime")).concat(
+                    sortProcessesAsc(stoppedProcesses, "endTime")).concat(
+                    sortProcessesAsc(errorProcesses, "endTime")).concat(
+                    sortProcessesAsc(otherProcesses, "endTime"))
+                );
+                
+                //sortProcessesAsc(processes, "endTime");
             case sortType.endTimeDsc:
-                return sortProcessesDsc(processes, "endTime");
-            case sortType.type:
-                return sortProcessesByType(processes);
+                return (
+                    sortProcessesDsc(runningProcesses, "endTime").concat(
+                    sortProcessesDsc(completedProcesses, "endTime")).concat(
+                    sortProcessesDsc(stoppedProcesses, "endTime")).concat(
+                    sortProcessesDsc(errorProcesses, "endTime")).concat(
+                    sortProcessesDsc(otherProcesses, "endTime"))
+                );
+                
+                // sortProcessesDsc(processes, "endTime");
+            // case sortType.type:
+            //     return (
+            //         sortProcessesByType(runningProcesses).concat(
+            //         sortProcessesByType(completedProcesses)).concat(
+            //         sortProcessesByType(stoppedProcesses)).concat(
+            //         sortProcessesByType(errorProcesses)).concat(
+            //         sortProcessesByType(otherProcesses))
+            //     ) ;
+                
+                // sortProcessesByType(processes);
             default:
-                return sortProcessesByType(processes);
+                return (
+                    sortProcessesAsc(runningProcesses, "startTime").concat(
+                    sortProcessesAsc(completedProcesses, "startTime")).concat(
+                    sortProcessesAsc(stoppedProcesses, "startTime")).concat(
+                    sortProcessesAsc(errorProcesses, "startTime")).concat(
+                    sortProcessesAsc(otherProcesses, "startTime"))
+                );
+                
+                // sortProcessesByType(processes);
         }
     }
 
@@ -192,11 +180,11 @@ function ProcessOverviewPopup(props) {
         }
     }
 
-    const sortProcessesByType = (processes) => {
-        return processes.sort((a, b) => {
-            return sortingOrder[a.status] - sortingOrder[b.status];
-        });
-    }
+    // const sortProcessesByType = (processes) => {
+    //     return processes.sort((a, b) => {
+    //         return sortingOrder[a.status] - sortingOrder[b.status];
+    //     });
+    // }
 
     if(isLoading){
         return (
