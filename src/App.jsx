@@ -35,25 +35,15 @@ function App(props) {
 
     //Toggle functions
     const toggleSidebar = () => { setSidebarOpen(!sidebarOpen); }
-
     const toggleSidebarHosts = () => { setSidebarHostsOpen(!sidebarHostsOpen); }
-
     const toggleFilePopupOpen = () => { setFilePopupOpen(!filePopupOpen); }
-
     const toggleActionPopupOpen = () => { setActionPopupOpen(!actionPopupOpen); }
-
     const toggleNewHostPopupOpen = () => { setNewHostPopupOpen(!newHostPopupOpen); }
-
     const togglenewHostFromSRPopupOpen = () => { setNewHostFromSRPopupOpen(!newHostFromSROpen); }
-
     const toggleGetFilePopupOpen = () => { setGetFilePopupOpen(!GetFilePopupOpen); }
-
     const toggleProcessOverviewPopupOpen = () => { setProcessOverviewPopupOpen(!processOverviewPopupOpen); }
-
     const toggleUploadManualChangesPopup = () => { setUploadManualChangesPopup(!uploadManualChangesPopup); }
-
     const toggleShadowPopupOpen = () => { setShadowPopupOpen(!shadowPopupOpen); }
-
     const toggleIsInformationPromptOpen = () => { setIsInformationPromptOpen(!isInformationPromptOpen); }
 
     useEffect(() => {

@@ -83,7 +83,6 @@ function SidebarFile(props) {
                             {getDateInMsAsString(getFileCreationDate(file))}
                         </div>
                     </div>
-                    
                 </div>
 
                 {getFileDynamic(file) && <div className='SidebarFile-stream'>

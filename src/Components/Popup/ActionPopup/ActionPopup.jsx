@@ -199,7 +199,7 @@ function ActionPopup(props) {
                 }
                 break;
             case 4:
-                setNextButtonDisabled(!outputFileName); // check if output file name is defined
+                setNextButtonDisabled(!repositoryDestination || !outputFileName); // check if repository dropdown value and output file name is defined
                 break;
             default:
                 setNextButtonDisabled(false); // default to enabled
