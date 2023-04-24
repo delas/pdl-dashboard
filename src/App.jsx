@@ -47,6 +47,8 @@ function App(props) {
     const toggleIsInformationPromptOpen = () => { setIsInformationPromptOpen(!isInformationPromptOpen); }
 
     useEffect(() => {
+        clearInterval(pingInterval.current);
+        clearInterval(pingProcessInterval.current);
         startPingHosts();
         startPingProcesses();
         getAllHostConfig();

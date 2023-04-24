@@ -8,9 +8,9 @@ import ResourceGraph from './ResourceGraph/ResourceGraph';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
 import { getFileDescription, getFileExtension, getFileHost, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileDynamic } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
-import {getVisalizations} from '../../config';
+import {getVisalizations, pingDynamicResourceInterval} from '../../config';
 import Dropdown from '../Widgets/Dropdown/Dropdown';
-import {getChildrenFromFile} from '../../Services/RepositoryServices';
+import {getChildrenFromFile, GetSingleFileMetadata} from '../../Services/RepositoryServices';
 import DefaultButton from '../Widgets/Buttons/DefaultButton/DefaultButton';
 import { getFileLocal } from '../../Store/LocalDataStore';
 
@@ -31,16 +31,17 @@ function Visualizations(props) {
     const [selectedChild, setSelectedChild] = useState(null);
     const [hasCalledChildren, setHasCalledChildren] = useState(null);
     const file = getFileLocal(selectedFileId);
+
+    const generateTabList = (file) => {
+        if(file) return getVisalizations(getFileResourceType(file).toUpperCase(), getFileExtension(file).toUpperCase()); 
+    }
+
     const selectedTabList = useMemo(() => generateTabList(file), [file]);
 
     const updateFileInterval = useRef(null);
     
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ updateState({}); }, []);
-
-    const generateTabList = (file) => {
-        if(file) return getVisalizations(getFileResourceType(file).toUpperCase(), getFileExtension(file).toUpperCase()); 
-    }
 
     useEffect(() => {
         setComponentUpdaterFunction("Visualizations", {update: forceUpdate})
@@ -55,22 +56,33 @@ function Visualizations(props) {
         }
         setIsLoading(false);
 
+        const runUpdateInterval = file && getFileDynamic(file);
+
         // updates file every second if dynamic. Ref prevents multiple intervals.
         clearInterval(updateFileInterval.current);
-        if(file && getFileDynamic(file)){
+        if(runUpdateInterval){
             updateFileInterval.current = setInterval(() => {
                 const internalFile = getFileLocal(selectedFileId);
                 getAndAddFile(internalFile);
+                GetSingleFileMetadata(getFileHost(internalFile), getFileResourceId(internalFile))
+                .then((res) => {
+                    getAndAddFile(res.data);
+                });
                 forceUpdate();
-            }, 1000);
+            }, pingDynamicResourceInterval);
         }
 
-    }, [selectedFileId]);
+    }, [selectedFileId]);    
+
+    useEffect(() => {
+
+    }, [file])
 
     useEffect(() => {
         const tabList = generateTabList(file);
         if(tabList && tabList.length > 0 && !selectedTab)
         setSelectedTab(generateTabList(file)[0] ? generateTabList(file)[0] : null);
+        file && getFileDynamic(file) === false && clearInterval(updateFileInterval.current);
     }, [file]);
 
     const onTabChange = (tab) => {
