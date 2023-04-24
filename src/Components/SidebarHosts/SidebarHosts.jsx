@@ -7,7 +7,7 @@ import {PingServiceRegistry} from '../../Services/ServiceRegistryServices';
 import {PingMiner} from '../../Services/MinerServices';
 import {PingRepository} from '../../Services/RepositoryServices';
 import IconizedButton from '../Widgets/Buttons/IconizedButton/IconizedButton';
-import {FaBuffer, FaPlus} from 'react-icons/fa';
+import {FaPlus} from 'react-icons/fa';
 import {BiTransfer} from 'react-icons/bi';
 
 function SidebarHosts(props) {
@@ -16,8 +16,8 @@ function SidebarHosts(props) {
         openPopup,
         popups,
         removeHost,
-        // setUpdateSidebarHosts
         setComponentUpdaterFunction,
+        setAllHostsStatus
     } = props;
 
     const [isLoading, setIsLoading] = useState(false);
@@ -30,14 +30,15 @@ function SidebarHosts(props) {
         setRepositoryHosts(getRepositoriesLocal());
         setMinerHosts(getMinersLocal());
         setSRHosts(getServiceRegistriesLocal());
+        setAllHostsStatus(); // After ping, will update the collective status of all hosts. Affects sidebar
     }, []);
     
 
     useEffect(() => {
-        // setUpdateSidebarHosts({update: forceUpdate});
         setComponentUpdaterFunction("SidebarHosts", {update: forceUpdate});
         forceUpdate();
         setIsLoading(false);
+        setAllHostsStatus();
     }, []);
 
     if(isLoading){

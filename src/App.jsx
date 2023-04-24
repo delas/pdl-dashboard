@@ -29,53 +29,32 @@ function App(props) {
     const [shadowPopupOpen, setShadowPopupOpen] = useState(false);
     const [isInformationPromptOpen, setIsInformationPromptOpen] = useState(false);
 
-    let pingInterval = useRef(null);
+    // --------------- Interval refs to ensure only one loop is running ----------------
+    let pingInterval = useRef(null); 
     let pingProcessInterval = useRef(null);
-    // let pingDynamicResourcesInterval = useRef(null);
 
-    const toggleSidebar = () => {
-        setSidebarOpen(!sidebarOpen);
-    }
+    //Toggle functions
+    const toggleSidebar = () => { setSidebarOpen(!sidebarOpen); }
 
-    const toggleSidebarHosts = () => {
-        setSidebarHostsOpen(!sidebarHostsOpen);
-    }
+    const toggleSidebarHosts = () => { setSidebarHostsOpen(!sidebarHostsOpen); }
 
-    const toggleFilePopupOpen = () => {
-        setFilePopupOpen(!filePopupOpen);
-    }
+    const toggleFilePopupOpen = () => { setFilePopupOpen(!filePopupOpen); }
 
-    const toggleActionPopupOpen = () => {
-        setActionPopupOpen(!actionPopupOpen);
-    }
+    const toggleActionPopupOpen = () => { setActionPopupOpen(!actionPopupOpen); }
 
-    const toggleNewHostPopupOpen = () => {
-        setNewHostPopupOpen(!newHostPopupOpen)
-    }
+    const toggleNewHostPopupOpen = () => { setNewHostPopupOpen(!newHostPopupOpen); }
 
-    const togglenewHostFromSRPopupOpen = () => {
-        setNewHostFromSRPopupOpen(!newHostFromSROpen)
-    }
+    const togglenewHostFromSRPopupOpen = () => { setNewHostFromSRPopupOpen(!newHostFromSROpen); }
 
-    const toggleGetFilePopupOpen = () => {
-        setGetFilePopupOpen(!GetFilePopupOpen)
-    }
+    const toggleGetFilePopupOpen = () => { setGetFilePopupOpen(!GetFilePopupOpen); }
 
-    const toggleProcessOverviewPopupOpen = () => {
-        setProcessOverviewPopupOpen(!processOverviewPopupOpen);
-    }
+    const toggleProcessOverviewPopupOpen = () => { setProcessOverviewPopupOpen(!processOverviewPopupOpen); }
 
-    const toggleUploadManualChangesPopup = () => {
-        setUploadManualChangesPopup(!uploadManualChangesPopup);
-    }
+    const toggleUploadManualChangesPopup = () => { setUploadManualChangesPopup(!uploadManualChangesPopup); }
 
-    const toggleShadowPopupOpen = () => {
-        setShadowPopupOpen(!shadowPopupOpen);
-    }
+    const toggleShadowPopupOpen = () => { setShadowPopupOpen(!shadowPopupOpen); }
 
-    const toggleIsInformationPromptOpen = () => {
-        setIsInformationPromptOpen(!isInformationPromptOpen);
-    }
+    const toggleIsInformationPromptOpen = () => { setIsInformationPromptOpen(!isInformationPromptOpen); }
 
     useEffect(() => {
         startPingHosts();
@@ -83,30 +62,6 @@ function App(props) {
         getAllHostConfig();
         setIsLoading(false);
     }, []);
-
-    // useEffect(() => {
-    //     if(pingInterval.current !== null) clearInterval(pingInterval.current);
-    //     pingInterval.current = setInterval(() => {
-    //         pingAllAddedServices().then(() => {
-    //             if(updateComponents.SidebarHosts){
-    //                 updateComponents.SidebarHosts.update();
-    //             }
-    //         });
-    //     }, pingHostInterval);
-    // }, []);
-
-    // useEffect(() => {
-    //     if(pingProcessInterval.current !== null) clearInterval(pingProcessInterval.current);
-    //     pingProcessInterval.current = setInterval(() => {
-    //         pingAllProcesses(getAndAddFile).then(() => {
-    //             if(updateComponents.ProcessOverviewPopup){
-    //                 setTimeout(() => {
-    //                     updateComponents.ProcessOverviewPopup.update();
-    //                 }, 200)
-    //             }
-    //         });
-    //     }, pingMinerProcessInterval);
-    // }, []);
 
     const startPingHosts = () => {
         if(pingInterval.current !== null) clearInterval(pingInterval.current);
@@ -160,15 +115,13 @@ function App(props) {
     }
 
     const addOrUpdateHost = (id, host) => {
-        // if(!hostExitsLocal(host.name)){
-            handleAddHostOfType(host.type.value, host.name).then((res) => {
-                host.config = res?.data;
-                saveHostLocal(id, host);
-                if(updateComponents.SidebarHosts){
-                    updateComponents.SidebarHosts.update();
-                }
-            })
-        // }
+        handleAddHostOfType(host.type.value, host.name).then((res) => {
+            host.config = res?.data;
+            saveHostLocal(id, host);
+            if(updateComponents.SidebarHosts){
+                updateComponents.SidebarHosts.update();
+            }
+        })
     }
 
     const deleteHost = (id) => {
@@ -206,9 +159,7 @@ function App(props) {
         setTimeout(() => { updateComponents.Sidebar.update() }, 500);
 
         let responsePromise;
-        const isImage = fileExtension.toUpperCase() === "PNG" 
-            || fileExtension.toUpperCase() === "JPG" 
-            || fileExtension.toUpperCase() === "SVG";
+        const isImage = fileExtension.toUpperCase() === "PNG" || fileExtension.toUpperCase() === "JPG" || fileExtension.toUpperCase() === "SVG";
         if(shouldSetFileContent(file)){
             if(isImage) responsePromise = GetFileImage(host, resourceId);
             else responsePromise = GetFileText(host, resourceId); 
@@ -230,9 +181,8 @@ function App(props) {
             var reader = new FileReader();
             reader.readAsDataURL(fileContent);
             reader.onload = (e) => {
-                saveFileLocal(getFileResourceId(file), {...file, fileContent: e.target.result });
+                saveFileLocal(getFileResourceId(file), {...file, fileContent: e.target.result }); // save the filecontent as a base64 string
             };
-            // saveFileLocal(getFileResourceId(file), {...file, fileContent: URL.createObjectURL(fileContent) })
         } else {
             saveFileLocal(getFileResourceId(file), {...file, fileContent: fileContent }); // save the filecontent
         }

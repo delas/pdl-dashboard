@@ -16,14 +16,13 @@ function Sidebar(props) {
         popups,
         deleteFile,
         selectFileForVisualization,
-        // setUpdateSidebar
         shouldSetFileContent,
         setComponentUpdaterFunction,
         selectedFileId,
+        allHostStatus
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-    // const [files, setFiles] = useState([]);
 
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ 
@@ -103,29 +102,17 @@ function Sidebar(props) {
     }
 
     const statusIconDisplayer = () => {
-        const uniqueStatus = getAllHostStatusLocal().filter((x, i, a) => a.indexOf(x) === i)
-        if(uniqueStatus.includes('online') && uniqueStatus.includes('offline')){ // if both true and false are present
-            return <FaCircle className='Sidebar-status-icon-yellow'/>
-        } else if (uniqueStatus.includes('online') && !uniqueStatus.includes('offline')){ // if only true is present
-            return <FaCircle className='Sidebar-status-icon-green'/>
-        } else if (uniqueStatus.includes('offline') && !uniqueStatus.includes('online')){ // if only false is present
-            return <FaCircle className='Sidebar-status-icon-red'/>
-        } else if (uniqueStatus.length === 0){
-            return <FaCircle className='Sidebar-status-icon-grey'/>
-        }
+        if(allHostStatus === "mixed") return <FaCircle className='Sidebar-status-icon-yellow'/>
+        if(allHostStatus === "online") return <FaCircle className='Sidebar-status-icon-green'/>
+        if(allHostStatus === "offline") return <FaCircle className='Sidebar-status-icon-red'/>
+        if(allHostStatus === "none") return <FaCircle className='Sidebar-status-icon-grey'/>
     }
 
     const statusTextDisplayer = () => {
-        const uniqueStatus = getAllHostStatusLocal().filter((x, i, a) => a.indexOf(x) === i)
-        if(uniqueStatus.includes('online') && uniqueStatus.includes('offline')){ // if both true and false are present
-            return <span>Some systems offline</span>
-        } else if (uniqueStatus.includes('online') && !uniqueStatus.includes('offline')){ // if only true is present
-            return <span>All systems online</span>
-        } else if (uniqueStatus.includes('offline') && !uniqueStatus.includes('online')){ // if only false is present
-            return <span>All systems offline</span>
-        } else if (uniqueStatus.length === 0){
-            return <span>No hosts connected</span>
-        }
+        if(allHostStatus === "mixed") return <span>Some systems offline</span>
+        if(allHostStatus === "online") return <span>All systems online</span>
+        if(allHostStatus === "offline") return <span>All systems offline</span>
+        if(allHostStatus === "none") return <span>No hosts connected</span>
     }
 
     if(isLoading){

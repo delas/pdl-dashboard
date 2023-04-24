@@ -6,7 +6,7 @@ import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
 import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
 import ResourceGraph from './ResourceGraph/ResourceGraph';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
-import { getFileDescription, getFileExtension, getFileHost, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileContent, getFileDynamic } from '../../Utils/FileUnpackHelper';
+import { getFileDescription, getFileExtension, getFileHost, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileDynamic } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 import {getVisalizations} from '../../config';
 import Dropdown from '../Widgets/Dropdown/Dropdown';
@@ -30,8 +30,10 @@ function Visualizations(props) {
     const [childrenForDropdown, setChildrenForDropdown] = useState([]);
     const [selectedChild, setSelectedChild] = useState(null);
     const [hasCalledChildren, setHasCalledChildren] = useState(null);
+    const file = getFileLocal(selectedFileId);
+    const selectedTabList = useMemo(() => generateTabList(file), [file]);
 
-    let updateFileInterval = useRef(null);
+    const updateFileInterval = useRef(null);
     
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ updateState({}); }, []);
@@ -40,17 +42,12 @@ function Visualizations(props) {
         if(file) return getVisalizations(getFileResourceType(file).toUpperCase(), getFileExtension(file).toUpperCase()); 
     }
 
-    const file = getFileLocal(selectedFileId);
-
-    const selectedTabList = useMemo(() => generateTabList(file), [file]);
-
     useEffect(() => {
         setComponentUpdaterFunction("Visualizations", {update: forceUpdate})
-        // setFileToDisplay(file);
         setSelectedChild(null);
-        // if(getFileResourceId(file) !== getFileResourceId(fileToDisplay)) setSelectedTab(null);
         setSelectedTab(null);
-        if(file && hasCalledChildren !== getFileResourceId(file)){
+
+        if(file && hasCalledChildren !== getFileResourceId(file)){ // prevents children being requested repeatedly
         getChildrenFromFile(getFileHost(file), getFileResourceId(file))
             .then((res) => {setChildren(res.data); generateChildren(res.data)} )
             .then(() => {setHasCalledChildren(getFileResourceId(file))})
@@ -58,8 +55,8 @@ function Visualizations(props) {
         }
         setIsLoading(false);
 
+        // updates file every second if dynamic. Ref prevents multiple intervals.
         clearInterval(updateFileInterval.current);
-        
         if(file && getFileDynamic(file)){
             updateFileInterval.current = setInterval(() => {
                 const internalFile = getFileLocal(selectedFileId);
@@ -71,12 +68,9 @@ function Visualizations(props) {
     }, [selectedFileId]);
 
     useEffect(() => {
-        // if(selectedTabList) {
-            // setSelectedTab(selectedTabList[0] ? selectedTabList[0] : null);
-            const tabList = generateTabList(file);
-            if(tabList && tabList.length > 0 && !selectedTab)
-            setSelectedTab(generateTabList(file)[0] ? generateTabList(file)[0] : null);
-        // }
+        const tabList = generateTabList(file);
+        if(tabList && tabList.length > 0 && !selectedTab)
+        setSelectedTab(generateTabList(file)[0] ? generateTabList(file)[0] : null);
     }, [file]);
 
     const onTabChange = (tab) => {
@@ -90,8 +84,7 @@ function Visualizations(props) {
                 const isVisualizable = !!getVisalizations(getFileResourceType(childMetadata).toUpperCase(), getFileExtension(childMetadata).toUpperCase());
                 if(isVisualizable)
                 return ({label: getFileResourceLabel(childMetadata), value: getFileResourceId(childMetadata)})
-                })
-                .filter((child) => { if(child) return child })
+            }).filter((child) => { if(child) return child }) // removes null values
         );
     }
 

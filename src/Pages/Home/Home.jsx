@@ -1,5 +1,5 @@
 import './Home.scss';
-import React, {useState, useEffect, useRef
+import React, {useState, useEffect
 // ,Suspense
 } from 'react';
 
@@ -17,12 +17,10 @@ import Topbar from '../../Components/Topbar/Topbar';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
 import Visualizations from '../../Components/Visualizations/Visualizations';
-import { getFileLocal } from '../../Store/LocalDataStore';
 // import ReactHtmlParser from 'react-html-parser';
-import { getFileDynamic, getFileResourceId } from '../../Utils/FileUnpackHelper';
-import {pingMinerProcessInterval} from '../../config';
 import UploadManualChangesPopup from '../../Components/Popup/UploadManualChangesPopup/UploadManualChangesPopup';
 import InformationPrompt from '../../Components/Widgets/InformationPrompt/InformationPrompt';
+import {getAllHostStatusLocal} from '../../Store/LocalDataStore';
 
 // import ReactDOMServer from 'react-dom/server'
 
@@ -46,6 +44,7 @@ function Home(props) {
     const [promptText, setPromptText] = useState("null");
     const [promptTitle, setPromptTitle] = useState("null");
     const [setTimeoutClosePrompt, setSetTimeoutClosePrompt] = useState(true);
+    const [allHostStatus, setAllHostStatus] = useState([]);
 
     const popups = {
         AddNewHostPopup: 'AddNewHostPopup',
@@ -145,6 +144,7 @@ function Home(props) {
 
     useEffect(() => {
         setIsLoading(false);
+        
 
         // const tb = <Topbar/>;
         // console.log(tb);
@@ -152,6 +152,19 @@ function Home(props) {
         // // console.log(htmlString);
 
     }, []);
+
+    const setAllHostsStatus = () => {
+        const uniqueStatus = getAllHostStatusLocal().filter((x, i, a) => a.indexOf(x) === i)
+        if(uniqueStatus.includes('online') && uniqueStatus.includes('offline')){ // if some hosts are offline and some are online
+            setAllHostStatus( "mixed");
+        } else if (uniqueStatus.includes('online') && !uniqueStatus.includes('offline')){ // if only if no hosts are offline
+            setAllHostStatus("online"); 
+        } else if (uniqueStatus.includes('offline') && !uniqueStatus.includes('online')){ // if only if no hosts are online
+            setAllHostStatus("offline"); 
+        } else if (uniqueStatus.length === 0){
+            setAllHostStatus("noneConnected"); 
+        }
+    }
 
     if(isLoading){
         return (
@@ -194,6 +207,7 @@ function Home(props) {
                             shouldSetFileContent = {shouldSetFileContent}
                             setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
                             selectedFileId = {visualizationsFileId}
+                            allHostStatus = {allHostStatus}
                         />
                     </div>
 
@@ -219,6 +233,7 @@ function Home(props) {
                         addHost = {addOrUpdateHost}
                         removeHost = {removeHost}
                         setComponentUpdaterFunction = {set.setComponentUpdaterFunction}
+                        setAllHostsStatus = {setAllHostsStatus}
                     />
                 </div>
 
