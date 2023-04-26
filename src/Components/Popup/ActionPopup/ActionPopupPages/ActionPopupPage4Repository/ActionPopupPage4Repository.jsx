@@ -34,7 +34,7 @@ function ActionPopupPage4Repository(props) {
                 output filetype:
             </div>
             <div>
-                {`${minerObject.ResourceOutput.ResourceType} ${minerObject.ResourceOutput.FileExtension}`}
+                {`${minerObject.ResourceOutput.ResourceType} ${minerObject.ResourceOutput.FileExtension ? minerObject.ResourceOutput.FileExtension : ""}`}
             </div>
         </div> 
     );

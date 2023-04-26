@@ -164,7 +164,6 @@ function Sidebar(props) {
                             files.map((file, index) => {
                                 const fileId = getFileResourceId(file);
                                 const isSelected = selectedFileId === fileId;
-                                console.log(getFileResourceLabel(file))
                                 return(
                                     <SidebarFile key={index}
                                         openPopup = {openPopup}
