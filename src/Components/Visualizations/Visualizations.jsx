@@ -74,6 +74,7 @@ function Visualizations(props) {
         if(runUpdateInterval){
             updateFileInterval.current = setInterval(() => {
                 const internalFile = getFileLocal(selectedFileId);
+                if(!internalFile || !getFileRepositoryUrl(internalFile) || !getFileResourceId(internalFile)) return clearInterval(updateFileInterval.current);
                 GetSingleFileMetadata(getFileRepositoryUrl(internalFile), getFileResourceId(internalFile))
                 .then((res) => {
                     getAndAddFile(res.data);
