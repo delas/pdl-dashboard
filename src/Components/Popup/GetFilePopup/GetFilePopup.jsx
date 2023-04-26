@@ -1,12 +1,10 @@
 import './GetFilePopup.scss';
 import {useState, useEffect} from 'react';
-import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
-import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {getRepositoriesLocal} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
-import { getFileExtension, getFileHost, getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
+import { getFileExtension, getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
 import {getAvailableResourceTypes } from '../../../config';
 import Popup from '../../Widgets/Popup/Popup';
 

@@ -171,6 +171,8 @@ function ActionPopup(props) {
     // ------------------ STEP 4 ------------------
         const [repositoryDestination, setRepositoryDestination] = useState(null);
         const [outputFileName, setOutputFileName] = useState("");
+        const [streamTopic, setStreamTopic] = useState("");
+        const [streamDestination, setStreamDestination] = useState("");
 
         const onFileOutputNameChange = (res) => {
             setOutputFileName(res.value);
@@ -179,6 +181,15 @@ function ActionPopup(props) {
         const onRepositoryDestinationDropdownChange = (value) => {
             setRepositoryDestination(value);
         }
+
+        const onStreamTopicChange = (res) => {
+            setStreamTopic(res.value);
+        }
+
+        const onStreamDestinationChange = (res) => {
+            setStreamDestination(res.value);
+        }
+
 
     // ------------------ Buttons and other default behavior ------------------
 
@@ -254,6 +265,10 @@ function ActionPopup(props) {
     const handleConfirmClick = () => {
         setIsLoading(true);
 
+        const isStreamOutput = minerObject.ResourceOutput.ResourceType === "EventStream";
+
+        const host = isStreamOutput ? streamDestination : `${repositoryDestination.label}/resources/`;
+
         var data = {
             MinerId: minerObject.MinerId,
             Input: {
@@ -261,12 +276,15 @@ function ActionPopup(props) {
                 MinerParameters: convertParamsToDictionary(selectedParams),// params ? params : {},
             },
             Output: {
-                Host: `${repositoryDestination.label}/resources/`,
+                Host: host,
                 HostInit: `${repositoryDestination.label}/resources/metadata/`,
                 ResourceLabel: outputFileName,
-                FileExtension: minerObject.ResourceOutput.FileExtension//selectedOutputFileType?.value ? selectedOutputFileType.value : outputFileTypeForDropdown[0].value,
+                FileExtension: minerObject.ResourceOutput.FileExtension,//selectedOutputFileType?.value ? selectedOutputFileType.value : outputFileTypeForDropdown[0].value,
+                StreamTopic: streamTopic,
             }
         };
+
+        console.log(data);
 
         PostMineAction(minerHostDropdownValue.label, data)
             .then((res) => {
@@ -394,6 +412,10 @@ function ActionPopup(props) {
                         outputFileName = {outputFileName}
                         onFileOutputNameChange = {onFileOutputNameChange}
                         minerObject = {minerObject}
+                        streamDestination = {streamDestination}
+                        streamTopic = {streamTopic}
+                        onStreamTopicChange = {onStreamTopicChange}
+                        onStreamDestinationChange = {onStreamDestinationChange}
                     /> : null}
             </Popup>
         </BackdropModal>

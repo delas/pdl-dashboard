@@ -11,7 +11,13 @@ function ActionPopupPage4Repository(props) {
         outputFileName,
         onFileOutputNameChange,
         minerObject,
+        streamDestination,
+        streamTopic,
+        onStreamTopicChange,
+        onStreamDestinationChange,
     } = props;
+
+    const isStreamOutput = minerObject.ResourceOutput.ResourceType === "EventStream";
 
     return (
         <div className='ActionPopup-wizard-step4'>
@@ -29,6 +35,26 @@ function ActionPopupPage4Repository(props) {
                 value = {outputFileName}
                 onChange = {onFileOutputNameChange}
             />
+
+            {isStreamOutput && 
+                <InputField
+                    label = {"Stream broker"}
+                    fieldType = {"text"}
+                    placeholder = {"mqtt.eclipseprojects.io"}
+                    value = {streamDestination}
+                    onChange = {onStreamDestinationChange}
+                />}
+
+            {isStreamOutput && 
+                <InputField
+                    label = {"Stream topic"}
+                    fieldType = {"text"}
+                    placeholder = {"Hello_world_stream_topic"}
+                    value = {streamTopic}
+                    onChange = {onStreamTopicChange}
+                />}
+
+            
 
             <div>
                 output filetype:

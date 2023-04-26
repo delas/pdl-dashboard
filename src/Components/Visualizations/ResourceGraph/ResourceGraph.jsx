@@ -2,7 +2,7 @@ import './ResourceGraph.scss';
 import {useState, useEffect} from 'react';
 import { Graphviz } from 'graphviz-react';
 import {GetResourceGraph} from '../../../Services/RepositoryServices';
-import { getFileHost, getFileResourceId } from '../../../Utils/FileUnpackHelper';
+import { getFileRepositoryUrl, getFileResourceId } from '../../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import { getFileLocal } from '../../../Store/LocalDataStore';
 
@@ -23,7 +23,7 @@ function ResourceGraph(props) {
 
     useEffect(() => {
         setIsLoading(true);
-        GetResourceGraph(getFileHost(file), getFileResourceId(file))
+        GetResourceGraph(getFileRepositoryUrl(file), getFileResourceId(file))
             .then((res) => {
                 setGraph(res.data);
             })
@@ -94,10 +94,12 @@ function ResourceGraph(props) {
     }
 
     if(error){
+        const errorText = error?.response?.statusText ? error.response.statusText : error;
+        const statusText = error?.response?.status ? error.response.status : "";
         return (
             <div className="ResourceGraph">
                 <div>Error loading graph</div>
-                <div>{`${error.response.statusText} ${error.response.status}`}</div>
+                <div>{`${errorText} ${statusText}`}</div>
             </div>
         )
     }

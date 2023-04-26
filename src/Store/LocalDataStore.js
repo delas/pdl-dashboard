@@ -1,4 +1,4 @@
-import { getFileExtension } from "../Utils/FileUnpackHelper";
+import { getFileExtension, getFileResourceType } from "../Utils/FileUnpackHelper";
 // ---------------------- Default utils ----------------------
 const setSavedItem = async (key, value) => {
     localStorage.setItem(key, JSON.stringify(value));
@@ -148,7 +148,7 @@ export function getAllFilesLocal(){
     const fileKeys = Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a FileExtension not in json format
             const storageItem = JSON.parse(localStorage.getItem(key));
-            if(storageItem && storageItem.ResourceId && getFileExtension(storageItem))
+            if(storageItem && storageItem.ResourceId && (getFileExtension(storageItem) || getFileResourceType(storageItem)))
             return storageItem;
         }
     })

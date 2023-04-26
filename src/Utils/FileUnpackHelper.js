@@ -42,6 +42,10 @@ export function getFileProcessId(file){
     return file.processId;
 }
 
+export function getFileRepositoryUrl(file){
+    return file.repositoryUrl;
+}
+
 export function fileBuilder(file, properties = {}){
     return {
         ResourceId: properties.ResourceId || getFileResourceId(file),

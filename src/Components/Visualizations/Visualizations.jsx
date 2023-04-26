@@ -6,7 +6,7 @@ import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
 import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
 import ResourceGraph from './ResourceGraph/ResourceGraph';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
-import { getFileDescription, getFileExtension, getFileHost, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileDynamic } from '../../Utils/FileUnpackHelper';
+import { getFileDescription, getFileExtension, getFileRepositoryUrl, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileDynamic } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 import {getVisalizations, pingDynamicResourceInterval} from '../../config';
 import Dropdown from '../Widgets/Dropdown/Dropdown';
@@ -33,7 +33,18 @@ function Visualizations(props) {
     const file = getFileLocal(selectedFileId);
 
     const generateTabList = (file) => {
-        if(file) return getVisalizations(getFileResourceType(file).toUpperCase(), getFileExtension(file).toUpperCase()); 
+        const defaultTabs = [
+            {
+                ResourceType: "DOT",
+                Title: "Related resources"
+            }
+        ];
+
+        if(file && getFileResourceType(file) && getFileExtension(file)) 
+            return getVisalizations(getFileResourceType(file).toUpperCase(), getFileExtension(file).toUpperCase()).concat(defaultTabs);
+        else {
+            return defaultTabs;
+        }
     }
 
     const selectedTabList = useMemo(() => generateTabList(file), [file]);
@@ -49,7 +60,7 @@ function Visualizations(props) {
         setSelectedTab(null);
 
         if(file && hasCalledChildren !== getFileResourceId(file)){ // prevents children being requested repeatedly
-        getChildrenFromFile(getFileHost(file), getFileResourceId(file))
+        getChildrenFromFile(getFileRepositoryUrl(file), getFileResourceId(file))
             .then((res) => {setChildren(res.data); generateChildren(res.data)} )
             .then(() => {setHasCalledChildren(getFileResourceId(file))})
             .catch((err) => {console.log(err)} );
@@ -64,7 +75,7 @@ function Visualizations(props) {
             updateFileInterval.current = setInterval(() => {
                 const internalFile = getFileLocal(selectedFileId);
                 getAndAddFile(internalFile);
-                GetSingleFileMetadata(getFileHost(internalFile), getFileResourceId(internalFile))
+                GetSingleFileMetadata(getFileRepositoryUrl(internalFile), getFileResourceId(internalFile))
                 .then((res) => {
                     getAndAddFile(res.data);
                 });
@@ -74,9 +85,9 @@ function Visualizations(props) {
 
     }, [selectedFileId]);    
 
-    useEffect(() => {
+    // useEffect(() => {
 
-    }, [file])
+    // }, [file])
 
     useEffect(() => {
         const tabList = generateTabList(file);

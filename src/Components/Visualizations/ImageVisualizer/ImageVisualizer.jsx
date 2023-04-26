@@ -2,7 +2,7 @@ import './ImageVisualizer.scss';
 import {useState, useEffect} from 'react';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import { GetFileImage } from '../../../Services/RepositoryServices';
-import { getFileContent, getFileDescription, getFileHost, getFileResourceId } from '../../../Utils/FileUnpackHelper';
+import { getFileContent, getFileDescription, getFileRepositoryUrl, getFileResourceId } from '../../../Utils/FileUnpackHelper';
 
 function ImageVisualizer(props) {
     const {
@@ -14,7 +14,7 @@ function ImageVisualizer(props) {
 
     useEffect(() => {
         const resourceId = getFileResourceId(file);
-        const host = getFileHost(file);
+        const host = getFileRepositoryUrl(file);
         if(file && getFileContent(file)){
             setImage(file.fileContent);
             setIsLoading(false);

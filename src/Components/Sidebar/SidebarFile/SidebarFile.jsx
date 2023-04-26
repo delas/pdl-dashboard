@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { CiStreamOn } from 'react-icons/ci';
 import { getFileLocal, setProcessKeyLocalAsync } from '../../../Store/LocalDataStore';
-import { getFileExtension, getFileResourceLabel, getFileContent, getFileDynamic, getFileProcessId, getFileCreationDate, getFileResourceId } from '../../../Utils/FileUnpackHelper';
+import { getFileExtension, getFileResourceLabel, getFileContent, getFileDynamic, getFileProcessId, getFileCreationDate, getFileResourceId, getFileResourceType } from '../../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import {getDateInMsAsString} from '../../../Utils/Utils';
 
@@ -21,23 +21,46 @@ function SidebarFile(props) {
 
     const fileId = getFileResourceId(file);
 
+    const generateNewFileTag = () => {
+        switch(getFileResourceType(file)){
+            case "EventStream": return "ES";
+            case "PetriNet": return "PetN";
+            case "ProcessTree": return "PT";
+            case "ProcessModel": return "ProM";
+            case "EventLog": return "EL";
+            case "Histogram" : return "Hist";
+            case "Alignment" : return "Alig";
+            default: return "File";
+        }
+    }
+
+    const fileTag = getFileExtension(file) ? getFileExtension(file) : generateNewFileTag();//getFileResourceType(file);
+
     useEffect(() => {
         getFileOrSetLoading();
     }, [fileId]);
 
     const getFileOrSetLoading = () => {
-        // const tempFile = getFileLocal(fileId);
-        // if(tempFile && shouldSetFileContent(tempFile)){
-            // setFile(tempFile);
-        // }
-        if(!fileContentLoading && shouldSetFileContent(file) && !getFileContent(file)) {
-            setFileContentLoading(true);
+        if(shouldSetFileContent(file)) {
+            if(!getFileContent(file) && !fileContentLoading){
+                setFileContentLoading(true);
+            } 
+            else if(getFileContent(file) && fileContentLoading){
+                setFileContentLoading(false);
+            }
         }
-        if(shouldSetFileContent(file) && getFileContent(file)){
+        else {
             setFileContentLoading(false);
-        } else {
-            setFileContentLoading(true);
         }
+
+        // if(!fileContentLoading && shouldSetFileContent(file) && !getFileContent(file)) {
+        //     setFileContentLoading(true);
+        // }
+        // if(shouldSetFileContent(file) && getFileContent(file)){
+        //     setFileContentLoading(false);
+        // } else {
+        //     setFileContentLoading(true);
+        // }
 
         if(fileContentLoading){ // retry if file content is not loaded
             setTimeout(() => {
@@ -73,7 +96,8 @@ function SidebarFile(props) {
             <div className='SidebarFile-flexContainer'>
                 <div className={`SidebarFile-flexContainer-left SidebarFile-flexContainer-left-stream-${getFileDynamic(file)}`}>
                     <div className='SidebarFile-filetype'>
-                        {getFileExtension(file)}
+                        {/* {getFileExtension(file)} */}
+                        {fileTag}
                     </div>
                     <div className='SidebarFile-text-center'>
                         <div className='SidebarFile-filename' onClick = {() => {selectFileForVisualization(fileId)}} >

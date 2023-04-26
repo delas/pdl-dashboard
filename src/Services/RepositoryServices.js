@@ -25,12 +25,12 @@ export async function getChildrenFromFile(hostname, fileId){
 }
 
 export async function GetFileImage(hostname, fileId){ //if the visualization is an image the reponseType needs to be blob
-    const urlExtension = `${fileId}`;
+    const urlExtension = `/resources/${fileId}`;
     return axios.get(`${hostname}${urlExtension}`, {responseType: 'blob'});
 }
 
 export async function GetFileText(hostname, fileId){ //If the visualization is text-formatted the responsetype can't be blolb
-    const urlExtension = `${fileId}`;
+    const urlExtension = `/resources/${fileId}`;
     return axios.get(`${hostname}${urlExtension}`);
 }
 
@@ -45,7 +45,7 @@ export async function GetRepositoryConfig(hostname) {
 }
 
 export async function GetResourceGraph(hostname, fileId){
-    const urlExtension = `graphs/${fileId}`;
+    const urlExtension = `/resources/graphs/${fileId}`;
     return axios.get(`${hostname}${urlExtension}`);
 }
 

@@ -8,7 +8,7 @@ import { pingAllAddedServices, pingAllProcesses } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
 import { GetRepositoryConfig } from './Services/RepositoryServices';
-import { getFileExtension, getFileHost, getFileResourceId, getFileResourceType } from './Utils/FileUnpackHelper';
+import { getFileExtension, getFileHost, getFileResourceId, getFileResourceType, getFileRepositoryUrl } from './Utils/FileUnpackHelper';
 import { pingHostInterval, pingMinerProcessInterval } from './config';
 import LoadingSpinner from './Components/Widgets/LoadingSpinner/LoadingSpinner';
 
@@ -146,12 +146,12 @@ function App(props) {
 
         const fileExtension = getFileExtension(file);
         const resourceId = getFileResourceId(file);
-        const host = getFileHost(file);
+        const host = getFileRepositoryUrl(file);//getFileHost(file);
         saveFileLocal(resourceId, file); // save the metadata without filecontent
         setTimeout(() => { updateComponents.Sidebar.update() }, 500);
 
         let responsePromise;
-        const isImage = fileExtension.toUpperCase() === "PNG" || fileExtension.toUpperCase() === "JPG" || fileExtension.toUpperCase() === "SVG";
+        const isImage = fileExtension && (fileExtension.toUpperCase() === "PNG" || fileExtension.toUpperCase() === "JPG" || fileExtension.toUpperCase() === "SVG");
         if(shouldSetFileContent(file)){
             if(isImage) responsePromise = GetFileImage(host, resourceId);
             else responsePromise = GetFileText(host, resourceId); 
