@@ -21,7 +21,7 @@ function HistogramVisualizer(props) {
     }, []);
 
     useEffect(() => {
-        if(getFileDynamic(file) || getFileExtension(file).toUpperCase() === "JSON"){
+        if(getFileDynamic(file) || (getFileExtension(file) && getFileExtension(file).toUpperCase() === "JSON")){
             setFileContent(convertFileContentToHistogramData(getFileContent(file)));
             forceUpdate();
             setIsLoading(false);

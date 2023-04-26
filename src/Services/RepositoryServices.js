@@ -12,7 +12,6 @@ export async function GetRepositoryFilterMetadata(hostname, filters) {
 
 export async function GetSingleFileMetadata(hostname, fileId){
     let urlExtension = `/resources/metadata/${fileId}`;
-    console.log(hostname, fileId);
     if(hostname.includes("/resources")){
         urlExtension = `metadata/${fileId}`;
     }

@@ -81,6 +81,10 @@ function SidebarFile(props) {
         }
     }
 
+    const handleFileClick = () => {
+        selectFileForVisualization(fileId)
+    }
+
     if(!file){
         return (
             <div className="SidebarFile">
@@ -100,7 +104,7 @@ function SidebarFile(props) {
                         {fileTag}
                     </div>
                     <div className='SidebarFile-text-center'>
-                        <div className='SidebarFile-filename' onClick = {() => {selectFileForVisualization(fileId)}} >
+                        <div className='SidebarFile-filename' onClick = {() => {handleFileClick()}} >
                             {getFileResourceLabel(file)}
                         </div>
                         <div className='SidebarFile-creationDate'>

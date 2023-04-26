@@ -284,8 +284,6 @@ function ActionPopup(props) {
             }
         };
 
-        console.log(data);
-
         PostMineAction(minerHostDropdownValue.label, data)
             .then((res) => {
                 handleSaveProcess(res.data, outputFileName);
@@ -313,6 +311,8 @@ function ActionPopup(props) {
             selectedParams: selectedParams,
             repositoryDestination: repositoryDestination,
             outputFileName: outputFileName,
+            streamTopic: streamTopic,
+            streamDestination: streamDestination,
         };
         saveInputValuesLocal(minerHostDropdownValue.value, minerObject.MinerId, inputValues);
     }
@@ -332,6 +332,11 @@ function ActionPopup(props) {
             });
             onRepositoryDestinationDropdownChange(savedInputValues.repositoryDestination);
             onFileOutputNameChange({value: savedInputValues.outputFileName});
+
+            if(minerObject.ResourceOutput.ResourceType === "EventStream") {
+                onStreamTopicChange({value: savedInputValues.streamTopic});
+                onStreamDestinationChange({value: savedInputValues.streamDestination});
+            }
             // setWizardStep(4);
             setMaxWizardStep(4)
         }

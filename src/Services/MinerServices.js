@@ -12,7 +12,6 @@ export async function GetMinerConfig(hostname) {
 
 export async function PostMineAction(hostname, data){
     const urlExtension = "/miner";
-    console.log(`${hostname}${urlExtension}`);
     return axios.post(`${hostname}${urlExtension}`, data);
 }
 
