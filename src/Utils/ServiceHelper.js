@@ -150,7 +150,9 @@ const tryGetAndSaveMetadataFromProcess = (process, resourceId, getAndAddFile) =>
         .catch(async () => {
             setProcessKeyLocalAsync(process.id, "saveOrUpdateFile", false).then(() => {
                 const newResourceId = getFileResourceId(resourceId);
-                const metadata = newResourceId ? getFileLocal(newResourceId) : null;
+                const metadata = newResourceId ? getFileLocal(newResourceId) : {};
+                metadata["processId"] = process.id;
+                metadata["repositoryUrl"] = process.outputDestination;
                 if(metadata) {
                     getAndAddFile(metadata, true);
                 }

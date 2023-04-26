@@ -1,49 +1,49 @@
 export function getFileHost(file){
-    return file.ResourceInfo.Host;
+    return file?.ResourceInfo?.Host;
 }
 
 export function getFileResourceId(file){
-    return file.ResourceId;
+    return file?.ResourceId;
 }
 
 export function getFileExtension(file){
-    return file.ResourceInfo.FileExtension;
+    return file?.ResourceInfo?.FileExtension;
 }
 
 export function getFileContent(file){
-    return file.fileContent;
+    return file?.fileContent;
 }
 
 export function getFileResourceLabel(file){
-    return file.ResourceInfo.ResourceLabel;
+    return file?.ResourceInfo?.ResourceLabel;
 }
 
 export function getFileResourceType(file){
-    return file.ResourceInfo.ResourceType;
+    return file?.ResourceInfo?.ResourceType;
 }
 
 export function getFileDynamic(file){
-    return file.ResourceInfo.Dynamic;
+    return file?.ResourceInfo?.Dynamic;
 }
 
 export function getFileDescription(file){
-    return file.ResourceInfo.Description;
+    return file?.ResourceInfo?.Description;
 }
 
 export function getFileCreationDate(file){
-    return file.CreationDate;
+    return file?.CreationDate;
 }
 
 export function getFileStreamTopic(file){
-    return file.ResourceInfo.StreamTopic;
+    return file?.ResourceInfo?.StreamTopic;
 }
 
 export function getFileProcessId(file){
-    return file.processId;
+    return file?.processId;
 }
 
 export function getFileRepositoryUrl(file){
-    return file.repositoryUrl;
+    return file?.repositoryUrl;
 }
 
 export function fileBuilder(file, properties = {}){

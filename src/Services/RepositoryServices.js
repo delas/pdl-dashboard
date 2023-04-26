@@ -12,6 +12,7 @@ export async function GetRepositoryFilterMetadata(hostname, filters) {
 
 export async function GetSingleFileMetadata(hostname, fileId){
     let urlExtension = `/resources/metadata/${fileId}`;
+    console.log(hostname, fileId);
     if(hostname.includes("/resources")){
         urlExtension = `metadata/${fileId}`;
     }
@@ -20,7 +21,7 @@ export async function GetSingleFileMetadata(hostname, fileId){
 }
 
 export async function getChildrenFromFile(hostname, fileId){
-    const urlExtension = `metadata/${fileId}/children`;
+    const urlExtension = `/resources/metadata/${fileId}/children`;
     return axios.get(`${hostname}${urlExtension}`);
 }
 
@@ -35,7 +36,7 @@ export async function GetFileText(hostname, fileId){ //If the visualization is t
 }
 
 export async function GetHistogramOfLog(hostname, fileId){
-    const urlExtension = `histograms/${fileId}`;
+    const urlExtension = `/resources/histograms/${fileId}`;
     return axios.post(`${hostname}${urlExtension}`);
 }
 

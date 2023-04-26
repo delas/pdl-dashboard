@@ -8,7 +8,7 @@ import { pingAllAddedServices, pingAllProcesses } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
 import { GetRepositoryConfig } from './Services/RepositoryServices';
-import { getFileExtension, getFileResourceId, getFileResourceType, getFileRepositoryUrl } from './Utils/FileUnpackHelper';
+import { getFileExtension, getFileResourceId, getFileResourceType, getFileRepositoryUrl, getFileProcessId } from './Utils/FileUnpackHelper';
 import { pingHostInterval, pingMinerProcessInterval } from './config';
 import LoadingSpinner from './Components/Widgets/LoadingSpinner/LoadingSpinner';
 
@@ -144,9 +144,18 @@ function App(props) {
     const getAndAddFile = (file, retry = false, retries = 0) => {
         if(!file || retries >= 10) return;
 
-        const fileExtension = getFileExtension(file);
         const resourceId = getFileResourceId(file);
+        const currentFile = getFileLocal(resourceId);
+
+        // If there is reason to get the metadata again, the response won't contain these values created on initialize.
+        if(getFileProcessId(currentFile) || getFileRepositoryUrl(currentFile)){
+            file["processId"] = getFileProcessId(currentFile);
+            file["repositoryUrl"] = getFileRepositoryUrl(currentFile);
+        }
+
+        const fileExtension = getFileExtension(file);
         const host = getFileRepositoryUrl(file);
+
         saveFileLocal(resourceId, file); // save the metadata without filecontent
         setTimeout(() => { updateComponents.Sidebar.update() }, 500);
 
