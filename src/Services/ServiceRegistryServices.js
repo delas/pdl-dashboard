@@ -19,3 +19,8 @@ export async function PingConnectedFilters(hostname, filter) {
     const urlExtension = "/connections/filters";
     return axios.post(`${hostname}${urlExtension}`, filter);
 }
+
+export async function GetConfigFromServiceRegistry(hostname, filters) {
+    const urlExtension = "/config/filters";
+    return axios.post(`${hostname}${urlExtension}`, filters);
+}

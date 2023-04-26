@@ -4,7 +4,7 @@ import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
 import { saveHostLocal, removeHostLocal, saveFileLocal, getFileLocal, removeFileLocal, getMinersLocal, getRepositoriesLocal, getServiceRegistriesLocal } from './Store/LocalDataStore';
-import { pingAllAddedServices, pingAllProcesses } from './Utils/ServiceHelper';
+import { pingAllAddedServices, pingAllProcesses, getAndSaveAllHostConfig } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
 import { GetRepositoryConfig } from './Services/RepositoryServices';
@@ -51,7 +51,7 @@ function App(props) {
         clearInterval(pingProcessInterval.current);
         startPingHosts();
         startPingProcesses();
-        getAllHostConfig();
+        getAndSaveAllHostConfig();
         setIsLoading(false);
     }, []);
 
@@ -77,18 +77,6 @@ function App(props) {
                 }
             });
         }, pingMinerProcessInterval);
-    }
-
-    const getAllHostConfig = () => { // TODO: Change this function to use service helper version.
-        getMinersLocal().forEach((miner) => {
-            addOrUpdateHost(miner.id, miner);
-        });
-        getRepositoriesLocal().forEach((repository) => {
-            addOrUpdateHost(repository.id, repository);
-        });
-        getServiceRegistriesLocal().forEach((serviceRegistry) => {
-            addOrUpdateHost(serviceRegistry.id, serviceRegistry);
-        });
     }
 
     const setComponentUpdaterFunction = (componentName, updateFunc) => {
