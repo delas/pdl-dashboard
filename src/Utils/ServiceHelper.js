@@ -1,7 +1,19 @@
-import { PingMiner, GetMinerProcessStatus } from '../Services/MinerServices';
-import { PingRepository, GetSingleFileMetadata } from '../Services/RepositoryServices';
+import { PingMiner, GetMinerProcessStatus, GetMinerConfig } from '../Services/MinerServices';
+import { PingRepository, GetSingleFileMetadata, GetRepositoryConfig } from '../Services/RepositoryServices';
 import { PingServiceRegistry, PingConnectedFilters } from '../Services/ServiceRegistryServices';
-import { getAllHostAddedFromServiceRegistry, getServiceRegistriesLocal, setHostStatusLocal, getAllRunningProcessesLocal, setProcessKeyLocalAsync, getAllHostLocallyAdded, getProcessLocal, getFileLocal } from '../Store/LocalDataStore';
+import { 
+    getAllHostAddedFromServiceRegistry, 
+    getServiceRegistriesLocal, 
+    setHostStatusLocal, 
+    getAllRunningProcessesLocal, 
+    setProcessKeyLocalAsync, 
+    getAllHostLocallyAdded, 
+    getProcessLocal, 
+    getFileLocal, 
+    getRepositoriesLocal, 
+    getMinersLocal,
+    saveHostLocal 
+} from '../Store/LocalDataStore';
 import { getFileResourceId } from './FileUnpackHelper';
 import {msToTime} from './Utils';
 
@@ -146,3 +158,53 @@ const tryGetAndSaveMetadataFromProcess = (process, resourceId, getAndAddFile) =>
             });
         })
 }
+
+export const getAllHostConfig = () => {
+    getLocallyAddedHostConfig();
+    getServiceRegistriesHostConfig();
+}
+
+const getLocallyAddedHostConfig = () => {
+    getMinersLocal().filter(miner => miner.addedFrom === "locally").forEach((miner) => {
+        addOrUpdateHostDirect(miner.id, miner);
+    });
+    getRepositoriesLocal().filter(repository => repository.addedFrom === "locally").forEach((repository) => {
+        addOrUpdateHostDirect(repository.id, repository);
+    });
+    // getServiceRegistriesLocal().filter(serviceRegistry => serviceRegistry.addedFrom === "locally").forEach((serviceRegistry) => {
+    //     addOrUpdateHostDirect(serviceRegistry.id, serviceRegistry);
+    // });
+}
+
+const getServiceRegistriesHostConfig = () => {
+    getMinersLocal().filter(miner => miner.addedFrom !== "locally").forEach((miner) => {
+        addOrUpdateHostThroughServiceRegistry(miner.id, miner);
+    });
+    getRepositoriesLocal().filter(repository => repository.addedFrom !== "locally").forEach((repository) => {
+        addOrUpdateHostThroughServiceRegistry(repository.id, repository);
+    });
+    // getServiceRegistriesLocal().filter(serviceRegistry => serviceRegistry.addedFrom !== "locally").forEach((serviceRegistry) => {
+    //     addOrUpdateHostThroughServiceRegistry(serviceRegistry.id, serviceRegistry);
+    // });
+}
+
+const addOrUpdateHostDirect = (id, host) => {
+    handleAddHostOfType(host.type.value, host.name).then((res) => {
+        host.config = res?.data;
+        saveHostLocal(id, host);
+    })
+}
+
+const handleAddHostOfType = async (type, hostname) => {
+    switch(type){
+        case 'miner': return GetMinerConfig(hostname)
+        case 'repository': return GetRepositoryConfig(hostname)
+        case 'service registry': return null;
+        default: return null;
+    }
+}
+
+const addOrUpdateHostThroughServiceRegistry = (id, host) => {
+    // TODO add API for getting host config through service registry
+}
+

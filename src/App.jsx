@@ -3,12 +3,12 @@ import {useState, useEffect, useRef} from 'react';
 import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
-import { saveHostLocal, removeHostLocal, saveFileLocal, getFileLocal, removeFileLocal, hostExitsLocal, getMinersLocal, getRepositoriesLocal, getServiceRegistriesLocal } from './Store/LocalDataStore';
+import { saveHostLocal, removeHostLocal, saveFileLocal, getFileLocal, removeFileLocal, getMinersLocal, getRepositoriesLocal, getServiceRegistriesLocal } from './Store/LocalDataStore';
 import { pingAllAddedServices, pingAllProcesses } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
 import { GetRepositoryConfig } from './Services/RepositoryServices';
-import { getFileExtension, getFileHost, getFileResourceId, getFileResourceType, getFileRepositoryUrl } from './Utils/FileUnpackHelper';
+import { getFileExtension, getFileResourceId, getFileResourceType, getFileRepositoryUrl } from './Utils/FileUnpackHelper';
 import { pingHostInterval, pingMinerProcessInterval } from './config';
 import LoadingSpinner from './Components/Widgets/LoadingSpinner/LoadingSpinner';
 
@@ -79,7 +79,7 @@ function App(props) {
         }, pingMinerProcessInterval);
     }
 
-    const getAllHostConfig = () => {
+    const getAllHostConfig = () => { // TODO: Change this function to use service helper version.
         getMinersLocal().forEach((miner) => {
             addOrUpdateHost(miner.id, miner);
         });
@@ -146,7 +146,7 @@ function App(props) {
 
         const fileExtension = getFileExtension(file);
         const resourceId = getFileResourceId(file);
-        const host = getFileRepositoryUrl(file);//getFileHost(file);
+        const host = getFileRepositoryUrl(file);
         saveFileLocal(resourceId, file); // save the metadata without filecontent
         setTimeout(() => { updateComponents.Sidebar.update() }, 500);
 
