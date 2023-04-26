@@ -96,7 +96,7 @@ function AddNewHostFromServiceRegistryPopup(props) {
             });
 
             setMinersDropdownFormat(nonSelectedMiners.map((miner) => {
-                return( {label: `${miner.HostName}`, value: "miner"} )
+                return( {label: `${miner}`, value: "miner"} )
             }));
         }
 
@@ -113,7 +113,7 @@ function AddNewHostFromServiceRegistryPopup(props) {
             });
 
             setRepositoriesDropdownFormat(nonSelectedRepositories.map((repository) => {
-                return( {label: `${repository.HostName}`, value: "repository"} )
+                return( {label: `${repository}`, value: "repository"} )
             }));
         }
     }

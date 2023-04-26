@@ -31,7 +31,7 @@ function pingAllServicesAddedFromServicesRegistry(){
             .then((res) => {
                 if(res.status !== 200) return;
                 res.data.forEach(host => { // for each hostStatus {name: host.net.com, status: bool} in the response
-                    const localHost = getAllHostAddedFromServiceRegistry(SR.name).find(localHost => localHost.name = host.host);
+                    const localHost = getAllHostAddedFromServiceRegistry(SR.name).find(localHost => localHost.name === host.host);
                     setHostStatusLocal(localHost.id, host.status ? "online" : "offline"); // set status of host
                 });
             }).catch(() => {
@@ -182,6 +182,7 @@ const getServiceRegistriesHostConfig = (serviceRegistries) => {
     serviceRegistries.forEach((SR) => {
         const hostsFromSR = getAllHostAddedFromServiceRegistry(SR.name);
         const hostUrlsFromSR = hostsFromSR.map((host) => host.name);
+        if(hostUrlsFromSR.length > 0)
         GetConfigFromServiceRegistry(SR.name, hostUrlsFromSR).then((res) => {
             const configList = res.data; // list of config objects [{host: "hostUrl", config: "config"}, {host: "hostUrl", config: "config"}...]
             hostsFromSR.forEach((host) => {
