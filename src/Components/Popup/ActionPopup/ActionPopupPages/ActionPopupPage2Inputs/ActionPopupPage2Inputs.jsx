@@ -28,7 +28,7 @@ function ActionPopupPage2Inputs(props) {
                         <Dropdown
                             options = {filteredFilesForDropdown[resourceInput.ResourceType]}
                             onValueChange = {onFileDropdownChange}
-                            label = {`Select ${resourceInput.Name} file:`}
+                            label = {`Select ${resourceInput.Name} resource:`}
                             value = {selectedFiles[resourceInput.Name]}
                             extraParam = {resourceInput.Name}
                             key = {index}
