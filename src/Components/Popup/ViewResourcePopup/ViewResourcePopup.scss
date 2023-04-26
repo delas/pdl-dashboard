@@ -1,4 +1,4 @@
-.GetFilePopup{
+.ViewResourcePopup{
     position: relative;
     display: flex;
     flex-direction: column;
@@ -15,7 +15,7 @@
 
 $theme:       rgb(153, 0, 0);
 
-.GetFilePopup-body{
+.ViewResourcePopup-body{
     width: 100%;
     height: 100%;
 }

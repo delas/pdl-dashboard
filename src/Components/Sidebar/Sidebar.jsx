@@ -142,7 +142,7 @@ function Sidebar(props) {
                             icon = {<FaFileDownload/>}
                             disabled = {false}
                             className = {``}
-                            onClick = {() => {openPopup(popups.GetFilePopup)}}
+                            onClick = {() => {openPopup(popups.ViewResourcePopup)}}
                         />
                         <IconizedButton
                             text = {`Execute action`}

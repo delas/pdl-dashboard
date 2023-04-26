@@ -23,7 +23,7 @@ function App(props) {
     const [actionPopupOpen, setActionPopupOpen] = useState(false);
     const [newHostPopupOpen, setNewHostPopupOpen] = useState(false);
     const [newHostFromSROpen, setNewHostFromSRPopupOpen] = useState(false);
-    const [GetFilePopupOpen, setGetFilePopupOpen] = useState(false); 
+    const [ViewResourcePopupOpen, setViewResourcePopupOpen] = useState(false); 
     const [processOverviewPopupOpen, setProcessOverviewPopupOpen] = useState(false);
     const [uploadManualChangesPopup, setUploadManualChangesPopup] = useState(false);
     const [shadowPopupOpen, setShadowPopupOpen] = useState(false);
@@ -40,7 +40,7 @@ function App(props) {
     const toggleActionPopupOpen = () => { setActionPopupOpen(!actionPopupOpen); }
     const toggleNewHostPopupOpen = () => { setNewHostPopupOpen(!newHostPopupOpen); }
     const togglenewHostFromSRPopupOpen = () => { setNewHostFromSRPopupOpen(!newHostFromSROpen); }
-    const toggleGetFilePopupOpen = () => { setGetFilePopupOpen(!GetFilePopupOpen); }
+    const toggleViewResourcePopupOpen = () => { setViewResourcePopupOpen(!ViewResourcePopupOpen); }
     const toggleProcessOverviewPopupOpen = () => { setProcessOverviewPopupOpen(!processOverviewPopupOpen); }
     const toggleUploadManualChangesPopup = () => { setUploadManualChangesPopup(!uploadManualChangesPopup); }
     const toggleShadowPopupOpen = () => { setShadowPopupOpen(!shadowPopupOpen); }
@@ -217,7 +217,7 @@ function App(props) {
                     toggleActionPopupOpen,
                     toggleNewHostPopupOpen,
                     togglenewHostFromSRPopupOpen,
-                    toggleGetFilePopupOpen,
+                    toggleViewResourcePopupOpen,
                     toggleProcessOverviewPopupOpen,
                     toggleUploadManualChangesPopup,
                     toggleShadowPopupOpen,
@@ -230,7 +230,7 @@ function App(props) {
                     setActionPopupOpen,
                     setNewHostPopupOpen,
                     setNewHostFromSRPopupOpen,
-                    setGetFilePopupOpen,
+                    setViewResourcePopupOpen,
                     setComponentUpdaterFunction,
                     setProcessOverviewPopupOpen,
                     setUploadManualChangesPopup,
@@ -244,7 +244,7 @@ function App(props) {
                     actionPopupOpen,
                     newHostPopupOpen,
                     newHostFromSROpen,
-                    GetFilePopupOpen,
+                    ViewResourcePopupOpen,
                     processOverviewPopupOpen,
                     uploadManualChangesPopup,
                     shadowPopupOpen,

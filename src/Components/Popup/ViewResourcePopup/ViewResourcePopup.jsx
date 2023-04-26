@@ -1,4 +1,4 @@
-import './GetFilePopup.scss';
+import './ViewResourcePopup.scss';
 import {useState, useEffect} from 'react';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {getRepositoriesLocal} from '../../../Store/LocalDataStore';
@@ -8,10 +8,10 @@ import { getFileExtension, getFileResourceLabel } from '../../../Utils/FileUnpac
 import {getAvailableResourceTypes } from '../../../config';
 import Popup from '../../Widgets/Popup/Popup';
 
-function GetFilePopup(props) {
+function ViewResourcePopup(props) {
 
     const {
-        toggleGetFilePopupOpen,
+        toggleViewResourcePopupOpen,
         getAndAddFile,
         repository = {},
     } = props;
@@ -59,7 +59,7 @@ function GetFilePopup(props) {
         if(selectedFile) {
             console.log("Calling getAndAddFile");
             getAndAddFile(selectedFile.value);
-            toggleGetFilePopupOpen();
+            toggleViewResourcePopupOpen();
         }
     }
 
@@ -69,18 +69,18 @@ function GetFilePopup(props) {
 
     if(isLoading){
         return (
-            <div className="GetFilePopup">
+            <div className="ViewResourcePopup">
                 <div>Loading ...</div>
             </div>
         )
     }
 
     return (
-        <BackdropModal closeModal = {toggleGetFilePopupOpen}>
+        <BackdropModal closeModal = {toggleViewResourcePopupOpen}>
             <Popup
                 title = {`Download file from repository`}
-                closePopup = {toggleGetFilePopupOpen}
-                onCancelClick = {toggleGetFilePopupOpen}
+                closePopup = {toggleViewResourcePopupOpen}
+                onCancelClick = {toggleViewResourcePopupOpen}
                 onNextClick = {onConfirmClick}
                 cancelText = {`Cancel`}
                 nextText = {`Download`}
@@ -108,4 +108,4 @@ function GetFilePopup(props) {
     );
 }
 
-export default GetFilePopup;
+export default ViewResourcePopup;

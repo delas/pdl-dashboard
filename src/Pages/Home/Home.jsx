@@ -8,7 +8,7 @@ import UploadResourcePopup from '../../Components/Popup/UploadResourcePopup/Uplo
 import ActionPopup from '../../Components/Popup/ActionPopup/ActionPopup';
 import AddNewHostPopup from '../../Components/Popup/AddNewHostPopup/AddNewHostPopup';
 import AddNewHostFromServiceRegistryPopup from '../../Components/Popup/AddNewHostFromServiceRegistryPopup/AddNewHostFromServiceRegistryPopup';
-import GetFilePopup from '../../Components/Popup/GetFilePopup/GetFilePopup';
+import ViewResourcePopup from '../../Components/Popup/ViewResourcePopup/ViewResourcePopup';
 import ProcessOverviewPopup from '../../Components/Popup/ProcessOverviewPopup/ProcessOverviewPopup';
 import ShadowPopup from '../../Components/Popup/ShadowPopup/ShadowPopup';
 
@@ -51,7 +51,7 @@ function Home(props) {
         AddFilePopup: 'AddFilePopup',
         ActionPopup: 'ActionPopup',
         NewSRHostPopup: 'NewSRHostPopup',
-        GetFilePopup: 'GetFilePopup',
+        ViewResourcePopup: 'ViewResourcePopup',
         ProcessOverviewPopup: 'ProcessOverviewPopup',
         UploadManualChangesPopup: 'UploadManualChangesPopup',
         ShadowPopup: 'ShadowPopup',
@@ -75,8 +75,8 @@ function Home(props) {
                 set.setNewHostFromSRPopupOpen(true); 
                 setPopupProps(props);
                 break;
-            case 'GetFilePopup':
-                set.setGetFilePopupOpen(true);
+            case 'ViewResourcePopup':
+                set.setViewResourcePopupOpen(true);
                 setPopupProps(props);
                 break;
             case 'ProcessOverviewPopup':
@@ -109,8 +109,8 @@ function Home(props) {
             case 'NewSRHostPopup': 
                 set.setNewHostFromSRPopupOpen(false);
                 break;
-            case 'GetFilePopup':
-                set.setGetFilePopupOpen(false);
+            case 'ViewResourcePopup':
+                set.setViewResourcePopupOpen(false);
                 break;
             case 'ProcessOverviewPopup':
                 set.setProcessOverviewPopupOpen(false);
@@ -281,9 +281,9 @@ function Home(props) {
                     : null
                 }
 
-                {isOpen.GetFilePopupOpen ? 
-                    <GetFilePopup
-                        toggleGetFilePopupOpen = {toggles.toggleGetFilePopupOpen}
+                {isOpen.ViewResourcePopupOpen ? 
+                    <ViewResourcePopup
+                        toggleViewResourcePopupOpen = {toggles.toggleViewResourcePopupOpen}
                         {...popupProps}
                         closePopup = {closePopup}
                         popups = {popups}
