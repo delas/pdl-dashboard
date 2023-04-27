@@ -1,6 +1,7 @@
 $active: rgb(153, 0, 0);
 $inactive: #f8f9fa;
 $tab-height: 3em;
+$header-height: 4em;
 
 .Visualizations{
     width: 100%;
@@ -15,6 +16,7 @@ $tab-height: 3em;
 .Visualizations-header{
     width: 100%;
     max-width: 100%;
+    height: $header-height;
     overflow: none;
     text-align: left;
     text-overflow: ellipsis !important;
@@ -35,7 +37,7 @@ $tab-height: 3em;
 
 .Visualizations-VisualizerContainer{
     width: 90%;
-    height: calc(100% - $tab-height);
+    height: calc(100% - ($tab-height + $header-height));
 }
 
 .Visualizations-loading{
