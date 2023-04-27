@@ -60,7 +60,7 @@ function ActionPopup(props) {
     }
 
     // ------------------ STEP 1 ------------------
-    const miners = getMinersLocal().map((miner) => { // Dropdown options for miner hosts
+    const miners = getMinersLocal().filter((miner) => miner.status === "online").map((miner) => { // Dropdown options for miner hosts
         return {label: miner.name, value: miner.id}
     });
     const [minerHostDropdownValue, setMinerHostDropdownValue] = useState(null); // Selected miner host
@@ -185,6 +185,7 @@ function ActionPopup(props) {
         const [outputFileName, setOutputFileName] = useState("");
         const [streamTopic, setStreamTopic] = useState("");
         const [streamDestination, setStreamDestination] = useState("");
+        const [overrideStreamResource, setOverrideStreamResource] = useState(true);
 
         const onFileOutputNameChange = (res) => {
             setOutputFileName(res.value);
@@ -200,6 +201,10 @@ function ActionPopup(props) {
 
         const onStreamDestinationChange = (res) => {
             setStreamDestination(res.value);
+        }
+
+        const onOverrideStreamResourceChange = () => {
+            setOverrideStreamResource(!overrideStreamResource);
         }
 
 
@@ -293,6 +298,7 @@ function ActionPopup(props) {
                 ResourceLabel: outputFileName,
                 FileExtension: minerObject.ResourceOutput.FileExtension,//selectedOutputFileType?.value ? selectedOutputFileType.value : outputFileTypeForDropdown[0].value,
                 StreamTopic: streamTopic,
+                Overwrite: overrideStreamResource,
             }
         };
 
@@ -433,6 +439,8 @@ function ActionPopup(props) {
                         streamTopic = {streamTopic}
                         onStreamTopicChange = {onStreamTopicChange}
                         onStreamDestinationChange = {onStreamDestinationChange}
+                        onOverrideStreamResourceChange = {onOverrideStreamResourceChange}
+                        overrideStreamResource = {overrideStreamResource}
                     /> : null}
             </Popup>
         </BackdropModal>

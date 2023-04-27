@@ -1,6 +1,8 @@
 import './ActionPopupPage4Repository.scss';
 import Dropdown from '../../../../Widgets/Dropdown/Dropdown';
 import InputField from '../../../../Widgets/InputField/InputField';
+import RadioButtons from '../../../../Widgets/Radiobuttons/Radiobuttons';
+import Checkbox from '../../../../Widgets/Checkbox/Checkbox';
 
 function ActionPopupPage4Repository(props) {
 
@@ -15,6 +17,8 @@ function ActionPopupPage4Repository(props) {
         streamTopic,
         onStreamTopicChange,
         onStreamDestinationChange,
+        onOverrideStreamResourceChange,
+        overrideStreamResource,
     } = props;
 
     const isStreamOutput = minerObject.ResourceOutput.ResourceType === "EventStream";
@@ -54,7 +58,14 @@ function ActionPopupPage4Repository(props) {
                     onChange = {onStreamTopicChange}
                 />}
 
-            
+            {isStreamOutput &&
+                <Checkbox
+                    title = {"Override resource if it already exists (combination of stream broker and -topic)"}
+                    value = {overrideStreamResource}
+                    onChange = {onOverrideStreamResourceChange}
+                    labelPosition = {'top'}
+                />
+            }            
 
             <div>
                 output filetype:
