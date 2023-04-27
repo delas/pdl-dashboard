@@ -27,7 +27,7 @@ function ViewResourcePopup(props) {
         setFilesForDropdownMetadata(repository)
     }, []);
 
-    const convertFilesToDropdown = (files) => { // param structure = [fileMetadata1, fileMetadata2, ...]
+    const convertFilesToDropdown = (files, repositoryUrl) => { // param structure = [fileMetadata1, fileMetadata2, ...]
         return files.map((file) => {
             const prefix = getFileExtension(file) ? `${getFileExtension(file).toUpperCase()}` : `${getFileResourceType(file)}`;
             const label = 
@@ -39,7 +39,7 @@ function ViewResourcePopup(props) {
                     {`${getFileResourceLabel(file)}`}
                 </div>
             </div>
-            return ({label: label, value: file})
+            return ({label: label, value: {...file, repositoryUrl: repositoryUrl}})
         })
     }
 
@@ -47,7 +47,7 @@ function ViewResourcePopup(props) {
         if(repository && Object.keys(repository).length > 0){
             const repositoryUrl = repository.label;
             GetAllMetadataFromRepository(repositoryUrl).then(res => {
-                setFilesForDropdown(convertFilesToDropdown(res.data));
+                setFilesForDropdown(convertFilesToDropdown(res.data, repositoryUrl));
             })
             // GetRepositoryFilterMetadata(repositoryUrl, getAvailableResourceTypes()).then(res => {
             //     setFilesForDropdown(convertFilesToDropdown(res.data));
@@ -71,6 +71,7 @@ function ViewResourcePopup(props) {
     const onConfirmClick = () => {
         if(selectedFile) {
             console.log("Calling getAndAddFile");
+            console.log(selectedFile.value);
             getAndAddFile(selectedFile.value);
             toggleViewResourcePopupOpen();
         }

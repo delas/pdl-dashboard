@@ -38,7 +38,7 @@ function SidebarFile(props) {
 
     useEffect(() => {
         getFileOrSetLoading();
-    }, [fileId]);
+    }, [file]);
 
     const getFileOrSetLoading = () => {
         if(shouldSetFileContent(file)) {
@@ -52,16 +52,6 @@ function SidebarFile(props) {
         else {
             setFileContentLoading(false);
         }
-
-        // if(!fileContentLoading && shouldSetFileContent(file) && !getFileContent(file)) {
-        //     setFileContentLoading(true);
-        // }
-        // if(shouldSetFileContent(file) && getFileContent(file)){
-        //     setFileContentLoading(false);
-        // } else {
-        //     setFileContentLoading(true);
-        // }
-
         if(fileContentLoading){ // retry if file content is not loaded
             setTimeout(() => {
                 getFileOrSetLoading();
