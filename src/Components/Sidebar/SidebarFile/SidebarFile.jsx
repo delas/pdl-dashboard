@@ -71,7 +71,9 @@ function SidebarFile(props) {
         }
     }
 
-    const handleFileClick = () => {
+    const handleFileClick = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
         selectFileForVisualization(fileId)
     }
 
@@ -93,8 +95,8 @@ function SidebarFile(props) {
                         {/* {getFileExtension(file)} */}
                         {fileTag}
                     </div>
-                    <div className='SidebarFile-text-center'>
-                        <div className='SidebarFile-filename' onClick = {() => {handleFileClick()}} >
+                    <div className='SidebarFile-text-center'  onClick={handleFileClick}>
+                        <div className='SidebarFile-filename' >
                             {getFileResourceLabel(file)}
                         </div>
                         <div className='SidebarFile-creationDate'>

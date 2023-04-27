@@ -69,6 +69,10 @@
     white-space: nowrap;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
+
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
 
 .SidebarFile-creationDate{
@@ -77,6 +81,10 @@
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     font-size: 0.8em;
+
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
 
 
