@@ -24,6 +24,11 @@ export async function getChildrenFromFile(hostname, fileId){
     return axios.get(`${hostname}${urlExtension}`);
 }
 
+export async function GetAllMetadataFromRepository(hostname){
+    const urlExtension = `/resources/metadata`;
+    return axios.get(`${hostname}${urlExtension}`);
+}
+
 export async function GetFileImage(hostname, fileId){ //if the visualization is an image the reponseType needs to be blob
     const urlExtension = `/resources/${fileId}`;
     return axios.get(`${hostname}${urlExtension}`, {responseType: 'blob'});

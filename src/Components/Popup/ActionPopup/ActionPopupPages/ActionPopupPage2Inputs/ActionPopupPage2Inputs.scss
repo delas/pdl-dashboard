@@ -11,3 +11,23 @@
     padding-top: 1em;
     padding-bottom: 0.5em;
 }
+
+.ActionPopup-dropdown-item{
+    display: flex;
+    flex-direction: row;
+    &-prefix{
+        width: 6em;
+        text-align: left;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        margin-right: 1em;
+    }
+    &-label{
+        width: 70%;
+        text-align: left;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+}

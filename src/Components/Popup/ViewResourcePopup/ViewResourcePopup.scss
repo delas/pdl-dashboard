@@ -19,3 +19,23 @@ $theme:       rgb(153, 0, 0);
     width: 100%;
     height: 100%;
 }
+
+.ViewResourcePopup-dropdown-item{
+    display: flex;
+    flex-direction: row;
+    &-prefix{
+        width: 6em;
+        text-align: left;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        margin-right: 1em;
+    }
+    &-label{
+        width: 70%;
+        text-align: left;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+}

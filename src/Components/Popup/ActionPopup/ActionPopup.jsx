@@ -1,12 +1,10 @@
 import './ActionPopup.scss';
 import {useState, useEffect, useCallback} from 'react';
-import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
-import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import { getMinersLocal, getRepositoriesLocal, getHostLocal, saveProcessLocal, saveInputValuesLocal, getSavedInputValuesLocal } from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { PostMineAction } from '../../../Services/MinerServices';
 import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
-import { getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
+import { getFileResourceLabel, getFileExtension, getFileResourceType } from '../../../Utils/FileUnpackHelper';
 import {v4 as uuidv4} from 'uuid';
 import ActionPopupWizardSteps from './ActionPopupWizardSteps/ActionPopupWizardSteps';
 import ActionPopupPage1Miner from './ActionPopupPages/ActionPopupPage1Miner/ActionPopupPage1Miner';
@@ -94,7 +92,21 @@ function ActionPopup(props) {
     const [filteredFilesForDropdown, setFileredFilesForDropdown] = useState([])
 
     const convertFilesToDropdown = (files) => {
-        return files.map((file) => ({label: getFileResourceLabel(file), value: file}) );
+        return files.map((file) => {
+            const prefix = getFileExtension(file) ? `${getFileExtension(file).toUpperCase()}` : `${getFileResourceType(file)}`;
+            const label = 
+            <div className='ActionPopup-dropdown-item'>
+                <div className='ActionPopup-dropdown-item-prefix'>
+                    {`${prefix}`}
+                </div>  
+                <div className='ActionPopup-dropdown-item-label'>
+                    {`${getFileResourceLabel(file)}`}
+                </div>
+            </div>
+            return ({label: label, value: file})
+        });
+
+        // return files.map((file) => ({label: getFileResourceLabel(file), value: file}) );
     }
 
     const getUniqueResourceTypesFromMinerObject = (retries = 0) => {

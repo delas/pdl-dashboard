@@ -3,8 +3,8 @@ import {useState, useEffect} from 'react';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {getRepositoriesLocal} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
-import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
-import { getFileExtension, getFileResourceLabel } from '../../../Utils/FileUnpackHelper';
+import { GetRepositoryFilterMetadata, GetAllMetadataFromRepository } from '../../../Services/RepositoryServices';
+import { getFileExtension, getFileResourceLabel, getFileResourceType } from '../../../Utils/FileUnpackHelper';
 import {getAvailableResourceTypes } from '../../../config';
 import Popup from '../../Widgets/Popup/Popup';
 
@@ -29,16 +29,29 @@ function ViewResourcePopup(props) {
 
     const convertFilesToDropdown = (files) => { // param structure = [fileMetadata1, fileMetadata2, ...]
         return files.map((file) => {
-            return ({label: `${getFileExtension(file)} ${getFileResourceLabel(file)}`, value: file})
+            const prefix = getFileExtension(file) ? `${getFileExtension(file).toUpperCase()}` : `${getFileResourceType(file)}`;
+            const label = 
+            <div className='ViewResourcePopup-dropdown-item'>
+                <div className='ViewResourcePopup-dropdown-item-prefix'>
+                    {`${prefix}`}
+                </div>  
+                <div className='ViewResourcePopup-dropdown-item-label'>
+                    {`${getFileResourceLabel(file)}`}
+                </div>
+            </div>
+            return ({label: label, value: file})
         })
     }
 
     const setFilesForDropdownMetadata = (repository) => { // param structure = {label: "Repository Name", value: "Repository Id"}
         if(repository && Object.keys(repository).length > 0){
             const repositoryUrl = repository.label;
-            GetRepositoryFilterMetadata(repositoryUrl, getAvailableResourceTypes()).then(res => {
+            GetAllMetadataFromRepository(repositoryUrl).then(res => {
                 setFilesForDropdown(convertFilesToDropdown(res.data));
-            });
+            })
+            // GetRepositoryFilterMetadata(repositoryUrl, getAvailableResourceTypes()).then(res => {
+            //     setFilesForDropdown(convertFilesToDropdown(res.data));
+            // });
         }
     }
 
