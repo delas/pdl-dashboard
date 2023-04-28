@@ -124,10 +124,10 @@ export const getVisalizations = (resourceType, fileExtension) => {
         if(visualizationConfig[resourceType]) {
             return visualizationConfig[resourceType][fileExtension];
         } else {
-            return undefined;
+            return [];
         }
     } else {
-        return undefined;
+        return [];
     }
 }
 
