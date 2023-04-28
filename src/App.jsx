@@ -44,7 +44,7 @@ function App(props) {
     const toggleProcessOverviewPopupOpen = () => { setProcessOverviewPopupOpen(!processOverviewPopupOpen); }
     const toggleUploadManualChangesPopup = () => { setUploadManualChangesPopup(!uploadManualChangesPopup); }
     const toggleShadowPopupOpen = () => { setShadowPopupOpen(!shadowPopupOpen); }
-    const toggleIsInformationPromptOpen = () => { setIsInformationPromptOpen(!isInformationPromptOpen); }
+    const toggleIsInformationPromptOpen = () => { console.log("CLICK"); setIsInformationPromptOpen(!isInformationPromptOpen); }
 
     useEffect(() => {
         clearInterval(pingInterval.current);
@@ -105,12 +105,12 @@ function App(props) {
     }
 
     const deleteHost = (id) => {
-        const host = getHostLocal(id);
-        if(host?.type?.value === "service registry") {
-            getAllHostAddedFromServiceRegistry(host.name).forEach((host) => {
-                removeHostLocal(host.id);
-            });
-        }
+        // const host = getHostLocal(id);
+        // if(host?.type?.value === "service registry") {
+        //     getAllHostAddedFromServiceRegistry(host.name).forEach((host) => {
+        //         removeHostLocal(host.id);
+        //     });
+        // }
         removeHostLocal(id);
         if(updateComponents.SidebarHosts){
             updateComponents.SidebarHosts.update();

@@ -10,8 +10,12 @@ function InformationPrompt(props) {
         closeButtonText,
         onClosePrompt,
         disabled,
-        primary,
+        closePrimary,
         setTimeoutClose = true,
+        hasAccept = false,
+        onAcceptPrompt,
+        acceptButtonText,
+        acceptPrimary,
     } = props;
 
     useEffect(() => {
@@ -21,18 +25,44 @@ function InformationPrompt(props) {
         }, 3000);
     })
 
+
+    console.log({
+        title,
+        text,
+        closeButtonText,
+        onClosePrompt,
+        disabled,
+        closePrimary,
+        setTimeoutClose,
+        hasAccept,
+        onAcceptPrompt,
+        acceptButtonText,
+        acceptPrimary,
+    });
+
     return (
         <div className={`InformationPrompt InformationPrompt-auto-close-${setTimeoutClose}`}>
             <h4>{title}</h4>
             <div className='InformationPrompt-text'>
                 {text}
             </div>
-            <DefaultButton
-                click = {onClosePrompt}
-                text = {closeButtonText}
-                disabled = {disabled}
-                primary =  {primary}
-            />
+            <div className='InformationPrompt-button-container'>
+                <DefaultButton
+                    click = {onClosePrompt}
+                    text = {closeButtonText}
+                    disabled = {disabled}
+                    primary =  {closePrimary}
+                />
+
+                {hasAccept && 
+                    <DefaultButton
+                        click = {onAcceptPrompt}
+                        text = {acceptButtonText}
+                        disabled = {disabled}
+                        primary =  {acceptPrimary}
+                    />
+                }
+            </div>
         </div>
     );
 }

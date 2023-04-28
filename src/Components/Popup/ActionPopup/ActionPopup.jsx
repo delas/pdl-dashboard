@@ -317,14 +317,19 @@ function ActionPopup(props) {
             .then(() => {
                 handleSaveInputValues();
                 toggleActionPopupOpen();
-                openInformationPrompt("Process started", 
-                "Check process status in the process list. The output will be visible in the sidebar once complete.");
+                openInformationPrompt({
+                    title: "Process started",
+                    text: "Check process status in the process list. The output will be visible in the sidebar once complete.",
+                    closeButtonText: "Close",
+                });
                 setIsLoading(false);
             })
             .catch((err) => {
-                // alert("Something went wrong. Please try to reload your browser and check status of the requested resources");
-                openInformationPrompt("Process failed", 
-                `Something went wrong when trying to start the requested resource ${err}`);
+                openInformationPrompt({
+                    title: "Process failed",
+                    text: `Something went wrong when trying to start the requested resource ${err}`,
+                    closeButtonText: "Close",
+                });
                 toggleActionPopupOpen();
                 setIsLoading(false);
             });

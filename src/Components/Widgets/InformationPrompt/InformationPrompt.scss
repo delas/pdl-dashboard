@@ -53,3 +53,12 @@
     text-align: left;
     align-self: flex-start;
 }
+
+.InformationPrompt-button-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 0.5em;
+}

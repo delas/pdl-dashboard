@@ -48,7 +48,15 @@ function ProcessOverviewCard(props) {
                 {processObject.status.toUpperCase() === 'PAUSED' && <GiPauseButton/>}
                 {processObject.status.toUpperCase() === 'ERROR' && <RiErrorWarningLine/>}
                 {processObject.status.toUpperCase() === 'CRASH' && <RxCrossCircled 
-                    onClick = {() => { openInformationPrompt("Crash details", processObject.error ? processObject.error : "No error message available", false); }} />}
+                    onClick = {() => { 
+                        openInformationPrompt({
+                            title: "Crash details",
+                            text: processObject.error ? processObject.error : "No error message available",
+                            closeButtonText: "Close",
+                            setTimeoutClose: false,
+                        });
+                    }} 
+                />}
                 {processObject.status.toUpperCase() === 'STOPPED' && <FaStop/>}
                 {processObject.status.toUpperCase() === 'COMPLETE' && <FaCheck/>}
             </div>
