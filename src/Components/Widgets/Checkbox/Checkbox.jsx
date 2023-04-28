@@ -6,7 +6,7 @@ function Checkbox(props) {
         onChange = () => {},
         title,
         value = false,
-        labelPosition = 'top', // 'left', 'top', 'right'
+        labelPosition = 'top', // 'left', 'top'
     } = props;
 
 

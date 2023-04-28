@@ -3,7 +3,7 @@ import {useState, useEffect, useRef} from 'react';
 import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
-import { saveHostLocal, removeHostLocal, saveFileLocal, getFileLocal, removeFileLocal, getMinersLocal, getRepositoriesLocal, getServiceRegistriesLocal } from './Store/LocalDataStore';
+import { saveHostLocal, removeHostLocal, getHostLocal, saveFileLocal, getFileLocal, removeFileLocal, getAllHostAddedFromServiceRegistry } from './Store/LocalDataStore';
 import { pingAllAddedServices, pingAllProcesses, getAndSaveAllHostConfig } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
@@ -105,6 +105,12 @@ function App(props) {
     }
 
     const deleteHost = (id) => {
+        const host = getHostLocal(id);
+        if(host?.type?.value === "service registry") {
+            getAllHostAddedFromServiceRegistry(host.name).forEach((host) => {
+                removeHostLocal(host.id);
+            });
+        }
         removeHostLocal(id);
         if(updateComponents.SidebarHosts){
             updateComponents.SidebarHosts.update();
