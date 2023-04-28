@@ -1,5 +1,6 @@
 import './ActionPopupPage2Inputs.scss';
 import Dropdown from '../../../../Widgets/Dropdown/Dropdown' 
+import { getFileExtension } from '../../../../../Utils/FileUnpackHelper';
 
 function ActionPopupPage2Inputs(props) {
 
@@ -24,9 +25,13 @@ function ActionPopupPage2Inputs(props) {
 
             {repositoryFileOwnerDropdownSelected && 
                 minerObject?.ResourceInput?.map((resourceInput, index) => {
+                    const options = resourceInput.FileExtension ? // Filters on file extension if it exists otherwise only on ResourceType in ActionPopup
+                        filteredFilesForDropdown[resourceInput.ResourceType].filter(dropdownValue => {
+                            return getFileExtension(dropdownValue.value) === resourceInput.FileExtension;
+                        }) : filteredFilesForDropdown[resourceInput.ResourceType]
                     return(
                         <Dropdown
-                            options = {filteredFilesForDropdown[resourceInput.ResourceType]}
+                            options = {options}
                             onValueChange = {onFileDropdownChange}
                             label = {`Select ${resourceInput.Name} resource:`}
                             value = {selectedFiles[resourceInput.Name]}
