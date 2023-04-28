@@ -7,6 +7,7 @@ import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import InputField from '../../Widgets/InputField/InputField';
 import Popup from '../../Widgets/Popup/Popup';
 import { getFileExtension, getFileHost, getFileResourceId, getFileResourceType } from '../../../Utils/FileUnpackHelper';
+import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function UploadManualChangesPopup(props) {
     const {
@@ -39,10 +40,12 @@ function UploadManualChangesPopup(props) {
         }
     }, []);
 
-    if(isLoading){ // TODO: Add loading spinner
+    if(isLoading){
         return (
             <div className="UploadManualChangesPopup">
-                <div>Loading ...</div> 
+                <div className='Spinner-container-l'>
+                    <LoadingSpinner loading={isLoading}/>
+                </div> 
             </div>
         )
     }
