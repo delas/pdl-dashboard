@@ -66,8 +66,6 @@ function ViewResourcePopup(props) {
 
     const onConfirmClick = () => {
         if(selectedFile) {
-            console.log("Calling getAndAddFile");
-            console.log(selectedFile.value);
             getAndAddFile(selectedFile.value);
             toggleViewResourcePopupOpen();
         }
@@ -112,7 +110,7 @@ function ViewResourcePopup(props) {
                         value = {selectedFile}
                         loading = {filesForDropdown === null}
                     />}
-                    
+
             </Popup>
         </BackdropModal>
     );

@@ -373,9 +373,6 @@ function Home(props) {
                     />
                     : null
                 }
-                {
-                    console.log(isOpen.isInformationPromptOpen)
-                }
                 {isOpen.isInformationPromptOpen ?
                     <InformationPrompt
                         text = {InformationPromptInfo.text}

@@ -132,7 +132,6 @@ export function getSavedInputValuesLocal(minerHostId, minerId){
 // ---------------------- FILE STORAGE ----------------------
 
 export function saveFileLocal(key, file) {
-    // console.log(file.fileContent);
     setSavedItem(key, file);
 }
 

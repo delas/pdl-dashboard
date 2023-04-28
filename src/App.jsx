@@ -44,7 +44,7 @@ function App(props) {
     const toggleProcessOverviewPopupOpen = () => { setProcessOverviewPopupOpen(!processOverviewPopupOpen); }
     const toggleUploadManualChangesPopup = () => { setUploadManualChangesPopup(!uploadManualChangesPopup); }
     const toggleShadowPopupOpen = () => { setShadowPopupOpen(!shadowPopupOpen); }
-    const toggleIsInformationPromptOpen = () => { console.log("CLICK"); setIsInformationPromptOpen(!isInformationPromptOpen); }
+    const toggleIsInformationPromptOpen = () => { setIsInformationPromptOpen(!isInformationPromptOpen); }
 
     useEffect(() => {
         clearInterval(pingInterval.current);

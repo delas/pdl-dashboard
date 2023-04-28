@@ -58,7 +58,6 @@ function HistogramVisualizer(props) {
     }
 
     if(error){
-        console.log(error);
         const errorStatusText = error?.response?.statusText;
         const errorStatusCode = error?.response?.status;
         const errorStatusData = error?.response?.data;

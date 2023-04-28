@@ -98,7 +98,6 @@ function UploadResourcePopup(props) {
                 .then((res) => {
                     GetSingleFileMetadata(fileDestination.label, res.data)
                     .then((res) => {
-                        console.log("Calling getAndAddFile");
                         getAndAddFile(res.data);
                     });
                 })
@@ -111,7 +110,6 @@ function UploadResourcePopup(props) {
                 .then((res) => {
                     GetSingleFileMetadata(fileDestination.label, res.data)
                     .then((res) => {
-                        console.log("Calling getAndAddFile");
                         getAndAddFile(res.data);
                     });
                 })
