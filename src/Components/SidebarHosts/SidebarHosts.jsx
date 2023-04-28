@@ -94,7 +94,6 @@ function SidebarHosts(props) {
                     <div className='SidebarHosts-hostsContainer'>
                         {repositoryHosts.map((repository, index) => {
                             return(
-                            // <>
                                 <SidebarHostItem key = {index}
                                     id = {repository.id}
                                     hostName = {repository.name}
@@ -107,8 +106,8 @@ function SidebarHosts(props) {
                                     status = {repository.status}
                                     allowClick = {repository.status === "online"}
                                     hostProvidedValue = {repository.config.Label}
-                                />)
-                            // </>)
+                                />
+                            )
                         })}
                         
                     </div>
@@ -121,7 +120,6 @@ function SidebarHosts(props) {
 
                     {minerHosts.map((miner, index) => {
                         return (
-                        // <>
                             <SidebarHostItem key = {index}
                                 id = {miner.id}
                                 hostName = {miner.name}
@@ -134,8 +132,8 @@ function SidebarHosts(props) {
                                 status = {miner.status}
                                 allowClick = {miner.status === "online"}
                                 hostProvidedValue = {miner.config.MinerLabel}
-                            />)
-                        // </>
+                            />
+                        )
                     })}
                 </div>
 

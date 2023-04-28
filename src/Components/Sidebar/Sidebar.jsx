@@ -2,11 +2,11 @@ import './Sidebar.scss';
 // import Iconi from '../Widgets/Button/IconizedButton/IconizedButton';
 import IconizedButton from '../Widgets/Buttons/IconizedButton/IconizedButton';
 import {useState, useEffect, useCallback} from 'react';
-import { FaCircle, FaCog, FaFileUpload, FaBuffer, FaFileDownload } from 'react-icons/fa';
+import { FaCircle, FaCog, FaFileUpload, FaFileDownload } from 'react-icons/fa';
 import {ImCogs} from 'react-icons/im';
 import SidebarFile from './SidebarFile/SidebarFile';
-import { getAllFilesLocal, getAllHostStatusLocal } from '../../Store/LocalDataStore';
-import { getFileContent, getFileCreationDate, getFileResourceId, getFileResourceLabel, getFileResourceType } from '../../Utils/FileUnpackHelper';
+import { getAllFilesLocal } from '../../Store/LocalDataStore';
+import { getFileCreationDate, getFileResourceId, getFileResourceLabel, getFileResourceType } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 
 function Sidebar(props) {

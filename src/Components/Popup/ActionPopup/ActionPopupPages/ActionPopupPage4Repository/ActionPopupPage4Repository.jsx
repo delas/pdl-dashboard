@@ -1,7 +1,6 @@
 import './ActionPopupPage4Repository.scss';
 import Dropdown from '../../../../Widgets/Dropdown/Dropdown';
 import InputField from '../../../../Widgets/InputField/InputField';
-import RadioButtons from '../../../../Widgets/Radiobuttons/Radiobuttons';
 import Checkbox from '../../../../Widgets/Checkbox/Checkbox';
 
 function ActionPopupPage4Repository(props) {

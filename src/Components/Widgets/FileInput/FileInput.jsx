@@ -12,11 +12,9 @@ function FileInput(props) {
     const fileSizeConverted = () => {
         if(filesize !== null){
             if (filesize < 1000000){
-                const size = Math.floor(filesize/1000) + 'KB';
-                return size
+                return Math.floor(filesize/1000) + 'KB'
             }else{
-                const size = Math.floor(filesize/1000000) + 'MB';  
-                return size;
+                return Math.floor(filesize/1000000) + 'MB';
             }
         }
         return null;

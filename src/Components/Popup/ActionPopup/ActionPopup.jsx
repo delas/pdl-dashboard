@@ -1,10 +1,22 @@
 import './ActionPopup.scss';
 import {useState, useEffect, useCallback} from 'react';
-import { getMinersLocal, getRepositoriesLocal, getHostLocal, saveProcessLocal, saveInputValuesLocal, getSavedInputValuesLocal } from '../../../Store/LocalDataStore';
+import { 
+    getMinersLocal, 
+    getRepositoriesLocal, 
+    getHostLocal, 
+    saveProcessLocal, 
+    saveInputValuesLocal, 
+    getSavedInputValuesLocal 
+} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { PostMineAction } from '../../../Services/MinerServices';
 import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
-import { getFileResourceLabel, getFileExtension, getFileResourceType, getFileResourceId } from '../../../Utils/FileUnpackHelper';
+import { 
+    getFileResourceLabel, 
+    getFileExtension, 
+    getFileResourceType, 
+    getFileResourceId 
+} from '../../../Utils/FileUnpackHelper';
 import {v4 as uuidv4} from 'uuid';
 import ActionPopupWizardSteps from './ActionPopupWizardSteps/ActionPopupWizardSteps';
 import ActionPopupPage1Miner from './ActionPopupPages/ActionPopupPage1Miner/ActionPopupPage1Miner';
@@ -33,7 +45,7 @@ function ActionPopup(props) {
 
     useEffect(() => { // Component mounted
         setIsLoading(false);
-        onMinerHostChange(miner); // If clicking configure host miner, select that as the miner host
+        onMinerHostChange(miner); // If clicking miner in configure host miner, select that as the miner host
     }, []);
 
     useEffect(() => { // Component mounted and updated
@@ -59,7 +71,9 @@ function ActionPopup(props) {
         }
     }
 
+    // --------------------------------------------
     // ------------------ STEP 1 ------------------
+    // --------------------------------------------
     const miners = getMinersLocal().filter((miner) => miner.status === "online").map((miner) => { // Dropdown options for miner hosts
         return {label: miner.name, value: miner.id}
     });
@@ -83,7 +97,10 @@ function ActionPopup(props) {
         setSelectedParams(miner?.MinerParameters);
     }
 
+    // --------------------------------------------
     // ------------------ STEP 2 ------------------
+    // --------------------------------------------
+
     const repositories = getRepositoriesLocal().map((repository, index) => { // dropdown options for repositories
         return {label: repository.name, value: repository.id}
     });
@@ -152,7 +169,9 @@ function ActionPopup(props) {
         forceUpdate();
     }
     
+    // --------------------------------------------
     // ------------------ STEP 3 ------------------
+    // --------------------------------------------
 
     const [selectedParams, setSelectedParams] = useState([]);
 
@@ -190,7 +209,10 @@ function ActionPopup(props) {
         }
     }
 
+    // --------------------------------------------
     // ------------------ STEP 4 ------------------
+    // --------------------------------------------
+
         const [repositoryDestination, setRepositoryDestination] = useState(null);
         const [outputFileName, setOutputFileName] = useState("");
         const [streamTopic, setStreamTopic] = useState("");
@@ -217,8 +239,9 @@ function ActionPopup(props) {
             setOverrideStreamResource(!overrideStreamResource);
         }
 
-
+    // ------------------------------------------------------------------------
     // ------------------ Buttons and other default behavior ------------------
+    // ------------------------------------------------------------------------
 
     const handleNextButtonDisabled = () => {
         switch (wizardStep) {

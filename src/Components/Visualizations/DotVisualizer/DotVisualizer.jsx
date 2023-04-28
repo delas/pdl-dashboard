@@ -1,4 +1,4 @@
-import './ResourceGraph.scss';
+import './DotVisualizer.scss';
 import {useState, useEffect} from 'react';
 import { Graphviz } from 'graphviz-react';
 import {GetResourceGraph} from '../../../Services/RepositoryServices';
@@ -6,11 +6,9 @@ import { getFileRepositoryUrl, getFileResourceId } from '../../../Utils/FileUnpa
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import { getFileLocal } from '../../../Store/LocalDataStore';
 
-function ResourceGraph(props) {
+function DotVisualizer(props) {
     const {
-        // file,
         selectedFileId
-
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -18,8 +16,6 @@ function ResourceGraph(props) {
     const [error, setError] = useState(null);
 
     let file = getFileLocal(selectedFileId);
-
-    // const file = getFileLocal(selectedFileId);
 
     useEffect(() => {
         setIsLoading(true);
@@ -85,7 +81,7 @@ function ResourceGraph(props) {
     
     if(isLoading){
         return (
-            <div className="ResourceGraph-loading">
+            <div className="DotVisualizer-loading">
                 <div className='Spinner-container-l'>
                     <LoadingSpinner loading={isLoading}/>
                 </div>
@@ -97,7 +93,7 @@ function ResourceGraph(props) {
         const errorText = error?.response?.statusText ? error.response.statusText : error;
         const statusText = error?.response?.status ? error.response.status : "";
         return (
-            <div className="ResourceGraph">
+            <div className="DotVisualizer">
                 <div>Error loading graph</div>
                 <div>{`${errorText} ${statusText}`}</div>
             </div>
@@ -109,12 +105,12 @@ function ResourceGraph(props) {
     }
 
     return (
-        <div className="ResourceGraph" onClick = {() => {getAllNodes()}}>
-            <Graphviz dot={graph} className="ResourceGraph-graphviz"
+        <div className="DotVisualizer" onClick = {() => {getAllNodes()}}>
+            <Graphviz dot={graph} className="DotVisualizer-graphviz"
                 options={options}
             />
         </div>
     )
 }
 
-export default ResourceGraph;
+export default DotVisualizer;

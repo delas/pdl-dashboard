@@ -1,5 +1,4 @@
 import './Dropdown.scss';
-// import {useState, useEffect} from 'react';
 import Select from 'react-select'
 
 function Dropdown(props) {
@@ -14,8 +13,6 @@ function Dropdown(props) {
         extraParam = null,
         labelPosition = "top",
     } = props;
-
-    // console.log(value);
     
     const handleValueChange = (value) => {
         if(extraParam != null) onValueChange(value, extraParam);

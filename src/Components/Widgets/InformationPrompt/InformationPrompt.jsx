@@ -25,21 +25,6 @@ function InformationPrompt(props) {
         }, 3000);
     })
 
-
-    console.log({
-        title,
-        text,
-        closeButtonText,
-        onClosePrompt,
-        disabled,
-        closePrimary,
-        setTimeoutClose,
-        hasAccept,
-        onAcceptPrompt,
-        acceptButtonText,
-        acceptPrimary,
-    });
-
     return (
         <div className={`InformationPrompt InformationPrompt-auto-close-${setTimeoutClose}`}>
             <h4>{title}</h4>

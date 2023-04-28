@@ -1,6 +1,5 @@
 import './HistogramVisualizer.scss';
 import {useState, useEffect, useCallback} from 'react';
-// import Histogram from 'react-chart-histogram';
 import { Chart } from "react-google-charts";
 import {GetHistogramOfLog} from '../../../Services/RepositoryServices';
 import { getFileResourceLabel, getFileResourceId, getFileRepositoryUrl, getFileContent, getFileDynamic, getFileExtension } from '../../../Utils/FileUnpackHelper';

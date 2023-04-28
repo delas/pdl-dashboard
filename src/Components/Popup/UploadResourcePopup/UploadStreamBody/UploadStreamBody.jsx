@@ -35,12 +35,7 @@ function UploadStreamBody(props) {
 
     return (        
         <div className='UploadStreamBody-body'>
-{/* 
-            <div className='UploadStreamBody-description'>
-                <div><b>Why "upload" a stream?</b></div>
-                By uploading information on where the stream can be found, it is possible to ask other resources to subscribe to it.
-            </div> */}
-
+            
             <Dropdown
                 options = {repositories}
                 onValueChange = {onFileDestinationDropdownChange}

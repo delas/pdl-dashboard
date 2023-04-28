@@ -4,13 +4,12 @@ import {getMinersLocal, getHostLocal} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import Popup from '../../Widgets/Popup/Popup';
-import {ShadowMiner, GetMinerConfig} from '../../../Services/MinerServices';
+import {ShadowMiner} from '../../../Services/MinerServices';
 import InputField from '../../Widgets/InputField/InputField';
 
 function ShadowPopup(props) {
     const {
         toggleShadowPopupOpen,
-        // addHost,
         addOrUpdateHost,
     } = props;
 
@@ -73,10 +72,8 @@ function ShadowPopup(props) {
         const shadowableMinersTemp = miners.filter(miner => miner.Shadow === true); // shadowable miners
         const miner = shadowableMinersTemp.find(miner => miner.MinerId === selectedShadowableMiner.value); // selected shadowable miner
         miner.MinerLabel = newMinerName ? newMinerName : miner.MinerLabel; // set new miner name if it exists
-        const extension = "py"; // TODO: remove this hardcode
         const body = {
             Host: ownerHostname + "/shadow/",
-            Extension: extension,
             Config: miner
         }
         const receiverHostname = selectedMinerHostReceiver.label;
@@ -85,7 +82,6 @@ function ShadowPopup(props) {
         ShadowMiner(receiverHostname, body)
             .then((res) => {
                 const receiverMiner = getMinersLocal().find(miner => miner.name === receiverHostname);
-                // addHost(receiverMiner.id, receiverMiner);
                 addOrUpdateHost(receiverMiner.id, receiverMiner)
             })
             .then(() => {
@@ -145,7 +141,6 @@ function ShadowPopup(props) {
                         className={`ShadowPopup-minername-input`}
                         type={`text`} 
                         placeholder = {`Alpha miner - cloned`}
-                        // id = "AddNewHostPopup-input-miner-id"
                         onChange = {onNewMinerNameChange}
                         value = {newMinerName}
                         label = {`Hostname:`}

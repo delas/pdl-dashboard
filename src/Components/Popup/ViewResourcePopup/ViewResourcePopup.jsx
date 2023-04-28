@@ -3,9 +3,8 @@ import {useState, useEffect} from 'react';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {getRepositoriesLocal} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
-import { GetRepositoryFilterMetadata, GetAllMetadataFromRepository } from '../../../Services/RepositoryServices';
+import { GetAllMetadataFromRepository } from '../../../Services/RepositoryServices';
 import { getFileExtension, getFileResourceLabel, getFileResourceType } from '../../../Utils/FileUnpackHelper';
-import {getAvailableResourceTypes } from '../../../config';
 import Popup from '../../Widgets/Popup/Popup';
 
 function ViewResourcePopup(props) {
@@ -49,9 +48,6 @@ function ViewResourcePopup(props) {
             GetAllMetadataFromRepository(repositoryUrl).then(res => {
                 setFilesForDropdown(convertFilesToDropdown(res.data, repositoryUrl));
             })
-            // GetRepositoryFilterMetadata(repositoryUrl, getAvailableResourceTypes()).then(res => {
-            //     setFilesForDropdown(convertFilesToDropdown(res.data));
-            // });
         }
     }
 
@@ -101,22 +97,22 @@ function ViewResourcePopup(props) {
                 nextButtonDisabled = {handleConfirmButtonDisabled()}
             >
 
-            <Dropdown
-                options = {repositories}
-                onValueChange = {onRepositoryChange}
-                label = {`Select repository`}
-                value = {selectedRepository}
-            />
-
-            {(selectedRepository && Object.keys(selectedRepository).length > 0) &&
                 <Dropdown
-                    options = {filesForDropdown}
-                    onValueChange = {onFileValueChange}
-                    label = {`Select log file`}
-                    value = {selectedFile}
-                    loading = {filesForDropdown === null}
-                />}
+                    options = {repositories}
+                    onValueChange = {onRepositoryChange}
+                    label = {`Select repository`}
+                    value = {selectedRepository}
+                />
 
+                {(selectedRepository && Object.keys(selectedRepository).length > 0) &&
+                    <Dropdown
+                        options = {filesForDropdown}
+                        onValueChange = {onFileValueChange}
+                        label = {`Select log file`}
+                        value = {selectedFile}
+                        loading = {filesForDropdown === null}
+                    />}
+                    
             </Popup>
         </BackdropModal>
     );

@@ -1,13 +1,11 @@
 import './ProcessOverviewCard.scss';
 import {useState, useEffect} from 'react';
-import {GiWarPick, GiPauseButton, GiPlayButton } from 'react-icons/gi';
+import {GiWarPick, GiPauseButton } from 'react-icons/gi';
 import {FaStopCircle, FaCheck, FaStop} from 'react-icons/fa';
 import {RxCrossCircled} from 'react-icons/rx';
 import { FaTrash } from 'react-icons/fa';
 import {RiErrorWarningLine} from 'react-icons/ri';
 import {getDateInMsAsString} from '../../../../Utils/Utils';
-import { getFileResourceLabel } from '../../../../Utils/FileUnpackHelper';
-import {getFileLocal} from '../../../../Store/LocalDataStore';
 
 function ProcessOverviewCard(props) {
 
@@ -43,6 +41,7 @@ function ProcessOverviewCard(props) {
 
     return (
         <div className='ProcessOverviewCard'>
+            {/* Row 1 */}
             <div className={`ProcessOverviewCard-status-icon ProcessOverviewCard-status-icon-${processObject.status.toUpperCase()}`}>
                 {processObject.status.toUpperCase() === 'RUNNING' && <GiWarPick/>}
                 {processObject.status.toUpperCase() === 'PAUSED' && <GiPauseButton/>}
@@ -72,20 +71,14 @@ function ProcessOverviewCard(props) {
                 </span>
             </div>
 
-            {/* <div className={`ProcessOverviewCard-host ProcessOverviewCard-host-${true}`}> */}
             <div className={`ProcessOverviewCard-host-name ProcessOverviewCard-host-name-${true}`}>
                 {processObject.hostname}
             </div>
             <div className={`ProcessOverviewCard-host-processName ProcessOverviewCard-host-processName-${true}`}>
                 {processObject.processName}
             </div>
-            {/* </div> */}
 
             <div className={`ProcessOverviewCard-change-process-status`}>
-                {/* <div className={`ProcessOverviewCard-pause-resume ProcessOverviewCard-pause-resume-${process.status.toUpperCase()}`}>
-                    {processObject.status.toUpperCase() === 'RUNNING' && <GiPauseButton onClick = {() => {pauseProcess(processObject.processId)}}/>}
-                    {processObject.status.toUpperCase() === 'PAUSED' && <GiPlayButton onClick = {() => {resumeProcess(processObject.processId)}}/>}
-                </div> */}
 
                 {processObject.status.toUpperCase() !== 'RUNNING' && 
                     <div className={`ProcessOverviewCard-delete ProcessOverviewCard-delete-${true}`} onClick = {() => {deleteProcess(processObject.id)}}>

@@ -1,6 +1,5 @@
 import './ProcessOverviewPopup.scss';
 import {useState, useEffect, useCallback, useRef} from 'react';
-import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import ProcessOverviewCard from './ProcessOverviewCard/ProcessOverviewCard';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
@@ -17,19 +16,11 @@ function ProcessOverviewPopup(props) {
         openInformationPrompt,
     } = props;
 
-    // const sortingOrder = {
-    //     Running: 1,
-    //     Paused: 2,
-    //     Stopped: 3,
-    //     Complete: 4,
-    // }
-
     const sortType = {
         startTimeAsc: "sAsc",
         startTimeDsc: "sDsc",
         endTimeAsc: "eAsc",
         endTimeDsc: "eDsc",
-        // type: "type",
     }
 
     const [isLoading, setIsLoading] = useState(true);
@@ -57,7 +48,6 @@ function ProcessOverviewPopup(props) {
         {value: sortType.startTimeDsc, label: "Started Descending"},
         {value: sortType.endTimeAsc, label: "Finished Ascending"},
         {value: sortType.endTimeDsc, label: "Finished Descending"},
-        // {value: sortType.type, label: "Type"},
     ]
 
     const onSortingDropdownValueChange = (value) => {
@@ -82,8 +72,6 @@ function ProcessOverviewPopup(props) {
                     sortProcessesAsc(errorProcesses, "startTime")).concat(
                     sortProcessesAsc(otherProcesses, "startTime"))
                 );
-                
-                // sortProcessesAsc(processes, "startTime");
             case sortType.startTimeDsc:
                 return (
                     sortProcessesDsc(runningProcesses, "startTime").concat(
@@ -92,8 +80,6 @@ function ProcessOverviewPopup(props) {
                     sortProcessesDsc(errorProcesses, "startTime")).concat(
                     sortProcessesDsc(otherProcesses, "startTime"))
                 );
-                
-                // sortProcessesDsc(processes, "startTime");
             case sortType.endTimeAsc:
                 return (
                     sortProcessesAsc(runningProcesses, "endTime").concat(
@@ -102,8 +88,6 @@ function ProcessOverviewPopup(props) {
                     sortProcessesAsc(errorProcesses, "endTime")).concat(
                     sortProcessesAsc(otherProcesses, "endTime"))
                 );
-                
-                //sortProcessesAsc(processes, "endTime");
             case sortType.endTimeDsc:
                 return (
                     sortProcessesDsc(runningProcesses, "endTime").concat(
@@ -112,18 +96,6 @@ function ProcessOverviewPopup(props) {
                     sortProcessesDsc(errorProcesses, "endTime")).concat(
                     sortProcessesDsc(otherProcesses, "endTime"))
                 );
-                
-                // sortProcessesDsc(processes, "endTime");
-            // case sortType.type:
-            //     return (
-            //         sortProcessesByType(runningProcesses).concat(
-            //         sortProcessesByType(completedProcesses)).concat(
-            //         sortProcessesByType(stoppedProcesses)).concat(
-            //         sortProcessesByType(errorProcesses)).concat(
-            //         sortProcessesByType(otherProcesses))
-            //     ) ;
-                
-                // sortProcessesByType(processes);
             default:
                 return (
                     sortProcessesAsc(runningProcesses, "startTime").concat(
@@ -132,8 +104,6 @@ function ProcessOverviewPopup(props) {
                     sortProcessesAsc(errorProcesses, "startTime")).concat(
                     sortProcessesAsc(otherProcesses, "startTime"))
                 );
-                
-                // sortProcessesByType(processes);
         }
     }
 
@@ -180,12 +150,6 @@ function ProcessOverviewPopup(props) {
             });
         }
     }
-
-    // const sortProcessesByType = (processes) => {
-    //     return processes.sort((a, b) => {
-    //         return sortingOrder[a.status] - sortingOrder[b.status];
-    //     });
-    // }
 
     if(isLoading){
         return (

@@ -1,7 +1,5 @@
 import './UploadResourcePopup.scss';
 import {useState, useEffect} from 'react';
-import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
-import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
 import {getRepositoriesLocal} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { sendFileToRepository, GetSingleFileMetadata, sendStreamToRepository } from '../../../Services/RepositoryServices';

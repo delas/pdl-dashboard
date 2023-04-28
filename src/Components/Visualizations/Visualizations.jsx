@@ -4,7 +4,7 @@ import Tabs from '../Widgets/Tabs/Tabs';
 import BPMNVisualizer from './BPMNVisualizer/BPMNVisualizer';
 import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
 import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
-import ResourceGraph from './ResourceGraph/ResourceGraph';
+import DotVisualizer from './DotVisualizer/DotVisualizer';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
 import { getFileDescription, getFileExtension, getFileRepositoryUrl, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileDynamic } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
@@ -25,7 +25,6 @@ function Visualizations(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [selectedTab, setSelectedTab] = useState(null);
-    // const [fileToDisplay, setFileToDisplay] = useState(getFileLocal(selectedFileId));
     const [children, setChildren] = useState([]);
     const [childrenForDropdown, setChildrenForDropdown] = useState([]);
     const [selectedChild, setSelectedChild] = useState(null);
@@ -48,7 +47,6 @@ function Visualizations(props) {
     }
 
     const selectedTabList = useMemo(() => generateTabList(file), [file]);
-
     const updateFileInterval = useRef(null);
     
     const [, updateState] = useState();
@@ -85,10 +83,6 @@ function Visualizations(props) {
 
     }, [selectedFileId]);    
 
-    // useEffect(() => {
-
-    // }, [file])
-
     useEffect(() => {
         const tabList = generateTabList(file);
         if(tabList && tabList.length > 0 && !selectedTab)
@@ -103,11 +97,11 @@ function Visualizations(props) {
     const generateChildren = (children) => {
         if(children);
         setChildrenForDropdown(
-            children.map((childMetadata) => {
-                const isVisualizable = !!getVisalizations(getFileResourceType(childMetadata).toUpperCase(), getFileExtension(childMetadata).toUpperCase());
-                if(isVisualizable)
+            children.filter((childMetadata) => {
+                return !!getVisalizations(getFileResourceType(childMetadata).toUpperCase(), getFileExtension(childMetadata).toUpperCase());
+            }).map((childMetadata) => {
                 return ({label: getFileResourceLabel(childMetadata), value: getFileResourceId(childMetadata)})
-            }).filter((child) => { if(child) return child }) // removes null values
+            })
         );
     }
 
@@ -188,7 +182,7 @@ function Visualizations(props) {
                     {(selectedTab.ResourceType === "BPMN")      && <BPMNVisualizer file = {file} uploadEditedFile = {uploadEditedFile}/>}
                     {(selectedTab.ResourceType === "HISTOGRAM") && <HistogramVisualizer file = {file}/>}
                     {(selectedTab.ResourceType === "PNML")      && <PNMLVisualizer file = {file}/>}
-                    {(selectedTab.ResourceType === "DOT")       && <ResourceGraph selectedFileId = {selectedFileId}/>}
+                    {(selectedTab.ResourceType === "DOT")       && <DotVisualizer selectedFileId = {selectedFileId}/>}
                     {(selectedTab.ResourceType === "IMAGE")     && <ImageVisualizer file = {file}/>}
                 </div>
             }

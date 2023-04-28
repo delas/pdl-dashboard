@@ -39,10 +39,10 @@ function UploadManualChangesPopup(props) {
         }
     }, []);
 
-    if(isLoading){
+    if(isLoading){ // TODO: Add loading spinner
         return (
             <div className="UploadManualChangesPopup">
-                <div>Loading ...</div>
+                <div>Loading ...</div> 
             </div>
         )
     }

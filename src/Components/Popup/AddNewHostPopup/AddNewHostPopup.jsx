@@ -2,8 +2,6 @@ import './AddNewHostPopup.scss';
 import {useState, useEffect} from 'react';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {v4 as uuidv4} from 'uuid';
-import PopupHeader from '../../Widgets/PopupHeader/PopupHeader';
-import PopupFooter from '../../Widgets/PopupFooter/PopupFooter';
 import InputField from '../../Widgets/InputField/InputField';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import Popup from '../../Widgets/Popup/Popup';
@@ -24,7 +22,7 @@ function AddNewHostPopup(props) {
         setIsLoading(false);
     }, []);
 
-    const handleSubmit = () => {
+    const handleSubmit = () => { // create new host object and add it to the list of hosts in localMemory
         const newHost = {
             id: uuidv4(),
             name: hostName,

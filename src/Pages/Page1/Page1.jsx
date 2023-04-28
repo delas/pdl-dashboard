@@ -20,7 +20,7 @@ function Page1(props) {
     return (
         <div className="Page1">
             <Link to="/">
-                <div>Hello world from Page1 page</div>
+                <div>Return to main page</div>
             </Link>
         </div>
     );

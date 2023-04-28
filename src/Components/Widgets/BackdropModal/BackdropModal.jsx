@@ -5,14 +5,12 @@ function BackdropModal(props) {
 
     const {
         children,
-        closeModal,
         showSpinner = false,
     } = props;
 
     return (
         <div className='Backdrop-modal' 
             onClick = {(e) => {
-                // closeModal(); 
                 e.stopPropagation();
             }}
         >

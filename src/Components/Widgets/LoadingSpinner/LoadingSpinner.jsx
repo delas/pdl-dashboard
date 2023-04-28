@@ -1,7 +1,5 @@
 import ClipLoader from "react-spinners/ClipLoader";
 import './LoadingSpinner.scss';
-// import {useState, useEffect, CSSProperties} from 'react';
-
 
 function LoadingSpinner (props) {
 

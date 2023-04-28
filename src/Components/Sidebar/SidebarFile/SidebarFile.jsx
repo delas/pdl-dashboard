@@ -2,8 +2,17 @@ import './SidebarFile.scss';
 import {useState, useEffect} from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { CiStreamOn } from 'react-icons/ci';
-import { getFileLocal, setProcessKeyLocalAsync } from '../../../Store/LocalDataStore';
-import { getFileExtension, getFileResourceLabel, getFileContent, getFileDynamic, getFileProcessId, getFileCreationDate, getFileResourceId, getFileResourceType } from '../../../Utils/FileUnpackHelper';
+import { setProcessKeyLocalAsync } from '../../../Store/LocalDataStore';
+import { 
+    getFileExtension, 
+    getFileResourceLabel, 
+    getFileContent, 
+    getFileDynamic, 
+    getFileProcessId, 
+    getFileCreationDate, 
+    getFileResourceId, 
+    getFileResourceType 
+} from '../../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import {getDateInMsAsString} from '../../../Utils/Utils';
 
@@ -92,7 +101,6 @@ function SidebarFile(props) {
             <div className='SidebarFile-flexContainer'>
                 <div className={`SidebarFile-flexContainer-left SidebarFile-flexContainer-left-stream-${getFileDynamic(file)}`}>
                     <div className='SidebarFile-filetype'>
-                        {/* {getFileExtension(file)} */}
                         {fileTag}
                     </div>
                     <div className='SidebarFile-text-center'  onClick={handleFileClick}>

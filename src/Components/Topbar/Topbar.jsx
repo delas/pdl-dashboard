@@ -3,7 +3,6 @@ import {useState, useEffect} from 'react';
 import { Link } from "react-router-dom";
 import Logo from '../../Assets/logo';
 import dtuImg from '../../Assets/dtu.png';
-// import Button from '../Widgets/Button/Button';
 import IconizedButton from '../Widgets/Buttons/IconizedButton/IconizedButton';
 import {FaAngleRight, FaAngleLeft} from 'react-icons/fa';
 
@@ -19,7 +18,7 @@ function Topbar(props) {
 
     useEffect(() => {
         setIsLoading(false);
-    });
+    }, []);
 
     if(isLoading){
         return (

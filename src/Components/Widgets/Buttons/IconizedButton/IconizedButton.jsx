@@ -1,5 +1,4 @@
 import './IconizedButton.scss';
-// import {useState, useEffect} from 'react';
 
 function IconizedButton(props) {
 
