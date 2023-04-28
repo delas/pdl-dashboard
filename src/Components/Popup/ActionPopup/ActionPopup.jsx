@@ -4,7 +4,7 @@ import { getMinersLocal, getRepositoriesLocal, getHostLocal, saveProcessLocal, s
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { PostMineAction } from '../../../Services/MinerServices';
 import { GetRepositoryFilterMetadata } from '../../../Services/RepositoryServices';
-import { getFileResourceLabel, getFileExtension, getFileResourceType } from '../../../Utils/FileUnpackHelper';
+import { getFileResourceLabel, getFileExtension, getFileResourceType, getFileResourceId } from '../../../Utils/FileUnpackHelper';
 import {v4 as uuidv4} from 'uuid';
 import ActionPopupWizardSteps from './ActionPopupWizardSteps/ActionPopupWizardSteps';
 import ActionPopupPage1Miner from './ActionPopupPages/ActionPopupPage1Miner/ActionPopupPage1Miner';
@@ -94,27 +94,22 @@ function ActionPopup(props) {
     const convertFilesToDropdown = (files) => {
         return files.map((file) => {
             const prefix = getFileExtension(file) ? `${getFileExtension(file).toUpperCase()}` : `${getFileResourceType(file)}`;
-            const label =
-            <>
-                <div className='ActionPopup-dropdown-item'>
-                    <div className='ActionPopup-dropdown-item-prefix'>
-                        {`${prefix}`}
-                    </div>  
-                    <div className='ActionPopup-dropdown-item-label'>
-                        {`${getFileResourceLabel(file)}`}
-                    </div>
-                </div>
-            </>
+            const label = `${prefix} \t ${getFileResourceLabel(file)}`;
+            // <> // use this instead for a prettier structure of files. But it removes search option from dropdown
+            //     <div className='ActionPopup-dropdown-item'>
+            //         <div className='ActionPopup-dropdown-item-prefix'>
+            //             {`${prefix}`}
+            //         </div>  
+            //         <div className='ActionPopup-dropdown-item-label'>
+            //             {`${getFileResourceLabel(file)}`}
+            //         </div>
+            //     </div>
+            // </>
             return ({label: label, value: file})
         });
-
-        // return files.map((file) => ({label: getFileResourceLabel(file), value: file}) );
     }
 
     const getUniqueResourceTypesFromMinerObject = (retries = 0) => {
-        // if(!minerObject && retries === 0) setTimeout(() => { // TODO: the state doesn't get set immediately, so this is a hacky way to wait for it to be set
-        //     return getUniqueResourceTypesFromMinerObject(1);
-        // }, 200);
         return minerObject.ResourceInput.map((inputTypes) => {
             return inputTypes.ResourceType;
         }).filter((x, i, a) => a.indexOf(x) === i);
@@ -125,6 +120,17 @@ function ActionPopup(props) {
         getUniqueResourceTypesFromMinerObject().forEach((filter) => {
             GetRepositoryFilterMetadata(hostname, [filter]) // Get files of each filter
             .then(res => { 
+                // --------------- This piece of code will remove files from selectedFiles that are not in the new list of possible files ---------------
+                if(selectedFiles && Object.keys(selectedFiles).length > 0) { // If selectedFiles is not empty
+                    const filesMetadata = Object.keys(selectedFiles).map((inputName) => {
+                        return selectedFiles[inputName].value;
+                    }).filter(selectedMetadata => 
+                        res.data.find(metadata => getFileResourceId(metadata) === getFileResourceId(selectedMetadata)) 
+                    );
+                    setSelectedFiles(filesMetadata);
+                }
+
+                // setting the dropdown options for each filter type
                 filteredFilesTemp[filter] = convertFilesToDropdown(res.data); // Assign files to filter key in object {filter1: [files], filter2: [files]}      
             })
             .then(() => { 
