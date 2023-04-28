@@ -14,6 +14,8 @@ function Dropdown(props) {
         extraParam = null,
         labelPosition = "top",
     } = props;
+
+    // console.log(value);
     
     const handleValueChange = (value) => {
         if(extraParam != null) onValueChange(value, extraParam);

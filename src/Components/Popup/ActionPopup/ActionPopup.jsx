@@ -94,15 +94,17 @@ function ActionPopup(props) {
     const convertFilesToDropdown = (files) => {
         return files.map((file) => {
             const prefix = getFileExtension(file) ? `${getFileExtension(file).toUpperCase()}` : `${getFileResourceType(file)}`;
-            const label = 
-            <div className='ActionPopup-dropdown-item'>
-                <div className='ActionPopup-dropdown-item-prefix'>
-                    {`${prefix}`}
-                </div>  
-                <div className='ActionPopup-dropdown-item-label'>
-                    {`${getFileResourceLabel(file)}`}
+            const label =
+            <>
+                <div className='ActionPopup-dropdown-item'>
+                    <div className='ActionPopup-dropdown-item-prefix'>
+                        {`${prefix}`}
+                    </div>  
+                    <div className='ActionPopup-dropdown-item-label'>
+                        {`${getFileResourceLabel(file)}`}
+                    </div>
                 </div>
-            </div>
+            </>
             return ({label: label, value: file})
         });
 
@@ -281,9 +283,7 @@ function ActionPopup(props) {
 
     const handleConfirmClick = () => {
         setIsLoading(true);
-
         const isStreamOutput = minerObject.ResourceOutput.ResourceType === "EventStream";
-
         const host = isStreamOutput ? streamDestination : `${repositoryDestination.label}/resources/`;
 
         var data = {
@@ -316,16 +316,20 @@ function ActionPopup(props) {
             .catch((err) => {
                 // alert("Something went wrong. Please try to reload your browser and check status of the requested resources");
                 openInformationPrompt("Process failed", 
-                "Something went wrong when trying to start the requested resource");
+                `Something went wrong when trying to start the requested resource ${err}`);
                 toggleActionPopupOpen();
                 setIsLoading(false);
             });
     }
 
     const handleSaveInputValues = () => {
+        const fileValues = {}
+        Object.keys(selectedFiles).forEach(inputName => {
+            fileValues[inputName] = selectedFiles[inputName].value;
+        });
         const inputValues = {
             repositoryFileOwnerDropdownSelected: repositoryFileOwnerDropdownSelected,
-            selectedFiles: selectedFiles,
+            selectedFiles: fileValues,//selectedFiles.map(selectedFile => selectedFile.value),
             selectedParams: selectedParams,
             repositoryDestination: repositoryDestination,
             outputFileName: outputFileName,
@@ -340,9 +344,10 @@ function ActionPopup(props) {
         const savedInputValues = getSavedInputValuesLocal(minerHostId, minerId);
         if(savedInputValues) {
             onRepositoryFileOwnerDropdownChange(savedInputValues.repositoryFileOwnerDropdownSelected);
-            Object.keys(savedInputValues.selectedFiles).forEach((fileName) => {
-                const file = savedInputValues.selectedFiles[fileName];
-                onFileDropdownChange(file, `${fileName}`);
+            Object.keys(savedInputValues.selectedFiles).forEach((inputName) => {
+                const file = savedInputValues.selectedFiles[inputName];
+                const dropdownValue = convertFilesToDropdown([file])[0];
+                onFileDropdownChange(dropdownValue, `${inputName}`);
             })
             savedInputValues.selectedParams.forEach((param, index) => {
                 const paramInputValue = {value: param.selectedValue, index: index}
