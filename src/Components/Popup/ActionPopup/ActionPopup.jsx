@@ -141,6 +141,8 @@ function ActionPopup(props) {
     }
 
     const onRepositoryFileOwnerDropdownChange = (value) => { // Onchange function on repository dropdown 
+        const host = getHostLocal(value.value);
+        if(!host) return;
         setRepositoryFileOwnerDropdownSelected(value);
         setFilesFromRepository(value.label);
     }
