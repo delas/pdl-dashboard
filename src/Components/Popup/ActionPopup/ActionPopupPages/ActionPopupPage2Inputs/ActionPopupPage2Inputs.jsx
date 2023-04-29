@@ -25,7 +25,7 @@ function ActionPopupPage2Inputs(props) {
 
             {repositoryFileOwnerDropdownSelected && 
                 minerObject?.ResourceInput?.map((resourceInput, index) => {
-                    const options = resourceInput.FileExtension ? // Filters on file extension if it exists otherwise only on ResourceType in ActionPopup
+                    const options = (resourceInput.FileExtension && filteredFilesForDropdown[resourceInput.ResourceType]) ? // Filters on file extension if it exists otherwise only on ResourceType in ActionPopup
                         filteredFilesForDropdown[resourceInput.ResourceType].filter(dropdownValue => {
                             return getFileExtension(dropdownValue.value) === resourceInput.FileExtension;
                         }) : filteredFilesForDropdown[resourceInput.ResourceType]
