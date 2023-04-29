@@ -27,6 +27,7 @@ function pingAllServicesAddedFromServicesRegistry(){
         const filters = getAllHostAddedFromServiceRegistry(SR.name).map(host => { // get all hosts added from that service registry
             return host.name;
         })
+        if(filters.length > 0)
         PingConnectedFilters(SR.name, filters) // ping all hosts added from that service registry
             .then((res) => {
                 if(res.status !== 200) return;
