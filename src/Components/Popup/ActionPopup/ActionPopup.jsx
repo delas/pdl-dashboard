@@ -15,7 +15,8 @@ import {
     getFileResourceLabel, 
     getFileExtension, 
     getFileResourceType, 
-    getFileResourceId 
+    getFileResourceId,
+    fileBuilder
 } from '../../../Utils/FileUnpackHelper';
 import {v4 as uuidv4} from 'uuid';
 import ActionPopupWizardSteps from './ActionPopupWizardSteps/ActionPopupWizardSteps';
@@ -295,7 +296,7 @@ function ActionPopup(props) {
         saveProcessLocal(status);
     }
 
-    const convertFilesToDictionary = (files) => {
+    const convertFilesToDictionary = () => {
         let filesDictionary = {};
         minerObject?.ResourceInput?.forEach((resourceInput) => { // Convert files to object {param1: file1, param2: file2}
             filesDictionary[resourceInput.Name] = selectedFiles[resourceInput.Name].value;
@@ -312,20 +313,52 @@ function ActionPopup(props) {
         return params;
     }
 
+    const getMinerCallableHostName = (repositoryUrl) => {
+        const repositoryConfig = getRepositoriesLocal().find(repository => repository.name === repositoryUrl).config;
+        return repositoryConfig.AlteredHostname ? repositoryConfig.AlteredHostname : repositoryUrl;
+    }
+
+    const getHostDestination = () => {
+        const isStreamOutput = minerObject.ResourceOutput.ResourceType === "EventStream";
+        const host = isStreamOutput ? streamDestination : `${getMinerCallableHostName(repositoryDestination.label)}/resources/`;
+        return host;
+    }
+
+    const getHostInit = () => {
+        return `${getMinerCallableHostName(repositoryDestination.label)}/resources/metadata/`;
+    }
+
+    const setFileHostForAllFiles = () => {
+        const files = convertFilesToDictionary();
+        const newFiles = {}
+        Object.keys(files).forEach((inputName) => {
+            const file = files[inputName];
+            const newFile = fileBuilder(file, {
+                Host: `${getMinerCallableHostName(repositoryFileOwnerDropdownSelected.label)}/resources/`, 
+                fileContent: "null"
+            });
+            newFiles[inputName] = newFile;
+        });
+        return newFiles;
+    }
+
     const handleConfirmClick = () => {
         setIsLoading(true);
-        const isStreamOutput = minerObject.ResourceOutput.ResourceType === "EventStream";
-        const host = isStreamOutput ? streamDestination : `${repositoryDestination.label}/resources/`;
+        // const isStreamOutput = minerObject.ResourceOutput.ResourceType === "EventStream";
+        // const host = isStreamOutput ? streamDestination : `${repositoryDestination.label}/resources/`;
 
         var data = {
             MinerId: minerObject.MinerId,
             Input: {
-                Resources: convertFilesToDictionary(minerObject?.ResourceInput),
+                // Resources: convertFilesToDictionary(minerObject?.ResourceInput),
+                Resources: setFileHostForAllFiles(),
                 MinerParameters: convertParamsToDictionary(selectedParams),// params ? params : {},
             },
             Output: {
-                Host: host,
-                HostInit: `${repositoryDestination.label}/resources/metadata/`,
+                // Host: host,
+                Host: getHostDestination(),
+                // HostInit: `${repositoryDestination.label}/resources/metadata/`,
+                HostInit: getHostInit(),
                 ResourceLabel: outputFileName,
                 FileExtension: minerObject.ResourceOutput.FileExtension,//selectedOutputFileType?.value ? selectedOutputFileType.value : outputFileTypeForDropdown[0].value,
                 StreamTopic: streamTopic,
