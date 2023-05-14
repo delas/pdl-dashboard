@@ -32,7 +32,7 @@ function Visualizations(props) {
     const file = getFileLocal(selectedFileId);
 
     const generateTabList = (file) => {
-        const defaultTabs = [
+        const defaultTabs = [ // These are the tabs that are always present
             {
                 ResourceType: "DOT",
                 Title: "Related resources"
@@ -61,15 +61,15 @@ function Visualizations(props) {
         getChildrenFromFile(getFileRepositoryUrl(file), getFileResourceId(file))
             .then((res) => {setChildren(res.data); generateChildren(res.data)} )
             .then(() => {setHasCalledChildren(getFileResourceId(file))})
+            .then(() => {setIsLoading(false)})
             .catch((err) => {console.log(err)} );
+        } else {
+            setIsLoading(false);
         }
-        setIsLoading(false);
-
-        const runUpdateInterval = file && getFileDynamic(file);
 
         // updates file every second if dynamic. Ref prevents multiple intervals.
         clearInterval(updateFileInterval.current);
-        if(runUpdateInterval){
+        if(file && getFileDynamic(file)){
             updateFileInterval.current = setInterval(() => {
                 const internalFile = getFileLocal(selectedFileId);
                 if(!internalFile || !getFileRepositoryUrl(internalFile) || !getFileResourceId(internalFile)) return clearInterval(updateFileInterval.current);
@@ -87,7 +87,7 @@ function Visualizations(props) {
         const tabList = generateTabList(file);
         if(tabList && tabList.length > 0 && !selectedTab)
         setSelectedTab(generateTabList(file)[0] ? generateTabList(file)[0] : null);
-        file && getFileDynamic(file) === false && clearInterval(updateFileInterval.current);
+        file && getFileDynamic(file) === false && clearInterval(updateFileInterval.current); // Inline if-statement without else clause 
     }, [file]);
 
     const onTabChange = (tab) => {
@@ -116,7 +116,7 @@ function Visualizations(props) {
         }
     }
 
-    const uploadEditedFile = (xml, originalMetadata) => {
+    const uploadEditedFile = (xml, originalMetadata) => { // Option to update a BPMN file with manual changes - save button in the bottom right
         openPopup(popups.UploadManualChangesPopup, {xml: xml, originalMetadata: originalMetadata});
     }
 

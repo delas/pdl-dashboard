@@ -315,17 +315,20 @@ function ActionPopup(props) {
         return params;
     }
 
+    // This function was created to allow docker containers to be called by their altered hostname
     const getMinerCallableHostName = (repositoryUrl) => {
         const repositoryConfig = getRepositoriesLocal().find(repository => repository.name === repositoryUrl).config;
         return repositoryConfig.AlteredHostname ? repositoryConfig.AlteredHostname : repositoryUrl;
     }
 
+    // This function was created to allow docker containers to be called by their altered hostname
     const getHostDestination = () => {
         const isStreamOutput = minerObject.ResourceOutput.ResourceType === "EventStream";
         const host = isStreamOutput ? streamDestination : `${getMinerCallableHostName(repositoryDestination.label)}/resources/`;
         return host;
     }
 
+    // This function was created to allow docker containers to be called by their altered hostname
     const getHostInit = () => {
         return `${getMinerCallableHostName(repositoryDestination.label)}/resources/metadata/`;
     }

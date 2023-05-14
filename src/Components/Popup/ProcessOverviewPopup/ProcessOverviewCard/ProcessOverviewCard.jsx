@@ -6,6 +6,7 @@ import {RxCrossCircled} from 'react-icons/rx';
 import { FaTrash } from 'react-icons/fa';
 import {RiErrorWarningLine} from 'react-icons/ri';
 import {getDateInMsAsString} from '../../../../Utils/Utils';
+import LoadingSpinner from '../../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function ProcessOverviewCard(props) {
 
@@ -18,7 +19,6 @@ function ProcessOverviewCard(props) {
         openInformationPrompt = () => {},
     } = props;
 
-    const [isExpanded, setIsExpanded] = useState(false);
     const [processObject, setProcessObject] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -33,8 +33,10 @@ function ProcessOverviewCard(props) {
 
     if(isLoading){
         return (
-            <div className='ProcessOverviewCard'>
-                <div>Loading...</div>
+            <div className="ProcessOverviewCard">
+                <div className='Spinner-container-l'>
+                    <LoadingSpinner loading={isLoading}/>
+                </div>
             </div>
         )
     }

@@ -1,9 +1,6 @@
 import './BPMNVisualizer.scss';
 import {useState, useEffect} from 'react';
-// import ReactBpmn from 'react-bpmn';
-
 import React from "react";
-// import ReactDOM from "react-dom";
 import BPMNComponent from "./BPMNComponent";
 // import ModelerCreator from "./diagramCreator/index";
 // import "./styles.css";
@@ -19,9 +16,7 @@ function BPMNVisualizer(props) {
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-    const [modeler, setModeler] = useState(null);
     const [getUpdatedBPMN, setGetUpdatedBPMN] = useState({});
-
     const fileDynamic = getFileDynamic(file);
 
     const setComponentUpdaterFunction = (componentName, func) => {
@@ -31,7 +26,6 @@ function BPMNVisualizer(props) {
     }
 
     useEffect(() => {
-        setModeler(<BPMNComponent file = {file} setComponentUpdaterFunction={setComponentUpdaterFunction}/>)
         setIsLoading(false);
     }, [file]);
 
@@ -79,10 +73,7 @@ function BPMNVisualizer(props) {
                         primary = {true}/>
                 </div>
             }
-            {/* <BPMNComponent
-                file = {file}
-            /> */}
-            {modeler}
+            <BPMNComponent file = {file} setComponentUpdaterFunction={setComponentUpdaterFunction}/>
         </div>
     );
 }
