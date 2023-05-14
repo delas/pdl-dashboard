@@ -16,7 +16,9 @@ import {
     getFileExtension, 
     getFileResourceType, 
     getFileResourceId,
-    fileBuilder
+    fileBuilder,
+    getFileStreamTopic,
+    getFileHost
 } from '../../../Utils/FileUnpackHelper';
 import {v4 as uuidv4} from 'uuid';
 import ActionPopupWizardSteps from './ActionPopupWizardSteps/ActionPopupWizardSteps';
@@ -334,7 +336,7 @@ function ActionPopup(props) {
         Object.keys(files).forEach((inputName) => {
             const file = files[inputName];
             const newFile = fileBuilder(file, {
-                Host: `${getMinerCallableHostName(repositoryFileOwnerDropdownSelected.label)}/resources/`, 
+                Host: getFileStreamTopic(file) ? getFileHost(file) : `${getMinerCallableHostName(repositoryFileOwnerDropdownSelected.label)}/resources/`, 
                 fileContent: "null"
             });
             newFiles[inputName] = newFile;
