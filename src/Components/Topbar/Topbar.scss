@@ -42,11 +42,15 @@
 }
 
 .Topbar-logo{
-    height: 60%;
+    height: 80%;
     width: auto;
     aspect-ratio: 1 / 1;
     img{
         height: 100%;
+    }
+    .Topbar-Logo-link{
+        height: 100%;
+        width: 100%;
     }
 }
 

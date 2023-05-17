@@ -2,6 +2,7 @@ import './Topbar.scss';
 import {useState, useEffect} from 'react';
 import { Link } from "react-router-dom";
 import Logo from '../../Assets/logo';
+import PDL_Logo3 from '../../Assets/PDL_logo3.png';
 import dtuImg from '../../Assets/dtu.png';
 import IconizedButton from '../Widgets/Buttons/IconizedButton/IconizedButton';
 import {FaAngleRight, FaAngleLeft} from 'react-icons/fa';
@@ -36,7 +37,8 @@ function Topbar(props) {
                     
                         <div className='Topbar-logo Logo'>
                             <Link className='Topbar-Logo-link' to="/">
-                                <Logo/>
+                                <img src={PDL_Logo3} alt="PDL logo"></img>
+                                {/* <Logo/> */}
                             </Link>
                         </div>
                         
