@@ -9,7 +9,16 @@ function AlignmentVisualizerItem(props) {
         alignmentItem
     } = props;
 
+    if(!alignmentItem){
+        return (null);
+    }
+
     const sequence = alignmentItem.alignment;
+
+    if(Array.isArray(sequence) === false){
+        return (null);
+    }
+
     const sequenceLength = sequence.length;
 
     return (

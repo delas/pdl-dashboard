@@ -21,7 +21,7 @@ function AlignmentVisualizer(props) {
 
     let fileContent = getFileContent(file);
     
-    if(isLoading || Array.isArray(fileContent) === false || fileContent.length === 0){
+    if(isLoading || Array.isArray(fileContent) === false){
         return (
             <div className="AlignmentVisualizer-loading">
                 <div className='Spinner-container-l'>
