@@ -9,7 +9,7 @@ function AlignmentVisualizerItem(props) {
         alignmentItem
     } = props;
 
-    if(!alignmentItem || Array.isArray(sequence) === false){
+    if(!alignmentItem || Array.isArray(alignmentItem.alignment) === false){
         return (null);
     }
 
