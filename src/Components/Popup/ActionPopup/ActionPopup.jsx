@@ -139,7 +139,7 @@ function ActionPopup(props) {
         let filteredFilesTemp = {};
         getUniqueResourceTypesFromMinerObject().forEach((filter) => {
             GetRepositoryFilterMetadata(hostname, [filter]) // Get files of each filter
-            .then(res => { 
+            .then(res => {
                 // --------------- This piece of code will remove files from selectedFiles that are not in the new list of possible files ---------------
                 if(selectedFiles && Object.keys(selectedFiles).length > 0) { // If selectedFiles is not empty
                     const filesMetadata = Object.keys(selectedFiles).map((inputName) => {
@@ -153,7 +153,7 @@ function ActionPopup(props) {
                 // setting the dropdown options for each filter type
                 filteredFilesTemp[filter] = convertFilesToDropdown(res.data); // Assign files to filter key in object {filter1: [files], filter2: [files]}      
             })
-            .then(() => { 
+            .then(() => {
                 setFileredFilesForDropdown(filteredFilesTemp) // Set filteredFilesTemp in state
             }) 
             .catch((e) => console.log(e));

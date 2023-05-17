@@ -1,0 +1,39 @@
+.AlignmentVisualizer{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+      
+    &::-webkit-scrollbar-track {
+        background: #e9ecef;
+    }
+      
+      /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: #6c757d;
+    }
+      
+      /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: rgb(153, 0, 0);
+    }
+}
+
+.AlignmentVisualizer-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.5em;
+}
+
+.AlignmentVisualizer-item{
+    width: 100%;
+}

@@ -13,6 +13,7 @@ import Dropdown from '../Widgets/Dropdown/Dropdown';
 import {getChildrenFromFile, GetSingleFileMetadata} from '../../Services/RepositoryServices';
 import DefaultButton from '../Widgets/Buttons/DefaultButton/DefaultButton';
 import { getFileLocal } from '../../Store/LocalDataStore';
+import AlignmentVisualizer from './AlignmentVisualizer/AlignmentVisualizer';
 
 function Visualizations(props) {
     const {
@@ -184,6 +185,7 @@ function Visualizations(props) {
                     {(selectedTab.ResourceType === "PNML")      && <PNMLVisualizer file = {file}/>}
                     {(selectedTab.ResourceType === "DOT")       && <DotVisualizer selectedFileId = {selectedFileId}/>}
                     {(selectedTab.ResourceType === "IMAGE")     && <ImageVisualizer file = {file}/>}
+                    {(selectedTab.ResourceType === "ALIGNMENT")     && <AlignmentVisualizer file = {file}/>}
                 </div>
             }
         </div>

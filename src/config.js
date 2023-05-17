@@ -9,10 +9,6 @@ export const visualizationConfig = {
                 Title: "Histogram",
                 ResourceType: "HISTOGRAM",
             },
-            // {
-            //     ResourceType: "DOT",
-            //     Title: "Related resources",
-            // },
         ]
     },
     HISTOGRAM: {
@@ -21,48 +17,28 @@ export const visualizationConfig = {
                 Title: "Histogram",
                 ResourceType: "HISTOGRAM",
             },
-            // {
-            //     ResourceType: "DOT",
-            //     Title: "Related resources",
-            // },
         ]
     },
     PETRINET: {
         PNML: [
-            // {
-            //     ResourceType: "DOT",
-            //     Title: "Related resources",
-            // },
         ],
         SVG: [
             {
                 ResourceType: "IMAGE",
                 Title: "Petri net",
             },
-            // {
-            //     ResourceType: "DOT",
-            //     Title: "Related resources",
-            // },
         ],
         JPG: [
             {
                 ResourceType: "IMAGE",
                 Title: "Petri net",
             },
-            // {
-            //     ResourceType: "DOT",
-            //     Title: "Related resources",
-            // },
         ],
         PNG: [
             {
                 ResourceType: "IMAGE",
                 Title: "Petri net",
             },
-            // {
-            //     ResourceType: "DOT",
-            //     Title: "Related resources",
-            // },
         ]
     },
     PROCESSMODEL: {
@@ -71,42 +47,34 @@ export const visualizationConfig = {
                 ResourceType: "BPMN",
                 Title: "BPMN",
             },
-            // {
-            //     ResourceType: "DOT",
-            //     Title: "Related resources",
-            // },
         ],
         SVG: [
             {
                 ResourceType: "IMAGE",
                 Title: "BPMN",
             },
-            // {
-            //     ResourceType: "DOT",
-            //     Title: "Related resources",
-            // },
         ],
         JPG: [
             {
                 ResourceType: "IMAGE",
                 Title: "BPMN",
             },
-            // {
-            //     ResourceType: "DOT",
-            //     Title: "Related resources",
-            // },
         ],
         PNG: [
             {
                 ResourceType: "IMAGE",
                 Title: "BPMN",
             },
-            // {
-            //     ResourceType: "DOT",
-            //     Title: "Related resources",
-            // },
         ]
     },
+    ALIGNMENT: {
+        JSON: [
+            {
+                ResourceType: "ALIGNMENT",
+                Title: "Alignment",
+            }
+        ],
+    }
 }
 
 export const getAvailableResourceTypes = () => {
