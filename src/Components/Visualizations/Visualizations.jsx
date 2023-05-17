@@ -30,6 +30,7 @@ function Visualizations(props) {
     const [childrenForDropdown, setChildrenForDropdown] = useState([]);
     const [selectedChild, setSelectedChild] = useState(null);
     const [hasCalledChildren, setHasCalledChildren] = useState(null);
+    const [error, setError] = useState(null);
     const file = getFileLocal(selectedFileId);
 
     const generateTabList = (file) => {
@@ -63,7 +64,7 @@ function Visualizations(props) {
             .then((res) => {setChildren(res.data); generateChildren(res.data)} )
             .then(() => {setHasCalledChildren(getFileResourceId(file))})
             .then(() => {setIsLoading(false)})
-            .catch((err) => {console.log(err)} );
+            .catch((err) => {setError(err); console.log(err)} );
         } else {
             setIsLoading(false);
         }
@@ -126,6 +127,18 @@ function Visualizations(props) {
             <div className="Visualizations-loading">
                 <div className='Spinner-container-l'>
                     <LoadingSpinner loading={isLoading}/>
+                </div>
+            </div>
+        )
+    }
+
+    if(error){
+        return (
+            <div className="Visualizations-error">
+                <h2>An error has occured</h2>
+                {/* <div>Please varify that the repository is available for the requested file and try again.</div> */}
+                <div className='Visualizations-error-message'>
+                    {`Error: ${error}`}
                 </div>
             </div>
         )
