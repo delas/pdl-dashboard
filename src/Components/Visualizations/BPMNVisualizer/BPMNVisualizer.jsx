@@ -12,12 +12,12 @@ function BPMNVisualizer(props) {
     const {
         file,
         uploadEditedFile,
-
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
     const [getUpdatedBPMN, setGetUpdatedBPMN] = useState({});
     const fileDynamic = getFileDynamic(file);
+    const [modeler, setModeler] = useState(null);
 
     const setComponentUpdaterFunction = (componentName, func) => {
         let tempUpdatedBPMN = getUpdatedBPMN;
@@ -27,6 +27,7 @@ function BPMNVisualizer(props) {
 
     useEffect(() => {
         setIsLoading(false);
+        setModeler(<BPMNComponent file = {file} setComponentUpdaterFunction={setComponentUpdaterFunction}/>)
     }, [file]);
 
     if(isLoading){
@@ -73,7 +74,8 @@ function BPMNVisualizer(props) {
                         primary = {true}/>
                 </div>
             }
-            <BPMNComponent file = {file} setComponentUpdaterFunction={setComponentUpdaterFunction}/>
+            {modeler}
+            {/* <BPMNComponent file = {file} setComponentUpdaterFunction={setComponentUpdaterFunction}/> */}
         </div>
     );
 }
