@@ -11,6 +11,7 @@ import { GetRepositoryConfig, GetHistogramOfLog } from './Services/RepositorySer
 import { getFileExtension, getFileResourceId, getFileResourceType, getFileRepositoryUrl, getFileProcessId, getFileResourceLabel } from './Utils/FileUnpackHelper';
 import { pingHostInterval, pingMinerProcessInterval } from './config';
 import LoadingSpinner from './Components/Widgets/LoadingSpinner/LoadingSpinner';
+import {v4 as uuidv4} from 'uuid';
 
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -94,10 +95,19 @@ function App(props) {
         }
     }
 
-    const addOrUpdateHost = (id, host) => {
-        handleAddHostOfType(host.type.value, host.name).then((res) => {
-            host.config = res?.data;
-            saveHostLocal(id, host);
+    const addOrUpdateHost = (name, type, addedFrom) => {
+
+        const hostObject = {
+            id: uuidv4(),
+            name: name,
+            status: "offline",
+            type: {label: type, value: type},
+            addedFrom: addedFrom,
+        }
+
+        handleAddHostOfType(type, name).then((res) => {
+            hostObject.config = res?.data;
+            saveHostLocal(hostObject.id, hostObject);
             if(updateComponents.SidebarHosts){
                 updateComponents.SidebarHosts.update();
             }

@@ -23,15 +23,15 @@ function AddNewHostPopup(props) {
     }, []);
 
     const handleSubmit = () => { // create new host object and add it to the list of hosts in localMemory
-        const newHost = {
-            id: uuidv4(),
-            name: hostName,
-            status: "online",
-            type: selectedHosttype,
-            addedFrom: 'locally',
-            config: {},
-        };
-        addHost(newHost.id, newHost);
+        // const newHost = {
+        //     id: uuidv4(),
+        //     name: hostName,
+        //     status: "online",
+        //     type: selectedHosttype,
+        //     addedFrom: 'locally',
+        //     config: {},
+        // };
+        addHost(hostName, selectedHosttype.value, "locally");
     }
 
     const handleTextfieldChange = (res) => {

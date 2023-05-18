@@ -30,25 +30,11 @@ function AddNewHostFromServiceRegistryPopup(props) {
 
     const handleSubmit = () => {
         minerHostsSelected.forEach((miner) => {
-            const newHost = {
-                id: uuidv4(),
-                name: miner.label,
-                status: "offline",
-                type: {label: miner.value, value: miner.value},
-                addedFrom: serviceRegistry.label,
-            };
-            addHost(newHost.id, newHost);
+            addHost(miner.label, miner.value, serviceRegistry.label);
         });
 
         repositoryHostsSelected.forEach((repository) => {
-            const newHost = {
-                id: uuidv4(),
-                name: repository.label,
-                status: "offline",
-                type: {label: repository.value, value: repository.value},
-                addedFrom: serviceRegistry.label,
-            };
-            addHost(newHost.id, newHost);
+            addHost(repository.label, repository.value, serviceRegistry.label);
         });
     }
 
