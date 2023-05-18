@@ -6,7 +6,7 @@ import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
 import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
 import DotVisualizer from './DotVisualizer/DotVisualizer';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
-import { getFileDescription, getFileExtension, getFileRepositoryUrl, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileDynamic } from '../../Utils/FileUnpackHelper';
+import { getFileDescription, getFileExtension, getFileRepositoryUrl, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileDynamic, getFileContent } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 import {getVisalizations, pingDynamicResourceInterval} from '../../config';
 import Dropdown from '../Widgets/Dropdown/Dropdown';
@@ -81,6 +81,12 @@ function Visualizations(props) {
                 });
                 forceUpdate();
             }, pingDynamicResourceInterval);
+        }
+        else if(file && getFileDynamic(file) === false && !getFileContent(file)){
+            GetSingleFileMetadata(getFileRepositoryUrl(file), getFileResourceId(file))
+            .then((res) => {
+                getAndAddFile(res.data);
+            });
         }
 
     }, [selectedFileId]);    

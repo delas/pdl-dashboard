@@ -7,7 +7,7 @@ import { saveHostLocal, removeHostLocal, saveFileLocal, getFileLocal, removeFile
 import { pingAllAddedServices, pingAllProcesses, getAndSaveAllHostConfig } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
-import { GetRepositoryConfig } from './Services/RepositoryServices';
+import { GetRepositoryConfig, GetHistogramOfLog } from './Services/RepositoryServices';
 import { getFileExtension, getFileResourceId, getFileResourceType, getFileRepositoryUrl, getFileProcessId } from './Utils/FileUnpackHelper';
 import { pingHostInterval, pingMinerProcessInterval } from './config';
 import LoadingSpinner from './Components/Widgets/LoadingSpinner/LoadingSpinner';
@@ -158,6 +158,9 @@ function App(props) {
         if(shouldSetFileContent(file)){
             if(isImage) responsePromise = GetFileImage(host, resourceId);
             else responsePromise = GetFileText(host, resourceId); 
+        }
+        else if (fileExtension.toUpperCase() === "XES") {
+            responsePromise = GetHistogramOfLog(host, resourceId);
         }
         if(responsePromise)
             responsePromise
