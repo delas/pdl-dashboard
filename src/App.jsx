@@ -8,7 +8,7 @@ import { pingAllAddedServices, pingAllProcesses, getAndSaveAllHostConfig } from 
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
 import { GetRepositoryConfig, GetHistogramOfLog } from './Services/RepositoryServices';
-import { getFileExtension, getFileResourceId, getFileResourceType, getFileRepositoryUrl, getFileProcessId } from './Utils/FileUnpackHelper';
+import { getFileExtension, getFileResourceId, getFileResourceType, getFileRepositoryUrl, getFileProcessId, getFileResourceLabel } from './Utils/FileUnpackHelper';
 import { pingHostInterval, pingMinerProcessInterval } from './config';
 import LoadingSpinner from './Components/Widgets/LoadingSpinner/LoadingSpinner';
 
@@ -136,7 +136,10 @@ function App(props) {
     }
 
     const getAndAddFile = (file, retry = false, retries = 0) => {
-        if(!file || retries >= 10) return;
+        if(!file || retries >= 10) {
+            alert(`Could not get file "${getFileResourceLabel(file)}" from host ${getFileRepositoryUrl(file)}`);
+            return;
+        }
 
         const resourceId = getFileResourceId(file);
         const currentFile = getFileLocal(resourceId);

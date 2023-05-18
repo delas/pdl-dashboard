@@ -29,15 +29,17 @@ function ViewResourcePopup(props) {
     const convertFilesToDropdown = (files, repositoryUrl) => { // param structure = [fileMetadata1, fileMetadata2, ...]
         return files.map((file) => {
             const prefix = getFileExtension(file) ? `${getFileExtension(file).toUpperCase()}` : `${getFileResourceType(file)}`;
-            const label = 
-            <div className='ViewResourcePopup-dropdown-item'>
-                <div className='ViewResourcePopup-dropdown-item-prefix'>
-                    {`${prefix}`}
-                </div>  
-                <div className='ViewResourcePopup-dropdown-item-label'>
-                    {`${getFileResourceLabel(file)}`}
-                </div>
-            </div>
+            const label = `${prefix} \t ${getFileResourceLabel(file)}`;
+            // <> // use this instead for a prettier structure of files. But it removes search option from dropdown
+            //     <div className='ActionPopup-dropdown-item'>
+            //         <div className='ActionPopup-dropdown-item-prefix'>
+            //             {`${prefix}`}
+            //         </div>  
+            //         <div className='ActionPopup-dropdown-item-label'>
+            //             {`${getFileResourceLabel(file)}`}
+            //         </div>
+            //     </div>
+            // </>
             return ({label: label, value: {...file, repositoryUrl: repositoryUrl}})
         })
     }
