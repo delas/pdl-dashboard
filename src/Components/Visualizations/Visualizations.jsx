@@ -78,7 +78,9 @@ function Visualizations(props) {
                 if(!internalFile || !getFileRepositoryUrl(internalFile) || !getFileResourceId(internalFile)) return clearInterval(updateFileInterval.current);
                 GetSingleFileMetadata(getFileRepositoryUrl(internalFile), getFileResourceId(internalFile))
                 .then((res) => {
-                    getAndAddFile(res.data);
+                    const metadata = res.data;
+                    metadata["repositoryUrl"] = getFileRepositoryUrl(internalFile);
+                    getAndAddFile(metadata);
                 });
                 forceUpdate();
             }, pingDynamicResourceInterval);
@@ -121,6 +123,8 @@ function Visualizations(props) {
     const onDropdownButtonClick = () => {
         if(selectedChild){
             const child = children.find((child) => getFileResourceId(child) === selectedChild.value);
+            const metadata = child;
+            metadata["repositoryUrl"] = getFileRepositoryUrl(file);
             getAndAddFile(child);
         }
     }
