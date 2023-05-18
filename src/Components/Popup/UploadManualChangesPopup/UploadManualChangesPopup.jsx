@@ -89,6 +89,8 @@ function UploadManualChangesPopup(props) {
             GetSingleFileMetadata(fileDestination.label, res.data)
             .then((res) => {
                 const isImage = false; // Currently no way to make changes to images
+                const metadata = res.data;
+                metadata["repositoryUrl"] = fileDestination.label; // Add repositoryUrl to metadata, used to get file content and children
                 saveFileAndUpdate(res.data, xml, isImage);
             });
         })
