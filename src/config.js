@@ -6,21 +6,25 @@ export const visualizationConfig = {
     EVENTLOG: {
         XES: [
             {
-                Title: "Histogram",
                 ResourceType: "HISTOGRAM",
+                Title: "Histogram",
             },
         ]
     },
     HISTOGRAM: {
         JSON: [
             {
-                Title: "Histogram",
                 ResourceType: "HISTOGRAM",
+                Title: "Histogram",
             },
         ]
     },
     PETRINET: {
-        PNML: [
+        PNML: [ // There is no stable visualization for PNML files
+            // {
+            //     ResourceType: "PNML",
+            //     Title: "PNML",
+            // },
         ],
         SVG: [
             {
@@ -74,6 +78,33 @@ export const visualizationConfig = {
                 Title: "Alignment",
             }
         ],
+    },
+    OTHER: {
+        PNG: [
+            {
+                ResourceType: "IMAGE",
+                Title: "Image viewer",
+            }
+        ],
+        JPG: [
+            {
+                ResourceType: "IMAGE",
+                Title: "Image viewer",
+            }
+        ],
+        SVG: [
+            {
+                ResourceType: "IMAGE",
+                Title: "Image viewer",
+            }
+        ],
+        DOT: [
+            {
+                ResourceType: "DOT",
+                Title: "Graph viewer",
+            }
+        ]
+
     }
 }
 
