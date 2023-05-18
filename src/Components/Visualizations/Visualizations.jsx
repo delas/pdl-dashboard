@@ -88,7 +88,9 @@ function Visualizations(props) {
         else if(file && getFileDynamic(file) === false && !getFileContent(file)){
             GetSingleFileMetadata(getFileRepositoryUrl(file), getFileResourceId(file))
             .then((res) => {
-                getAndAddFile(res.data);
+                const metadata = res.data;
+                metadata["repositoryUrl"] = getFileRepositoryUrl(file);
+                getAndAddFile(metadata);
             });
         }
 
@@ -122,10 +124,9 @@ function Visualizations(props) {
 
     const onDropdownButtonClick = () => {
         if(selectedChild){
-            const child = children.find((child) => getFileResourceId(child) === selectedChild.value);
-            const metadata = child;
+            const metadata = children.find((child) => getFileResourceId(child) === selectedChild.value);
             metadata["repositoryUrl"] = getFileRepositoryUrl(file);
-            getAndAddFile(child);
+            getAndAddFile(metadata);
         }
     }
 
