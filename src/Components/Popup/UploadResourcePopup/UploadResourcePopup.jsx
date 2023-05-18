@@ -98,7 +98,9 @@ function UploadResourcePopup(props) {
                 .then((res) => {
                     GetSingleFileMetadata(fileDestination.label, res.data)
                     .then((res) => {
-                        getAndAddFile(res.data);
+                        const metadata = res.data;
+                        metadata["repositoryUrl"] = fileDestination.label;
+                        getAndAddFile(metadata);
                     });
                 })
                 .then(() => {toggleFilePopupOpen(); setIsLoading(false);})

@@ -58,6 +58,7 @@ function Visualizations(props) {
         setComponentUpdaterFunction("Visualizations", {update: forceUpdate})
         setSelectedChild(null);
         setSelectedTab(null);
+        setError(null);
 
         if(file && hasCalledChildren !== getFileResourceId(file)){ // prevents children being requested repeatedly
         getChildrenFromFile(getFileRepositoryUrl(file), getFileResourceId(file))
