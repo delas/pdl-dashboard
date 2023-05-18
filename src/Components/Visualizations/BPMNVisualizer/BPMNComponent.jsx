@@ -9,6 +9,7 @@ import camundaModdleDescriptor from "camunda-bpmn-moddle/resources/camunda";
 import './BPMNComponent.scss';
 import { getFileContent } from "../../../Utils/FileUnpackHelper";
 import LoadingSpinner from "../../Widgets/LoadingSpinner/LoadingSpinner";
+import {BiHide, BiShow} from 'react-icons/bi';
 
 function BPMNComponent(props) {
     const {
@@ -20,6 +21,8 @@ function BPMNComponent(props) {
     const viewerRef = useRef(null);
     const containerRef = useRef(null);
     const [didMount, setDidMount] = useState(false);
+    const panelRef = useRef(null);
+    const [isOpen, setIsOpen] = useState("show");
 
     useEffect(() => {
         setDidMount(true); // Setting mount will ensure the divs are created before the viewer accesses them
@@ -60,8 +63,13 @@ function BPMNComponent(props) {
             });
     }, [file, didMount]);
 
+    const togglePanelOpen = () => {
+        setIsOpen(!isOpen);
+        if(panelRef.current !== null)
+        panelRef.current.className = `djs-palette two-column ${!isOpen ? "open" : "closed"}`;
+    }
 
-    if(isLoading){
+    if(isLoading || containerRef === null){
         return (
             <div className="BPMNComponent">
                 <div className='Spinner-container-l'>
@@ -71,11 +79,17 @@ function BPMNComponent(props) {
         )
     }
 
+    panelRef.current = document.getElementsByClassName("djs-palette")[0];
+
     return (
         <div className="BPMNComponent-parent">
             <div id="bpmn-component-canvas" ref={containerRef} />
 
             {/* <div id="propview" /> */}
+
+            <div className={`BPMNComponent-panen--${isOpen ? "open" : "closed"}`} onClick = {() => {togglePanelOpen()}}>
+                {isOpen ? <BiShow/> : <BiHide/>}
+            </div>
         </div>
     );
 }

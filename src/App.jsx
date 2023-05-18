@@ -159,7 +159,7 @@ function App(props) {
             if(isImage) responsePromise = GetFileImage(host, resourceId);
             else responsePromise = GetFileText(host, resourceId); 
         }
-        else if (fileExtension.toUpperCase() === "XES") {
+        else if (fileExtension && fileExtension.toUpperCase() === "XES") {
             responsePromise = GetHistogramOfLog(host, resourceId);
         }
         if(responsePromise)
