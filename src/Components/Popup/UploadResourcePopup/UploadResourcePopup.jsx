@@ -91,37 +91,45 @@ function UploadResourcePopup(props) {
     }
 
     const onConfirmClick = () => {
+        let request;
         switch(selectedTab.Title){
             case "File":
                 setIsLoading(true);
-                sendFileToRepository(fileDestination.label, selectedFile, fileExtension, selectedFileType.value, resourceName, fileDescription)
-                .then((res) => {
-                    GetSingleFileMetadata(fileDestination.label, res.data)
-                    .then((res) => {
-                        const metadata = res.data;
-                        metadata["repositoryUrl"] = fileDestination.label;
-                        getAndAddFile(metadata);
-                    });
-                })
-                .then(() => {toggleFilePopupOpen(); setIsLoading(false);})
-                .catch((err) => {console.log(err); setIsLoading(false);});
+                request = sendFileToRepository(
+                    fileDestination.label, 
+                    selectedFile, 
+                    fileExtension, 
+                    selectedFileType.value, 
+                    resourceName, 
+                    fileDescription
+                );
                 break;
             case "Stream":
                 setIsLoading(true);
-                sendStreamToRepository(fileDestination.label, streamBrokerLocation, streamTopic, resourceName, selectedFileType.value, fileDescription)
-                .then((res) => {
-                    GetSingleFileMetadata(fileDestination.label, res.data)
-                    .then((res) => {
-                        getAndAddFile(res.data);
-                    });
-                })
-                .then(() => {toggleFilePopupOpen(); setIsLoading(false);})
-                .catch((err) => {console.log(err); setIsLoading(false);});
+                request = sendStreamToRepository(
+                    fileDestination.label, 
+                    streamBrokerLocation, 
+                    streamTopic, 
+                    resourceName, 
+                    selectedFileType.value, 
+                    fileDescription
+                );
                 break;
             default:
                 alert("It seems there was an error while uploading the resource. Please try selecting a tab in the popup and try again.")
                 setIsLoading(false);
+                return;
         }
+        request.then((res) => {
+            GetSingleFileMetadata(fileDestination.label, res.data)
+            .then((res) => {
+                const metadata = res.data;
+                metadata["repositoryUrl"] = fileDestination.label;
+                getAndAddFile(metadata);
+            });
+        })
+        .then(() => {toggleFilePopupOpen(); setIsLoading(false);})
+        .catch((err) => {console.log(err); setIsLoading(false);});
     }
 
     const repositories = getRepositoriesLocal().map((repository, index) => {

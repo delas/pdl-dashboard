@@ -46,14 +46,14 @@ function UploadStreamBody(props) {
             <InputField
                 label = {"Stream broker host:"}
                 fieldType = {"text"}
-                placeholder = {"Streambroker.org.net.com.org"}
+                placeholder = {"Streambroker.org"}
                 value = {streamBrokerLocation}
                 onChange = {onStreamBrokerLocationChange}
             />
             <InputField
                 label = {"Stream topic:"}
                 fieldType = {"text"}
-                placeholder = {"My_very_special_topic"}
+                placeholder = {"Some_topic"}
                 value = {streamTopic}
                 onChange = {onStreamTopicChange}
             />
