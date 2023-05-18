@@ -65,9 +65,9 @@ function ViewResourcePopup(props) {
     })
 
     const onConfirmClick = () => {
-        if(selectedFile) {
+        if(selectedFile) {  
             const metadata = selectedFile.value;
-            metadata["repositoryUrl"] = repository.name;
+            metadata["repositoryUrl"] = selectedRepository.label;
             getAndAddFile(metadata);
             toggleViewResourcePopupOpen();
         }
