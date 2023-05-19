@@ -104,7 +104,9 @@ function ActionPopup(props) {
     // ------------------ STEP 2 ------------------
     // --------------------------------------------
 
-    const repositories = getRepositoriesLocal().map((repository, index) => { // dropdown options for repositories
+    const repositories = getRepositoriesLocal().filter((repository) => {
+        return repository.status === "online"
+    }).map((repository, index) => { // dropdown options for repositories
         return {label: repository.name, value: repository.id}
     });
     const [repositoryFileOwnerDropdownSelected, setRepositoryFileOwnerDropdownSelected] = useState(null); // dropdown selected option for repository {label: repository.name, value: repository.id}
@@ -162,7 +164,7 @@ function ActionPopup(props) {
 
     const onRepositoryFileOwnerDropdownChange = (value) => { // Onchange function on repository dropdown 
         const host = getHostLocal(value.value);
-        if(!host) return;
+        if(!host || host.status === "offline") return;
         setRepositoryFileOwnerDropdownSelected(value);
         setFilesFromRepository(value.label);
     }
