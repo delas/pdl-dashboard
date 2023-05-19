@@ -189,21 +189,31 @@ export function getProcessLocal(key) {
     return getSavedItem(key);
 }
 
-export function getAllProcessesLocal(){
-    return getAllProcessKeysLocal().map((key) => {
+export function getAllActionProcessesLocal(){
+    return getAllProcessKeysLocal("process").map((key) => {
         return JSON.parse(localStorage.getItem(key));
     })
 }
 
-export function getAllRunningProcessesLocal(){
-    return getAllProcessesLocal().filter((process) => process.status.toUpperCase() === "RUNNING"); // !process.resourceId);
+export function getAllRunningActionProcessesLocal(){
+    return getAllActionProcessesLocal().filter((process) => process.status.toUpperCase() === "RUNNING");
 }
 
-export function getAllProcessKeysLocal() {
+export function getAllShadowProcessesLocal(){
+    return getAllProcessKeysLocal("shadowProcess").map((key) => {
+        return JSON.parse(localStorage.getItem(key));
+    })
+}
+
+export function getAllRunningShadowProcessesLocal(){
+    return getAllShadowProcessesLocal().filter((process) => process.status.toUpperCase() === "RUNNING");
+}
+
+export function getAllProcessKeysLocal(objectType = "process") {
     return Object.keys(localStorage).filter((key) => {
         if(key !== "debug"){ // because there is default a value not in json format
             const storageItem = JSON.parse(localStorage.getItem(key));
-            if(storageItem && storageItem.objectType === "process")
+            if(storageItem && storageItem.objectType === objectType)
             return storageItem;
         }
     })

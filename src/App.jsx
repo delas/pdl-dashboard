@@ -4,14 +4,15 @@ import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
 import Page2 from './Pages/Page2/Page2';
 import { saveHostLocal, removeHostLocal, saveFileLocal, getFileLocal, removeFileLocal } from './Store/LocalDataStore';
-import { pingAllAddedServices, pingAllProcesses, getAndSaveAllHostConfig } from './Utils/ServiceHelper';
+import { pingAllAddedServices, pingAllActionProcesses, getAndSaveAllHostConfig, pingAllShadowProcesses } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
 import { GetMinerConfig } from './Services/MinerServices';
 import { GetRepositoryConfig, GetHistogramOfLog } from './Services/RepositoryServices';
 import { getFileExtension, getFileResourceId, getFileResourceType, getFileRepositoryUrl, getFileProcessId, getFileResourceLabel } from './Utils/FileUnpackHelper';
-import { pingHostInterval, pingMinerProcessInterval } from './config';
+import { pingHostInterval, pingMinerProcessInterval, pingShadowProcessInterval } from './config';
 import LoadingSpinner from './Components/Widgets/LoadingSpinner/LoadingSpinner';
 import {v4 as uuidv4} from 'uuid';
+import InformationPrompt from './Components/Widgets/InformationPrompt/InformationPrompt';
 
 function App(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -33,6 +34,7 @@ function App(props) {
     // --------------- Interval refs to ensure only one loop is running ----------------
     let pingInterval = useRef(null); 
     let pingProcessInterval = useRef(null);
+    let pingShadowInterval = useRef(null);
 
     //Toggle functions
     const toggleSidebar = () => { setSidebarOpen(!sidebarOpen); }
@@ -46,12 +48,17 @@ function App(props) {
     const toggleUploadManualChangesPopup = () => { setUploadManualChangesPopup(!uploadManualChangesPopup); }
     const toggleShadowPopupOpen = () => { setShadowPopupOpen(!shadowPopupOpen); }
     const toggleIsInformationPromptOpen = () => { setIsInformationPromptOpen(!isInformationPromptOpen); }
+    const [InformationPromptInfo, setIsInformationPromptInfo] = useState({});
 
     useEffect(() => {
         clearInterval(pingInterval.current);
         clearInterval(pingProcessInterval.current);
+        clearInterval(pingShadowInterval.current);
+
         startPingHosts();
         startPingProcesses();
+        startPingShadowProcesses();
+
         getAndSaveAllHostConfig();
         setIsLoading(false);
     }, []);
@@ -70,7 +77,7 @@ function App(props) {
     const startPingProcesses = () => {
         if(pingProcessInterval.current !== null) clearInterval(pingProcessInterval.current);
         pingProcessInterval.current = setInterval(() => {
-            pingAllProcesses(getAndAddFile).then(() => {
+            pingAllActionProcesses(getAndAddFile).then(() => {
                 if(updateComponents.ProcessOverviewPopup){
                     setTimeout(() => {
                         updateComponents.ProcessOverviewPopup.update();
@@ -78,6 +85,17 @@ function App(props) {
                 }
             });
         }, pingMinerProcessInterval);
+    }
+
+    const startPingShadowProcesses = () => {
+        if(pingShadowInterval.current !== null) clearInterval(pingShadowInterval.current);
+        pingShadowInterval.current = setInterval(() => {
+            pingAllShadowProcesses(addOrUpdateHost, openInformationPrompt).then(() => {
+                if(updateComponents.SidebarHosts){
+                    updateComponents.SidebarHosts.update();
+                }
+            });
+        }, pingShadowProcessInterval)
     }
 
     const setComponentUpdaterFunction = (componentName, updateFunc) => {
@@ -95,15 +113,17 @@ function App(props) {
         }
     }
 
-    const addOrUpdateHost = (name, type, addedFrom) => {
+    const addOrUpdateHost = (name, type, addedFrom, id = null, status = "offline") => {
 
         const hostObject = {
-            id: uuidv4(),
+            id: id ? id : uuidv4(),
             name: name,
-            status: "offline",
+            status: status,
             type: {label: type, value: type},
             addedFrom: addedFrom,
         }
+
+        console.log(hostObject);
 
         handleAddHostOfType(type, name).then((res) => {
             hostObject.config = res?.data;
@@ -207,6 +227,35 @@ function App(props) {
         }
     }
 
+    const openInformationPrompt = ({
+        title, 
+        text, 
+        setTimeoutClose, 
+        closeButtonText, 
+        onClosePrompt,
+        disabled,
+        closePrimary,
+        hasAccept,
+        acceptButtonText,
+        acceptPrimary ,
+        onAcceptPrompt,
+    }) => {
+        setIsInformationPromptInfo({
+            text: text ? text : "",
+            title: title ? title : "",
+            closeButtonText: closeButtonText ? closeButtonText : "Close",
+            onClosePrompt: (onClosePrompt !== null && onClosePrompt !== undefined) ? onClosePrompt : () => setIsInformationPromptOpen(false),
+            disabled: (disabled !== null && disabled !== undefined) ? disabled : false,
+            closePrimary: (closePrimary !== null && closePrimary !== undefined) ? closePrimary : true,
+            setTimeoutClose: (setTimeoutClose !== null && setTimeoutClose !== undefined) ? setTimeoutClose : true,
+            hasAccept: (hasAccept !== null && hasAccept !== undefined) ? hasAccept : false,
+            acceptButtonText: acceptButtonText ? acceptButtonText : "",
+            acceptPrimary: (acceptPrimary !== null && acceptPrimary !== undefined) ? acceptPrimary : true,
+            onAcceptPrompt:  (onAcceptPrompt !== null && onAcceptPrompt !== undefined) ? onAcceptPrompt : (() => {})(),
+        });
+        setIsInformationPromptOpen(true);
+    }   
+
     if(isLoading){
         return (
             <div className="App">
@@ -232,6 +281,7 @@ function App(props) {
                 updateComponents = {updateComponents}
                 shouldSetFileContent = {shouldSetFileContent}
                 saveFileAndUpdate = {saveFileAndUpdate}
+                openInformationPrompt = {openInformationPrompt}
                 toggles = {{
                     toggleSidebar,
                     toggleSidebarHosts,
@@ -273,6 +323,22 @@ function App(props) {
                     isInformationPromptOpen,
                 }}
             /> : null}
+            {isInformationPromptOpen ?
+                <InformationPrompt
+                    text = {InformationPromptInfo.text}
+                    title= {InformationPromptInfo.title}
+                    closeButtonText = {InformationPromptInfo.closeButtonText}
+                    onClosePrompt = {InformationPromptInfo.onClosePrompt}//{toggles.toggleIsInformationPromptOpen}
+                    disabled = {InformationPromptInfo.disabled}
+                    closePrimary = {InformationPromptInfo.closePrimary}
+                    setTimeoutClose = {InformationPromptInfo.setTimeoutClose}
+                    hasAccept = {InformationPromptInfo.hasAccept}
+                    acceptButtonText = {InformationPromptInfo.acceptButtonText}
+                    acceptPrimary = {InformationPromptInfo.acceptPrimary}
+                    onAcceptPrompt = {InformationPromptInfo.onAcceptPrompt}
+                />
+                : null
+            }
             {props.page === "Page1" ? <Page1/> : null}
             {props.page === "Page2" ? <Page2/> : null}
         </div>

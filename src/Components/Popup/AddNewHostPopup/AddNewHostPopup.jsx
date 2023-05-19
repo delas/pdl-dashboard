@@ -1,7 +1,6 @@
 import './AddNewHostPopup.scss';
 import {useState, useEffect} from 'react';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
-import {v4 as uuidv4} from 'uuid';
 import InputField from '../../Widgets/InputField/InputField';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import Popup from '../../Widgets/Popup/Popup';
@@ -23,15 +22,8 @@ function AddNewHostPopup(props) {
     }, []);
 
     const handleSubmit = () => { // create new host object and add it to the list of hosts in localMemory
-        // const newHost = {
-        //     id: uuidv4(),
-        //     name: hostName,
-        //     status: "online",
-        //     type: selectedHosttype,
-        //     addedFrom: 'locally',
-        //     config: {},
-        // };
         addHost(hostName, selectedHosttype.value, "locally");
+        
     }
 
     const handleTextfieldChange = (res) => {

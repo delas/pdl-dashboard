@@ -1,6 +1,7 @@
 export const pingDynamicResourceInterval = 1000; // 1 seconds
 export const pingHostInterval = 10000; // 10 seconds
 export const pingMinerProcessInterval = 1000; // 1 seconds
+export const pingShadowProcessInterval = 10000; // 10 seconds
 
 export const visualizationConfig = {
     EVENTLOG: {

@@ -1,18 +1,21 @@
-import { PingMiner, GetMinerProcessStatus, GetMinerConfig } from '../Services/MinerServices';
+import { PingMiner, GetMinerActionProcessStatus, GetMinerConfig, GetMinerShadowProcessStatus } from '../Services/MinerServices';
 import { PingRepository, GetSingleFileMetadata, GetRepositoryConfig } from '../Services/RepositoryServices';
 import { PingServiceRegistry, PingConnectedFilters, GetConfigFromServiceRegistry } from '../Services/ServiceRegistryServices';
 import { 
     getAllHostAddedFromServiceRegistry, 
     getServiceRegistriesLocal, 
     setHostStatusLocal, 
-    getAllRunningProcessesLocal, 
+    getAllRunningActionProcessesLocal, 
     setProcessKeyLocalAsync, 
+    getAllShadowProcessesLocal,
+    getAllRunningShadowProcessesLocal,
     getAllHostLocallyAdded, 
     getProcessLocal, 
     getFileLocal, 
     getRepositoriesLocal, 
     getMinersLocal,
-    saveHostLocal 
+    saveHostLocal,
+    removeProcessLocal,
 } from '../Store/LocalDataStore';
 import { getFileResourceId } from './FileUnpackHelper';
 import {msToTime} from './Utils';
@@ -80,9 +83,9 @@ function pingAllLocallyAddedServices() {
     });
 }
 
-export async function pingAllProcesses(getAndAddFile) {
-    getAllRunningProcessesLocal().forEach((process) => {
-        GetMinerProcessStatus(process.hostname, process.processId)
+export async function pingAllActionProcesses(getAndAddFile) {
+    getAllRunningActionProcessesLocal().forEach((process) => {
+        GetMinerActionProcessStatus(process.hostname, process.processId)
             .then(async res => {
                 if(res?.data?.ProcessStatus) { // Update status
                     const result = res.data;
@@ -96,7 +99,7 @@ export async function pingAllProcesses(getAndAddFile) {
                     if(process.saveOrUpdateFile && !process.resourceId && res?.data?.ResourceId && !res?.data?.Error){
                         tryGetAndSaveMetadataFromProcess(process, res?.data?.ResourceId, getAndAddFile); // get metadata and save file
                     }
-                    await updateProcessKeys(process, result); // Update progress, endTime, saveOrUpdateFile, error
+                    await updateActionProcessKeys(process, result); // Update progress, endTime, saveOrUpdateFile, error
                 }
             })
             .catch(e => {
@@ -107,7 +110,7 @@ export async function pingAllProcesses(getAndAddFile) {
 }
 
 
-const updateProcessKeys = async (process, result) => {
+const updateActionProcessKeys = async (process, result) => {
     switch(result.ProcessStatus?.toUpperCase()){
         case "RUNNING":
             await setProcessKeyLocalAsync(process.id, "progress", msToTime(new Date().getTime() - process.startTime))
@@ -132,6 +135,64 @@ const updateProcessKeys = async (process, result) => {
             await setProcessKeyLocalAsync(process.id, "progress", 0);
             break;
     }
+}
+
+export async function pingAllShadowProcesses(addOrUpdateHost, openInformationPrompt) {
+    getAllRunningShadowProcessesLocal().forEach((process) => {
+        GetMinerShadowProcessStatus(process.hostname, process.processId)
+            .then(async res => {
+                if(res?.data) { // Update status
+                    const result = res.data;
+                    await setProcessKeyLocalAsync(process.id, "status", result);
+                    process = getProcessLocal(process.id);
+                    if(result && typeof result === "string" && result.toUpperCase() === "COMPLETE"){ // TODO: some completion condition
+                        GetMinerConfig(process.hostname)
+                            .then(() => {addOrUpdateHost(process.hostname, process.minerType.value, process.addedFrom, process.minerId, "online")})
+                            .then(() => {
+                                openInformationPrompt({
+                                    title: "Shadow process completed",
+                                    text: `Cloning completed for ${process.hostname} "${process.processName}" in ${msToTime(new Date().getTime() - process.startTime)}`,
+                                    setTimeoutClose: true,
+                                    closeButtonText: "close",
+                                    disabled: false,
+                                })
+                                removeProcessLocal(process.id);
+                            })
+                            .catch((err) => {
+                                openInformationPrompt({
+                                    title: "Shadow process failed",
+                                    text: `Cloning successful. Failed to get config for ${process.hostname}. Try to refresh your browser. Error: ${err}`,
+                                    setTimeoutClose: false,
+                                    closeButtonText: "close",
+                                    disabled: false,
+                                })
+                                removeProcessLocal(process.id);
+                            });
+                    }
+                    if(result && typeof result === "string" && result.toUpperCase() === "CRASH"){
+                        openInformationPrompt({
+                            title: "Shadow process crash",
+                            text: `Cloning crashed for ${process.hostname} "${process.processName}" after ${msToTime(new Date().getTime() - process.startTime)}`,
+                            setTimeoutClose: false,
+                            closeButtonText: "close",
+                            disabled: false,
+                        })
+                        removeProcessLocal(process.id);
+                    }
+                }
+            })
+            .catch(e => {
+                setProcessKeyLocalAsync(process.id, "status", "Stopped");
+                openInformationPrompt({
+                    title: "Shadow process failed",
+                    text: `Cloning failed for "${process.hostname} ${process.processName}" after ${msToTime(new Date().getTime() - process.startTime)} with error: ${e}`,
+                    setTimeoutClose: false,
+                    closeButtonText: "close",
+                    disabled: false,
+                })
+                setProcessKeyLocalAsync(process.id, "error", e);
+            })
+    })
 }
 
 const tryGetAndSaveMetadataFromProcess = (process, resourceId, getAndAddFile) => {

@@ -36,12 +36,13 @@ function Home(props) {
         deleteFile,
         shouldSetFileContent,
         saveFileAndUpdate,
+        openInformationPrompt
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
     const [popupProps, setPopupProps] = useState({});
     const [visualizationsFileId, setVisualizationsFileId] = useState(null);
-    const [InformationPromptInfo, setIsInformationPromptInfo] = useState({});
+    // const [InformationPromptInfo, setIsInformationPromptInfo] = useState({});
     const [allHostStatus, setAllHostStatus] = useState([]);
 
     const popups = {
@@ -157,35 +158,6 @@ function Home(props) {
             removeHost(id);
         }
     }
-
-    const openInformationPrompt = ({
-        title, 
-        text, 
-        setTimeoutClose, 
-        closeButtonText, 
-        onClosePrompt,
-        disabled,
-        closePrimary,
-        hasAccept,
-        acceptButtonText,
-        acceptPrimary ,
-        onAcceptPrompt,
-    }) => {
-        setIsInformationPromptInfo({
-            text: text ? text : "",
-            title: title ? title : "",
-            closeButtonText: closeButtonText ? closeButtonText : "Close",
-            onClosePrompt: (onClosePrompt !== null && onClosePrompt !== undefined) ? onClosePrompt : () => set.setIsInformationPromptOpen(false),
-            disabled: (disabled !== null && disabled !== undefined) ? disabled : false,
-            closePrimary: (closePrimary !== null && closePrimary !== undefined) ? closePrimary : true,
-            setTimeoutClose: (setTimeoutClose !== null && setTimeoutClose !== undefined) ? setTimeoutClose : true,
-            hasAccept: (hasAccept !== null && hasAccept !== undefined) ? hasAccept : false,
-            acceptButtonText: acceptButtonText ? acceptButtonText : "",
-            acceptPrimary: (acceptPrimary !== null && acceptPrimary !== undefined) ? acceptPrimary : true,
-            onAcceptPrompt:  (onAcceptPrompt !== null && onAcceptPrompt !== undefined) ? onAcceptPrompt : (() => {})(),
-        });
-        set.setIsInformationPromptOpen(true);
-    }    
 
     // const [htmlString, setHtmlString] = useState(null); 
 
@@ -373,23 +345,6 @@ function Home(props) {
                     />
                     : null
                 }
-                {isOpen.isInformationPromptOpen ?
-                    <InformationPrompt
-                        text = {InformationPromptInfo.text}
-                        title= {InformationPromptInfo.title}
-                        closeButtonText = {InformationPromptInfo.closeButtonText}
-                        onClosePrompt = {InformationPromptInfo.onClosePrompt}//{toggles.toggleIsInformationPromptOpen}
-                        disabled = {InformationPromptInfo.disabled}
-                        closePrimary = {InformationPromptInfo.closePrimary}
-                        setTimeoutClose = {InformationPromptInfo.setTimeoutClose}
-                        hasAccept = {InformationPromptInfo.hasAccept}
-                        acceptButtonText = {InformationPromptInfo.acceptButtonText}
-                        acceptPrimary = {InformationPromptInfo.acceptPrimary}
-                        onAcceptPrompt = {InformationPromptInfo.onAcceptPrompt}
-                    />
-                    : null
-                }
-
             </div>
         </div>
     );

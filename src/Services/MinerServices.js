@@ -15,8 +15,13 @@ export async function PostMineAction(hostname, data){
     return axios.post(`${hostname}${urlExtension}`, data);
 }
 
-export async function GetMinerProcessStatus(hostname, processId) {
+export async function GetMinerActionProcessStatus(hostname, processId) {
     const urlExtension = `/status/${processId}`;
+    return axios.get(`${hostname}${urlExtension}`);
+}
+
+export async function GetMinerShadowProcessStatus(hostname, processId) {
+    const urlExtension = `/shadow/status/${processId}`;
     return axios.get(`${hostname}${urlExtension}`);
 }
 

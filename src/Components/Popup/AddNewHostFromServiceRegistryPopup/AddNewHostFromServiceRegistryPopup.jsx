@@ -1,7 +1,6 @@
 import './AddNewHostFromServiceRegistryPopup.scss';
 import {useState, useEffect} from 'react';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
-import {v4 as uuidv4} from 'uuid';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import SidebarHostItem from '../../SidebarHosts/SidebarHostItem/SidebarHostItem';
 import {GetMinersFromServiceRegistry, GetRepositoriesFromServiceRegistry} from '../../../Services/ServiceRegistryServices';

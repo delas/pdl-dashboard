@@ -6,6 +6,8 @@ import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import Popup from '../../Widgets/Popup/Popup';
 import {ShadowMiner} from '../../../Services/MinerServices';
 import InputField from '../../Widgets/InputField/InputField';
+import { saveProcessLocal } from '../../../Store/LocalDataStore';
+import {v4 as uuidv4} from 'uuid';
 
 function ShadowPopup(props) {
     const {
@@ -64,6 +66,26 @@ function ShadowPopup(props) {
         return(!selectedMinerHostOwner || !selectedShadowableMiner || !selectedMinerHostReceiver);      
     }
 
+    const handleSaveShadowProcess = (minerReceiver, shadowMiner, processId) => {
+        const status = {
+            id: uuidv4(),
+            objectType: "shadowProcess",
+            hostname: minerReceiver.name,
+            minerId: minerReceiver.id,
+            processId: processId,
+            processName: `Shadow ${shadowMiner.MinerLabel}`,
+            status: "Running",
+            progress: 0,
+            startTime: new Date().getTime(),
+            endTime: null,
+            outputDestination: minerReceiver.name,
+            error: null,
+            addedFrom: minerReceiver.addedFrom,
+            minerType: minerReceiver.type,
+        };
+        saveProcessLocal(status);
+    }
+
     const onSubmit = () => {
         const ownerHostname = selectedMinerHostOwner.label; // hostname e.g. localhost:5000
         const minerHost = getHostLocal(selectedMinerHostOwner.value); // miner host object
@@ -82,7 +104,7 @@ function ShadowPopup(props) {
         ShadowMiner(receiverHostname, body)
             .then((res) => {
                 const receiverMiner = getMinersLocal().find(miner => miner.name === receiverHostname);
-                addOrUpdateHost(receiverMiner.id, receiverMiner)
+                handleSaveShadowProcess(receiverMiner, miner, res.data);
             })
             .then(() => {
                 setIsLoading(false);

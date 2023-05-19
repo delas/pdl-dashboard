@@ -3,7 +3,7 @@ import {useState, useEffect, useCallback, useRef} from 'react';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import ProcessOverviewCard from './ProcessOverviewCard/ProcessOverviewCard';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
-import {getAllProcessesLocal, getProcessLocal, setProcessKeyLocalAsync, removeProcessLocal} from '../../../Store/LocalDataStore';
+import {getAllActionProcessesLocal, getProcessLocal, setProcessKeyLocalAsync, removeProcessLocal} from '../../../Store/LocalDataStore';
 import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import {StopMinerProcess} from '../../../Services/MinerServices';
 import Popup from '../../Widgets/Popup/Popup';
@@ -31,7 +31,7 @@ function ProcessOverviewPopup(props) {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ 
         updateState({});
-        setProcesses(sortProcesses(getAllProcessesLocal(), sortingRef.current?.value ? sortingRef.current?.value : sortType.type));
+        setProcesses(sortProcesses(getAllActionProcessesLocal(), sortingRef.current?.value ? sortingRef.current?.value : sortType.type));
     }, []);
 
     useEffect (() => {
@@ -39,7 +39,7 @@ function ProcessOverviewPopup(props) {
             setSelectedSorting({value: sortType.endTimeDsc, label: "Finished Descending"});
         }
         setComponentUpdaterFunction("ProcessOverviewPopup", {update: forceUpdate})
-        setProcesses(sortProcesses(getAllProcessesLocal(), selectedSorting?.value ? selectedSorting?.value : sortType.type));
+        setProcesses(sortProcesses(getAllActionProcessesLocal(), selectedSorting?.value ? selectedSorting?.value : sortType.type));
         setIsLoading(false);
     }, []);
 
@@ -51,7 +51,7 @@ function ProcessOverviewPopup(props) {
     ]
 
     const onSortingDropdownValueChange = (value) => {
-        setProcesses(sortProcesses(getAllProcessesLocal(), value.value));
+        setProcesses(sortProcesses(getAllActionProcessesLocal(), value.value));
         setSelectedSorting(value);
         sortingRef.current = value;
     }

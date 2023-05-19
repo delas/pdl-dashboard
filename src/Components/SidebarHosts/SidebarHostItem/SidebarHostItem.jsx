@@ -2,6 +2,7 @@ import './SidebarHostItem.scss';
 import {useState, useEffect} from 'react';
 import { FaTrash, FaServer, FaCogs, FaNetworkWired, FaQuestion } from 'react-icons/fa';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
+import { getAllRunningShadowProcessesLocal } from '../../../Store/LocalDataStore';
 
 function SidebarHostItem(props) {
 
@@ -16,9 +17,22 @@ function SidebarHostItem(props) {
         popups,
         status,
         allowClick = true,
+        shadowProcesses = [],
     } = props;
 
     const [icon, setIcon] = useState(null);
+    
+    const getIsMinerProcessRunning = () => {
+        if(hostType.value === 'miner' ){
+            if(shadowProcesses.length > 0){
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
     const setIconForItem = () => {
         switch(hostType.value){
@@ -66,7 +80,7 @@ function SidebarHostItem(props) {
                     </div>                    
                 </div>
 
-                <div className={`SidebarHostItem-loadingSpinner-${false}`}>
+                <div className={`SidebarHostItem-loadingSpinner-${getIsMinerProcessRunning()}`}>
                     <LoadingSpinner loading = {true} />
                 </div>
 

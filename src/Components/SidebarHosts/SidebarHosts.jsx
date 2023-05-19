@@ -2,7 +2,7 @@ import './SidebarHosts.scss';
 import {useState, useEffect, useCallback} from 'react';
 import { FaRegWindowClose } from 'react-icons/fa';
 import SidebarHostItem from './SidebarHostItem/SidebarHostItem';
-import {getMinersLocal, getRepositoriesLocal, getServiceRegistriesLocal} from '../../Store/LocalDataStore';
+import {getMinersLocal, getRepositoriesLocal, getServiceRegistriesLocal, getAllRunningShadowProcessesLocal} from '../../Store/LocalDataStore';
 import {PingServiceRegistry} from '../../Services/ServiceRegistryServices';
 import {PingMiner} from '../../Services/MinerServices';
 import {PingRepository} from '../../Services/RepositoryServices';
@@ -25,6 +25,8 @@ function SidebarHosts(props) {
     const [repositoryHosts, setRepositoryHosts] = useState([]);
     const [minerHosts, setMinerHosts] = useState([]);
     const [SRHosts, setSRHosts] = useState([]);
+    const [runningProcesses, setRunningProcesses] = useState({}); // {hostname: [processes]}
+
     const forceUpdate = useCallback(() =>{ 
         updateState({}); 
         setRepositoryHosts(getRepositoriesLocal());
@@ -57,6 +59,17 @@ function SidebarHosts(props) {
         removeHost(id);
         forceRerender();
     }
+
+    const runningShadowProcessesMapped = {}; // {hostname: [processes]}
+
+    const mapRunningProcesses = () => {
+        const runningShadowProcesses = getAllRunningShadowProcessesLocal();
+        runningShadowProcesses.forEach((item) => {
+            runningShadowProcessesMapped[item.hostname] = runningShadowProcessesMapped[item.hostname] && runningShadowProcessesMapped[item.hostname].length > 0 ? runningShadowProcessesMapped[item.hostname].push(item) : [item];
+        });
+    }
+    mapRunningProcesses(); // map running processes on load and rerender
+    
 
     return (
         <div className="SidebarHosts">
@@ -131,7 +144,8 @@ function SidebarHosts(props) {
                                 popups = {popups}
                                 status = {miner.status}
                                 allowClick = {miner.status === "online"}
-                                hostProvidedValue = {miner.config.MinerLabel}
+                                hostProvidedValue = {miner?.config?.MinerLabel}
+                                shadowProcesses = {runningShadowProcessesMapped[miner.name]}
                             />
                         )
                     })}
