@@ -36,7 +36,7 @@ function SidebarHosts(props) {
     
 
     useEffect(() => {
-        setComponentUpdaterFunction("SidebarHosts", {update: forceUpdate});
+        setComponentUpdaterFunction("SidebarHosts", {update: forceUpdate}); // provide a forceUpdate function to app.jsx.
         forceUpdate();
         setIsLoading(false);
         setAllHostsStatus();

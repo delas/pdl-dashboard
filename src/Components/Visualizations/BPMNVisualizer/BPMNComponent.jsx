@@ -19,21 +19,26 @@ function BPMNComponent(props) {
     const [isLoading, setIsLoading] = useState(true);
     const viewerRef = useRef(null);
     const containerRef = useRef(null);
-    const [didMount, setDidMount] = useState(false);
     const panelRef = useRef(null);
     const [isOpen, setIsOpen] = useState("show");
+    const xmlRef = useRef(null);
+    const [, updateState] = useState();
 
-    useEffect(() => {
-        setDidMount(true); // Setting mount will ensure the divs are created before the viewer accesses them
-        containerRef.current = null; // Resetting the container ref will ensure the viewer is reloaded when the file changes
-        setComponentUpdaterFunction("getBPMNXML", {call: getBPMNJSViewer});
-    }, [file]);
+    const forceRerender = () => {
+        updateState({});
+    }
 
     const getBPMNJSViewer = () => {
-        return viewerRef.current;
+        return xmlRef.current;
     }
 
     useEffect(() => {
+        setComponentUpdaterFunction("getBPMNXML", {call: getBPMNJSViewer});
+        setAndCreateBPMNJSViewer();
+        forceRerender();
+    }, [file]);
+
+    const setAndCreateBPMNJSViewer = () => {
         viewerRef.current = new BpmnViewer({
             container: containerRef.current,
             keyboard: {
@@ -49,7 +54,6 @@ function BPMNComponent(props) {
         });
         var diagramXML = getFileContent(file);
 
-
         viewerRef.current.importXML(diagramXML)
             .then(() => {
                 var canvas = viewerRef.current.get("canvas");
@@ -60,7 +64,12 @@ function BPMNComponent(props) {
                 console.error("could not import BPMN 2.0 diagram", err);
                 setIsLoading(false);
             });
-    }, [file, didMount]);
+        viewerRef.current.on('commandStack.changed', function() {
+            viewerRef.current.saveXML({ format: true }).then(function(result) {
+                xmlRef.current = result;
+            });
+        });
+    }
 
     const togglePanelOpen = () => {
         setIsOpen(!isOpen);

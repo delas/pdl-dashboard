@@ -1,5 +1,5 @@
-import './UploadManualChangesPopup.scss';
 import {useState, useEffect} from 'react';
+import './UploadManualChangesPopup.scss';
 import {getRepositoriesLocal} from '../../../Store/LocalDataStore';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import { sendFileToRepository, GetSingleFileMetadata } from '../../../Services/RepositoryServices';
@@ -20,7 +20,6 @@ function UploadManualChangesPopup(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [fileDestination, setFileDestination] = useState({});
-
     const [fileDescription, setFileDescription] = useState(null);
     const [resourceName, setResourceName] = useState(null);
 
@@ -81,8 +80,10 @@ function UploadManualChangesPopup(props) {
             SourceLabel: "Manual editing"
         }
 
-        var blob = new Blob([xml], { type: 'text/xml' });
+        const blob = new Blob([xml], { type: 'text/xml' });
         const xmlFile =  new File([blob], `foo.xml`, {type: "text/xml"});
+
+        console.log(xml);
 
         sendFileToRepository(fileDestination.label, xmlFile, fileExtension, selectedFileType, resourceName, fileDescription, parents, generatedFrom)
         .then((res) => {
@@ -91,6 +92,7 @@ function UploadManualChangesPopup(props) {
                 const isImage = false; // Currently no way to make changes to images
                 const metadata = res.data;
                 metadata["repositoryUrl"] = fileDestination.label; // Add repositoryUrl to metadata, used to get file content and children
+                metadata["fileContent"] = xml;
                 saveFileAndUpdate(res.data, xml, isImage);
             });
         })

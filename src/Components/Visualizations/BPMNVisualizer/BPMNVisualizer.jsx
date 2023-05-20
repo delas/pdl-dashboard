@@ -4,7 +4,7 @@ import React from "react";
 import BPMNComponent from "./BPMNComponent";
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import DefaultButton from '../../Widgets/Buttons/DefaultButton/DefaultButton';
-import { getFileDynamic } from '../../../Utils/FileUnpackHelper';
+import { getFileContent, getFileDynamic } from '../../../Utils/FileUnpackHelper';
 
 function BPMNVisualizer(props) {
     const {
@@ -57,11 +57,14 @@ function BPMNVisualizer(props) {
 
     async function saveChanges() {
         if(getUpdatedBPMN?.getBPMNXML){
-            const viewer = getUpdatedBPMN.getBPMNXML.call(); // getting the viewer from the child component
-            viewer.saveXML({ format: true }, function (err, xml) { // getting the xml from the viewer
-                if (err) {console.log(err); return};
-                uploadEditedFile(xml, file); // Sending xml and file to popup
-            });
+            const xmlContainer = getUpdatedBPMN.getBPMNXML.call(); // getting the viewer from the child component
+            if(!xmlContainer.xml){
+                alert("There is no BPMN XML to save.")
+            } else if(xmlContainer.xml === getFileContent(file)) {
+                alert("There are no changes to save.")
+            } else {
+                uploadEditedFile(xmlContainer.xml, file); // Sending xml and file to popup
+            }
         }
     }
 

@@ -18,17 +18,13 @@ function UploadResourcePopup(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [fileDestination, setFileDestination] = useState({});
-
     const [selectedFile, setSelectedFile] = useState();
 	const [isFilePicked, setIsFilePicked] = useState(false);
     const [selectedFileType, setSelectedFileType] = useState(null);
-
     const [fileDescription, setFileDescription] = useState(null);
     const [selectedTab, setSelectedTab] = useState({Title: "File"});
-
     const [streamBrokerLocation, setStreamBrokerLocation] = useState(null);
     const [streamTopic, setStreamTopic] = useState(null);
-
     const [fileExtension, setFileExtension] = useState(null);
     const [resourceName, setResourceName] = useState(null);
 
@@ -91,7 +87,7 @@ function UploadResourcePopup(props) {
     }
 
     const onConfirmClick = () => {
-        let request;
+        let request; // Created as either file or stream
         switch(selectedTab.Title){
             case "File":
                 setIsLoading(true);
