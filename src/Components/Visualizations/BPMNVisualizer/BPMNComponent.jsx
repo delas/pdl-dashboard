@@ -36,13 +36,15 @@ function BPMNComponent(props) {
         setComponentUpdaterFunction("getBPMNXML", {call: getBPMNJSViewer});
         setAndCreateBPMNJSViewer();
         forceRerender();
-    }, [file]);
+    }, [file, isLoading]);
 
     const setAndCreateBPMNJSViewer = () => {
+        const container = containerRef.current;
+        containerRef.current = null;
         viewerRef.current = new BpmnViewer({
-            container: containerRef.current,
+            container,
             keyboard: {
-                bindTo: window
+                bindTo: document
             },
             // propertiesPanel: {
             //     parent: "#propview"
