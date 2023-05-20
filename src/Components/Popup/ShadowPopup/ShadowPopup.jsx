@@ -161,10 +161,10 @@ function ShadowPopup(props) {
                         <InputField
                         className={`ShadowPopup-minername-input`}
                         type={`text`} 
-                        placeholder = {`Alpha miner - cloned`}
+                        placeholder = {`[My new miner name]`}
                         onChange = {onNewMinerNameChange}
                         value = {newMinerName}
-                        label = {`Hostname:`}
+                        label = {`New miner label:`}
                     />
                     }
                 </div>
