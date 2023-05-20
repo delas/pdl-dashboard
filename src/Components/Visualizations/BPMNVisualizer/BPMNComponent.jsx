@@ -43,7 +43,6 @@ function BPMNComponent(props) {
         if(container !== null && container.getElementsByClassName("bjs-container").length > 0){
             container.getElementsByClassName("bjs-container")[0].remove();
         }
-        // containerRef.current = null;
         viewerRef.current = new BpmnViewer({
             container,
             keyboard: {
@@ -72,7 +71,6 @@ function BPMNComponent(props) {
         viewerRef.current.on('commandStack.changed', function() {
             viewerRef.current.saveXML({ format: true }).then(function(result) {
                 xmlRef.current = result;
-                // console.log(result.xml);
             });
         });
     }
