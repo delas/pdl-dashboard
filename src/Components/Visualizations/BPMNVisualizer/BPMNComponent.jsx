@@ -22,25 +22,30 @@ function BPMNComponent(props) {
     const panelRef = useRef(null);
     const [isOpen, setIsOpen] = useState("show");
     const xmlRef = useRef(null);
-    const [, updateState] = useState();
+    // const [, updateState] = useState();
 
-    const forceRerender = () => {
-        updateState({});
-    }
+    // const forceRerender = () => {
+    //     updateState({});
+    // }
 
     const getBPMNJSViewer = () => {
         return xmlRef.current;
     }
 
     useEffect(() => {
+        setIsLoading(true);
         setComponentUpdaterFunction("getBPMNXML", {call: getBPMNJSViewer});
         setAndCreateBPMNJSViewer();
-        forceRerender();
-    }, [file]);
+    }, [file, isLoading]);
 
     const setAndCreateBPMNJSViewer = () => {
+        const container = containerRef.current;
+        if(container !== null && container.getElementsByClassName("bjs-container").length > 0){
+            container.getElementsByClassName("bjs-container")[0].remove();
+        }
+        // containerRef.current = null;
         viewerRef.current = new BpmnViewer({
-            container: containerRef.current,
+            container,
             keyboard: {
                 bindTo: window
             },
@@ -67,6 +72,7 @@ function BPMNComponent(props) {
         viewerRef.current.on('commandStack.changed', function() {
             viewerRef.current.saveXML({ format: true }).then(function(result) {
                 xmlRef.current = result;
+                // console.log(result.xml);
             });
         });
     }

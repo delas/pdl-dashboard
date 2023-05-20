@@ -60,7 +60,7 @@ function BPMNVisualizer(props) {
             const xmlContainer = getUpdatedBPMN.getBPMNXML.call(); // getting the viewer from the child component
             if(!xmlContainer.xml){
                 alert("There is no BPMN XML to save.")
-            } else if(xmlContainer.xml === getFileContent(file)) {
+            } else if(xmlContainer?.xml === getFileContent(file)) {
                 alert("There are no changes to save.")
             } else {
                 uploadEditedFile(xmlContainer.xml, file); // Sending xml and file to popup
