@@ -170,12 +170,6 @@ function ProcessOverviewPopup(props) {
             console.log(error);
         });
     }
-    const pauseProcess = (processId) => {
-        console.log(`pausing process: ${processId}`);
-    }
-    const resumeProcess = (processId) => {
-        console.log(`resuming process: ${processId}`);
-    }
 
     const deleteProcess = (processId) => {
         removeProcessLocal(processId);
@@ -206,8 +200,6 @@ function ProcessOverviewPopup(props) {
                                     key = {process.processId}
                                     process = {process}
                                     stopProcess = {stopProcess}
-                                    pauseProcess = {pauseProcess}
-                                    resumeProcess = {resumeProcess}
                                     deleteProcess = {deleteProcess}
                                     openInformationPrompt = {openInformationPrompt}
                                 />

@@ -2,8 +2,6 @@ import './BPMNVisualizer.scss';
 import {useState, useEffect} from 'react';
 import React from "react";
 import BPMNComponent from "./BPMNComponent";
-// import ModelerCreator from "./diagramCreator/index";
-// import "./styles.css";
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import DefaultButton from '../../Widgets/Buttons/DefaultButton/DefaultButton';
 import { getFileDynamic } from '../../../Utils/FileUnpackHelper';
@@ -19,6 +17,11 @@ function BPMNVisualizer(props) {
     const fileDynamic = getFileDynamic(file);
     const [modeler, setModeler] = useState(null);
 
+    /* 
+        This function is used to update a state value with a function defined in the child component.
+        The purpose of this is to access the BPMN viewer from the child component and send data contained in
+        the child to a popup. The setting of the child function happens on load, while the saving happens on the button click.
+    */
     const setComponentUpdaterFunction = (componentName, func) => {
         let tempUpdatedBPMN = getUpdatedBPMN;
         tempUpdatedBPMN[componentName] = func;
@@ -75,7 +78,6 @@ function BPMNVisualizer(props) {
                 </div>
             }
             {modeler}
-            {/* <BPMNComponent file = {file} setComponentUpdaterFunction={setComponentUpdaterFunction}/> */}
         </div>
     );
 }

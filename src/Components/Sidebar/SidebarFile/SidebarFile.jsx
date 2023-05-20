@@ -121,12 +121,14 @@ function SidebarFile(props) {
                     <FaTrash/>
                 </div>
             </div>
+
             {fileContentLoading && // Show spinner if file content is loading
             <div className={`SpinnerModal SpinnerModal-stream-${getFileDynamic(file)}`}>
                 <div className='LoadingSpinner-container'>
                     <LoadingSpinner loading={fileContentLoading}/>
                 </div>
             </div>}
+            
         </div>
     );
 }

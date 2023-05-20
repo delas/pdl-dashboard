@@ -1,7 +1,7 @@
 import './Topbar.scss';
 import {useState, useEffect} from 'react';
 import { Link } from "react-router-dom";
-import Logo from '../../Assets/logo';
+// import Logo from '../../Assets/logo';
 import PDL_Logo3 from '../../Assets/PDL_logo3.png';
 import dtuImg from '../../Assets/dtu.png';
 import IconizedButton from '../Widgets/Buttons/IconizedButton/IconizedButton';
@@ -45,10 +45,9 @@ function Topbar(props) {
                         <div className='Topbar-logo DtuLogo'> 
                             <img src={dtuImg} alt=" dtu logo"/>
                         </div>
+                        
                     </div>
-                    
                     <div className='Topbar-title'>Process dry lab</div>
-                    
                 </div>
                 
                 <div className='Topbar-flexContainer-right'>
@@ -71,7 +70,6 @@ function Topbar(props) {
                             onClick = {toggleSidebar}
                             theme = {"primary"}
                         />
-
                     </div>
                 </div>
             </div>

@@ -2,7 +2,6 @@ import './SidebarHostItem.scss';
 import {useState, useEffect} from 'react';
 import { FaTrash, FaServer, FaCogs, FaNetworkWired, FaQuestion } from 'react-icons/fa';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
-import { getAllRunningShadowProcessesLocal } from '../../../Store/LocalDataStore';
 
 function SidebarHostItem(props) {
 

@@ -12,7 +12,7 @@ function ImageVisualizer(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [image, setImage] = useState(null);
 
-    useEffect(() => {
+    useEffect(() => { // Use image if it is already loaded, otherwise fetch it. Set loading to done when finished.
         const resourceId = getFileResourceId(file);
         const host = getFileRepositoryUrl(file);
         if(file && getFileContent(file)){

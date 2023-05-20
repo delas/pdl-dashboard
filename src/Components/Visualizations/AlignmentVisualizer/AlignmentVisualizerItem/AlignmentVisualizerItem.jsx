@@ -1,8 +1,4 @@
 import './AlignmentVisualizerItem.scss';
-import {useState, useEffect} from 'react';
-import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
-import { getFileLocal } from '../../../Store/LocalDataStore';
-import { getFileContent } from '../../../Utils/FileUnpackHelper';
 
 function AlignmentVisualizerItem(props) {
     const {
@@ -10,7 +6,7 @@ function AlignmentVisualizerItem(props) {
     } = props;
 
     if(!alignmentItem || Array.isArray(alignmentItem.alignment) === false){
-        return (null);
+        return <div>The provided data is not compliant for this visualizer</div>;
     }
 
     const sequence = alignmentItem.alignment;

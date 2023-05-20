@@ -13,9 +13,8 @@ export async function GetRepositoryFilterMetadata(hostname, filters) {
 export async function GetSingleFileMetadata(hostname, fileId){
     let urlExtension = `/resources/metadata/${fileId}`;
     if(hostname.includes("/resources")){
-        urlExtension = `metadata/${fileId}`;
+        urlExtension = `metadata/${fileId}`; // this prevents errors when the hostname already contains /resources
     }
-    // const urlExtension = `/resources/metadata/${fileId}`;
     return axios.get(`${hostname}${urlExtension}`);
 }
 
@@ -55,7 +54,6 @@ export async function GetResourceGraph(hostname, fileId){
 }
 
 export const sendFileToRepository = async (hostname, file, fileExtension, fileType, resourceLabel, description = "", parents = [], generatedFrom = {}) => {
-    // The file param is the html input type, not the metadata object used elsewhere.
     const urlExtension = hostname.includes("/resources/") ? "" : "/resources/";
     const formdata = new FormData();
     formdata.append('file', file);

@@ -6,6 +6,12 @@ import { getFileRepositoryUrl, getFileResourceId } from '../../../Utils/FileUnpa
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import { getFileLocal } from '../../../Store/LocalDataStore';
 
+/* 
+    This visualizer is currently used primarily for visualizing the related resources of a file.
+    However, it is possible to visualize all .dot files with this visualizer. To do so, simply 
+    add the file extension to the config.js file in the getVisualizations() function.
+*/
+
 function DotVisualizer(props) {
     const {
         selectedFileId

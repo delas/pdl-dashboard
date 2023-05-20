@@ -4,6 +4,7 @@ import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import InputField from '../../Widgets/InputField/InputField';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
 import Popup from '../../Widgets/Popup/Popup';
+import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 
 function AddNewHostPopup(props) {
 
@@ -42,7 +43,9 @@ function AddNewHostPopup(props) {
     if(isLoading){
         return (
             <div className="AddNewHostPopup">
-                <div>Loading ...</div>
+                <div className='Spinner-container-l'>
+                    <LoadingSpinner loading={isLoading}/>
+                </div>
             </div>
         )
     }

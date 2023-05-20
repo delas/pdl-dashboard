@@ -1,5 +1,4 @@
 import './Sidebar.scss';
-// import Iconi from '../Widgets/Button/IconizedButton/IconizedButton';
 import IconizedButton from '../Widgets/Buttons/IconizedButton/IconizedButton';
 import {useState, useEffect, useCallback} from 'react';
 import { FaCircle, FaCog, FaFileUpload, FaFileDownload } from 'react-icons/fa';
@@ -27,17 +26,12 @@ function Sidebar(props) {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() =>{ 
         updateState({}); 
-        // setFiles(sortFiles(getAllFilesLocal(), sortingOptions.dsc));
     }, []);
 
     useEffect(() => {
         setComponentUpdaterFunction("Sidebar", {update: forceUpdate});
         setIsLoading(false);
     }, []);
-
-    // useEffect(() => {
-        // setFiles(sortFiles(getAllFilesLocal(), sortingOptions.dsc));
-    // }, []);
 
     const sortingOptions = {
         asc: "asc",
@@ -169,7 +163,6 @@ function Sidebar(props) {
                                         openPopup = {openPopup}
                                         popups = {popups}
                                         deleteFile = {deleteFile}
-                                        // fileId = {fileId}
                                         file = {file}
                                         selectFileForVisualization = {selectFileForVisualization}
                                         shouldSetFileContent = {shouldSetFileContent}

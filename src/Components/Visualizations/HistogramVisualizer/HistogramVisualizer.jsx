@@ -47,7 +47,7 @@ function HistogramVisualizer(props) {
     }
 
     const convertFileContentToHistogramData = (fileContent) => {
-        let data = [["Events", "Event"]];
+        let data = [["Events", "Event"]]; // Add header - always the first index in the top-level array
         return data.concat(fileContent);
     }
 

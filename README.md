@@ -2,6 +2,14 @@
 
 In the project directory, you can run:
 
+### `npm install`
+
+Navigate to the location of this project on your machine and run:
+```
+npm install
+```
+This will install all the required dependencies needed to run the application.
+
 ### `npm start`
 
 Navigate to the location of this repository on your machine and and run:

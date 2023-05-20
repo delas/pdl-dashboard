@@ -1,19 +1,19 @@
-import './Visualizations.scss';
 import {useState, useEffect, useCallback, useMemo, useRef} from 'react';
+import './Visualizations.scss';
 import Tabs from '../Widgets/Tabs/Tabs';
-import BPMNVisualizer from './BPMNVisualizer/BPMNVisualizer';
-import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
-import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
-import DotVisualizer from './DotVisualizer/DotVisualizer';
-import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
-import { getFileDescription, getFileExtension, getFileRepositoryUrl, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileDynamic, getFileContent } from '../../Utils/FileUnpackHelper';
+import { getFileDescription, getFileExtension, getFileRepositoryUrl, getFileResourceLabel, getFileResourceType, getFileResourceId, getFileDynamic, getFileContent, fileBuilder } from '../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../Widgets/LoadingSpinner/LoadingSpinner';
 import {getVisalizations, pingDynamicResourceInterval} from '../../config';
 import Dropdown from '../Widgets/Dropdown/Dropdown';
 import {getChildrenFromFile, GetSingleFileMetadata} from '../../Services/RepositoryServices';
 import DefaultButton from '../Widgets/Buttons/DefaultButton/DefaultButton';
-import { getFileLocal } from '../../Store/LocalDataStore';
+import { getFileLocal, saveFileLocal } from '../../Store/LocalDataStore';
 import AlignmentVisualizer from './AlignmentVisualizer/AlignmentVisualizer';
+import BPMNVisualizer from './BPMNVisualizer/BPMNVisualizer';
+import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
+import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
+import DotVisualizer from './DotVisualizer/DotVisualizer';
+import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
 
 function Visualizations(props) {
     const {
@@ -32,6 +32,8 @@ function Visualizations(props) {
     const [hasCalledChildren, setHasCalledChildren] = useState(null);
     const [error, setError] = useState(null);
     const file = getFileLocal(selectedFileId);
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() =>{ updateState({}); }, []);
 
     const generateTabList = (file) => {
         const defaultTabs = [ // These are the tabs that are always present
@@ -50,9 +52,6 @@ function Visualizations(props) {
 
     const selectedTabList = useMemo(() => generateTabList(file), [file]);
     const updateFileInterval = useRef(null);
-    
-    const [, updateState] = useState();
-    const forceUpdate = useCallback(() =>{ updateState({}); }, []);
 
     useEffect(() => {
         setComponentUpdaterFunction("Visualizations", {update: forceUpdate})
@@ -61,38 +60,12 @@ function Visualizations(props) {
         setError(null);
 
         if(file && hasCalledChildren !== getFileResourceId(file)){ // prevents children being requested repeatedly
-        getChildrenFromFile(getFileRepositoryUrl(file), getFileResourceId(file))
-            .then((res) => {setChildren(res.data); generateChildren(res.data)} )
-            .then(() => {setHasCalledChildren(getFileResourceId(file))})
-            .then(() => {setIsLoading(false)})
-            .catch((err) => {setError(err); console.log(err)} );
+            getAndSaveChildren();
         } else {
             setIsLoading(false);
         }
 
-        // updates file every second if dynamic. Ref prevents multiple intervals.
-        clearInterval(updateFileInterval.current);
-        if(file && getFileDynamic(file)){
-            updateFileInterval.current = setInterval(() => {
-                const internalFile = getFileLocal(selectedFileId);
-                if(!internalFile || !getFileRepositoryUrl(internalFile) || !getFileResourceId(internalFile)) return clearInterval(updateFileInterval.current);
-                GetSingleFileMetadata(getFileRepositoryUrl(internalFile), getFileResourceId(internalFile))
-                .then((res) => {
-                    const metadata = res.data;
-                    metadata["repositoryUrl"] = getFileRepositoryUrl(internalFile);
-                    getAndAddFile(metadata);
-                });
-                forceUpdate();
-            }, pingDynamicResourceInterval);
-        }
-        else if(file && getFileDynamic(file) === false && !getFileContent(file)){
-            GetSingleFileMetadata(getFileRepositoryUrl(file), getFileResourceId(file))
-            .then((res) => {
-                const metadata = res.data;
-                metadata["repositoryUrl"] = getFileRepositoryUrl(file);
-                getAndAddFile(metadata);
-            });
-        }
+        getAndSaveVisualizationForFile();
 
     }, [selectedFileId]);    
 
@@ -105,6 +78,38 @@ function Visualizations(props) {
 
     const onTabChange = (tab) => {
         setSelectedTab(tab);
+    }
+
+    const getAndSaveChildren = () => {
+        getChildrenFromFile(getFileRepositoryUrl(file), getFileResourceId(file))
+            .then((res) => {setChildren(res.data); generateChildren(res.data)} )
+            .then(() => {setHasCalledChildren(getFileResourceId(file))})
+            .then(() => {setIsLoading(false)})
+            .catch((err) => {setError(err); console.log(err)} );
+    }
+
+    const getAndSaveVisualizationForFile = () => {
+        clearInterval(updateFileInterval.current);
+        if(file && getFileDynamic(file)){
+            updateFileInterval.current = setInterval(() => {
+                const internalFile = getFileLocal(selectedFileId);
+                if(!internalFile || !getFileRepositoryUrl(internalFile) || !getFileResourceId(internalFile)) return clearInterval(updateFileInterval.current);
+                getSingleFileMetadataHandler(internalFile);
+                forceUpdate();
+            }, pingDynamicResourceInterval);
+        }
+        else if(file && getFileDynamic(file) === false && !getFileContent(file)){
+            getSingleFileMetadataHandler(file);
+        }
+    }
+
+    const getSingleFileMetadataHandler = (file) => {
+        GetSingleFileMetadata(getFileRepositoryUrl(file), getFileResourceId(file))
+            .then((res) => {
+                const metadata = res.data;
+                metadata["repositoryUrl"] = getFileRepositoryUrl(file);
+                getAndAddFile(metadata);
+            }).catch((err) => saveFileLocal(getFileResourceId(file), fileBuilder(file, {Dynamic: false})));
     }
 
     const generateChildren = (children) => {

@@ -1,7 +1,5 @@
 import './Home.scss';
-import React, {useState, useEffect
-// ,Suspense
-} from 'react';
+import React, {useState, useEffect} from 'react';
 
 //Popups
 import UploadResourcePopup from '../../Components/Popup/UploadResourcePopup/UploadResourcePopup';
@@ -17,12 +15,9 @@ import Topbar from '../../Components/Topbar/Topbar';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import SidebarHosts from '../../Components/SidebarHosts/SidebarHosts';
 import Visualizations from '../../Components/Visualizations/Visualizations';
-// import ReactHtmlParser from 'react-html-parser';
+// import ReactHtmlParser from 'react-html-parser'; // this is used to parse html string to react components - ideal for server side rendering of visualizations or other components
 import UploadManualChangesPopup from '../../Components/Popup/UploadManualChangesPopup/UploadManualChangesPopup';
-import InformationPrompt from '../../Components/Widgets/InformationPrompt/InformationPrompt';
 import {getAllHostStatusLocal, getAllHostAddedFromServiceRegistry, getHostLocal} from '../../Store/LocalDataStore';
-
-// import ReactDOMServer from 'react-dom/server'
 
 function Home(props) {
 
@@ -42,7 +37,6 @@ function Home(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [popupProps, setPopupProps] = useState({});
     const [visualizationsFileId, setVisualizationsFileId] = useState(null);
-    // const [InformationPromptInfo, setIsInformationPromptInfo] = useState({});
     const [allHostStatus, setAllHostStatus] = useState([]);
 
     const popups = {
@@ -163,13 +157,6 @@ function Home(props) {
 
     useEffect(() => {
         setIsLoading(false);
-        
-
-        // const tb = <Topbar/>;
-        // console.log(tb);
-        // setHtmlString(ReactDOMServer.renderToString(tb));
-        // // console.log(htmlString);
-
     }, []);
 
     const setAllHostsStatus = () => {

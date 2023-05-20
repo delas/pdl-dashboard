@@ -1,11 +1,11 @@
 import './AddNewHostFromServiceRegistryPopup.scss';
 import {useState, useEffect} from 'react';
-import Dropdown from '../../Widgets/Dropdown/Dropdown';
 import BackdropModal from '../../Widgets/BackdropModal/BackdropModal';
-import SidebarHostItem from '../../SidebarHosts/SidebarHostItem/SidebarHostItem';
 import {GetMinersFromServiceRegistry, GetRepositoriesFromServiceRegistry} from '../../../Services/ServiceRegistryServices';
 import Popup from '../../Widgets/Popup/Popup';
 import { getMinersLocal, getRepositoriesLocal } from '../../../Store/LocalDataStore';
+import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
+import AddNewHostFromServiceRegistryPopupList from './AddNewHostFromServiceRegistryPopupLists/AddNewHostFromServiceRegistryPopupList';
 
 function AddNewHostFromServiceRegistryPopup(props) {
 
@@ -67,36 +67,29 @@ function AddNewHostFromServiceRegistryPopup(props) {
         GetRepositoriesFromServiceRegistry(serviceRegistry.label).then(res => setRepositories(res.data) )
     }, []);
 
+    const createAndSetHostSingleDropdownList = (hosts, hostsSelected, getHostsLocal) => {
+        return hosts.filter((host) => { // Filter out repositories that are already selected
+            return !hostsSelected.find((selectedHost) => {
+                return selectedHost.label === host;
+            });
+        }).filter((host) => { // Filter out repositories that are already added
+            return !getHostsLocal().find((addedHost) => {
+                return addedHost.name === host;
+            });
+        });
+    }
+
     const createAndSetHostDropdownLists = () => {
         if(miners !== null) {
-            const nonSelectedMiners = miners
-            .filter((miner) => { // Filter out miners that are already selected
-                return !minerHostsSelected.find((selectedMiner) => {
-                    return selectedMiner.label === miner.HostName;
-                });
-            }).filter((miner) => { // Filter out miners that are already added
-                return !getMinersLocal().find((localMiner) => {
-                    return localMiner.name === miner.HostName;
-                });
-            });
-
+            console.log(miners);
+            const nonSelectedMiners = createAndSetHostSingleDropdownList(miners, minerHostsSelected, getMinersLocal);
             setMinersDropdownFormat(nonSelectedMiners.map((miner) => {
                 return( {label: `${miner}`, value: "miner"} )
             }));
         }
 
         if(repositories !== null) {
-            const nonSelectedRepositories = repositories
-            .filter((repository) => { // Filter out repositories that are already selected
-                return !repositoryHostsSelected.find((selectedRepository) => {
-                    return selectedRepository.label === repository.HostName;
-                });
-            }).filter((repository) => { // Filter out repositories that are already added
-                return !getRepositoriesLocal().find((localRepository) => {
-                    return localRepository.name === repository.HostName;
-                });
-            });
-
+            const nonSelectedRepositories = createAndSetHostSingleDropdownList(repositories, repositoryHostsSelected, getRepositoriesLocal);
             setRepositoriesDropdownFormat(nonSelectedRepositories.map((repository) => {
                 return( {label: `${repository}`, value: "repository"} )
             }));
@@ -110,7 +103,9 @@ function AddNewHostFromServiceRegistryPopup(props) {
     if(isLoading){
         return (
             <div className="AddNewHostFromServiceRegistryPopup">
-                <div>Loading ...</div>
+                <div className='Spinner-container-l'>
+                    <LoadingSpinner loading={isLoading}/>
+                </div>
             </div>
         )
     }
@@ -128,61 +123,26 @@ function AddNewHostFromServiceRegistryPopup(props) {
             >
 
                 <div className='AddNewHostFromServiceRegistryPopup-body'>
-                    <div className='AddNewHostFromServiceRegistryPopup-body-miners'>
-                        <Dropdown
-                            options = {minersDropdownFormat}
-                            onValueChange = {addMinerHost}
-                            label = {`Miners:`}
-                            loading = {minersDropdownFormat === null}
-                        />
-                        <div className='AddNewHostFromServiceRegistryPopup-body-miners-bottom'>
-                            <span className='AddNewHostFromServiceRegistryPopup-body-right-miners-Title'>
-                                Selected Miners: 
-                            </span>
-                            <div className='AddNewHostFromServiceRegistryPopup-body-right-miners-list'>
-                                {minerHostsSelected.map((miner, index) => {
-                                    return(
-                                        <SidebarHostItem key = {index}
-                                            id = {miner.label}
-                                            hostName = {miner.label}
-                                            hostType = {{value: "miner", label: "miner"}}
-                                            addedFrom = {serviceRegistry.label}
-                                            onRemove = {removeMinerHost}
-                                            ping = {null}
-                                            allowClick = {false}
-                                        />)
-                                })}
-                            </div>
-                        </div>
-                    </div>  
 
-                    <div className='AddNewHostFromServiceRegistryPopup-body-repositories'>
-                        <Dropdown
-                            options = {repositoriesDropdownFormat}
-                            onValueChange = {addRepositoryHost}
-                            label = {`Repositories:`}
-                            loading = {repositoriesDropdownFormat === null}
-                        />
-                        <div className='AddNewHostFromServiceRegistryPopup-body-repositories-bottom'>
-                            <span className='AddNewHostFromServiceRegistryPopup-body-right-repositories-Title'>
-                                Selected Repositories:
-                            </span>
-                            <div className='AddNewHostFromServiceRegistryPopup-body-right-repositories-list'>
-                                {repositoryHostsSelected.map((repository, index) => {
-                                    return(
-                                        <SidebarHostItem key = {index}
-                                            id = {repository.label}
-                                            hostName = {repository.label}
-                                            hostType = {{value: "repository", label: "repository"}}
-                                            addedFrom = {serviceRegistry.label}
-                                            onRemove = {removeRepositoryHost}
-                                            ping = {null}
-                                            allowClick = {false}
-                                        />)
-                                })}
-                            </div>
-                        </div>
-                    </div>
+                    <AddNewHostFromServiceRegistryPopupList
+                        title = {`Selected Miners:`}
+                        label = {`Miners:`}
+                        DropdownOptions = {minersDropdownFormat}
+                        onValueChange = {addMinerHost}
+                        selectedHostsList = {minerHostsSelected}
+                        onRemove = {removeMinerHost}
+                        hostType = {{value: "miner", label: "miner"}}
+                        
+                    />
+                    <AddNewHostFromServiceRegistryPopupList
+                        title = {`Selected Repositories:`}
+                        label = {`Repositories:`}
+                        DropdownOptions = {repositoriesDropdownFormat}
+                        onValueChange = {addRepositoryHost}
+                        selectedHostsList = {repositoryHostsSelected}
+                        onRemove = {removeRepositoryHost}
+                        hostType = {{value: "repository", label: "repository"}}
+                    />
                 </div>
             </Popup>
         </BackdropModal>

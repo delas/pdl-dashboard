@@ -13,8 +13,6 @@ function ProcessOverviewCard(props) {
     const {
         process,
         stopProcess = () => {},
-        pauseProcess = () => {},
-        resumeProcess = () => {},
         deleteProcess = () => {},
         openInformationPrompt = () => {},
     } = props;

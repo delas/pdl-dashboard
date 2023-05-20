@@ -4,7 +4,7 @@ function Radiobuttons(props) {
 
     const {
         onChange = () => {},
-        options = [], // {label: "name", value: "output"}
+        options = [], // {label: "name_of_type_string", value: {output_of_any_type} }
         title = '',
     } = props;
 

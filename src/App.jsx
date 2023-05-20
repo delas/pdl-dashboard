@@ -2,7 +2,6 @@ import './App.css';
 import {useState, useEffect, useRef} from 'react';
 import Home from './Pages/Home/Home';
 import Page1 from './Pages/Page1/Page1';
-import Page2 from './Pages/Page2/Page2';
 import { saveHostLocal, removeHostLocal, saveFileLocal, getFileLocal, removeFileLocal } from './Store/LocalDataStore';
 import { pingAllAddedServices, pingAllActionProcesses, getAndSaveAllHostConfig, pingAllShadowProcesses } from './Utils/ServiceHelper';
 import { GetFileImage, GetFileText } from './Services/RepositoryServices';
@@ -135,12 +134,6 @@ function App(props) {
     }
 
     const deleteHost = (id) => {
-        // const host = getHostLocal(id);
-        // if(host?.type?.value === "service registry") {
-        //     getAllHostAddedFromServiceRegistry(host.name).forEach((host) => {
-        //         removeHostLocal(host.id);
-        //     });
-        // }
         removeHostLocal(id);
         if(updateComponents.SidebarHosts){
             updateComponents.SidebarHosts.update();
@@ -339,8 +332,8 @@ function App(props) {
                 />
                 : null
             }
+            {/* This is how to change the page from a single page application to a multipage application if needed. */}
             {props.page === "Page1" ? <Page1/> : null}
-            {props.page === "Page2" ? <Page2/> : null}
         </div>
     );
 }
