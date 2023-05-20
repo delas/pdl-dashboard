@@ -47,7 +47,7 @@ function BPMNComponent(props) {
         viewerRef.current = new BpmnViewer({
             container,
             keyboard: {
-                bindTo: window
+                bindTo: document
             },
             // propertiesPanel: {
             //     parent: "#propview"
