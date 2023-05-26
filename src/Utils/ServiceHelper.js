@@ -39,8 +39,8 @@ function pingAllServicesAddedFromServicesRegistry(){
                 });
             }).catch(() => {
                 console.log("Failed to ping connected filters");
-                getAllHostAddedFromServiceRegistry(SR.name).forEach(host => { // if failed to ping connected filters, set all hosts added from that service registry to offline
-                    setHostStatusLocal(host.id, "offline");
+                getAllHostAddedFromServiceRegistry(SR.name).forEach(host => { // if failed to ping SR for connected host, ping host directly
+                    pingLocalHost(host);
                 });
             });
     })
@@ -48,38 +48,42 @@ function pingAllServicesAddedFromServicesRegistry(){
 
 function pingAllLocallyAddedServices() {
     getAllHostLocallyAdded().forEach(host => { // for each host added locally
-        switch(host.type.value){
-            case "miner":
-                PingMiner(host.name).then((res) =>{ // ping miner
-                    const status = res.status === 200 && res.data.toUpperCase() === "PONG";
-                    setHostStatusLocal(host.id, status ? "online" : "offline"); // set status of miner
-                }).catch((e) => {
-                    setHostStatusLocal(host.id, "offline"); // if failed to ping miner, set status to offline
-                    console.log(`Failed to connect to miner ${host.name} with error: ${e}`)
-                });
-                break;
-            case "repository":
-                PingRepository(host.name).then((res) =>{
-                    const status = res.status === 200 && res.data.toUpperCase() === "PONG";
-                    setHostStatusLocal(host.id, status ? "online" : "offline");
-                }).catch((e) => {
-                    setHostStatusLocal(host.id, "offline");
-                    console.log(`Failed to connect to repository ${host.name} with error: ${e}`)
-                });
-                break;
-            case "service registry":
-                PingServiceRegistry(host.name).then((res) =>{
-                    const status = res.status === 200 && res.data.toUpperCase() === "PONG";
-                    setHostStatusLocal(host.id, status ? "online" : "offline");
-                }).catch((e) => {
-                    setHostStatusLocal(host.id, "offline");
-                    console.log(`Failed to connect to service registry ${host.name} with error: ${e}`)
-                });
-                break;
-            default:
-                break;
-        }
+        pingLocalHost(host);
     });
+}
+
+const pingLocalHost = async (host) => {
+    switch(host.type.value){
+        case "miner":
+            PingMiner(host.name).then((res) =>{ // ping miner
+                const status = res.status === 200 && res.data.toUpperCase() === "PONG";
+                setHostStatusLocal(host.id, status ? "online" : "offline"); // set status of miner
+            }).catch((e) => {
+                setHostStatusLocal(host.id, "offline"); // if failed to ping miner, set status to offline
+                console.log(`Failed to connect to miner ${host.name} with error: ${e}`)
+            });
+            break;
+        case "repository":
+            PingRepository(host.name).then((res) =>{
+                const status = res.status === 200 && res.data.toUpperCase() === "PONG";
+                setHostStatusLocal(host.id, status ? "online" : "offline");
+            }).catch((e) => {
+                setHostStatusLocal(host.id, "offline");
+                console.log(`Failed to connect to repository ${host.name} with error: ${e}`)
+            });
+            break;
+        case "service registry":
+            PingServiceRegistry(host.name).then((res) =>{
+                const status = res.status === 200 && res.data.toUpperCase() === "PONG";
+                setHostStatusLocal(host.id, status ? "online" : "offline");
+            }).catch((e) => {
+                setHostStatusLocal(host.id, "offline");
+                console.log(`Failed to connect to service registry ${host.name} with error: ${e}`)
+            });
+            break;
+        default:
+            break;
+    }
 }
 
 export async function pingAllActionProcesses(getAndAddFile) {
