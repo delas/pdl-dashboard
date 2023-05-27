@@ -257,6 +257,10 @@ const getServiceRegistriesHostConfig = (serviceRegistries) => {
                     saveHostLocal(host.id, host);
                 }
             });
+        }).catch(() => { // If service registry is down, try to get config directly
+            const miners = hostsFromSR.filter((host) => host.type.value === "miner");
+            const repositories = hostsFromSR.filter((host) => host.type.value === "repository");
+            getLocallyAddedHostConfig(miners, repositories);
         });
     });
 }
