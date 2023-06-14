@@ -8,6 +8,22 @@ function ActionPopupPage3Paramters(props) {
         onParamValueChange,
         getInputType
     } = props;
+
+    const getDefaultValue = (param) => {
+        if(param.Default !== null && param.Default !== undefined) {
+            return param.Default;
+        } else {
+            switch(selectedParams[0].Type) {
+                case 'string': return '';
+                case 'int' : return 0;
+                case 'float': return 0.0;
+                case 'bool': return false;
+                case 'double': return 0.0;
+                default:
+                    return null;
+            } 
+        }  
+    }
     
     return (
         <div className='ActionPopup-wizard-step3'>
@@ -21,7 +37,7 @@ function ActionPopupPage3Paramters(props) {
                                 key = {index}
                                 label = {param.Name}
                                 fieldType = {type}
-                                placeholder = {param.Default}
+                                placeholder = {param.Default ? param.Default : getDefaultValue(param)}
                                 min = {param.Min}
                                 index = {index}
                                 max = {param.Max}

@@ -207,8 +207,8 @@ function ActionPopup(props) {
         if(params) {
             const param = params[res.index];
             param.selectedValue = res.value;
-            if(param.selectedValue > param.Max) param.selectedValue = param.Max;
-            if(param.selectedValue < param.Min) param.selectedValue = param.Min;
+            if(param.Max && param.selectedValue > param.Max) param.selectedValue = param.Max;
+            if(param.Min && param.selectedValue < param.Min) param.selectedValue = param.Min;
             setSelectedParams(params);
             forceUpdate();
         }
