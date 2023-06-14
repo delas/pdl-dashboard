@@ -16,7 +16,7 @@ Navigate to the location of this repository on your machine and run:
 ```
 npm start
 ```
-Open [http://localhost:8080](http://localhost:8080) to view it in your browser.
+The frontend is hosted at [http://localhost:8080](http://localhost:8080).
 
 ### `npm run build`
 If you want to get the application ready for production, navigate to the location of this repository on your machine and run:
@@ -35,10 +35,6 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 # Understanding the code
 
 This section is targeted toward developers
-
-## The systems
-
-The overall system and flow are designed in collaboration with DTU. 
 
 ### Services
 
