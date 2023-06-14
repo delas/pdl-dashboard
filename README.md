@@ -40,13 +40,29 @@ This section is targeted toward developers
 
 The overall system and flow are designed in collaboration with DTU. 
 
-### Hosts
+### Services
 
-Hosts are represented as objects that are saved in local memory.
+Services are represented as objects that are saved in local memory.
 
-![Host update loop](./Flow_images/addHost.png)
+Connecting a service can happen through a service registry or directly by inserting the URL of the service. This will influence how a service status and configuration will be retrieved. 
 
-```js
+The following shows how adding a service will add a new object to the local memory.
+
+![Connect host to frontend](./Flow_images/connect_host_FE_flow.png)
+
+Services are pinged regularly for status, but as mentioned this differs depending on the method used to add the service to the frontend. 
+
+Getting status from directly added service:
+
+![Ping hosts directly](./Flow_images/ping_hosts_process_direct_FE_flow.png)
+
+Getting status from service add through a service registry.
+
+![Ping hosts through service registry nodes](./Flow_images/ping_hosts_SR_FE_flow.png)
+
+Below is seen the object structure saved in local memory. The status and configuration properties can change depending on what happens in the service:
+
+```
 {
     addedFrom: hostname_of_service_registry_or_local,
     config: config_of_resource,
@@ -62,14 +78,34 @@ Hosts are represented as objects that are saved in local memory.
 
 ### Processes
 
-Processes are represented as javascript objects located in local memory that has information on which foreign process is running. From the frontend, this is used to determine the state of the foreign process, and when to receive the results. To create a process, create a process object, and save it to local memory. In App.jsx, exists an interval, that will ping running processes, thus keeping the user up to date with all processes created by the initiator.
+Processes are represented as javascript objects located in local memory with information on which foreign process is running. From the frontend, this is used to determine the state of the foreign process, and when to receive the results. To create a process, create a process object, and save it to local memory. In App.jsx, an interval exists that will ping running processes, thus keeping the user up to date with all processes created by the initiator.
 
-![Start and add a process](./Flow_images/runMiner.png)
+There are two types of processes, and thereby two process objects. The first type is starting an algorithm, which will create a process to track status, output, and other useful information. The second is started when cloning an algorithm is initiated. 
 
 Processes are created upon successfully submitting an action to a miner. This will save a process to local memory, which will then be handled in an interval which will check the status, and respond accordingly by either getting a metadata and file or by setting an error. Only "running" processes will be pinged. 
 
-A process looks like this:
-```js
+#### Running an algorithm process
+
+Starting an algorithm process:
+
+![Starting algorithm process](./Flow_images/start_process_FE_flow.png)
+
+Getting the status of a algorithm process:
+
+![Pinging algorithm process](./Flow_images/ping_process_FE_flow.png)
+
+#### Running a cloning process
+
+Starting an cloning process:
+
+![Starting cloning process](./Flow_images/start_process_shadow_FE_flow.png)
+
+Getting the status of a cloning process:
+
+![Pinging cloning process](./Flow_images/ping_shadow_process_FE_flow.png)
+
+An algorithm process looks like this:
+```
 {
     id: some_uuid,
     objectType: "process",
@@ -101,7 +137,9 @@ A process looks like this:
 11. <b>error:</b> Errors will be save in this attribute.
 12. <b>resourceId:</b> Reference to the output that is created from this process.
 13. <b>saveOrUpdateFile:</b> A boolean that determines if the output should be saved/updated. Is only changed and read in src/Utils/ServiceHelper.js.
-14. <b>resourceLabel:</b> Reference to the name of the generated file. As Files and Processes are split and can be deleted independently, this ensures the process has the name of the file.  
+14. <b>resourceLabel:</b> Reference to the name of the generated file. As Files and Processes are split and can be deleted independently, this ensures the process has the name of the file. 
+
+Cloning algorithms consist of much of the same structure but has fewer keys as no resource will be generated.  
 
 ### Files
 
@@ -112,7 +150,7 @@ Files consist of two components: Metadata and content. Metadata is a bunch of in
 The file metadata is a javascript object, that has relevant information pertaining to a file. The contents are used to display information in various areas of the frontend, and determine the type, visualization possibilities, and completion state of a file. Much of the information is also used to determine if communication is necessary with either the producer or the repository that holds it.
 
 the Files are saved like this in local memory:
-```js
+```
 {
     CreationDate: "some_number_of_ms_since_1970",
     GenerationTree : {
@@ -168,19 +206,17 @@ The file contents are important for certain file types. This will be the actual 
 
 ### Service helper
 
-ServiceHelper.js is an important file, as it contains a function that measures external data such as process status, files, and hosts. Each function is designed to run once, where an interval in the App.jsx will be responsible for running the functions. The interval request rate can be found in config.js. 
-
-![Process update loop](./Flow_images/pingProcess.png)
-
-![Process update loop](./Flow_images/pingHosts.png)
+ServiceHelper.js is an important file, as it contains a function that measures external data such as process status, files, and hosts. Each function is designed to run once, where an interval in the App.jsx will be responsible for running the functions. The interval request rate can be found in config.js. This is where pings for services, processes, and resources are located.
 
 ### Visualizations
 
 The rules that determine what visualizations the frontend can display, can be found in config.js. The contents of metadata will be compared to the list of allowed visualizations, and pull information from a repository as needed. Therefore, the frontend will not show content that cannot be visualized. 
 
-To add visualizations, go to config.js and change the visualizationConfig variable. The keys are used for lookup, as the combination of resourceType and file-extension is necessary to select the correct visualization. If the lookup returns nothing, only the generation tree is available for the resource, such as for streams, flowcharts, and other unimplemented visualizations. This also means, that one resourceType can be represented by many different file types. For example, a resource of type BPMN can be visualized as either a BPMN diagram generated from a .bpmn file, or as an image. 
+To add visualizations, go to config.js and change the visualizationConfig variable. The keys are used for lookup, as the combination of resourceType and file extension is necessary to select the correct visualization. If the lookup returns nothing, only the generation tree is available for the resource, such as for streams, flowcharts, and other unimplemented visualizations. This also means, that one resourceType can be represented by many different file types. For example, a resource of type BPMN can be visualized as either a BPMN diagram generated from a .bpmn file or as an image. 
 
-![Process update loop](./Flow_images/selectVisualization.png)
+Resources must be located in local memory before they can be displayed. To ensure that dynamic resources are always updated, the frontend will request the resource based on an interval. This only happens if the correct visualization is selected to avoid unnecessary communication. 
+
+![Selecting visualization](./Flow_images/visualization_FE_flow.png)
 
 #### Create a new visualization
 
@@ -206,6 +242,4 @@ Most actions that the user can do, happen in a popup. This allows for a clear di
 
 ### Clone a miner
 
-It is possible to clone an executable miner from one host to another. This will update the configuration of the receiver and thereby requires all interested parties to retrieve the new configuration. The purpose of this feature is to allow users to run programs from a controlled environment, which provides options for using sensitive data or measuring efficiency. Configurations will be fetched on page reload. If the host is added through a service registry, the  configuration will be fetched from the service registry instead of the host.
-
-![Shadow miner](./Flow_images/Shadow.png)
+It is possible to clone a miner algorithm from one miner node to another. This will update the configuration of the receiver and thereby requires all interested parties to retrieve the new configuration. The purpose of this feature is to allow users to run programs from a controlled environment, which provides options for using sensitive data or measuring efficiency. Configurations will be fetched on page reload. If the service is added through a service registry, the  configuration will be fetched from the service registry instead of the service.
