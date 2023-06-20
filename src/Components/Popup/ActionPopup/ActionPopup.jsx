@@ -116,7 +116,7 @@ function ActionPopup(props) {
     const convertFilesToDropdown = (files) => {
         return files.map((file) => {
             const prefix = getFileExtension(file) ? `${getFileExtension(file).toUpperCase()}` : `${getFileResourceType(file)}`;
-            const label = `${prefix} \t ${getFileResourceLabel(file)}`;
+            const label = `[${prefix}] \t ${getFileResourceLabel(file)}`;
             // <> // use this instead for a prettier structure of files. But it removes search option from dropdown
             //     <div className='ActionPopup-dropdown-item'>
             //         <div className='ActionPopup-dropdown-item-prefix'>

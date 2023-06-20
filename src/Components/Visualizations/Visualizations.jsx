@@ -44,9 +44,10 @@ function Visualizations(props) {
             }
         ];
 
-        if(file && getFileResourceType(file) && getFileExtension(file)) 
-            return getVisalizations(getFileResourceType(file).toUpperCase(), getFileExtension(file).toUpperCase()).concat(defaultTabs);
-        else {
+        if(file && getFileResourceType(file) && getFileExtension(file)) {
+            const visualizations = getVisalizations(getFileResourceType(file).toUpperCase(), getFileExtension(file).toUpperCase());
+            return visualizations ? visualizations.concat(defaultTabs) : defaultTabs;  // If there are visualizations for the file, add them to the default tabs
+        } else {
             return defaultTabs;
         }
     }

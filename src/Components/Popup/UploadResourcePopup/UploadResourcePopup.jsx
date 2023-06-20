@@ -58,8 +58,11 @@ function UploadResourcePopup(props) {
     
     const onFileUploadValueChange = (event) => {
         setSelectedFile(event.target.files[0]);
-        const filenameWithoutExtension = event.target.files[0].name.split('.')[0];
-        setResourceName(filenameWithoutExtension);
+        const newResourceName = event.target.files[0].name.split('.')[0];
+        const newFileExtension = event.target.files[0].name.split('.')[1];
+        console.log(resourceName, fileExtension);
+        if(resourceName === null) setResourceName(newResourceName);
+        if(fileExtension === null) setFileExtension(newFileExtension);
 		setIsFilePicked(true);
     }
 
