@@ -2,21 +2,23 @@ import './ImageVisualizer.scss';
 import {useState, useEffect} from 'react';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
 import { GetFileImage } from '../../../Services/RepositoryServices';
-import { getFileContent, getFileDescription, getFileRepositoryUrl, getFileResourceId } from '../../../Utils/FileUnpackHelper';
+import { getFileContent, getFileDescription, getFileExtension, getFileRepositoryUrl, getFileResourceId } from '../../../Utils/FileUnpackHelper';
 
 function ImageVisualizer(props) {
     const {
-        file
+        file,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
     const [image, setImage] = useState(null);
+    const [imageType, setImageType] = useState(null);
 
     useEffect(() => { // Use image if it is already loaded, otherwise fetch it. Set loading to done when finished.
         const resourceId = getFileResourceId(file);
         const host = getFileRepositoryUrl(file);
         if(file && getFileContent(file)){
             setImage(file.fileContent);
+            setImageType(getFileExtension(file)?.toUpperCase());
             setIsLoading(false);
         } else {
             GetFileImage(host, resourceId).then((res) => {
@@ -41,7 +43,16 @@ function ImageVisualizer(props) {
 
     return (
         <div className="ImageVisualizer">
-            <img src={image} alt={`${getFileDescription(file)}`}/>
+            {imageType === "SVG" &&
+                <embed
+                    alt={`${getFileDescription(file)}`}
+                    src={image}
+                    type="image/svg+xml"
+                />
+            }
+            {(imageType === "PNG" || imageType === "JPG") &&
+                <img src={image} alt={`${getFileDescription(file)}`}/>
+            }
         </div>
     )
 }
