@@ -1,10 +1,7 @@
 import './DotVisualizer.scss';
 import {useState, useEffect} from 'react';
 import { Graphviz } from 'graphviz-react';
-import {GetResourceGraph} from '../../../Services/RepositoryServices';
-import { getFileRepositoryUrl, getFileResourceId } from '../../../Utils/FileUnpackHelper';
 import LoadingSpinner from '../../Widgets/LoadingSpinner/LoadingSpinner';
-import { getFileLocal } from '../../../Store/LocalDataStore';
 
 /* 
     This visualizer is currently used primarily for visualizing the related resources of a file.
@@ -14,29 +11,14 @@ import { getFileLocal } from '../../../Store/LocalDataStore';
 
 function DotVisualizer(props) {
     const {
-        selectedFileId
+        fileContent,
     } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-    const [graph, setGraph] = useState(null);
-    const [error, setError] = useState(null);
-
-    let file = getFileLocal(selectedFileId);
 
     useEffect(() => {
-        setIsLoading(true);
-        GetResourceGraph(getFileRepositoryUrl(file), getFileResourceId(file))
-            .then((res) => {
-                setGraph(res.data);
-            })
-            .then(() => {
-                setIsLoading(false);
-            })
-            .catch((err) => {
-                setError(err);
-                setIsLoading(false);
-            });
-    }, [selectedFileId]);
+        setIsLoading(false);
+    }, [fileContent]);
 
     const options = {
         fit: true,
@@ -85,23 +67,12 @@ function DotVisualizer(props) {
         "tooltip.adjust.resize.scroll": true,
     }
     
-    if(isLoading){
+    if(isLoading || !fileContent){
         return (
             <div className="DotVisualizer-loading">
                 <div className='Spinner-container-l'>
                     <LoadingSpinner loading={isLoading}/>
                 </div>
-            </div>
-        )
-    }
-
-    if(error){
-        const errorText = error?.response?.statusText ? error.response.statusText : error;
-        const statusText = error?.response?.status ? error.response.status : "";
-        return (
-            <div className="DotVisualizer">
-                <div>Error loading graph</div>
-                <div>{`${errorText} ${statusText}`}</div>
             </div>
         )
     }
@@ -112,7 +83,7 @@ function DotVisualizer(props) {
 
     return (
         <div className="DotVisualizer" onClick = {() => {getAllNodes()}}>
-            <Graphviz dot={graph} className="DotVisualizer-graphviz"
+            <Graphviz dot={fileContent} className="DotVisualizer-graphviz"
                 options={options}
             />
         </div>

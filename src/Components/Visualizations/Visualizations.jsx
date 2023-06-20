@@ -14,6 +14,7 @@ import HistogramVisualizer from './HistogramVisualizer/HistogramVisualizer';
 import PNMLVisualizer from './PNMLVisualizer/PNMLVisualizer';
 import DotVisualizer from './DotVisualizer/DotVisualizer';
 import ImageVisualizer from './ImageVisualizer/ImageVisualizer';
+import ResourceGraphVisualizer from './ResourceGraphVisualizer/ResourceGraphVisualizer';
 
 function Visualizations(props) {
     const {
@@ -38,7 +39,7 @@ function Visualizations(props) {
     const generateTabList = (file) => {
         const defaultTabs = [ // These are the tabs that are always present
             {
-                ResourceType: "DOT",
+                ResourceType: "RELATIONGRAPH",
                 Title: "Related resources"
             }
         ];
@@ -213,7 +214,8 @@ function Visualizations(props) {
                     {(selectedTab.ResourceType === "BPMN")      && <BPMNVisualizer file = {file} uploadEditedFile = {uploadEditedFile}/>}
                     {(selectedTab.ResourceType === "HISTOGRAM") && <HistogramVisualizer file = {file}/>}
                     {(selectedTab.ResourceType === "PNML")      && <PNMLVisualizer file = {file}/>}
-                    {(selectedTab.ResourceType === "DOT")       && <DotVisualizer selectedFileId = {selectedFileId}/>}
+                    {(selectedTab.ResourceType === "DOT")       && <DotVisualizer fileContent = {getFileContent(file)} />}
+                    {(selectedTab.ResourceType === "RELATIONGRAPH")      && <ResourceGraphVisualizer selectedFileId = {selectedFileId}/>}
                     {(selectedTab.ResourceType === "IMAGE")     && <ImageVisualizer file = {file}/>}
                     {(selectedTab.ResourceType === "ALIGNMENT")     && <AlignmentVisualizer file = {file}/>}
                 </div>

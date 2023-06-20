@@ -44,6 +44,12 @@ export const visualizationConfig = {
                 ResourceType: "IMAGE",
                 Title: "Petri net",
             },
+        ],
+        DOT: [
+            {
+                ResourceType: "DOT",
+                Title: "Petri net",
+            },
         ]
     },
     PROCESSMODEL: {
@@ -70,6 +76,12 @@ export const visualizationConfig = {
                 ResourceType: "IMAGE",
                 Title: "BPMN",
             },
+        ],
+        DOT: [
+            {
+                ResourceType: "DOT",
+                Title: "Petri net",
+            },
         ]
     },
     ALIGNMENT: {
@@ -79,6 +91,12 @@ export const visualizationConfig = {
                 Title: "Alignment",
             }
         ],
+        DOT: [
+            {
+                ResourceType: "DOT",
+                Title: "Petri net",
+            },
+        ]
     },
     OTHER: {
         PNG: [
@@ -105,7 +123,6 @@ export const visualizationConfig = {
                 Title: "Graph viewer",
             }
         ]
-
     }
 }
 
