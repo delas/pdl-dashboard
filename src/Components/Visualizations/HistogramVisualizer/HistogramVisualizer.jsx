@@ -25,7 +25,7 @@ function HistogramVisualizer(props) {
             forceUpdate();
             setIsLoading(false);
         }
-        else if(file && !getFileDynamic(file) && !getFileContent(file)){
+        else if(file && !getFileDynamic(file) && !getFileContent(file) && getFileExtension(file)){
             setHistogramOfLog();
         }
         else {
