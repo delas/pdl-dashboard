@@ -14,6 +14,14 @@ function ActionPopupPage2Inputs(props) {
         selectedFiles
     } = props;
 
+    if(minerObject?.ResourceInput.length <= 0){
+        return (
+            <div className='ActionPopup-wizard-step2'>
+                <span>This mining algorithm requires no inputs.</span>
+            </div>
+        );
+    }
+
     return (
         <div className='ActionPopup-wizard-step2'>
             <Dropdown

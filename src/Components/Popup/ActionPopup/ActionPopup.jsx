@@ -137,8 +137,9 @@ function ActionPopup(props) {
         }).filter((x, i, a) => a.indexOf(x) === i);
     }
 
-    const setFilesFromRepository = (hostname, minerObject) => { // Create list of files for each filter type - minerObject is optional param used to ensure it exists when needed instead of waiting for state to be set
+    const setFilesFromRepository = (hostname, minerHostId = null) => { // Create list of files for each filter type - minerHostId is sent when previous inputs are noticed 
         let filteredFilesTemp = {};
+        // console.log(hostname);
         getUniqueResourceTypesFromMinerObject().forEach((filter) => {
             GetRepositoryFilterMetadata(hostname, [filter]) // Get files of each filter
             .then(res => {
@@ -153,20 +154,25 @@ function ActionPopup(props) {
                 }
 
                 // setting the dropdown options for each filter type
-                filteredFilesTemp[filter] = convertFilesToDropdown(res.data); // Assign files to filter key in object {filter1: [files], filter2: [files]}      
+                filteredFilesTemp[filter] = convertFilesToDropdown(res.data); // Assign files to filter key in object {filter1: [files], filter2: [files]}  
+                
+                
             })
             .then(() => {
+                if(minerHostId){
+                    applyInputResources(minerHostId, filteredFilesTemp);
+                }
                 setFileredFilesForDropdown(filteredFilesTemp) // Set filteredFilesTemp in state
             }) 
             .catch((e) => console.log(e));
         });
     }
 
-    const onRepositoryFileOwnerDropdownChange = (value) => { // Onchange function on repository dropdown 
+    const onRepositoryFileOwnerDropdownChange = (value, minerHostId = null) => { // Onchange function on repository dropdown 
         const host = getHostLocal(value.value);
         if(!host || host.status === "offline") return;
         setRepositoryFileOwnerDropdownSelected(value);
-        setFilesFromRepository(value.label);
+        setFilesFromRepository(value.label, minerHostId);
     }
 
     const onFileDropdownChange = (value, resourceName) => { // Onchange function for all file dropdowns
@@ -419,12 +425,19 @@ function ActionPopup(props) {
         const minerId = minerObject.MinerId;
         const savedInputValues = getSavedInputValuesLocal(minerHostId, minerId);
         if(savedInputValues) {
-            onRepositoryFileOwnerDropdownChange(savedInputValues.repositoryFileOwnerDropdownSelected);
-            Object.keys(savedInputValues.selectedFiles).forEach((inputName) => {
-                const file = savedInputValues.selectedFiles[inputName];
-                const dropdownValue = convertFilesToDropdown([file])[0];
-                onFileDropdownChange(dropdownValue, `${inputName}`);
-            })
+            onRepositoryFileOwnerDropdownChange(savedInputValues.repositoryFileOwnerDropdownSelected)
+            if(filteredFilesForDropdown && filteredFilesForDropdown.length > 0) {
+                Object.keys(savedInputValues.selectedFiles).forEach((inputName) => {
+                    const file = savedInputValues.selectedFiles[inputName];
+                    if(filteredFilesForDropdown[getFileResourceType(file)].find(availablefile => getFileResourceId(availablefile) === getFileResourceId(file))){
+                        const dropdownValue = convertFilesToDropdown([file])[0];
+                        onFileDropdownChange(dropdownValue, `${inputName}`);
+                    }
+                })
+            }
+            else {
+                onRepositoryFileOwnerDropdownChange(savedInputValues.repositoryFileOwnerDropdownSelected, minerHostId);
+            }
             savedInputValues.selectedParams.forEach((param, index) => {
                 const paramInputValue = {value: param.selectedValue, index: index}
                 onParamValueChange(paramInputValue);
@@ -436,9 +449,21 @@ function ActionPopup(props) {
                 onStreamTopicChange({value: savedInputValues.streamTopic});
                 onStreamDestinationChange({value: savedInputValues.streamDestination});
             }
-            // setWizardStep(4);
             setMaxWizardStep(4)
         }
+    }
+
+    const applyInputResources = (minerHostId, filteredFilesForDropdown) => {
+        const minerId = minerObject.MinerId;
+        const savedInputValues = getSavedInputValuesLocal(minerHostId, minerId);
+        Object.keys(savedInputValues.selectedFiles).forEach((inputName) => {
+            const file = savedInputValues.selectedFiles[inputName];
+            if(filteredFilesForDropdown[getFileResourceType(file)] && 
+            filteredFilesForDropdown[getFileResourceType(file)].find(availablefile => getFileResourceId(availablefile.value) === getFileResourceId(file))){
+                const dropdownValue = convertFilesToDropdown([file])[0];
+                onFileDropdownChange(dropdownValue, `${inputName}`);
+            }
+        })
     }
 
     const handleCancelButtonClick = () => {
