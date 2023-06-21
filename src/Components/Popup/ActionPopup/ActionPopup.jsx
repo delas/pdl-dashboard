@@ -169,6 +169,7 @@ function ActionPopup(props) {
     }
 
     const onRepositoryFileOwnerDropdownChange = (value, minerHostId = null) => { // Onchange function on repository dropdown 
+        if(value === null) return; // If the action doesn't require any input resources
         const host = getHostLocal(value.value);
         if(!host || host.status === "offline") return;
         setRepositoryFileOwnerDropdownSelected(value);
@@ -260,8 +261,11 @@ function ActionPopup(props) {
                 setNextButtonDisabled(!minerObject);
                 break;
             case 2:
-                const isFileValid = Object.keys(selectedFiles).length >= minerObject.ResourceInput.length; // check if all files are selected
-                setNextButtonDisabled(!(repositoryFileOwnerDropdownSelected && isFileValid));
+                if(minerObject?.ResourceInput?.length === 0) setNextButtonDisabled(false) // if no input resources are needed, skip this step
+                else{
+                    const isFileValid = Object.keys(selectedFiles).length >= minerObject.ResourceInput.length; // check if all files are selected
+                    setNextButtonDisabled(!(repositoryFileOwnerDropdownSelected && isFileValid));
+                }
                 break;
             case 3:
                 if (!selectedParams) setNextButtonDisabled(false);
