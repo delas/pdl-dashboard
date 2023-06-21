@@ -115,14 +115,15 @@ function Visualizations(props) {
     }
 
     const generateChildren = (children) => {
-        if(children);
-        setChildrenForDropdown(
-            children.filter((childMetadata) => {
-                return !!getVisalizations(getFileResourceType(childMetadata).toUpperCase(), getFileExtension(childMetadata).toUpperCase());
-            }).map((childMetadata) => {
-                return ({label: getFileResourceLabel(childMetadata), value: getFileResourceId(childMetadata)})
-            })
-        );
+        if(children){
+            setChildrenForDropdown(
+                children.filter((childMetadata) => {
+                    return !!getVisalizations(getFileResourceType(childMetadata)?.toUpperCase(), getFileExtension(childMetadata)?.toUpperCase());
+                }).map((childMetadata) => {
+                    return ({label: getFileResourceLabel(childMetadata), value: getFileResourceId(childMetadata)})
+                })
+            );
+        }
     }
 
     const onChildDropdownChange = (value) => {
