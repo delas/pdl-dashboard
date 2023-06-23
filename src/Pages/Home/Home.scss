@@ -42,11 +42,11 @@ $Sidebar-width: 20em;
     height: 100%;
     top:0;
     left: 0;
+    max-width: 30em;
     transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
     &-sidebarHostsopen{
         left: 0;
         width: 50%;
-        max-width: 30em;
     }
     &-sidebarHostsclosed{
         left: -50%;
