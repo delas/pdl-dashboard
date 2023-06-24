@@ -117,7 +117,7 @@ function SidebarHosts(props) {
                                     popups = {popups}
                                     status = {repository.status}
                                     allowClick = {repository.status === "online"}
-                                    hostProvidedValue = {repository.config.Label}
+                                    // hostProvidedValue = {repository.config.Label}
                                 />
                             )
                         })}
@@ -143,7 +143,7 @@ function SidebarHosts(props) {
                                 popups = {popups}
                                 status = {miner.status}
                                 allowClick = {miner.status === "online"}
-                                hostProvidedValue = {miner?.config?.MinerLabel}
+                                // hostProvidedValue = {miner?.config?.MinerLabel}
                                 shadowProcesses = {runningShadowProcessesMapped[miner.name]}
                             />
                         )
